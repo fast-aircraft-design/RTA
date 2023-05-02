@@ -1,0 +1,10 @@
+1) Copy folder on deskop and rename it "RHEA"
+2) Download Python version 3.8 or greater
+3) Download fast-oad through anaconda prompt with the following command: pip install fast-oad==0.5.4b0
+4) Download openmdao through anaconda prompt with the following command: pip install openmdao==3.6.0
+
+
+5)jupyter notebook --notebook-dir=C:\Users\LA202059\Desktop\RHEA from anconda prompt
+
+6) pip freeze > requirements.txt (to save all library versions)
+7) pip install -r requirements.txt (to install all libraries needed)

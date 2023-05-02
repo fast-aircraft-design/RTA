@@ -1,0 +1,85 @@
+title = "Sizing process"
+
+# List of folder paths where user added custom registered OpenMDAO components
+module_folders = ['C:\Users\LA202059\Desktop\RHEA\rhea\models']
+
+# Input and output files
+input_file = "./problem_inputs.xml"
+output_file = "./problem_outputs.xml"
+
+# Definition of problem driver assuming the OpenMDAO convention "import openmdao.api as om"
+driver = "om.ScipyOptimizeDriver(tol=1e-6, optimizer='COBYLA')"
+
+# Definition of OpenMDAO model
+[model]
+    # Solvers are defined assuming the OpenMDAO convention "import openmdao.api as om"
+    nonlinear_solver = "om.NonlinearBlockGS(maxiter=200)"
+    linear_solver = "om.DirectSolver()"
+
+    # Although "model" is a mandatory name for the top level of the model, its
+    # sub-components can be freely named by user
+    [model.geometry]
+        # An OpenMDAO component is identified by its "id"
+        id = "rhea.geometry.IN"
+#    [model.propulsion_propeller]
+#        id = "rhea.propulsion.propeller_sizing" 
+
+#    [model.aerodynamics.highspeed]
+#        id = "rhea.aerodynamics.highspeed"
+#    [model.aerodynamics_lowspeed]
+#        id = "rhea.aerodynamics.lowspeed"
+#    [model.aerodynamics_takeoff]
+#        id =  "rhea.aerodynamics.takeoff"
+
+###################ONLY for L1 models
+#    [model.propulsion]
+#        id = "rhea.propulsion.turboprop_sizing"  
+         
+#    [model.electric_propulsion]
+#        id = "rhea.propulsion.fuel_cell_sizing"    
+
+       
+###################
+        
+    [model.performance]
+        id = "rhea.performances.sizing_flight"   
+        propulsion_id = "rhea.wrapper.propulsion.ML_TP_L1_H2_burn"
+        out_file = "C:/Users/LA202059/Desktop/RHEA/workdir/TPAD/TPAD_H2burn/TPAD_H2burn_0.3blend/sizing/flight_points.csv"
+        
+    [model.hybrid_systems]
+        id = "rhea.propulsion.BoP_sizing"   
+
+    [model.weight]
+        id = "rhea.weight.IN"
+        payload_from_npax = false
+        
+        
+    #[model.performance_payloadRange]
+      #  id = "rhea.performances.payload_range"   
+       # propulsion_id = "rhea.wrapper.propulsion.TP_engine_L1"
+       # out_file = "C:/Users/LA202059/Desktop/RHEA/workdir/TPAD/TPAD_H2burn/TPAD_H2burn_0.3blend/sizing/flight_points_pr.csv"
+                
+    [model.hq.static_margin]
+        id = "fastoad.handling_qualities.static_margin"
+        #target = 0.05
+
+[optimization]  # This section is needed only if optimization process is run
+
+    [[optimization.design_var]]
+            name ="data:geometry:wing:area"
+
+            lower = 50
+            upper = 60
+            
+    [[optimization.design_var]]
+            name = "data:geometry:wing:MAC:at25percent:x"
+            lower = 8.5
+            upper = 11.0
+            
+    [[optimization.constraint]]
+            name = "data:handling_qualities:static_margin"
+            lower = 0.05
+            upper = 0.1
+
+    [[optimization.objective]]
+            name = "data:mission:sizing:fuel"

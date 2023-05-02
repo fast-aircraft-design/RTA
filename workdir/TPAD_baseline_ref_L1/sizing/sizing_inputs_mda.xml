@@ -1,0 +1,601 @@
+<FASTOAD_model>
+  <data>
+    <TLAR>
+      <NPAX is_input="True">72.0<!--top-level requirement: number of passengers, assuming a classic eco/business class repartition--></NPAX>
+      <OEI_ceiling units="m" is_input="True">2900.0</OEI_ceiling>
+      <TOD units="m" is_input="True">1200.0</TOD>
+      <TTC units="min" is_input="True">24.0</TTC>
+      <approach_speed units="m/s" is_input="True">60.0<!--top-level requirement: approach speed--></approach_speed>
+      <cruise_mach is_input="True">0.45<!--top-level requirement: cruise Mach number--></cruise_mach>
+      <range units="nmi" is_input="True">750.0<!--top-level requirement: design range--></range>
+    </TLAR>
+    <geometry>
+      <has_T_tail is_input="True">1.0<!--0=horizontal tail is attached to fuselage / 1=horizontal tail is attached to top of vertical tail--></has_T_tail>
+      <cabin>
+        <aisle_width units="m" is_input="True">0.45<!--width of aisles--></aisle_width>
+        <exit_width units="m" is_input="True">0.75<!--width of exits--></exit_width>
+        <crew_count>
+          <technical is_input="True">2.0<!--number of technical crew members--></technical>
+        </crew_count>
+        <seats>
+          <economical>
+            <count_by_row is_input="True">4.0<!--number of economical class seats along width--></count_by_row>
+            <length units="m" is_input="True">0.762<!--length of economical class seats--></length>
+            <width units="m" is_input="True">0.4572<!--width of economical class seats--></width>
+          </economical>
+        </seats>
+      </cabin>
+      <flap>
+        <chord_ratio is_input="True">0.3<!--mean value of (flap chord)/(section chord)--></chord_ratio>
+        <span_ratio is_input="True">0.623<!--ratio (width of flaps)/(total span)--></span_ratio>
+      </flap>
+      <horizontal_tail>
+        <aspect_ratio is_input="True">4.555<!--aspect ratio of horizontal tail--></aspect_ratio>
+        <sweep_25 units="deg" is_input="True">6.32<!--sweep angle at 25% chord of horizontal tail--></sweep_25>
+        <taper_ratio is_input="True">0.613<!--taper ratio of horizontal tail--></taper_ratio>
+        <thickness_ratio is_input="True">0.12<!--thickness ratio of horizontal tail--></thickness_ratio>
+      </horizontal_tail>
+      <propulsion>
+        <layout is_input="True">1.0<!--position of engines (1=under the wing / 2=rear fuselage)--></layout>
+        <engine>
+          <count is_input="True">2.0<!--number of engines--></count>
+          <y_ratio is_input="True">0.3<!--engine position with respect to total span--></y_ratio>
+        </engine>
+        <propeller>
+          <B is_input="True">6.0</B>
+        </propeller>
+      </propulsion>
+      <slat>
+        <chord_ratio is_input="True">0.0<!--mean value of slat chord)/(section chord)--></chord_ratio>
+        <span_ratio is_input="True">0.0<!--ratio (width of slats)/(total span)--></span_ratio>
+      </slat>
+      <vertical_tail>
+        <aspect_ratio is_input="True">1.6<!--aspect ratio of vertical tail--></aspect_ratio>
+        <sweep_25 units="deg" is_input="True">28.56<!--sweep angle at 25% chord of vertical tail--></sweep_25>
+        <taper_ratio is_input="True">0.6<!--taper ratio of vertical tail--></taper_ratio>
+        <thickness_ratio is_input="True">0.12<!--thickness ratio of vertical tail--></thickness_ratio>
+      </vertical_tail>
+      <wing>
+        <aspect_ratio is_input="True">11.995<!--wing aspect ratio--></aspect_ratio>
+        <sweep_25 units="deg" is_input="True">2.3<!--sweep angle at 25% chord of wing--></sweep_25>
+        <taper_ratio is_input="True">0.618<!--taper ratio of wing--></taper_ratio>
+        <kink>
+          <span_ratio is_input="True">0.3866<!--ratio (Y-position of kink)/(semi-span)--></span_ratio>
+        </kink>
+        <spar_ratio>
+          <front>
+            <kink is_input="True">0.15<!--ratio (front spar position)/(chord length) at wing kink--></kink>
+            <root is_input="True">0.11<!--ratio (front spar position)/(chord length) at wing root--></root>
+            <tip is_input="True">0.27<!--ratio (front spar position)/(chord length) at wing tip--></tip>
+          </front>
+          <rear>
+            <kink is_input="True">0.66<!--ratio (rear spar position)/(chord length) at wing kink--></kink>
+            <root is_input="True">0.57<!--ratio (rear spar position)/(chord length) at wing root--></root>
+            <tip is_input="True">0.56<!--ratio (rear spar position)/(chord length) at wing tip--></tip>
+          </rear>
+        </spar_ratio>
+      </wing>
+    </geometry>
+    <propulsion>
+      <Power_Offtake units="W" is_input="True">7500.0</Power_Offtake>
+      <gearbox_eta is_input="True">0.99</gearbox_eta>
+      <L1_engine>
+        <HP_bleed is_input="True">1.0</HP_bleed>
+        <LP_bleed is_input="True">0.97</LP_bleed>
+        <fuel is_input="True">0.0</fuel>
+        <turbine_inlet_temperature units="degK" is_input="True">1526.0</turbine_inlet_temperature>
+        <combustor>
+          <combustor_eta is_input="True">0.995</combustor_eta>
+          <combustor_pressure_ratio is_input="True">0.93</combustor_pressure_ratio>
+        </combustor>
+        <hpc>
+          <hpc_eta_pol is_input="True">0.84</hpc_eta_pol>
+          <hpc_pressure_ratio is_input="True">2.6</hpc_pressure_ratio>
+        </hpc>
+        <hpt>
+          <hpt_eta_mech is_input="True">0.96</hpt_eta_mech>
+          <hpt_eta_pol is_input="True">0.86</hpt_eta_pol>
+        </hpt>
+        <inlet>
+          <inlet_eta_pol is_input="True">0.98</inlet_eta_pol>
+          <inlet_pressure_ratio is_input="True">1.0</inlet_pressure_ratio>
+        </inlet>
+        <lpc>
+          <lpc_eta_pol is_input="True">0.85</lpc_eta_pol>
+          <lpc_pressure_ratio is_input="True">5.65</lpc_pressure_ratio>
+        </lpc>
+        <lpt>
+          <lpt_eta_mech is_input="True">0.96</lpt_eta_mech>
+          <lpt_eta_pol is_input="True">0.86</lpt_eta_pol>
+        </lpt>
+        <nozzle>
+          <nozzle_area_ratio is_input="True">1.33</nozzle_area_ratio>
+          <nozzle_eta_pol is_input="True">0.98</nozzle_eta_pol>
+          <nozzle_pressure_ratio is_input="True">1.0</nozzle_pressure_ratio>
+        </nozzle>
+        <pt>
+          <pt_eta_mech is_input="True">0.98</pt_eta_mech>
+          <pt_eta_pol is_input="True">0.88</pt_eta_pol>
+        </pt>
+      </L1_engine>
+      <propeller>
+        <disk_loading units="kW/m**2" is_input="True">184.99</disk_loading>
+      </propeller>
+    </propulsion>
+    <handling_qualities>
+      <static_margin>
+        <target is_input="True">0.05</target>
+      </static_margin>
+    </handling_qualities>
+    <load_case>
+      <lc1>
+        <U_gust units="m/s" is_input="True">15.25<!--gust vertical speed for sizing load case 1 (gust with minimum aircraft mass)--></U_gust>
+        <Vc_EAS units="m/s" is_input="True">200.0<!--equivalent air speed for sizing load case 1 (gust with minimum aircraft mass)--></Vc_EAS>
+        <altitude units="ft" is_input="True">20000.0<!--altitude for sizing load case 1 (gust with minimum aircraft mass)--></altitude>
+      </lc1>
+      <lc2>
+        <U_gust units="m/s" is_input="True">15.25<!--gust vertical speed for sizing load case 2 (gust with maximum aircraft mass)--></U_gust>
+        <Vc_EAS units="knot" is_input="True">200.0<!--equivalent air speed for sizing load case 2 (gust with maximum aircraft mass)--></Vc_EAS>
+        <altitude units="ft" is_input="True">20000.0<!--altitude for sizing load case 2 (gust with maximum aircraft mass)--></altitude>
+      </lc2>
+    </load_case>
+    <mission>
+      <DOC>
+        <TOW units="kg" is_input="True">18600.0</TOW>
+        <payload units="kg" is_input="True">6460.0</payload>
+        <range units="m" is_input="True">370400.0</range>
+        <climb>
+          <speed units="m/s" is_input="True">87.5</speed>
+          <thrust_rate is_input="True">1.0</thrust_rate>
+        </climb>
+        <cruise>
+          <mach is_input="True">0.446</mach>
+        </cruise>
+        <descent>
+          <speed units="m/s" is_input="True">128.6</speed>
+          <thrust_rate is_input="True">0.01</thrust_rate>
+        </descent>
+        <diversion>
+          <altitude units="ft" is_input="True">14000.0</altitude>
+          <distance units="m" is_input="True">185200.0</distance>
+          <mach is_input="True">0.33</mach>
+        </diversion>
+        <holding>
+          <duration units="s" is_input="True">1800.0</duration>
+        </holding>
+        <landing>
+          <fuel units="kg" is_input="True">20.0</fuel>
+        </landing>
+        <takeoff>
+          <altitude units="m" is_input="True">0.0</altitude>
+          <fuel units="kg" is_input="True">10.0</fuel>
+        </takeoff>
+        <taxi_in>
+          <duration units="s" is_input="True">60.0</duration>
+          <fuel units="kg" is_input="True">3.0</fuel>
+          <speed units="m/s" is_input="True">10.0</speed>
+          <thrust_rate is_input="True">0.01</thrust_rate>
+        </taxi_in>
+        <taxi_out>
+          <fuel units="kg" is_input="True">9.0</fuel>
+        </taxi_out>
+        <main_route>
+          <cruise>
+            <altitude units="ft" is_input="True">20000.0</altitude>
+          </cruise>
+        </main_route>
+      </DOC>
+      <sizing>
+        <climb>
+          <speed units="m/s" is_input="True">87.5</speed>
+          <thrust_rate is_input="True">1.0<!--thrust rate (between 0.0 and 1.0) during climb phase in sizing mission--></thrust_rate>
+        </climb>
+        <descent>
+          <speed units="m/s" is_input="True">113.2</speed>
+          <thrust_rate is_input="True">0.1<!--thrust rate (between 0.0 and 1.0) during descent phase in sizing mission--></thrust_rate>
+        </descent>
+        <diversion>
+          <altitude units="ft" is_input="True">14000.0</altitude>
+          <distance units="m" is_input="True">185200.0<!--distance to travel during diversion in sizing mission--></distance>
+          <mach is_input="True">0.33</mach>
+        </diversion>
+        <holding>
+          <duration units="s" is_input="True">1800.0<!--duration of holding phase in sizing mission--></duration>
+        </holding>
+        <landing>
+          <fuel units="kg" is_input="True">20.0<!--mass of consumed fuel during landing phase in sizing mission--></fuel>
+        </landing>
+        <takeoff>
+          <Friction_coefficient_no_brake is_input="True">0.004</Friction_coefficient_no_brake>
+          <V_MCA units="m/s" is_input="True">50.69</V_MCA>
+          <altitude units="m" is_input="True">0.0<!--altitude at takeoff in sizing mission--></altitude>
+          <flap_angle units="deg" is_input="True">15.0<!--flap angle during takeoff phase in sizing mission--></flap_angle>
+          <fuel units="kg" is_input="True">10.0<!--mass of consumed fuel during takeoff phase in sizing mission--></fuel>
+          <slat_angle units="deg" is_input="True">0.0<!--slat angle during takeoff phase in sizing mission--></slat_angle>
+          <thrust_rate is_input="True">1.0</thrust_rate>
+        </takeoff>
+        <taxi_in>
+          <duration units="s" is_input="True">60.0<!--duration of taxi-in phase in sizing mission--></duration>
+          <fuel units="kg" is_input="True">3.0<!--mass of consumed fuel during taxi-in phase in sizing mission--></fuel>
+          <speed units="m/s" is_input="True">10.0<!--speed during taxi-in phase in sizing mission--></speed>
+          <thrust_rate is_input="True">0.01<!--thrust rate (between 0.0 and 1.0) during taxi-in phase in sizing mission--></thrust_rate>
+        </taxi_in>
+        <taxi_out>
+          <fuel units="kg" is_input="True">9.0<!--mass of consumed fuel during taxi-out phase in sizing mission--></fuel>
+        </taxi_out>
+        <main_route>
+          <cruise>
+            <altitude units="m" is_input="True">6096.0<!--altitude during cruise phase in sizing mission--></altitude>
+          </cruise>
+        </main_route>
+      </sizing>
+    </mission>
+    <weight>
+      <aircraft_empty>
+        <contingency units="kg" is_input="True">72.0</contingency>
+      </aircraft_empty>
+    </weight>
+    <aerodynamics>
+      <aircraft>
+        <landing>
+          <CL_max is_input="True">2.8<!--maximum lift coefficient in landing conditions--></CL_max>
+        </landing>
+        <low_speed>
+          <DCD_ext is_input="True">0.0</DCD_ext>
+          <DCD_feather is_input="True">0.004</DCD_feather>
+        </low_speed>
+        <takeoff>
+          <CT_effect>
+            <DCL0 is_input="True">[0, 0, 0, 0, 0]</DCL0>
+            <DCL_alpha units="1/rad" is_input="True">[0, 0, 0, 0, 0]</DCL_alpha>
+          </CT_effect>
+          <ground_effect>
+            <DCD is_input="True">[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]</DCD>
+            <DCL is_input="True">[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]</DCL>
+            <K_H is_input="True">[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]</K_H>
+          </ground_effect>
+        </takeoff>
+      </aircraft>
+    </aerodynamics>
+  </data>
+  <tuning>
+    <propulsion>
+      <k_prop is_input="True">1.0</k_prop>
+      <k_psfc is_input="True">1.0</k_psfc>
+    </propulsion>
+    <aerodynamics>
+      <aircraft>
+        <cruise>
+          <CD>
+            <k is_input="True">1.0<!--correction ratio to apply to computed drag coefficient in cruise conditions--></k>
+            <offset is_input="True">0.0<!--correction offset to apply to computed drag coefficient in cruise conditions--></offset>
+            <compressibility>
+              <ceiling is_input="True">0.01<!--maximum authorized value for compressibility drag. Allows to prevent the model from overestimating the compressibility effect, especially for aircraft models after year 2000.--></ceiling>
+            </compressibility>
+            <parasite>
+              <k is_input="True">1.85</k>
+            </parasite>
+            <winglet_effect>
+              <k is_input="True">1.0<!--correction ratio to apply to computed induced drag coefficient in cruise conditions--></k>
+              <offset is_input="True">0.0<!--correction ratio to apply to computed drag coefficient in cruise conditions--></offset>
+            </winglet_effect>
+          </CD>
+          <CL>
+            <k is_input="True">1.0<!--ratio to apply to defined cl range (which goes by default from 0.0 to 1.5) in cruise polar computation--></k>
+            <offset is_input="True">0.0<!--offset to apply to defined cl range (which goes by default from 0.0 to 1.5) in cruise polar computation--></offset>
+            <winglet_effect>
+              <k is_input="True">1.0<!--ratio to apply to defined cl range (which goes by default from 0.0 to 1.5) in cruise polar computation--></k>
+              <offset is_input="True">0.0<!--offset to apply to defined cl range (which goes by default from 0.0 to 1.5) in cruise polar computation--></offset>
+            </winglet_effect>
+          </CL>
+        </cruise>
+        <low_speed>
+          <CL0_clean>
+            <k is_input="True">1</k>
+          </CL0_clean>
+          <CL_alpha>
+            <k is_input="True">1</k>
+          </CL_alpha>
+          <CD>
+            <winglet_effect>
+              <k is_input="True">1.0</k>
+              <offset is_input="True">0.0</offset>
+            </winglet_effect>
+          </CD>
+        </low_speed>
+      </aircraft>
+    </aerodynamics>
+    <weight>
+      <airframe>
+        <fuselage>
+          <mass>
+            <k is_input="True">1.0<!--fuselage (A2): correction ratio to be applied on computed mass--></k>
+            <offset units="kg" is_input="True">0.0<!--fuselage (A2): correction offset to be applied on computed mass--></offset>
+          </mass>
+        </fuselage>
+        <horizontal_tail>
+          <mass>
+            <k is_input="True">1.0<!--horizontal tail (A31): correction ratio to be applied on computed mass--></k>
+            <offset units="kg" is_input="True">0.0<!--horizontal tail (A31): correction offset to be applied on computed mass--></offset>
+          </mass>
+        </horizontal_tail>
+        <landing_gear>
+          <mass>
+            <k is_input="True">1.0<!--landing gears (A5): correction ratio to be applied on computed mass--></k>
+            <offset units="kg" is_input="True">0.0<!--landing gears (A5): correction offset to be applied on computed mass--></offset>
+          </mass>
+        </landing_gear>
+        <nacelle>
+          <mass>
+            <k is_input="True">1.0</k>
+            <offset units="kg" is_input="True">0.0</offset>
+          </mass>
+        </nacelle>
+        <vertical_tail>
+          <mass>
+            <k is_input="True">1.0<!--vertical tail (A32): correction ratio to be applied on computed mass--></k>
+            <offset units="kg" is_input="True">0.0<!--vertical tail (A32): correction offset to be applied on computed mass--></offset>
+          </mass>
+        </vertical_tail>
+        <wing>
+          <mass>
+            <k is_input="True">1.0<!--wing (A1): correction ratio to be applied on computed mass--></k>
+            <offset units="kg" is_input="True">0.0<!--wing (A1): correction offset to be applied on computed mass--></offset>
+          </mass>
+          <bending_sizing>
+            <mass>
+              <k is_input="True">1.0<!--wing bending sizing (A11): correction ratio to be applied on computed mass--></k>
+              <offset units="kg" is_input="True">0.0<!--wing bending sizing (A11): correction offset to be applied on computed mass--></offset>
+            </mass>
+          </bending_sizing>
+          <reinforcements>
+            <mass>
+              <k is_input="True">0.0<!--wing reinforcements (A14): correction ratio to be applied on computed mass--></k>
+              <offset units="kg" is_input="True">0.0<!--wing reinforcements (A14): correction offset to be applied on computed mass--></offset>
+            </mass>
+          </reinforcements>
+          <ribs>
+            <mass>
+              <k is_input="True">1.0<!--wing ribs (A13): correction ratio to be applied on computed mass--></k>
+              <offset units="kg" is_input="True">0.0<!--wing ribs (A13): correction offset to be applied on computed mass--></offset>
+            </mass>
+          </ribs>
+          <secondary_parts>
+            <mass>
+              <k is_input="True">1.0<!--wing secondary parts (A15): correction ratio to be applied on computed mass--></k>
+              <offset units="kg" is_input="True">0.0<!--wing secondary parts (A15): correction offset to be applied on computed mass--></offset>
+            </mass>
+          </secondary_parts>
+          <shear_sizing>
+            <mass>
+              <k is_input="True">1.0<!--wing shear sizing (A12): correction ratio to be applied on computed mass--></k>
+              <offset units="kg" is_input="True">0.0<!--wing shear sizing (A12): correction offset to be applied on computed mass--></offset>
+            </mass>
+          </shear_sizing>
+        </wing>
+      </airframe>
+      <furniture>
+        <cabin_lighting>
+          <mass>
+            <k is_input="True">1.0</k>
+            <offset units="kg" is_input="True">0.0</offset>
+          </mass>
+        </cabin_lighting>
+        <furnishing>
+          <mass>
+            <k is_input="True">1.0</k>
+            <offset units="kg" is_input="True">0.0</offset>
+          </mass>
+        </furnishing>
+        <insulation>
+          <mass>
+            <k is_input="True">0.4</k>
+            <offset units="kg" is_input="True">0.0</offset>
+          </mass>
+        </insulation>
+        <interior_integration>
+          <mass>
+            <k is_input="True">1.0</k>
+            <offset units="kg" is_input="True">0.0</offset>
+          </mass>
+        </interior_integration>
+        <oxygen>
+          <mass>
+            <k is_input="True">1.0</k>
+            <offset units="kg" is_input="True">0.0</offset>
+          </mass>
+        </oxygen>
+        <passenger_seats>
+          <mass>
+            <k is_input="True">1.0<!--passenger seats (D2): correction ratio to be applied on computed mass--></k>
+            <offset units="kg" is_input="True">0.0<!--passenger seats (D2): correction offset to be applied on computed mass--></offset>
+          </mass>
+        </passenger_seats>
+        <seats_crew_accommodation>
+          <mass>
+            <k is_input="True">1.0</k>
+            <offset units="kg" is_input="True">0.0</offset>
+          </mass>
+        </seats_crew_accommodation>
+        <water>
+          <mass>
+            <k is_input="True">1.0</k>
+            <offset units="kg" is_input="True">0.0</offset>
+          </mass>
+        </water>
+      </furniture>
+      <propulsion>
+        <engine>
+          <mass>
+            <k is_input="True">1.0<!--engine (B1): correction ratio to be applied on computed mass--></k>
+          </mass>
+        </engine>
+        <engine_controls_instrumentation>
+          <mass>
+            <k is_input="True">1.0</k>
+          </mass>
+        </engine_controls_instrumentation>
+        <fuel_lines>
+          <mass>
+            <k is_input="True">1.0<!--fuel lines (B2): correction ratio to be applied on computed mass--></k>
+            <offset units="kg" is_input="True">0.0<!--fuel lines (B2): correction offset to be applied on computed mass--></offset>
+          </mass>
+        </fuel_lines>
+        <propeller>
+          <mass>
+            <k is_input="True">1.0</k>
+          </mass>
+        </propeller>
+      </propulsion>
+      <systems>
+        <ECS>
+          <mass>
+            <k is_input="True">1.0</k>
+            <offset units="kg" is_input="True">0.0</offset>
+          </mass>
+        </ECS>
+        <automatic_flight_system>
+          <mass>
+            <k is_input="True">1.0</k>
+            <offset units="kg" is_input="True">0.0</offset>
+          </mass>
+        </automatic_flight_system>
+        <auxiliary_power_unit>
+          <mass>
+            <k is_input="True">0.0</k>
+            <offset units="kg" is_input="True">0.0</offset>
+          </mass>
+        </auxiliary_power_unit>
+        <communications>
+          <mass>
+            <k is_input="True">1.0</k>
+            <offset units="kg" is_input="True">0.0</offset>
+          </mass>
+        </communications>
+        <de-icing>
+          <mass>
+            <k is_input="True">1.0</k>
+            <offset units="kg" is_input="True">0.0</offset>
+          </mass>
+        </de-icing>
+        <fire_protection>
+          <mass>
+            <k is_input="True">1.0</k>
+            <offset units="kg" is_input="True">0.0</offset>
+          </mass>
+        </fire_protection>
+        <flight_controls>
+          <mass>
+            <k is_input="True">1.0</k>
+            <offset units="kg" is_input="True">0.0</offset>
+          </mass>
+        </flight_controls>
+        <flight_furnishing>
+          <mass>
+            <k is_input="True">1.0</k>
+            <offset units="kg" is_input="True">0.0</offset>
+          </mass>
+        </flight_furnishing>
+        <hydraulic_systems>
+          <mass>
+            <k is_input="True">1.0</k>
+            <offset units="kg" is_input="True">0.0</offset>
+          </mass>
+        </hydraulic_systems>
+        <navigation>
+          <mass>
+            <k is_input="True">1.0<!--navigation (C3): correction ratio to be applied on computed mass--></k>
+            <offset units="kg" is_input="True">0.0<!--navigation (C3): correction offset to be applied on computed mass--></offset>
+          </mass>
+        </navigation>
+        <electric_systems>
+          <electric_generation>
+            <mass>
+              <k is_input="True">1.0</k>
+              <offset units="kg" is_input="True">0.0</offset>
+            </mass>
+          </electric_generation>
+        </electric_systems>
+      </systems>
+    </weight>
+  </tuning>
+  <settings>
+    <geometry>
+      <horizontal_tail>
+        <position_ratio_on_fuselage is_input="True">0.91</position_ratio_on_fuselage>
+      </horizontal_tail>
+    </geometry>
+    <weight>
+      <aircraft>
+        <design_mass_per_seat units="kg" is_input="True">10.0</design_mass_per_seat>
+        <CG>
+          <range is_input="True">0.3<!--distance between front position and aft position of CG, as ratio of mean aerodynamic chord (allows to have front position of CG, as currently, FAST-OAD estimates only the aft position of CG)--></range>
+          <aft>
+            <MAC_position>
+              <margin is_input="True">0.05</margin>
+            </MAC_position>
+          </aft>
+        </CG>
+        <payload>
+          <design_mass_per_passenger units="kg" is_input="True">95.0</design_mass_per_passenger>
+          <fret_ratio is_input="True">0.6</fret_ratio>
+          <max_mass_per_passenger units="kg" is_input="True">130.72</max_mass_per_passenger>
+        </payload>
+      </aircraft>
+      <airframe>
+        <fuselage>
+          <mass>
+            <k_fus is_input="True">1.0<!--correction coefficient: 1.00 if all engines under wing / 1.02 with 2 engines at rear / 1.03 if 3 engines at rear / 1.05 if 1 engine in vertical tail (with or without 2 engines under wing)--></k_fus>
+            <k_lg is_input="True">1.1<!--correction coefficient: 1.05 if main landing gear under wing / 1.10 if main landing gear under fuselage--></k_lg>
+          </mass>
+        </fuselage>
+        <landing_gear>
+          <front>
+            <weight_ratio is_input="True">0.08<!--part of aircraft weight that is supported by front landing gear--></weight_ratio>
+          </front>
+        </landing_gear>
+        <wing>
+          <mass>
+            <k_mvo is_input="True">0.6<!--1.39 for Airbus type aircrafts--></k_mvo>
+            <k_voil is_input="True">1.05<!--1.00 if 4 engines / 1.05 if 2 or 3 engines / 1.10 if engines on fuselage--></k_voil>
+          </mass>
+        </wing>
+      </airframe>
+      <systems>
+        <electric_systems>
+          <mass>
+            <k_elec is_input="True">1.0</k_elec>
+          </mass>
+        </electric_systems>
+      </systems>
+    </weight>
+    <propulsion>
+      <ratings>
+        <FID>
+          <k_gb is_input="True">1.0</k_gb>
+          <k_th is_input="True">0.7</k_th>
+        </FID>
+        <MCL>
+          <k_gb is_input="True">0.797</k_gb>
+          <k_th is_input="True">0.92</k_th>
+        </MCL>
+        <MCR>
+          <k_gb is_input="True">0.775</k_gb>
+          <k_th is_input="True">0.905</k_th>
+        </MCR>
+        <MCT>
+          <k_gb is_input="True">0.909</k_gb>
+          <k_th is_input="True">1.0</k_th>
+        </MCT>
+        <NTO>
+          <k_gb is_input="True">0.9</k_gb>
+          <k_th is_input="True">0.971</k_th>
+        </NTO>
+        <RTO>
+          <k_gb is_input="True">1.0</k_gb>
+          <k_th is_input="True">1.0</k_th>
+        </RTO>
+      </ratings>
+    </propulsion>
+  </settings>
+</FASTOAD_model>

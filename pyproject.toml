@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "RHEA"
+version = "0.0.1"
+description = "Conceptual aircraft design platform for conventional and hybrid 80 seat aircraft"
+authors = ["Vincenzo PALLADINO <VINCENZO.PALLADINO@atr-aircraft.com>"]
+
+[tool.poetry.dependencies]
+# IMPORTANT: when modifying this list, docs/requirements.txt must be updated for
+# ReadTheDocs to be able to compile the documentation.
+# A pre-commit hook has been added to do this task. As a result, any modification
+# of poetry.lock file will modify docs/requirements.txt and make
+# the commit fail because "files were modified by this hook". In that case,
+# doing again the commit including changes in docs/requirements.txt will succeed.
+python = "^3.8, <3.10"
+fast-oad = "0.5.4b0"
+openmdao = "3.6.0"

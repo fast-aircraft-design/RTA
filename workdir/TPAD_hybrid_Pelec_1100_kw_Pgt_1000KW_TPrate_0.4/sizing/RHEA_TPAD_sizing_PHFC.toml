@@ -1,0 +1,285 @@
+title = "Sizing process"
+
+# List of folder paths where user added custom registered OpenMDAO components
+module_folders = ['C:\Users\vinx0\OneDrive\Desktop\RHEA\rhea\models']
+
+# Input and output files
+input_file = "./problem_inputs.xml"
+output_file = "./problem_outputs.xml"
+
+# Definition of problem driver assuming the OpenMDAO convention "import openmdao.api as om"
+driver = "om.ScipyOptimizeDriver(tol=1e-6, optimizer='COBYLA',disp=True,maxiter=200)"
+
+# Definition of OpenMDAO model
+[model]
+    # Solvers are defined assuming the OpenMDAO convention "import openmdao.api as om"
+    nonlinear_solver = "om.NonlinearBlockGS(maxiter=200)"
+    linear_solver = "om.DirectSolver()"
+
+    # Although "model" is a mandatory name for the top level of the model, its
+    # sub-components can be freely named by user
+    [model.propulsion_inp]
+        id = "rhea.propulsion.propulsion_inputs"     
+    
+    [model.geometry]
+        # An OpenMDAO component is identified by its "id"
+        id = "rhea.geometry.IN"
+    [model.propulsion_propeller]
+        id = "rhea.propulsion.propeller_sizing" 
+
+    [model.aerodynamics.highspeed]
+        id = "rhea.aerodynamics.highspeed"
+    [model.aerodynamics_lowspeed]
+        id = "rhea.aerodynamics.lowspeed"
+    [model.aerodynamics_takeoff]
+        id =  "rhea.aerodynamics.takeoff"
+#    [model.aerodynamics_landing]
+#        id = "fastoad.aerodynamics.landing.legacy"
+#        use_xfoil = false
+
+#    [model.performance]
+#        id = "fastoad.performances.breguet"  #fastoad.performances.breguet rhea.breguet
+#        propulsion_id = "rhea.wrapper.propulsion.TP_engine_L1" #rubber_TP_engine #PHFC_engine_L0
+        #propulsion_id = "fastoad.wrapper.propulsion.rubber_engine"
+
+###################ONLY for L1 models
+    #[model.propulsion]
+        #id = "rhea.propulsion.turboprop_sizing"  
+         
+    [model.electric_propulsion]
+        id = "rhea.propulsion.fuel_cell_sizing"    
+ 
+       
+###################
+
+    [model.performance_TO]
+        id ="rhea.performances.TOFL"
+        propulsion_id = "rhea.wrapper.propulsion.PHFC_engine_ML_L1"
+        out_file = "C:/Users/vinx0/OneDrive/Desktop/RHEA/workdir/TPAD_hybrid_Pelec_1100_kw_Pgt_1000KW_TPrate_0.4/sizing/TO_flight_points.csv"
+        prop_fid ="ADT"
+        
+        
+    [model.performance_OEI]
+        id ="rhea.performances.OEI"
+        propulsion_id = "rhea.wrapper.propulsion.PHFC_engine_ML_L1"
+        prop_fid ="ADT"
+                
+    [model.performance]
+        id = "rhea.performances.sizing_flight"   
+        propulsion_id = "rhea.wrapper.propulsion.PHFC_engine_ML_L1" #PHFC_engine_L1 #PHFC_engine_ML_L1 #PHFC_engine_PW
+        out_file = "C:/Users/vinx0/OneDrive/Desktop/RHEA/workdir/TPAD_hybrid_Pelec_1100_kw_Pgt_1000KW_TPrate_0.4/sizing/flight_points.csv"
+        prop_fid ='ADT'
+        
+    [model.hybrid_systems]
+        id = "rhea.propulsion.BoP_sizing"   
+
+    [model.weight]
+        id = "rhea.weight.IN"
+        payload_from_npax = false
+        out_file = "C:/Users/vinx0/OneDrive/Desktop/RHEA/workdir/TPAD_hybrid_Pelec_1100_kw_Pgt_1000KW_TPrate_0.4/sizing/sizing_conditions.csv"
+        
+    [model.outputs]
+        id = "rhea.performace.mission_outputs"           
+    #[model.performance_payloadRange]
+      #  id = "rhea.performances.payload_range"   
+       # propulsion_id = "rhea.wrapper.propulsion.TP_engine_L1"
+       # out_file = "C:/Users/vinx0/OneDrive/Desktop/RHEA/workdir/TPAD_hybrid_Pelec_1100_kw_Pgt_1000KW_TPrate_0.4/sizing/TPAD_hybrid_optimization_test1/sizing/flight_points_pr.csv"
+                
+    [model.hq.static_margin]
+        id = "fastoad.handling_qualities.static_margin"
+        #target = 0.05
+
+[optimization]  # This section is needed only if optimization process is run
+
+    [[optimization.design_var]]
+            name ="data:propulsion:electric_systems:P_nom_norm"
+            lower = 0.0
+            upper = 1.0
+            
+    #[[optimization.design_var]]
+            #name ="data:propulsion:electric_systems:fuel_cell:sizing:w_p"
+            #lower = 0.4
+            #upper = 1.0     
+   
+            
+    [[optimization.design_var]]
+            name = "sego:climb:EM_rate0"
+            lower = 0.6
+            upper = 1.0           
+    [[optimization.design_var]]
+            name = "sego:climb:EM_rate1"
+            lower = 0.6
+            upper = 1.0 
+    [[optimization.design_var]]
+            name = "sego:climb:EM_rate2"
+            lower = 0.6
+            upper = 1.0 
+    [[optimization.design_var]]
+            name = "sego:climb:EM_rate3"
+            lower = 0.6
+            upper = 1.0 
+    [[optimization.design_var]]
+            name = "sego:climb:EM_rate4"
+            lower = 0.6
+            upper = 1.0 
+    [[optimization.design_var]]
+            name = "sego:climb:EM_rate5"
+            lower = 0.6
+            upper = 1.0                         
+    [[optimization.design_var]]
+            name = "sego:climb:EM_rate6"
+            lower = 0.6
+            upper = 1.0 
+            
+    [[optimization.design_var]]
+            name = "sego:climb:TP_rate0"
+            lower = 0.4
+            upper = 1.0           
+    [[optimization.design_var]]
+            name = "sego:climb:TP_rate1"
+            lower = 0.4
+            upper = 1.0 
+    [[optimization.design_var]]
+            name = "sego:climb:TP_rate2"
+            lower = 0.4
+            upper = 1.0 
+    [[optimization.design_var]]
+            name = "sego:climb:TP_rate3"
+            lower = 0.4
+            upper = 1.0 
+    [[optimization.design_var]]
+            name = "sego:climb:TP_rate4"
+            lower = 0.4
+            upper = 1.0 
+    [[optimization.design_var]]
+            name = "sego:climb:TP_rate5"
+            lower = 0.4
+            upper = 1.0                         
+    [[optimization.design_var]]
+            name = "sego:climb:TP_rate6"
+            lower = 0.4
+            upper = 1.0        
+                                 
+    [[optimization.design_var]]
+            name = "data:propulsion:RTO_power_norm"
+            #ref  = 2000000.0
+            #ref0 = 1800000.0
+            #scaler = 5e-07
+            lower = 0.0
+            upper = 1.0        
+              
+    [[optimization.design_var]]
+            name = "data:mission:sizing:initial_climb:EM_power_rate"     
+            lower = 0.6
+            upper = 1.0 
+                
+              
+    [[optimization.design_var]]
+            name = "data:mission:sizing:initial_climb:TP_power_rate"     
+            lower = 0.9
+            upper = 1.0                         
+
+    #[[optimization.design_var]]
+            #name = "data:mission:sizing:cruise:mach"     
+            #lower = 0.35
+            #upper = 0.5 
+                 
+    [[optimization.design_var]]
+            name = "data:mission:sizing:takeoff:EM_power_rate"     
+            lower = 0.6
+            upper = 1.0             
+                                                   
+    #[[optimization.constraint]]
+            #name = "data:TLAR:NPAX"
+            #lower = 20.0
+            #upper = 80.0
+
+    [[optimization.constraint]]
+            name = "data:mission:sizing:main_route:climb:TTC"
+
+    #[[optimization.constraint]]
+            #name = "data:mission:sizing:block_time"   
+                     
+    #[[optimization.constraint]]
+            #name = "data:propulsion:electric_systems:H2_storage:volume"
+
+    [[optimization.constraint]]
+            name = "data:mission:sizing:climb:operational_ceiling" 
+
+    [[optimization.constraint]]
+            name = "data:mission:sizing:diversion:climb:operational_ceiling" 
+                                    
+    [[optimization.constraint]]
+            name = "data:mission:sizing:OEI:net_ceiling"            
+            
+    [[optimization.constraint]]
+            name = "data:mission:sizing:takeoff:TOFL"             
+                      
+    [[optimization.objective]]
+            name = "data:mission:sizing:block_fuel_pax_gross"
+
+[sego]  # This section is needed only if sego is used to optimize
+    [[sego.design_var]]
+            name ="data:propulsion:electric_systems:P_nom_norm"
+            type="FLOAT"
+    [[sego.design_var]]
+            name = "data:propulsion:RTO_power_norm"
+            type="FLOAT"
+    #[[sego.design_var]]
+            #name = "data:propulsion:electric_systems:fuel_cell:sizing:w_p"
+            #type="FLOAT"            
+    [[sego.design_var]]
+            name = "sego:climb:EM_rate0"
+            type="FLOAT"              
+    [[sego.design_var]]
+            name = "sego:climb:EM_rate1"
+            type="FLOAT"  
+    [[sego.design_var]]
+            name = "sego:climb:EM_rate2"
+            type="FLOAT"  
+    [[sego.design_var]]
+            name = "sego:climb:EM_rate3"
+            type="FLOAT"              
+    [[sego.design_var]]
+            name = "sego:climb:EM_rate4"
+            type="FLOAT"  
+    [[sego.design_var]]
+            name = "sego:climb:EM_rate5"
+            type="FLOAT"                              
+    [[sego.design_var]]
+            name = "sego:climb:EM_rate6"
+            type="FLOAT"                          
+    [[sego.design_var]]
+            name = "data:mission:sizing:takeoff:EM_power_rate"     
+            type="FLOAT"             
+    [[sego.design_var]]
+            name = "data:mission:sizing:initial_climb:EM_power_rate"     
+            type="FLOAT"               
+    [[sego.design_var]]
+            name = "sego:climb:TP_rate0"
+            type="FLOAT"              
+    [[sego.design_var]]
+            name = "sego:climb:TP_rate1"
+            type="FLOAT"  
+    [[sego.design_var]]
+            name = "sego:climb:TP_rate2"
+            type="FLOAT"  
+    [[sego.design_var]]
+            name = "sego:climb:TP_rate3"
+            type="FLOAT"              
+    [[sego.design_var]]
+            name = "sego:climb:TP_rate4"
+            type="FLOAT"  
+    [[sego.design_var]]
+            name = "sego:climb:TP_rate5"
+            type="FLOAT"                              
+    [[sego.design_var]]
+            name = "sego:climb:TP_rate6"
+            type="FLOAT"                          
+           
+    [[sego.design_var]]
+            name = "data:mission:sizing:initial_climb:TP_power_rate"     
+            type="FLOAT"     
+    #[[sego.design_var]]
+            #name = "data:mission:sizing:cruise:mach"     
+            #type="FLOAT"               
