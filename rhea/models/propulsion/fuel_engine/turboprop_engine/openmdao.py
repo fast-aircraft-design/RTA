@@ -13,14 +13,14 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import numpy as np
-from fastoad.models.propulsion import IOMPropulsionWrapper, IPropulsion, BaseOMPropulsionComponent
+from fastoad.model_base.propulsion import IOMPropulsionWrapper, IPropulsion, BaseOMPropulsionComponent
 from fastoad.module_management.service_registry import RegisterPropulsion
 from fastoad.openmdao.validity_checker import ValidityDomainChecker
 from openmdao.core.component import Component
 from typing import Union, Sequence, Optional, Tuple
 from fastoad.constants import EngineSetting
 import pandas as pd
-from fastoad.base.flight_point import FlightPoint
+from fastoad.model_base.flight_point import FlightPoint
 
 
 #from .rubber_TP_engine import RubberTPEngine

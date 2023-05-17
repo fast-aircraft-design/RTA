@@ -17,7 +17,7 @@ Computation of wing area
 import numpy as np
 import openmdao.api as om
 import os
-from rhea.models.propulsion.fuel_engine.constants import POWER_RATE_COUNT
+from .constants import POWER_RATE_COUNT
 
 class CompletePropulsionInputs(om.ExplicitComponent):
     """

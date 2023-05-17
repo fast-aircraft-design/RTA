@@ -15,23 +15,24 @@ Weight computation (mass and CG)
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import openmdao.api as om
-from fastoad.models.options import OpenMdaoOptionDispatcherGroup
+#from fastoad.models.options import OpenMdaoOptionDispatcherGroup
 #from fastoad.models.weight.cg.cg import ComputeAircraftCG
 # from rhea.models.weight.cg.cg_RHEA import CG_RHEA
 # from rhea.models.weight.mass_breakdown import MassBreakdown_RHEA
 import numpy as np
-from models.propulsion.fuel_engine.turboprop_engine.engine_components.Ram import Ram
-from models.propulsion.fuel_engine.turboprop_engine.engine_components.Compression_Nozzle import Compression_Nozzle
-from models.propulsion.fuel_engine.turboprop_engine.engine_components.Low_Pressure_Compressor import LPC
-from models.propulsion.fuel_engine.turboprop_engine.engine_components.High_Pressure_Compressor import HPC
-from models.propulsion.fuel_engine.turboprop_engine.engine_components.Combustor import Combustor
-from models.propulsion.fuel_engine.turboprop_engine.engine_components.Low_Pressure_Turbine import LPT
-from models.propulsion.fuel_engine.turboprop_engine.engine_components.High_Pressure_Turbine import HPT
-from models.propulsion.fuel_engine.turboprop_engine.engine_components.Power_Turbine import Power_Turbine
-from models.propulsion.fuel_engine.turboprop_engine.engine_components.Expansion_Nozzle import Expansion_Nozzle
-from models.propulsion.fuel_engine.turboprop_engine.engine_components.Thrust import Thrust
-from models.propulsion.fuel_engine.turboprop_engine.engine_components.Fuel_Data import Fuel_data
-from fastoad.utils.physics import Atmosphere
+
+from ..engine_components.Ram import Ram
+from ..engine_components.Compression_Nozzle import Compression_Nozzle
+from ..engine_components.Low_Pressure_Compressor import LPC
+from ..engine_components.High_Pressure_Compressor import HPC
+from ..engine_components.Combustor import Combustor
+from ..engine_components.Low_Pressure_Turbine import LPT
+from ..engine_components.High_Pressure_Turbine import HPT
+from ..engine_components.Power_Turbine import Power_Turbine
+from ..engine_components.Expansion_Nozzle import Expansion_Nozzle
+from ..engine_components.Thrust import Thrust
+from ..engine_components.Fuel_Data import Fuel_data
+from fastoad.model_base.atmosphere import Atmosphere
 from openmdao.core.explicitcomponent import ExplicitComponent
 
 class TP_sizing(ExplicitComponent):

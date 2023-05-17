@@ -11,8 +11,8 @@
 #  GNU General Public License for more details.
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
-import pickle
-from sklearn.preprocessing import PolynomialFeatures
+# import pickle
+#
 from scipy import constants
 import logging
 import math
@@ -20,23 +20,23 @@ from typing import Union, Sequence, Tuple, Optional
 import os
 import numpy as np
 from fastoad.constants import FlightPhase
-from fastoad.models.propulsion import IPropulsion
+#from fastoad.models.propulsion import IPropulsion
 #from models.propulsion import IPropulsion
-from fastoad.models.propulsion.fuel_propulsion.rubber_engine.exceptions import (
+from fastoad_cs25.models.propulsion.fuel_propulsion.rubber_engine.exceptions import (
     FastRubberEngineInconsistentInputParametersError,
 )
-from fastoad.utils.physics import Atmosphere
+from fastoad.model_base.atmosphere import Atmosphere
 import pandas as pd
-from fastoad.base.flight_point import FlightPoint
-from models.propulsion.fuel_engine.turboprop_engine.base import AbstractFuelPropulsion
-from models.propulsion.fuel_engine.turboprop_engine.engine_components.Propeller import Propeller
+from fastoad.model_base.flight_point import FlightPoint
+from .base import AbstractFuelPropulsion
+from .engine_components.Propeller import Propeller
 
 # Logger for this module
 _LOGGER = logging.getLogger(__name__)
-from fastoad.base.dict import AddKeyAttributes
+#from fastoad.base.dict import AddKeyAttributes
 
-AddKeyAttributes(["psfc","shaft_power", "power_rate","thermo_power","TP_thermal_efficiency","TP_residual_thrust","TP_air_flow","TP_total_pressure","TP_total_temperature","fuel_mass" 
-                  ,"H2_mass","TPshaft_power","EMshaft_power","FC_power","TP_power_rate","EM_power_rate","H2_fc","CT"])(FlightPoint)
+#AddKeyAttributes(["psfc","shaft_power", "power_rate","thermo_power","TP_thermal_efficiency","TP_residual_thrust","TP_air_flow","TP_total_pressure","TP_total_temperature","fuel_mass"
+                 # ,"H2_mass","TPshaft_power","EMshaft_power","FC_power","TP_power_rate","EM_power_rate","H2_fc","CT"])(FlightPoint)
 
 
 script_path = os.path.abspath(__file__) # i.e. /path/to/dir/foobar.py
@@ -134,9 +134,13 @@ class TPEngine_L0(AbstractFuelPropulsion):
         atmosphere = Atmosphere(altitude, altitude_in_feet=False)
         
         a = atmosphere.speed_of_sound
-        V_TAS = mach*a
-        V_EAS = atmosphere.get_equivalent_airspeed(V_TAS)/constants.knot        
-        
+
+
+
+        if mach ==0:
+            mach = 0.025
+        V_TAS = mach * a
+        V_EAS = atmosphere.get_equivalent_airspeed(V_TAS) / constants.knot
 
         if thrust_is_regulated is not None:
             thrust_is_regulated = np.asarray(np.round(thrust_is_regulated, 0), dtype=bool)

@@ -17,9 +17,13 @@ from typing import Union
 
 import pandas as pd
 
-from fastoad.base.flight_point import FlightPoint
-from fastoad.models.propulsion import IPropulsion
-from rhea.models.propulsion.fuel_engine.turboprop_engine.base import AbstractFuelPropulsion
+from fastoad.model_base.flight_point import FlightPoint
+from fastoad.model_base.propulsion import IPropulsion
+#from rhea.models.propulsion.fuel_engine.turboprop_engine.base import AbstractFuelPropulsion
+
+FlightPoint.add_field("TPshaft_power")
+FlightPoint.add_field("psfc")
+FlightPoint.add_field("H2_fc")
 
 class AbstractHybridPropulsion(IPropulsion, ABC):
     """

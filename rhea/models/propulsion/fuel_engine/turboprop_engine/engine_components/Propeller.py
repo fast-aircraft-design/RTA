@@ -1,12 +1,12 @@
 
-import pickle
-from sklearn.preprocessing import PolynomialFeatures
+import warnings
+import joblib
 from scipy import constants
 import numpy as np
 from fastoad.constants import FlightPhase
 import os
-
-from fastoad.utils.physics import Atmosphere
+from mlinsights.mlmodel import ExtendedFeatures
+from fastoad.model_base.atmosphere import Atmosphere
 from typing import Union, Sequence, Tuple, Optional
 
 from scipy.optimize import fsolve
@@ -59,17 +59,18 @@ class Propeller(object):
         #     T_prop =loaded_model.predict(x)[0] *10 #daN to N
         if phase == 1 or phase==8 or phase==9:
             eta=0.
-            poly = PolynomialFeatures(degree=3)
+            poly = ExtendedFeatures(poly_degree=3)
             x = poly.fit_transform(np.array([altitude, mach, DISA], dtype=object).reshape(1, -1))
             T_prop = data.dict_metamodels[RC]['fn'].predict(x)[0]*10
             #T_prop =loaded_model.predict(x)[0] *10 #daN to N          
             
         else:
-            poly = PolynomialFeatures(degree=4)
+            poly = ExtendedFeatures(poly_degree=4)
             x=poly.fit_transform(np.array([altitude,V_TAS,shp_prop],dtype=object).reshape(1,-1))
             #filename ='C:/Users/LA202059/Desktop/RHEA/rhea/resources/propeller/H568F/Metamodels/NP82/power_to_eta_4th_degree.sav'
             filename = os.path.join(rhea_path,'resources/propeller/H568F/Metamodels/NP82/power_to_eta_4th_degree.sav')
-            loaded_model = pickle.load(open(filename, 'rb'))
+            warnings.simplefilter("ignore", category=UserWarning)
+            loaded_model = joblib.load(open(filename, 'rb'))
             eta =data.k_prop * loaded_model.predict(x)[0]
             #print(eta)    
             T_prop =  eta * shp_prop * constants.hp / (V_TAS* constants.knot) #N 
@@ -101,12 +102,12 @@ class Propeller(object):
 
 
         def func(shp_prop,altitude,V_TAS,thrust):
-            poly = PolynomialFeatures(degree=4)
+            poly = ExtendedFeatures(poly_degree=4)
             x=poly.fit_transform(np.array([altitude,V_TAS,shp_prop],dtype=object).reshape(1,-1))
             #filename ='C:/Users/LA202059/Desktop/RHEA/rhea/resources/propeller/H568F/Metamodels/NP82/power_to_eta_4th_degree.sav'
             filename = os.path.join(rhea_path,'resources/propeller/H568F/Metamodels/NP82/power_to_eta_4th_degree.sav')
-
-            loaded_model = pickle.load(open(filename, 'rb'))
+            warnings.simplefilter("ignore", category=UserWarning)
+            loaded_model = joblib.load(open(filename, 'rb'))
             eta = loaded_model.predict(x)[0]
             shp=thrust* (V_TAS* constants.knot)/eta/constants.hp 
             return shp_prop-shp   

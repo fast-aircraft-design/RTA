@@ -16,12 +16,12 @@ Main components for mass breakdown
 
 import openmdao.api as om
 
-from fastoad.models.options import PAYLOAD_FROM_NPAX
-from fastoad.models.weight.mass_breakdown.e_crew import CrewWeight
-from fastoad.models.weight.mass_breakdown.payload import ComputePayload
-from rhea.models.weight.mass_breakdown.b_propulsion.hybrid_propulsion_weight import HybridPropulsionWeight
-from rhea.models.weight.mass_breakdown.b_propulsion.turboprop_weight import TurbopropWeight
-from rhea.models.weight.mass_breakdown.b_propulsion.fuel_lines_weight import (
+from fastoad_cs25.models.constants import PAYLOAD_FROM_NPAX
+from fastoad_cs25.models.weight.mass_breakdown.e_crew import CrewWeight
+from fastoad_cs25.models.weight.mass_breakdown.payload import ComputePayload
+from .b_propulsion.hybrid_propulsion_weight import HybridPropulsionWeight
+from .b_propulsion.turboprop_weight import TurbopropWeight
+from .b_propulsion.fuel_lines_weight import (
     FuelLinesWeight,
 )
 import numpy as np
