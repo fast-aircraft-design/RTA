@@ -140,7 +140,7 @@ class TPEngine_L0(AbstractFuelPropulsion):
         if mach ==0:
             mach = 0.025
         V_TAS = mach * a
-        V_EAS = atmosphere.get_equivalent_airspeed(V_TAS) / constants.knot
+        #V_EAS = atmosphere.get_equivalent_airspeed(V_TAS) / constants.knot
 
         if thrust_is_regulated is not None:
             thrust_is_regulated = np.asarray(np.round(thrust_is_regulated, 0), dtype=bool)
@@ -247,7 +247,7 @@ class TPEngine_L0(AbstractFuelPropulsion):
         flight_points.TP_power_rate = out_power_rate
         flight_points.thermo_power = max_thermo_power 
         flight_points.TP_residual_thrust = FR
-
+        flight_points.sfc=tsfc
 
     @staticmethod
     def _check_thrust_inputs(
