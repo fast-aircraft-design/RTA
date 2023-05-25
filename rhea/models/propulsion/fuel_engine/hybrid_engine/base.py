@@ -20,11 +20,13 @@ import pandas as pd
 from fastoad.model_base.flight_point import FlightPoint
 from fastoad.model_base.propulsion import IPropulsion
 #from rhea.models.propulsion.fuel_engine.turboprop_engine.base import AbstractFuelPropulsion
-
 FlightPoint.add_field("TPshaft_power")
+FlightPoint.add_field("EMshaft_power")
 FlightPoint.add_field("psfc")
 FlightPoint.add_field("H2_fc")
-
+FlightPoint.add_field("EM_power_rate")
+FlightPoint.add_field("BAT_ec")
+FlightPoint.add_field("BAT_power")
 class AbstractHybridPropulsion(IPropulsion, ABC):
     """
     Propulsion model that consume any fuel should inherit from this one.

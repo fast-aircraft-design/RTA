@@ -13,7 +13,8 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import numpy as np
-from fastoad.model_base.propulsion import IOMPropulsionWrapper, IPropulsion, BaseOMPropulsionComponent
+from fastoad.model_base.propulsion import IOMPropulsionWrapper,IPropulsion,BaseOMPropulsionComponent,FuelEngineSet
+
 from fastoad.module_management.service_registry import RegisterPropulsion
 from fastoad.openmdao.validity_checker import ValidityDomainChecker
 from openmdao.core.component import Component
@@ -21,6 +22,7 @@ from typing import Union, Sequence, Optional, Tuple
 from fastoad.constants import EngineSetting
 import pandas as pd
 from fastoad.model_base.flight_point import FlightPoint
+from fastoad.models.performances.mission.openmdao.mission_run import MissionComp
 
 
 #from .rubber_TP_engine import RubberTPEngine
@@ -52,6 +54,7 @@ class OMMLTPL1Wrapper(IOMPropulsionWrapper):
         component.add_input("data:propulsion:Power_Offtake", np.nan, units="W")
         component.add_input("data:propulsion:gearbox_eta", np.nan)
         component.add_input("data:geometry:propulsion:propeller:diameter", np.nan,units="m")
+        component.add_input("data:geometry:propulsion:engine:count", 2)
         #tuning factors
         component.add_input("tuning:propulsion:k_psfc", np.nan)
         component.add_input("tuning:propulsion:k_prop", np.nan)
@@ -63,6 +66,7 @@ class OMMLTPL1Wrapper(IOMPropulsionWrapper):
         component.add_input("settings:propulsion:ratings:MCT:k_gb", np.nan)
         component.add_input("settings:propulsion:ratings:MCR:k_gb", np.nan)
         component.add_input("settings:propulsion:ratings:FID:k_gb", np.nan)
+
         #component.add_output("data:propulsion:shaft_power", units="W")
         #component.add_output("data:propulsion:power_rate")
         
@@ -95,7 +99,8 @@ class OMMLTPL1Wrapper(IOMPropulsionWrapper):
 
         }
 
-        return ML_TP_L1(**engine_params)
+        return FuelEngineSet(ML_TP_L1(**engine_params), inputs["data:geometry:propulsion:engine:count"]
+        )
 
 
 @ValidityDomainChecker(
@@ -191,6 +196,7 @@ class OMMLTPL1H2Wrapper(IOMPropulsionWrapper):
         component.add_input("data:propulsion:Power_Offtake", np.nan, units="W")
         component.add_input("data:propulsion:gearbox_eta", np.nan)
         component.add_input("data:geometry:propulsion:propeller:diameter", np.nan,units="m")
+        component.add_input("data:geometry:propulsion:engine:count", 2)
         #tuning factors
         component.add_input("tuning:propulsion:k_psfc", np.nan)
         component.add_input("tuning:propulsion:k_prop", np.nan)
@@ -202,6 +208,7 @@ class OMMLTPL1H2Wrapper(IOMPropulsionWrapper):
         component.add_input("settings:propulsion:ratings:MCT:k_gb", np.nan)
         component.add_input("settings:propulsion:ratings:MCR:k_gb", np.nan)
         component.add_input("settings:propulsion:ratings:FID:k_gb", np.nan)
+
         #component.add_output("data:propulsion:shaft_power", units="W")
         #component.add_output("data:propulsion:power_rate")
         
@@ -234,7 +241,7 @@ class OMMLTPL1H2Wrapper(IOMPropulsionWrapper):
 
         }
 
-        return ML_TP_L1_H2_burn(**engine_params)
+        return FuelEngineSet(ML_TP_L1_H2_burn(**engine_params),inputs["data:geometry:propulsion:engine:count"])
 
 
 @ValidityDomainChecker(
@@ -342,6 +349,7 @@ class OMTPEngineL0Wrapper(IOMPropulsionWrapper):
         component.add_input("data:propulsion:Power_Offtake", np.nan, units="W")
         component.add_input("data:propulsion:gearbox_eta", np.nan)
         component.add_input("data:geometry:propulsion:propeller:diameter", np.nan,units="m")
+        component.add_input("data:geometry:propulsion:engine:count", 2)
         #tuning factors
         component.add_input("tuning:propulsion:k_psfc", np.nan)
         component.add_input("tuning:propulsion:k_prop", np.nan)   
@@ -352,7 +360,8 @@ class OMTPEngineL0Wrapper(IOMPropulsionWrapper):
         component.add_input("settings:propulsion:ratings:MCL:k_gb", np.nan)        
         component.add_input("settings:propulsion:ratings:MCT:k_gb", np.nan)
         component.add_input("settings:propulsion:ratings:MCR:k_gb", np.nan)
-        component.add_input("settings:propulsion:ratings:FID:k_gb", np.nan)        
+        component.add_input("settings:propulsion:ratings:FID:k_gb", np.nan)
+
         #component.add_output("data:propulsion:shaft_power", units="W")
         #component.add_output("data:propulsion:power_rate")
         
@@ -384,7 +393,7 @@ class OMTPEngineL0Wrapper(IOMPropulsionWrapper):
             
         }
 
-        return TPEngine_L0(**engine_params)
+        return FuelEngineSet(TPEngine_L0(**engine_params),inputs["data:geometry:propulsion:engine:count"])
 
 
 @ValidityDomainChecker(
@@ -502,6 +511,7 @@ class OMTPEngineL1Wrapper(IOMPropulsionWrapper):
         component.add_input("data:propulsion:L1_engine:nozzle:nozzle_eta_pol", np.nan)
         component.add_input("data:propulsion:L1_engine:nozzle:nozzle_pressure_ratio", np.nan)
         component.add_input("data:propulsion:L1_engine:nozzle:nozzle_area_ratio", np.nan)
+        component.add_input("data:geometry:propulsion:engine:count", 2)
            
         #sizing factors
         component.add_input("data:propulsion:L1_engine:sizing:k0", np.nan)
@@ -528,6 +538,7 @@ class OMTPEngineL1Wrapper(IOMPropulsionWrapper):
         component.add_input("settings:propulsion:ratings:MCR:k_gb", np.nan)
         component.add_input("settings:propulsion:ratings:FID:k_th", np.nan)
         component.add_input("settings:propulsion:ratings:FID:k_gb", np.nan)
+
         
     @staticmethod
     def get_model(inputs) -> IPropulsion:
@@ -602,7 +613,7 @@ class OMTPEngineL1Wrapper(IOMPropulsionWrapper):
             
         }
 
-        return TPEngine_L1(**engine_params)
+        return FuelEngineSet(TPEngine_L1(**engine_params) ,inputs["data:geometry:propulsion:engine:count"])
 
 
 @ValidityDomainChecker(
