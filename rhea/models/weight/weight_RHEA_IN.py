@@ -15,12 +15,14 @@ Weight computation (mass and CG)
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import openmdao.api as om
-from fastoad.models.options import OpenMdaoOptionDispatcherGroup
+#from fastoad.models.options import OpenMdaoOptionDispatcherGroup
 #from fastoad.models.weight.cg.cg import ComputeAircraftCG
+from fastoad.module_management.service_registry import RegisterOpenMDAOSystem
 from rhea.models.weight.cg.cg_RHEA_IN import CG_RHEA
 from rhea.models.weight.mass_breakdown import MassBreakdown_RHEA
+from fastoad.module_management.constants import ModelDomain
 
-
+@RegisterOpenMDAOSystem("rhea.weight.IN", domain=ModelDomain.WEIGHT)
 class Weight_RHEA_IN(om.Group):
     """
     Computes aircraft CG from CG ratio

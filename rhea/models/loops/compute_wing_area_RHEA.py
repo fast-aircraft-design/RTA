@@ -17,8 +17,10 @@ Computation of wing area
 import numpy as np
 import openmdao.api as om
 from scipy.constants import g
+from fastoad.module_management.constants import ModelDomain
+from fastoad.module_management.service_registry import RegisterOpenMDAOSystem, RegisterSubmodel
 
-
+@RegisterOpenMDAOSystem("rhea.loop.wing_area", domain=ModelDomain.OTHER)
 class ComputeWingArea_RHEA(om.Group):
     """
     Computes needed wing area for:
