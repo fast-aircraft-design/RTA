@@ -102,7 +102,7 @@ class TP_sizing(ExplicitComponent):
 
 
 
-    def compute(self, inputs, outputs):   
+    def compute(self, inputs, outputs,discrete_inputs=None, discrete_outputs=None):
 
     
         Design_Thermo_Power = inputs["data:propulsion:Design_Thermo_Power"]

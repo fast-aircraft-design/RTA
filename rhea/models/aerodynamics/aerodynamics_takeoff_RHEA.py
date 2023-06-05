@@ -19,7 +19,10 @@ from rhea.models.aerodynamics.components.lg_effect import ComputeDeltaLg
 
 from rhea.models.aerodynamics.components.OEI_effect import ComputeDeltaOEI
 from rhea.models.aerodynamics.components.initialize_in import InitializeIN
+from fastoad.module_management.constants import ModelDomain
+from fastoad.module_management.service_registry import RegisterOpenMDAOSystem, RegisterSubmodel
 
+@RegisterOpenMDAOSystem("rhea.aerodynamics.takeoff", domain=ModelDomain.AERODYNAMICS)
 class AerodynamicsTakeoffRHEA(om.Group):
     """
     Computes aerodynamic characteristics at takeoff.

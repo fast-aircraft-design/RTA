@@ -154,7 +154,7 @@ class TPEngine_L1(AbstractFuelPropulsion):
         self.nozzle_pressure_ratio=nozzle_pressure_ratio
         self.nozzle_area_ratio=nozzle_area_ratio
         
-        self.k0 =k0
+        self.k0 = k0
         self.k1 =k1
         self.k2 =k2
         self.tau_t_sizing = tau_t_sizing
@@ -222,7 +222,7 @@ class TPEngine_L1(AbstractFuelPropulsion):
         
         a = atmosphere.speed_of_sound
         V_TAS = mach*a
-        V_EAS = atmosphere.get_equivalent_airspeed(V_TAS)/constants.knot
+        #V_EAS = atmosphere.equivalent_airspeed(V_TAS)/constants.knot
         
         thrust_is_regulated = flight_points.thrust_is_regulated
 
@@ -342,8 +342,8 @@ class TPEngine_L1(AbstractFuelPropulsion):
         flight_points.TP_residual_thrust  =engine_charac[1]
         flight_points.TP_air_flow=engine_charac[4]
         flight_points.TP_total_pressure= thermo_data.Pt.values.tolist()
-        flight_points.TP_total_temperature  =  thermo_data.Tt.values.tolist()  
-        
+        flight_points.TP_total_temperature  =  thermo_data.Tt.values.tolist()
+        flight_points.sfc = tsfc
         
         # return for debug
         # return max_shaft_power,max_thermo_power,Shp_gb_limit,engine_charac, thermo_data
@@ -688,25 +688,25 @@ class TPEngine_L1(AbstractFuelPropulsion):
             design_power=Shp_gb_limit
         #print(design_power/constants.hp)
     
-        thermo_dict = {'Tt': [np.asscalar(ram.stagnation_pressure) ,
-                              np.asscalar(inlet.stagnation_pressure_out),
-                              np.asscalar(lpc.stagnation_temperature_out),          
-                              np.asscalar(hpc.stagnation_temperature_out),          
-                              np.asscalar(combustor.stagnation_temperature_out),          
-                              np.asscalar(hpt.stagnation_temperature_out),         
-                              np.asscalar(lpt.stagnation_temperature_out),          
-                              np.asscalar(pt.stagnation_temperature_out),         
-                              np.asscalar(nozzle.stagnation_temperature_out)
+        thermo_dict = {'Tt': [ram.stagnation_pressure.item() ,
+                              inlet.stagnation_pressure_out.item(),
+                              lpc.stagnation_temperature_out.item(),
+                              hpc.stagnation_temperature_out.item(),
+                              combustor.stagnation_temperature_out.item(),
+                              hpt.stagnation_temperature_out.item(),
+                              lpt.stagnation_temperature_out.item(),
+                              pt.stagnation_temperature_out.item(),
+                              nozzle.stagnation_temperature_out.item()
                               ],
-                        'Pt':[np.asscalar(ram.stagnation_pressure) ,
-                              np.asscalar(inlet.stagnation_pressure_out),
-                              np.asscalar(lpc.stagnation_pressure_out),
-                              np.asscalar(hpc.stagnation_pressure_out) ,
-                              np.asscalar(combustor.stagnation_pressure_out),  
-                              np.asscalar(hpt.stagnation_pressure_out),  
-                              np.asscalar(lpt.stagnation_pressure_out) ,        
-                              np.asscalar(pt.stagnation_pressure_out) ,
-                              np.asscalar(nozzle.stagnation_pressure_out)                        
+                        'Pt':[ram.stagnation_pressure.item() ,
+                              inlet.stagnation_pressure_out.item(),
+                              lpc.stagnation_pressure_out.item(),
+                              hpc.stagnation_pressure_out.item() ,
+                              combustor.stagnation_pressure_out.item(),
+                              hpt.stagnation_pressure_out.item(),
+                              lpt.stagnation_pressure_out.item() ,
+                              pt.stagnation_pressure_out.item() ,
+                              nozzle.stagnation_pressure_out.item()
                               ] }          
         
         thermo_data= pd.DataFrame(data=thermo_dict)  
