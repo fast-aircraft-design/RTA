@@ -1,0 +1,761 @@
+<FASTOAD_model>
+  <setup>
+    <conv is_input="True">nan</conv>
+  </setup>
+  <data>
+    <TLAR>
+      <cruise_mach is_input="True">0.45<!--top-level requirement: cruise Mach number--></cruise_mach>
+      <range units="m" is_input="True">1111200.0<!--top-level requirement: design range--></range>
+    </TLAR>
+    <propulsion>
+      <Design_Thermo_Power units="W" is_input="True">2441930.9304358964</Design_Thermo_Power>
+      <Power_Offtake units="W" is_input="True">7500.0</Power_Offtake>
+      <RTO_power units="W" is_input="True">2001582.729865489</RTO_power>
+      <gearbox_eta is_input="True">0.99</gearbox_eta>
+      <electric_systems>
+        <P_nom units="W" is_input="True">0.0</P_nom>
+        <H2_distribution>
+          <mass_ratio is_input="True">1</mass_ratio>
+          <pipes_length units="m" is_input="True">50.0</pipes_length>
+        </H2_distribution>
+        <H2_storage>
+          <efficiency is_input="True">0.15</efficiency>
+        </H2_storage>
+        <battery>
+          <battery_SOCmin is_input="True">0.2</battery_SOCmin>
+          <specific_energy units="W*h/kg" is_input="True">300.0</specific_energy>
+          <specific_power units="W/kg" is_input="True">600.0</specific_power>
+        </battery>
+        <cables>
+          <length units="m" is_input="True">30.0</length>
+        </cables>
+        <cooling>
+          <DISA units="degC" is_input="True">0.0</DISA>
+          <T_cool units="degC" is_input="True">75.0</T_cool>
+        </cooling>
+        <fuel_cell>
+          <Gross_net_power_ratio is_input="True">0.89</Gross_net_power_ratio>
+          <Power_Offtake units="W" is_input="True">0</Power_Offtake>
+          <specific_power units="W/kg" is_input="True">650.0</specific_power>
+          <layout>
+            <cells is_input="True">1.0</cells>
+            <packs is_input="True">1</packs>
+            <stacks is_input="True">1</stacks>
+          </layout>
+          <polarization_curve>
+            <V is_input="True">[1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]</V>
+            <efficiency is_input="True">[1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]</efficiency>
+            <i is_input="True">[1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]</i>
+          </polarization_curve>
+          <sizing>
+            <A_cell units="m**2" is_input="True">1.0</A_cell>
+            <T_op units="degK" is_input="True">353.15</T_op>
+            <nominal_operational_point>
+              <efficiency_cell is_input="True">1</efficiency_cell>
+              <i_pack is_input="True">1.0</i_pack>
+            </nominal_operational_point>
+            <sizing_point>
+              <P_sizing units="W" is_input="True">10.0</P_sizing>
+            </sizing_point>
+          </sizing>
+        </fuel_cell>
+        <motor>
+          <motor_eta is_input="True">0.97</motor_eta>
+          <specific_power units="W/kg" is_input="True">7000.0</specific_power>
+        </motor>
+        <power_electronics>
+          <power_electronics_eta is_input="True">0.98</power_electronics_eta>
+          <specific_power units="W/kg" is_input="True">11000.0</specific_power>
+        </power_electronics>
+      </electric_systems>
+      <propeller>
+        <max_power units="kW" is_input="True">2189.731506472845</max_power>
+      </propeller>
+    </propulsion>
+    <geometry>
+      <cabin>
+        <NPAX1 is_input="True">75.0<!--number of passengers if there are only economical class seats--></NPAX1>
+        <crew_count>
+          <commercial is_input="True">2.0<!--number of commercial crew members--></commercial>
+          <technical is_input="True">2.0<!--number of technical crew members--></technical>
+        </crew_count>
+      </cabin>
+      <flap>
+        <chord_ratio is_input="True">0.3<!--mean value of (flap chord)/(section chord)--></chord_ratio>
+        <span_ratio is_input="True">0.623<!--ratio (width of flaps)/(total span)--></span_ratio>
+      </flap>
+      <fuselage>
+        <front_length units="m" is_input="True">4.9859096<!--length of front non-cylindrical part of the fuselage--></front_length>
+        <length units="m" is_input="True">26.962306400000003<!--total fuselage length--></length>
+        <maximum_height units="m" is_input="True">2.932888<!--maximum fuselage height--></maximum_height>
+        <maximum_width units="m" is_input="True">2.792888<!--maximum fuselage width--></maximum_width>
+        <rear_length units="m" is_input="True">10.5583968<!--length of rear non-cylindrical part of the fuselage--></rear_length>
+        <wetted_area units="m**2" is_input="True">207.12692242420104<!--wetted area of fuselage--></wetted_area>
+      </fuselage>
+      <horizontal_tail>
+        <area units="m**2" is_input="True">8.11730377579848<!--horizontal tail area--></area>
+        <span units="m" is_input="True">6.080651213903327<!--horizontal tail span--></span>
+        <sweep_0 units="deg" is_input="True">9.281646675338017<!--sweep angle at leading edge of horizontal tail--></sweep_0>
+        <sweep_25 units="deg" is_input="True">6.32<!--sweep angle at 25% chord of horizontal tail--></sweep_25>
+        <thickness_ratio is_input="True">0.12<!--thickness ratio of horizontal tail--></thickness_ratio>
+        <wetted_area units="m**2" is_input="True">12.987686041277568<!--wetted area of horizontal tail--></wetted_area>
+        <MAC>
+          <length units="m" is_input="True">1.3605548515256178<!--mean aerodynamic chord length of horizontal tail--></length>
+          <at25percent>
+            <x>
+              <from_wingMAC25 units="m" is_input="True">14.327264493223456<!--distance along X between 25% MAC of wing and 25% MAC of horizontal tail--></from_wingMAC25>
+              <local units="m" is_input="True">0.22856748914299238<!--X-position of the 25% of mean aerodynamic chord of horizontal tail w.r.t. leading edge of root chord--></local>
+            </x>
+          </at25percent>
+        </MAC>
+        <root>
+          <chord units="m" is_input="True">1.6552261541014732<!--chord length at root of horizontal tail--></chord>
+        </root>
+        <tip>
+          <chord units="m" is_input="True">1.014653632464203<!--chord length at tip of horizontal tail--></chord>
+        </tip>
+      </horizontal_tail>
+      <slat>
+        <chord_ratio is_input="True">0.0<!--mean value of slat chord)/(section chord)--></chord_ratio>
+        <span_ratio is_input="True">0.0<!--ratio (width of slats)/(total span)--></span_ratio>
+      </slat>
+      <vertical_tail>
+        <area units="m**2" is_input="True">7.638265634755191<!--vertical tail area--></area>
+        <aspect_ratio is_input="True">1.6<!--aspect ratio of vertical tail--></aspect_ratio>
+        <sweep_25 units="deg" is_input="True">28.56<!--sweep angle at 25% chord of vertical tail--></sweep_25>
+        <thickness_ratio is_input="True">0.12<!--thickness ratio of vertical tail--></thickness_ratio>
+        <wetted_area units="m**2" is_input="True">16.0403578329859<!--wetted area of vertical tail--></wetted_area>
+        <MAC>
+          <length units="m" is_input="True">2.23044866071518<!--mean aerodynamic chord length of vertical tail--></length>
+          <at25percent>
+            <x>
+              <from_wingMAC25 units="m" is_input="True">12.439903045223456<!--distance along X between 25% MAC of wing and 25% MAC of vertical tail--></from_wingMAC25>
+            </x>
+          </at25percent>
+        </MAC>
+      </vertical_tail>
+      <wing>
+        <area units="m**2" is_input="True">59.90800243934688<!--wing reference area--></area>
+        <aspect_ratio is_input="True">11.995<!--wing aspect ratio--></aspect_ratio>
+        <b_50 units="m" is_input="True">26.811236215196164<!--actual length between root and tip along 50% of chord--></b_50>
+        <span units="m" is_input="True">26.806650099753366<!--wing span--></span>
+        <sweep_0 units="rad" is_input="True">0.06175126109230798<!--sweep angle at leading edge of wing--></sweep_0>
+        <sweep_100_outer units="rad" is_input="True">-0.024827915382607715<!--sweep angle at trailing edge of wing (outer side of the kink)--></sweep_100_outer>
+        <sweep_25 units="deg" is_input="True">2.3<!--sweep angle at 25% chord of wing--></sweep_25>
+        <thickness_ratio is_input="True">0.14066207365003952<!--mean thickness ratio of wing--></thickness_ratio>
+        <wetted_area units="m**2" is_input="True">107.76138757848364<!--wetted area of wing--></wetted_area>
+        <MAC>
+          <length units="m" is_input="True">2.2745146919224997<!--length of mean aerodynamic chord of wing--></length>
+          <at25percent>
+            <x units="m" is_input="True">12.635041830787317<!--X-position of the 25% of mean aerodynamic chord of wing w.r.t. aircraft nose (drives position of wing along fuselage)--></x>
+          </at25percent>
+          <leading_edge>
+            <x>
+              <local units="m" is_input="True">0.3016183830123978<!--X-position of leading edge of mean aerodynamic chord w.r.t. leading edge of root chord--></local>
+            </x>
+          </leading_edge>
+        </MAC>
+        <kink>
+          <chord units="m" is_input="True">2.3959120830232203<!--chord length at wing kink--></chord>
+          <y units="m" is_input="True">5.181725464282326<!--Y-position of wing kink--></y>
+          <leading_edge>
+            <x>
+              <local units="m" is_input="True">0.2340434659331746<!--X-position of leading edge at wing kink w.r.t. leading edge of root chord--></local>
+            </x>
+          </leading_edge>
+        </kink>
+        <root>
+          <chord units="m" is_input="True">2.629955548956395<!--chord length at wing root--></chord>
+          <virtual_chord units="m" is_input="True">2.7239555122991774<!--virtual chord length at wing root if sweep angle of trailing edge of outer wing part was on the whole wing (no kink)--></virtual_chord>
+          <y units="m" is_input="True">1.396444<!--Y-position of wing root--></y>
+        </root>
+        <tip>
+          <chord units="m" is_input="True">1.6834045066008916<!--chord length at wing tip--></chord>
+          <thickness_ratio is_input="True">0.12503295435559067<!--thickness ratio at wing tip--></thickness_ratio>
+          <y units="m" is_input="True">13.403325049876683<!--Y-position of wing tip--></y>
+          <leading_edge>
+            <x>
+              <local units="m" is_input="True">0.7423839105431711<!--X-position of leading edge at wing tip w.r.t. leading edge of root chord--></local>
+            </x>
+          </leading_edge>
+        </tip>
+      </wing>
+      <propulsion>
+        <engine>
+          <count is_input="True">2.0<!--number of engines--></count>
+        </engine>
+        <motor>
+          <count is_input="True">2.0</count>
+        </motor>
+        <nacelle>
+          <length units="m" is_input="True">2.1527431176237424<!--nacelle length--></length>
+          <wetted_area units="m**2" is_input="True">4.731481410908749<!--wetted area of nacelle--></wetted_area>
+          <y units="m" is_input="True">4.020997514963005<!--Y-position of nacelle center--></y>
+        </nacelle>
+        <propeller>
+          <B is_input="True">6.0</B>
+          <diameter units="m" is_input="True">3.882186246764011</diameter>
+        </propeller>
+        <pylon>
+          <length units="m" is_input="True">2.368017429386117<!--pylon length--></length>
+          <wetted_area units="m**2" is_input="True">0.0<!--wetted area of pylon--></wetted_area>
+        </pylon>
+      </propulsion>
+    </geometry>
+    <mission>
+      <DOC>
+        <TOW units="kg" is_input="True">18600.0</TOW>
+        <payload units="kg" is_input="True">6840.0</payload>
+        <range units="m" is_input="True">555600.0</range>
+        <climb>
+          <speed units="m/s" is_input="True">87.5</speed>
+          <thrust_rate is_input="True">1.0</thrust_rate>
+        </climb>
+        <cruise>
+          <mach is_input="True">0.8</mach>
+        </cruise>
+        <descent>
+          <speed units="m/s" is_input="True">128.6</speed>
+          <thrust_rate is_input="True">0.01</thrust_rate>
+        </descent>
+        <diversion>
+          <altitude units="ft" is_input="True">14000.0</altitude>
+          <distance units="m" is_input="True">185200.0</distance>
+          <mach is_input="True">0.33</mach>
+        </diversion>
+        <holding>
+          <duration units="s" is_input="True">1800.0</duration>
+        </holding>
+        <landing>
+          <H2 units="kg" is_input="True">0.0</H2>
+          <fuel units="kg" is_input="True">20.0</fuel>
+        </landing>
+        <takeoff>
+          <H2 units="kg" is_input="True">0.0</H2>
+          <altitude units="m" is_input="True">0.0</altitude>
+          <fuel units="kg" is_input="True">10.0</fuel>
+        </takeoff>
+        <taxi_in>
+          <H2 units="kg" is_input="True">0.0</H2>
+          <duration units="s" is_input="True">60.0</duration>
+          <fuel units="kg" is_input="True">3.0</fuel>
+          <speed units="m/s" is_input="True">10.0</speed>
+          <thrust_rate is_input="True">0.01</thrust_rate>
+        </taxi_in>
+        <taxi_out>
+          <H2 units="kg" is_input="True">0.0</H2>
+          <fuel units="kg" is_input="True">9.0</fuel>
+        </taxi_out>
+        <main_route>
+          <cruise>
+            <altitude units="ft" is_input="True">20000.0</altitude>
+          </cruise>
+        </main_route>
+      </DOC>
+      <sizing>
+        <climb>
+          <EM_power_rate is_input="True">[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]</EM_power_rate>
+          <TP_power_rate is_input="True">[1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0]</TP_power_rate>
+          <speed units="m/s" is_input="True">87.5</speed>
+          <thrust_rate is_input="True">1.0<!--thrust rate (between 0.0 and 1.0) during climb phase in sizing mission--></thrust_rate>
+        </climb>
+        <cruise>
+          <EM_power_rate is_input="True">0.0</EM_power_rate>
+          <TP_power_rate is_input="True">1.0</TP_power_rate>
+          <mach is_input="True">0.46</mach>
+        </cruise>
+        <descent>
+          <speed units="m/s" is_input="True">113.2</speed>
+          <thrust_rate is_input="True">0.1<!--thrust rate (between 0.0 and 1.0) during descent phase in sizing mission--></thrust_rate>
+        </descent>
+        <diversion>
+          <altitude units="ft" is_input="True">14000.0</altitude>
+          <distance units="m" is_input="True">185200.0<!--distance to travel during diversion in sizing mission--></distance>
+          <mach is_input="True">0.33</mach>
+          <climb>
+            <EM_power_rate is_input="True">0.0</EM_power_rate>
+            <TP_power_rate is_input="True">1.0</TP_power_rate>
+          </climb>
+          <cruise>
+            <EM_power_rate is_input="True">0.0</EM_power_rate>
+            <TP_power_rate is_input="True">1.0</TP_power_rate>
+          </cruise>
+        </diversion>
+        <holding>
+          <EM_power_rate is_input="True">0.0</EM_power_rate>
+          <TP_power_rate is_input="True">1.0</TP_power_rate>
+          <duration units="s" is_input="True">1800.0<!--duration of holding phase in sizing mission--></duration>
+        </holding>
+        <initial_climb>
+          <EM_power_rate is_input="True">0.0</EM_power_rate>
+          <TP_power_rate is_input="True">1.0</TP_power_rate>
+        </initial_climb>
+        <landing>
+          <H2 units="kg" is_input="True">0.0</H2>
+          <duration units="s" is_input="True">120.0<!--duration of landing phase in sizing mission--></duration>
+          <fuel units="kg" is_input="True">20.0<!--mass of consumed fuel during landing phase in sizing mission--></fuel>
+        </landing>
+        <takeoff>
+          <EM_power_rate is_input="True">0.0</EM_power_rate>
+          <Friction_coefficient_brake is_input="True">0.6</Friction_coefficient_brake>
+          <Friction_coefficient_no_brake is_input="True">0.004</Friction_coefficient_no_brake>
+          <H2 units="kg" is_input="True">0.0</H2>
+          <TP_power_rate is_input="True">1.0</TP_power_rate>
+          <V_MCA units="m/s" is_input="True">50.69</V_MCA>
+          <altitude units="m" is_input="True">0.0<!--altitude at takeoff in sizing mission--></altitude>
+          <duration units="s" is_input="True">60.0<!--duration of takeoff phase in sizing mission--></duration>
+          <flap_angle units="deg" is_input="True">15.0<!--flap angle during takeoff phase in sizing mission--></flap_angle>
+          <fuel units="kg" is_input="True">10.0<!--mass of consumed fuel during takeoff phase in sizing mission--></fuel>
+          <slat_angle units="deg" is_input="True">0.0<!--slat angle during takeoff phase in sizing mission--></slat_angle>
+          <thrust_rate is_input="True">1.0</thrust_rate>
+        </takeoff>
+        <taxi_in>
+          <H2 units="kg" is_input="True">0.0</H2>
+          <duration units="s" is_input="True">60.0<!--duration of taxi-in phase in sizing mission--></duration>
+          <fuel units="kg" is_input="True">3.0<!--mass of consumed fuel during taxi-in phase in sizing mission--></fuel>
+          <speed units="m/s" is_input="True">10.0<!--speed during taxi-in phase in sizing mission--></speed>
+          <thrust_rate is_input="True">0.01<!--thrust rate (between 0.0 and 1.0) during taxi-in phase in sizing mission--></thrust_rate>
+        </taxi_in>
+        <taxi_out>
+          <H2 units="kg" is_input="True">0.0</H2>
+          <duration units="s" is_input="True">360.0<!--duration of taxi-out phase in sizing mission--></duration>
+          <fuel units="kg" is_input="True">9.0<!--mass of consumed fuel during taxi-out phase in sizing mission--></fuel>
+        </taxi_out>
+        <main_route>
+          <cruise>
+            <altitude units="m" is_input="True">6096.0<!--altitude during cruise phase in sizing mission--></altitude>
+          </cruise>
+        </main_route>
+      </sizing>
+    </mission>
+    <weight>
+      <aircraft>
+        <MFW units="kg" is_input="True">7819.4676065250305<!--maximum fuel weight--></MFW>
+        <MTOW units="kg" is_input="True">23572.575504764103<!--maximum takeoff weight--></MTOW>
+      </aircraft>
+      <aircraft_empty>
+        <contingency units="kg" is_input="True">72.0</contingency>
+      </aircraft_empty>
+      <airframe>
+        <fuselage>
+          <mass units="kg" is_input="True">3704.496932620962<!--fuselage (A2): total mass--></mass>
+          <CG>
+            <x units="m" is_input="True">12.133037880000002<!--fuselage (A2): X-position of center of gravity--></x>
+          </CG>
+        </fuselage>
+        <horizontal_tail>
+          <mass units="kg" is_input="True">165.23288907977238<!--horizontal tail (A31): mass--></mass>
+          <CG>
+            <x units="m" is_input="True">27.175371217317622<!--horizontal tail (A31): X-position of center of gravity--></x>
+          </CG>
+        </horizontal_tail>
+        <nacelle_struts>
+          <mass units="kg" is_input="True">361.2963810604608</mass>
+          <CG>
+            <x units="m" is_input="True">11.657466497438806</x>
+          </CG>
+        </nacelle_struts>
+        <vertical_tail>
+          <mass units="kg" is_input="True">168.73546482009462<!--vertical tail (A32): mass--></mass>
+          <CG>
+            <x units="m" is_input="True">25.611525314666004<!--vertical tail (A32): X-position of center of gravity--></x>
+          </CG>
+        </vertical_tail>
+        <wing>
+          <mass units="kg" is_input="True">2361.6355720457614<!--wing (A1): total mass--></mass>
+          <CG>
+            <x units="m" is_input="True">13.165740495771422<!--wing (A1): X-position of center of gravity--></x>
+          </CG>
+        </wing>
+        <landing_gear>
+          <front>
+            <mass units="kg" is_input="True">175.8470092376111<!--front landing gear (A52): mass--></mass>
+            <CG>
+              <x units="m" is_input="True">3.7394322000000004<!--front landing gear (A52): X-position of center of gravity--></x>
+            </CG>
+          </front>
+          <main>
+            <mass units="kg" is_input="True">795.9030914169637<!--main landing gear (A51): mass--></mass>
+            <CG>
+              <x units="m" is_input="True">13.051529168972442<!--main landing gear (A51): X-position of center of gravity--></x>
+            </CG>
+          </main>
+        </landing_gear>
+      </airframe>
+      <fuel_tank>
+        <CG>
+          <x units="m" is_input="True">12.864066012970047<!--fuel tank: X-position of center of gravity--></x>
+        </CG>
+      </fuel_tank>
+      <furniture>
+        <cabin_lighting>
+          <mass units="kg" is_input="True">87.50736236695546</mass>
+          <CG>
+            <x units="m" is_input="True">12.133037880000002</x>
+          </CG>
+        </cabin_lighting>
+        <furnishing>
+          <mass units="kg" is_input="True">942.9030207471494</mass>
+          <CG>
+            <x units="m" is_input="True">12.2189096</x>
+          </CG>
+        </furnishing>
+        <insulation>
+          <mass units="kg" is_input="True">232.5195628607674</mass>
+          <CG>
+            <x units="m" is_input="True">12.133037880000002</x>
+          </CG>
+        </insulation>
+        <interior_integration>
+          <mass units="kg" is_input="True">117.86287759339368</mass>
+          <CG>
+            <x units="m" is_input="True">10.99701864</x>
+          </CG>
+        </interior_integration>
+        <oxygen>
+          <mass units="kg" is_input="True">177.5</mass>
+          <CG>
+            <x units="m" is_input="True">12.2189096</x>
+          </CG>
+        </oxygen>
+        <seats_crew_accommodation>
+          <mass units="kg" is_input="True">60.0</mass>
+          <CG>
+            <x units="m" is_input="True">12.2189096</x>
+          </CG>
+        </seats_crew_accommodation>
+        <water>
+          <mass units="kg" is_input="True">10.0</mass>
+          <CG>
+            <x units="m" is_input="True">21.569845120000004</x>
+          </CG>
+        </water>
+      </furniture>
+      <systems>
+        <ECS>
+          <mass units="kg" is_input="True">360.0</mass>
+          <CG>
+            <x units="m" is_input="True">12.2189096</x>
+          </CG>
+        </ECS>
+        <automatic_flight_system>
+          <mass units="kg" is_input="True">30.0</mass>
+          <CG>
+            <x units="m" is_input="True">12.133037880000002</x>
+          </CG>
+        </automatic_flight_system>
+        <auxiliary_power_unit>
+          <mass units="kg" is_input="True">0.0</mass>
+          <CG>
+            <x units="m" is_input="True">25.61419108</x>
+          </CG>
+        </auxiliary_power_unit>
+        <communications>
+          <mass units="kg" is_input="True">80.0</mass>
+          <CG>
+            <x units="m" is_input="True">6.740576600000001</x>
+          </CG>
+        </communications>
+        <de-icing>
+          <mass units="kg" is_input="True">110.41978317938113</mass>
+          <CG>
+            <x units="m" is_input="True">12.293864702988172</x>
+          </CG>
+        </de-icing>
+        <fire_protection>
+          <mass units="kg" is_input="True">25.0</mass>
+          <CG>
+            <x units="m" is_input="True">12.133037880000002</x>
+          </CG>
+        </fire_protection>
+        <flight_controls>
+          <mass units="kg" is_input="True">235.72575518678735</mass>
+          <CG>
+            <x units="m" is_input="True">14.39475039973992</x>
+          </CG>
+        </flight_controls>
+        <flight_furnishing>
+          <mass units="kg" is_input="True">100.0</mass>
+          <CG>
+            <x units="m" is_input="True">2.4929548</x>
+          </CG>
+        </flight_furnishing>
+        <hydraulic_systems>
+          <mass units="kg" is_input="True">188.5806041494299</mass>
+          <CG>
+            <x units="m" is_input="True">13.481153200000001</x>
+          </CG>
+        </hydraulic_systems>
+        <navigation>
+          <mass units="kg" is_input="True">173.85546127129754<!--navigation (C3): mass--></mass>
+          <CG>
+            <x units="m" is_input="True">3.98872768<!--navigation (C3): X-position of center of gravity--></x>
+          </CG>
+        </navigation>
+        <electric_systems>
+          <electric_common_installation>
+            <mass units="kg" is_input="True">212.73110496184069</mass>
+            <CG>
+              <x units="m" is_input="True">6.740576600000001</x>
+            </CG>
+          </electric_common_installation>
+          <electric_generation>
+            <mass units="kg" is_input="True">319.096657442761</mass>
+            <CG>
+              <x units="m" is_input="True">6.740576600000001</x>
+            </CG>
+          </electric_generation>
+        </electric_systems>
+      </systems>
+      <operational>
+        <equipment>
+          <crew>
+            <mass units="kg" is_input="True">320.0</mass>
+            <CG>
+              <x units="m" is_input="True">8.08869192</x>
+            </CG>
+          </crew>
+          <others>
+            <mass units="kg" is_input="True">100.0</mass>
+            <CG>
+              <x units="m" is_input="True">12.174729917005392</x>
+            </CG>
+          </others>
+        </equipment>
+        <items>
+          <documents_toolkit>
+            <mass units="kg" is_input="True">15.0</mass>
+            <CG>
+              <x units="m" is_input="True">12.2189096</x>
+            </CG>
+          </documents_toolkit>
+          <galley_structure>
+            <mass units="kg" is_input="True">100.0</mass>
+            <CG>
+              <x units="m" is_input="True">18.87361448</x>
+            </CG>
+          </galley_structure>
+          <unusable_fuel>
+            <mass units="kg" is_input="True">30.0</mass>
+            <CG>
+              <x units="m" is_input="True">12.864066012970047</x>
+            </CG>
+          </unusable_fuel>
+          <passenger_seats>
+            <CG>
+              <x units="m" is_input="True">12.2189096</x>
+            </CG>
+          </passenger_seats>
+        </items>
+      </operational>
+      <payload>
+        <PAX>
+          <CG>
+            <x units="m" is_input="True">12.2189096<!--passengers: X-position of center of gravity--></x>
+          </CG>
+        </PAX>
+        <front_fret>
+          <CG>
+            <x units="m" is_input="True">8.375352225391762<!--front fret: X-position of center of gravity--></x>
+          </CG>
+        </front_fret>
+        <rear_fret>
+          <CG>
+            <x units="m" is_input="True">14.75533444497432<!--rear fret: X-position of center of gravity--></x>
+          </CG>
+        </rear_fret>
+      </payload>
+      <propulsion>
+        <engine>
+          <CG>
+            <x units="m" is_input="True">11.373138046281763<!--engine (B1): X-position of center of gravity--></x>
+          </CG>
+        </engine>
+        <engine_controls_instrumentation>
+          <CG>
+            <x units="m" is_input="True">2.4929548</x>
+          </CG>
+        </engine_controls_instrumentation>
+        <fuel_system>
+          <CG>
+            <x units="m" is_input="True">12.568192494671736</x>
+          </CG>
+        </fuel_system>
+        <propeller>
+          <CG>
+            <x units="m" is_input="True">9.667167339339498</x>
+          </CG>
+        </propeller>
+        <electric_systems>
+          <H2_storage>
+            <CG>
+              <x units="m" is_input="True">20.0</x>
+            </CG>
+          </H2_storage>
+          <battery>
+            <CG>
+              <x units="m" is_input="True">11.0</x>
+            </CG>
+          </battery>
+          <fuel_cell>
+            <CG>
+              <x units="m" is_input="True">11.0</x>
+            </CG>
+          </fuel_cell>
+          <motor>
+            <CG>
+              <x units="m" is_input="True">11.0</x>
+            </CG>
+          </motor>
+          <power_electronics>
+            <CG>
+              <x units="m" is_input="True">11.0</x>
+            </CG>
+          </power_electronics>
+        </electric_systems>
+      </propulsion>
+    </weight>
+    <aerodynamics>
+      <aircraft>
+        <cruise>
+          <CL_alpha is_input="True">6.454241456213044<!--derivative of lift coefficient with respect to angle of attack in cruise conditions--></CL_alpha>
+        </cruise>
+        <landing>
+          <CL_max is_input="True">2.8<!--maximum lift coefficient in landing conditions--></CL_max>
+        </landing>
+        <low_speed>
+          <DCD_ext is_input="True">0.0</DCD_ext>
+        </low_speed>
+        <takeoff>
+          <CT_effect>
+            <DCL0 is_input="True">[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]</DCL0>
+            <DCL_alpha units="1/rad" is_input="True">[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]</DCL_alpha>
+          </CT_effect>
+          <ground_effect>
+            <DCD is_input="True">[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]</DCD>
+            <DCL is_input="True">[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]</DCL>
+            <K_H is_input="True">[0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0]</K_H>
+          </ground_effect>
+        </takeoff>
+      </aircraft>
+      <horizontal_tail>
+        <cruise>
+          <CL_alpha is_input="True">3.3891565017181735<!--derivative of lift coefficient of horizontal tail with respect to local angle of attack in cruise conditions--></CL_alpha>
+        </cruise>
+      </horizontal_tail>
+    </aerodynamics>
+  </data>
+  <tuning>
+    <propulsion>
+      <k_prop is_input="True">1.0</k_prop>
+      <k_psfc is_input="True">1.0</k_psfc>
+    </propulsion>
+    <aerodynamics>
+      <aircraft>
+        <cruise>
+          <CD>
+            <k is_input="True">1.0<!--correction ratio to apply to computed drag coefficient in cruise conditions--></k>
+            <offset is_input="True">0.0<!--correction offset to apply to computed drag coefficient in cruise conditions--></offset>
+            <compressibility>
+              <ceiling is_input="True">0.01<!--maximum authorized value for compressibility drag. Allows to prevent the model from overestimating the compressibility effect, especially for aircraft models after year 2000.--></ceiling>
+            </compressibility>
+            <parasite>
+              <k is_input="True">1.85</k>
+            </parasite>
+            <winglet_effect>
+              <k is_input="True">1.0<!--correction ratio to apply to computed induced drag coefficient in cruise conditions--></k>
+              <offset is_input="True">0.0<!--correction ratio to apply to computed drag coefficient in cruise conditions--></offset>
+            </winglet_effect>
+          </CD>
+          <CL>
+            <k is_input="True">1.0<!--ratio to apply to defined cl range (which goes by default from 0.0 to 1.5) in cruise polar computation--></k>
+            <offset is_input="True">0.0<!--offset to apply to defined cl range (which goes by default from 0.0 to 1.5) in cruise polar computation--></offset>
+            <winglet_effect>
+              <k is_input="True">1.0<!--ratio to apply to defined cl range (which goes by default from 0.0 to 1.5) in cruise polar computation--></k>
+              <offset is_input="True">0.0<!--offset to apply to defined cl range (which goes by default from 0.0 to 1.5) in cruise polar computation--></offset>
+            </winglet_effect>
+          </CL>
+        </cruise>
+        <low_speed>
+          <CL0_clean>
+            <k is_input="True">1.0</k>
+          </CL0_clean>
+          <CL_alpha>
+            <k is_input="True">1.0</k>
+          </CL_alpha>
+          <CD>
+            <winglet_effect>
+              <k is_input="True">1.0</k>
+              <offset is_input="True">0.0</offset>
+            </winglet_effect>
+          </CD>
+        </low_speed>
+      </aircraft>
+    </aerodynamics>
+    <weight>
+      <propulsion>
+        <engine>
+          <mass>
+            <k is_input="True">1.0<!--engine (B1): correction ratio to be applied on computed mass--></k>
+          </mass>
+        </engine>
+        <engine_controls_instrumentation>
+          <mass>
+            <k is_input="True">1.0</k>
+          </mass>
+        </engine_controls_instrumentation>
+        <fuel_lines>
+          <mass>
+            <k is_input="True">1.0<!--fuel lines (B2): correction ratio to be applied on computed mass--></k>
+            <offset units="kg" is_input="True">0.0<!--fuel lines (B2): correction offset to be applied on computed mass--></offset>
+          </mass>
+        </fuel_lines>
+        <propeller>
+          <mass>
+            <k is_input="True">1.0</k>
+          </mass>
+        </propeller>
+      </propulsion>
+    </weight>
+  </tuning>
+  <settings>
+    <weight>
+      <aircraft>
+        <design_mass_per_seat units="kg" is_input="True">10.0</design_mass_per_seat>
+        <payload>
+          <design_mass_per_passenger units="kg" is_input="True">95.0</design_mass_per_passenger>
+          <fret_ratio is_input="True">0.6</fret_ratio>
+        </payload>
+        <CG>
+          <aft>
+            <MAC_position>
+              <margin is_input="True">0.05</margin>
+            </MAC_position>
+          </aft>
+        </CG>
+      </aircraft>
+    </weight>
+    <propulsion>
+      <ratings>
+        <FID>
+          <k_gb is_input="True">1.0</k_gb>
+        </FID>
+        <MCL>
+          <k_gb is_input="True">0.797</k_gb>
+        </MCL>
+        <MCR>
+          <k_gb is_input="True">0.775</k_gb>
+        </MCR>
+        <MCT>
+          <k_gb is_input="True">0.909</k_gb>
+        </MCT>
+        <NTO>
+          <k_gb is_input="True">0.9</k_gb>
+        </NTO>
+        <RTO>
+          <k_gb is_input="True">1.0</k_gb>
+        </RTO>
+      </ratings>
+    </propulsion>
+  </settings>
+</FASTOAD_model>
