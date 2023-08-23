@@ -11,7 +11,7 @@
 #  GNU General Public License for more details.
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
-import pickle
+import joblib
 from sklearn.preprocessing import PolynomialFeatures
 from scipy import constants
 import logging
@@ -378,7 +378,7 @@ class ML_TP_L1(AbstractFuelPropulsion):
             x=poly.fit_transform(np.array([altitude,mach],dtype=object).reshape(1,-1)) 
 
 
-        loaded_model = pickle.load(open(filename, 'rb'))
+        loaded_model = joblib.load(open(filename, 'rb'))
         psfc = loaded_model.predict(x)[0]
 
                                  
@@ -441,7 +441,7 @@ class ML_TP_L1(AbstractFuelPropulsion):
 
         poly = PolynomialFeatures(degree=3)
         x=poly.fit_transform(np.array([altitude,mach], dtype=object).reshape(1,-1))
-        loaded_model = pickle.load(open(filename, 'rb'))
+        loaded_model = joblib.load(open(filename, 'rb'))
         K_powerlapse = loaded_model.predict(x)[0]
         
         # if altitude>=19000.:
@@ -470,7 +470,7 @@ class ML_TP_L1(AbstractFuelPropulsion):
         
         altitude = atmosphere.get_altitude(altitude_in_feet=True)
         filename = os.path.join(rhea_path,'resources/gasturbine/TP_L1/Metamodels/TP_L1_FR_Ratio.sav')
-        loaded_model = pickle.load(open(filename, 'rb'))
+        loaded_model = joblib.load(open(filename, 'rb'))
         
         poly = PolynomialFeatures(degree=3)
         x=poly.fit_transform(np.array([altitude*constants.foot,mach,throttle],dtype=object).reshape(1,-1))
