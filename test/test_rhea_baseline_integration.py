@@ -1,7 +1,5 @@
-import os
 import os.path as pth
 import shutil
-from platform import system
 from shutil import rmtree
 
 import numpy as np
@@ -13,14 +11,13 @@ from numpy.testing import assert_allclose
 from fastoad import api
 from fastoad.io import VariableIO
 from fastoad.io.configuration.configuration import FASTOADProblemConfigurator
-from fastoad.io.xml import VariableLegacy1XmlFormatter
 from fastoad.openmdao.utils import get_problem_after_setup
 
 DATA_FOLDER_PATH = pth.join(pth.dirname(__file__), "data")
 RESULTS_FOLDER_PATH = pth.join(pth.dirname(__file__), "results")
 CONFIGURATION_FILE = "oad_sizing.toml"
-SOURCE_FILE = "problem_inputs.toml"
-RESULTS_FILE = "problem_outputs.toml"
+SOURCE_FILE = "problem_outputs.xml"
+RESULTS_FOLDER = "problem_folder"
 
 @pytest.fixture(scope="module")
 def cleanup():
@@ -31,7 +28,7 @@ def test_non_regression_mission(cleanup):
     run_non_regression_test(
         CONFIGURATION_FILE,
         SOURCE_FILE,
-        RESULTS_FILE,
+        RESULTS_FOLDER,
         check_only_mtow=True,
         tolerance=1.0e-2,
     )
@@ -53,7 +50,7 @@ def run_non_regression_test(
 
     # Generation and reading of inputs ----------------------------------------
     ref_inputs = pth.join(DATA_FOLDER_PATH, legacy_result_file)
-    get_problem_after_setup(problem).write_needed_inputs(ref_inputs, VariableLegacy1XmlFormatter())
+    get_problem_after_setup(problem).write_needed_inputs(ref_inputs)
     problem.read_inputs()
     problem.setup()
 
@@ -78,7 +75,8 @@ def run_non_regression_test(
         + problem["data:weight:propulsion:mass"]
         + problem["data:weight:systems:mass"]
         + problem["data:weight:furniture:mass"]
-        + problem["data:weight:crew:mass"],
+        + problem["data:weight:operational:mass"]
+        + problem["data:weight:aircraft_empty:contingency"],
         atol=1,
     )
     assert_allclose(
