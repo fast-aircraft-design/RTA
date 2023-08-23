@@ -35,11 +35,6 @@ driver = "om.ScipyOptimizeDriver(tol=1e-3, optimizer='COBYLA')"
         id = "rhea.aerodynamics.lowspeed"   
     [model.aerodynamics_takeoff]
         id = "rhea.aerodynamics.takeoff"
-    #[model.performance_TO]
-    #    id ="rhea.performances.TOFL"
-    #    propulsion_id = "rhea.wrapper.propulsion.ML_TP_L1"
-    #    out_file = "C:/Users/vinx0/OneDrive/Desktop/RHEA/workdir/TPAD_baseline_tutorial/sizing/TO_flight_points.csv"
-    #    prop_fid ="ADT"
         
     [model.performance_OEI]
         id ="rhea.performances.OEI"
@@ -49,7 +44,7 @@ driver = "om.ScipyOptimizeDriver(tol=1e-3, optimizer='COBYLA')"
     [model.performance]
         id = "rhea.performances.sizing_flight"   
         propulsion_id = "rhea.wrapper.propulsion.ML_TP_L1" #TP_engine_L1
-        out_file = ".flight_points_without_TO.csv"
+        out_file = ".flight_points.csv"
              
     [model.hq_tail_sizing]
         id = "fastoad.handling_qualities.tail_sizing"
