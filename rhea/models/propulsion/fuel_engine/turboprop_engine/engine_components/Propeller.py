@@ -5,12 +5,12 @@ from scipy import constants
 import numpy as np
 from fastoad.constants import FlightPhase
 import os
-from mlinsights.mlmodel import ExtendedFeatures
+from sklearn.preprocessing import PolynomialFeatures
 from fastoad.model_base.atmosphere import Atmosphere
 from typing import Union, Sequence, Tuple, Optional
 
 from scipy.optimize import fsolve
-script_path = os.path.abspath(__file__) # i.e. /path/to/dir/foobar.py
+script_path = os.path.abspath(__file__)
 rhea_path = script_path.split('\\models')[0]
 RHEA_path=script_path.split('\\rhea')[0]
 
@@ -59,20 +59,17 @@ class Propeller(object):
         #     T_prop =loaded_model.predict(x)[0] *10 #daN to N
         if phase == 1 or phase==8 or phase==9:
             eta=0.
-            poly = ExtendedFeatures(poly_degree=3)
+            poly = PolynomialFeatures(poly_degree=3)
             x = poly.fit_transform(np.array([altitude, mach, DISA], dtype=object).reshape(1, -1))
             T_prop = data.dict_metamodels[RC]['fn'].predict(x)[0]*10
-            #T_prop =loaded_model.predict(x)[0] *10 #daN to N          
             
         else:
-            poly = ExtendedFeatures(poly_degree=4)
+            poly = PolynomialFeatures(poly_degree=4)
             x=poly.fit_transform(np.array([altitude,V_TAS,shp_prop],dtype=object).reshape(1,-1))
-            #filename ='C:/Users/LA202059/Desktop/RHEA/rhea/resources/propeller/H568F/Metamodels/NP82/power_to_eta_4th_degree.sav'
             filename = os.path.join(rhea_path,'resources/propeller/H568F/Metamodels/NP82/power_to_eta_4th_degree.sav')
             warnings.simplefilter("ignore", category=UserWarning)
             loaded_model = joblib.load(open(filename, 'rb'))
             eta =data.k_prop * loaded_model.predict(x)[0]
-            #print(eta)    
             T_prop =  eta * shp_prop * constants.hp / (V_TAS* constants.knot) #N 
         
 
@@ -102,7 +99,7 @@ class Propeller(object):
 
 
         def func(shp_prop,altitude,V_TAS,thrust):
-            poly = ExtendedFeatures(poly_degree=4)
+            poly = PolynomialFeatures(poly_degree=4)
             x=poly.fit_transform(np.array([altitude,V_TAS,shp_prop],dtype=object).reshape(1,-1))
             #filename ='C:/Users/LA202059/Desktop/RHEA/rhea/resources/propeller/H568F/Metamodels/NP82/power_to_eta_4th_degree.sav'
             filename = os.path.join(rhea_path,'resources/propeller/H568F/Metamodels/NP82/power_to_eta_4th_degree.sav')

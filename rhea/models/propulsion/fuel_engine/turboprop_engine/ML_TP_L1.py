@@ -27,7 +27,6 @@ from fastoad.module_management.service_registry import RegisterPropulsion
 from fastoad_cs25.models.propulsion.fuel_propulsion.rubber_engine.exceptions import (
     FastRubberEngineInconsistentInputParametersError,
 )
-from mlinsights.mlmodel import ExtendedFeatures
 from fastoad.model_base.atmosphere import Atmosphere
 from fastoad.model_base.propulsion import IOMPropulsionWrapper
 import pandas as pd
