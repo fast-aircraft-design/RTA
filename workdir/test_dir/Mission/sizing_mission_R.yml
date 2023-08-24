@@ -83,29 +83,22 @@ phases:
       default: 5.0
       unit: s
     parts:
-      - segment: altitude_change
-        target:
-          altitude:
-            value: 12000.
-            unit: ft
-          equivalent_airspeed: constant
       - segment: speed_change
         target:
           equivalent_airspeed:
             value: data:mission:sizing:climb:second_segment:CAS
-            default: 190.
+            default: 170.
             unit: kn
       - segment: altitude_change
         target:
           equivalent_airspeed: constant
-          mach: data:TLAR:cruise_mach
-      - segment: altitude_change
-        target:
-          mach: constant
           altitude:
-            value: 6080
-            unit: m
-        maximum_flight_level: 220
+            value: 20000.
+            unit: ft
+      - segment: speed_change
+        target:
+          mach:
+            value: data:TLAR:cruise_mach
   diversion_climb:
     engine_setting: climb
     polar: data:aerodynamics:aircraft:cruise
@@ -118,21 +111,9 @@ phases:
       - segment: altitude_change
         target:
           altitude:
-            value: 7000.
-            unit: ft
-          equivalent_airspeed: constant
-      - segment: speed_change
-        target:
-          equivalent_airspeed:
-            value: data:mission:sizing:climb:second_segment:CAS
-            default: 170.
-            unit: kn
-      - segment: altitude_change
-        target:
-          altitude:
             value: 14000.
             unit: ft
-          equivalent_airspeed: constant
+          mach: constant
   descent:
     engine_setting: idle
     polar: data:aerodynamics:aircraft:cruise
@@ -144,27 +125,10 @@ phases:
     parts:
       - segment: altitude_change
         target:
-          equivalent_airspeed:
-            value: 220
-            unit: kn
-          mach: constant
-      - segment: altitude_change
-        target:
-          altitude:
-            value: 10000.
-            unit: ft
-          equivalent_airspeed: constant
-      - segment: speed_change
-        target:
-          equivalent_airspeed:
-            value: 116.
-            unit: kn
-      - segment: altitude_change
-        target:
-          equivalent_airspeed: constant
           altitude:
             value: 1500.
             unit: ft
+          equivalent_airspeed: constant
   holding:
     time_step:
       value: settings:mission~
@@ -203,10 +167,6 @@ routes:
       segment: cruise
       engine_setting: cruise
       polar: data:aerodynamics:aircraft:cruise
-      target:
-        altitude:
-          value: 6080
-          unit: m
       maximum_flight_level: 220
     descent_parts:
       - phase: descent

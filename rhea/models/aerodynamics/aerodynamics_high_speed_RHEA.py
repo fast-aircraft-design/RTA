@@ -29,6 +29,7 @@ from components.oswald import OswaldCoefficient
 from openmdao.core.group import Group
 from fastoad.module_management.constants import ModelDomain
 from fastoad.module_management.service_registry import RegisterOpenMDAOSystem, RegisterSubmodel
+from fastoad_cs25.models.aerodynamics.constants import SERVICE_CL_ALPHA
 
 @RegisterOpenMDAOSystem("rhea.aerodynamics.highspeed", domain=ModelDomain.AERODYNAMICS)
 class AerodynamicsHighSpeed_RHEA(Group):
@@ -43,6 +44,7 @@ class AerodynamicsHighSpeed_RHEA(Group):
         self.add_subsystem("compute_oswald_coeff", OswaldCoefficient(), promotes=["*"])
         self.add_subsystem("comp_re", ComputeReynolds(), promotes=["*"])
         self.add_subsystem("initialize_cl", InitializeClPolar(), promotes=["*"])
+        self.add_subsystem("compute_CL_alpha", RegisterSubmodel.get_submodel(SERVICE_CL_ALPHA), promotes=['*'])
         self.add_subsystem("cd0_wing", Cd0Wing(), promotes=["*"])
         self.add_subsystem("cd0_fuselage", Cd0Fuselage(), promotes=["*"])
         self.add_subsystem("cd0_ht", Cd0HorizontalTail(), promotes=["*"])

@@ -30,8 +30,11 @@ model:
     linear_solver: om.DirectSolver()
 
     geometry:
-      # An OpenMDAO component is identified by its "id"
       id: rhea.geometry.sizing
+    propeller:
+      id: rhea.propulsion.propeller_sizing
+    gasturbine:
+      id: rhea.propulsion.turboprop_sizing
     weight:
       id: rhea.weight.sizing
     mtow:
@@ -48,9 +51,6 @@ model:
       id: rhea.aerodynamics.lowspeed
     aerodynamics_takeoff:
       id: rhea.aerodynamics.takeoff
-    aerodynamics_landing:
-      id: fastoad.aerodynamics.landing.legacy
-      use_xfoil: false
     wing_area:
       id: rhea.loop.wing_area
   performance:
@@ -61,6 +61,8 @@ model:
     out_file: ./flight_points.csv
     adjust_fuel: true
     is_sizing: true
+#  engine_size:
+#    id: rhea.loop.engine_size
 
 
 #optimization: # This section is needed only if optimization process is run

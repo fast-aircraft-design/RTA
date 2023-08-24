@@ -77,7 +77,9 @@
       </wing>
     </geometry>
     <propulsion>
+      <Design_Thermo_Power units="W" is_input="True">2500000</Design_Thermo_Power>
       <Power_Offtake units="W" is_input="True">7500.0</Power_Offtake>
+      <RTO_power units="W" is_input="True">2050000</RTO_power>
       <gearbox_eta is_input="True">0.99</gearbox_eta>
       <L1_engine>
         <fuel is_input="True">0.0</fuel>
@@ -125,6 +127,7 @@
       </electric_systems>
       <propeller>
         <disk_loading units="kW/m**2" is_input="True">184.99</disk_loading>
+        <max_power units="kW" is_input="False">2250.0</max_power>
       </propeller>
     </propulsion>
     <handling_qualities>
