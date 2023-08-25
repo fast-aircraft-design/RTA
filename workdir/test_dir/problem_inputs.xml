@@ -171,24 +171,24 @@
         </initial_climb>
         <start>
           <altitude units="ft" is_input="True">0.0<!--Input defined by the mission.--></altitude>
-          <true_airspeed units="m/s" is_input="True">0.0<!--Input defined by the mission.--></true_airspeed>
+          <true_airspeed units="m/s" is_input="True">1.0<!--Input defined by the mission.--></true_airspeed>
         </start>
         <takeoff>
           <V2 units="m/s" is_input="True">60.0<!--Input defined by the mission.--></V2>
           <duration units="s" is_input="True">60.0<!--duration of takeoff phase in sizing mission--></duration>
           <flap_angle units="deg" is_input="True">15.0<!--flap angle during takeoff phase in sizing mission--></flap_angle>
-          <fuel units="kg" is_input="True">10.0<!--mass of consumed fuel during takeoff phase in sizing mission--></fuel>
+          <fuel units="kg" is_input="True">30.0<!--mass of consumed fuel during takeoff phase in sizing mission--></fuel>
           <safety_altitude units="ft" is_input="True">35<!--Input defined by the mission.--></safety_altitude>
           <slat_angle units="deg" is_input="True">0.0<!--slat angle during takeoff phase in sizing mission--></slat_angle>
         </takeoff>
         <taxi_in>
           <duration units="s" is_input="True">60.0<!--duration of taxi-in phase in sizing mission--></duration>
           <thrust_rate is_input="True">0.01<!--thrust rate (between 0.0 and 1.0) during taxi-in phase in sizing mission--></thrust_rate>
-          <true_airspeed units="m/s" is_input="True">0.0<!--Input defined by the mission.--></true_airspeed>
+          <true_airspeed units="m/s" is_input="True">15.0<!--Input defined by the mission.--></true_airspeed>
         </taxi_in>
         <taxi_out>
           <duration units="s" is_input="True">360.0<!--duration of taxi-out phase in sizing mission--></duration>
-          <true_airspeed units="m/s" is_input="True">0.01<!--Input defined by the mission.--></true_airspeed>
+          <true_airspeed units="m/s" is_input="True">15.0<!--Input defined by the mission.--></true_airspeed>
         </taxi_out>
         <main_route>
           <cruise>
