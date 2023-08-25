@@ -31,38 +31,30 @@ class ECSWeight(ExplicitComponent):
     - Temperature and pressure control
 
 
-    Based on "Aircraft conceptual design synthesis", Denis Howe 
+    Based on "Aircraft conceptual design synthesis", Denis Howe
     Formula (AD4.10b) pag.359
     """
 
     def setup(self):
-   
+
         self.add_input("data:geometry:cabin:NPAX1", val=np.nan)
         self.add_input("tuning:weight:systems:ECS:mass:k", val=1.0)
-        self.add_input(
-            "tuning:weight:systems:ECS:mass:offset", val=0.0, units="kg"
-        )
-
+        self.add_input("tuning:weight:systems:ECS:mass:offset", val=0.0, units="kg")
 
         self.add_output("data:weight:systems:ECS:mass", units="kg")
-
 
         self.declare_partials("*", "*", method="fd")
 
     # pylint: disable=too-many-locals
     def compute(self, inputs, outputs, discrete_inputs=None, discrete_outputs=None):
 
-
         npax1 = inputs["data:geometry:cabin:NPAX1"]
 
         k = inputs["tuning:weight:systems:ECS:mass:k"]
         offset = inputs["tuning:weight:systems:ECS:mass:offset"]
 
-        mass_ECS = (4*npax1 + 60)
+        mass_ECS = 4 * npax1 + 60
 
         # Mass of air conditioning and pressurization system
 
-        outputs["data:weight:systems:ECS:mass"] = (
-            k * mass_ECS + offset
-        )
-
+        outputs["data:weight:systems:ECS:mass"] = k * mass_ECS + offset

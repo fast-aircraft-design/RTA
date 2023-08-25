@@ -24,7 +24,7 @@ from openmdao.core.explicitcomponent import ExplicitComponent
 class OswaldCoefficient(ExplicitComponent):
     # TODO: Document equations. Cite sources (M. Nita and D. Scholz)
     # FIXME: output the real Oswald coefficient (coef_e instead of coef_k)
-    """ Computes Oswald efficiency number """
+    """Computes Oswald efficiency number"""
 
     def initialize(self):
         self.options.declare("low_speed_aero", default=False, types=bool)
@@ -40,10 +40,14 @@ class OswaldCoefficient(ExplicitComponent):
 
         if self.options["low_speed_aero"]:
             self.add_input("data:aerodynamics:aircraft:takeoff:mach", val=np.nan)
-            self.add_output("data:aerodynamics:aircraft:low_speed:induced_drag_coefficient")
+            self.add_output(
+                "data:aerodynamics:aircraft:low_speed:induced_drag_coefficient"
+            )
         else:
             self.add_input("data:TLAR:cruise_mach", val=np.nan)
-            self.add_output("data:aerodynamics:aircraft:cruise:induced_drag_coefficient")
+            self.add_output(
+                "data:aerodynamics:aircraft:cruise:induced_drag_coefficient"
+            )
 
         self.declare_partials("*", "*", method="fd")
 
@@ -60,13 +64,17 @@ class OswaldCoefficient(ExplicitComponent):
         else:
             mach = inputs["data:TLAR:cruise_mach"]
 
-        aspect_ratio = span ** 2 / wing_area
+        aspect_ratio = span**2 / wing_area
         df = math.sqrt(width_fus * height_fus)
         lamda = l4_wing / l2_wing
         delta_lamda = -0.357 + 0.45 * math.exp(0.0375 * sweep_25 / 180.0 * math.pi)
         lamda = lamda - delta_lamda
         f_lamda = (
-            0.0524 * lamda ** 4 - 0.15 * lamda ** 3 + 0.1659 * lamda ** 2 - 0.0706 * lamda + 0.0119
+            0.0524 * lamda**4
+            - 0.15 * lamda**3
+            + 0.1659 * lamda**2
+            - 0.0706 * lamda
+            + 0.0119
         )
         e_theory = 1 / (1 + f_lamda * aspect_ratio)
 
@@ -78,10 +86,12 @@ class OswaldCoefficient(ExplicitComponent):
         ke_f = 1 - 2 * (df / span) ** 2
         coef_e = e_theory * ke_f * ke_m * 0.95
         coef_k = 1.0 / (math.pi * aspect_ratio * coef_e)
-        
-        
 
         if self.options["low_speed_aero"]:
-            outputs["data:aerodynamics:aircraft:low_speed:induced_drag_coefficient"] = coef_k
+            outputs[
+                "data:aerodynamics:aircraft:low_speed:induced_drag_coefficient"
+            ] = coef_k
         else:
-            outputs["data:aerodynamics:aircraft:cruise:induced_drag_coefficient"] = coef_k
+            outputs[
+                "data:aerodynamics:aircraft:cruise:induced_drag_coefficient"
+            ] = coef_k

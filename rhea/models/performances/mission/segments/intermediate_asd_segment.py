@@ -18,44 +18,50 @@ from scipy.constants import g
 from fastoad.utils.physics import AtmosphereSI
 import math
 from fastoad.base.flight_point import FlightPoint
-from fastoad.models.performances.mission.segments.base import ManualThrustSegment, FixedDurationSegment
+from fastoad.models.performances.mission.segments.base import (
+    ManualThrustSegment,
+    FixedDurationSegment,
+)
 import numpy as np
 import scipy.constants as const
+
 _LOGGER = logging.getLogger(__name__)  # Logger for this module
 import pandas as pd
 from fastoad.base.dict import AddKeyAttributes
-from fastoad.models.performances.mission.exceptions import FastFlightSegmentIncompleteFlightPoint
+from fastoad.models.performances.mission.exceptions import (
+    FastFlightSegmentIncompleteFlightPoint,
+)
 
 SEGMENT_KEYWORD_ARGUMENTS = {
     "CL_alpha": 0,
     "CL0": 0,
-    "CL_max":0,
-    "kf": 0,   
-    'H_list':0,
-    'alpha_list':0,
-    'CT_list':0,    
-    'DCl0_CT':0,
-    'DCl_alpha_CT':0,
-    'DCd_OEI':0,
-    'DCd_gd':0,
-    'DCl_gd':0,
-    'K_H' :0,
-    'DCd_lg':0,
-    'DCl_lg':0,
+    "CL_max": 0,
+    "kf": 0,
+    "H_list": 0,
+    "alpha_list": 0,
+    "CT_list": 0,
+    "DCl0_CT": 0,
+    "DCl_alpha_CT": 0,
+    "DCd_OEI": 0,
+    "DCd_gd": 0,
+    "DCl_gd": 0,
+    "K_H": 0,
+    "DCd_lg": 0,
+    "DCl_lg": 0,
     "EM_power_rate": 0.0,
-    "TP_power_rate":1.0,  
-    "vef":1000,
-    "kf_brake":0.6,
+    "TP_power_rate": 1.0,
+    "vef": 1000,
+    "kf_brake": 0.6,
 }
 
+
 @AddKeyAttributes(SEGMENT_KEYWORD_ARGUMENTS)
-class IntermediateAsdSegment(ManualThrustSegment,FixedDurationSegment):
+class IntermediateAsdSegment(ManualThrustSegment, FixedDurationSegment):
     """
-    Computes the acceleration from vef to v1 with one engine inoperative. 
-    
+    Computes the acceleration from vef to v1 with one engine inoperative.
+
     The target is the segment duration (v1 is the speed reached after 1 second accelerating with oei)
     """
-
 
     def complete_flight_point(self, flight_point: FlightPoint):
         """
@@ -76,68 +82,89 @@ class IntermediateAsdSegment(ManualThrustSegment,FixedDurationSegment):
             self._complete_speed_values(flight_point)
 
         atm = AtmosphereSI(flight_point.altitude, delta_t=flight_point.DISA)
-        reference_force = 0.5 * atm.density * flight_point.true_airspeed ** 2 * self.reference_area
-        
+        reference_force = (
+            0.5 * atm.density * flight_point.true_airspeed**2 * self.reference_area
+        )
+
         self.propulsion.engine_count = 1
         self.propulsion.motor_count = 1
-        
+
         self._compute_propulsion(flight_point)
-        
-        CT   = flight_point.thrust/2/reference_force  #####verify the division by 2.
-        
-        
+
+        CT = flight_point.thrust / 2 / reference_force  #####verify the division by 2.
+
         flight_point.CT = CT
-        
+
         self.compute_aerodynamics(flight_point)
-        
-        friction = ( flight_point.thrust * math.sin(flight_point.alpha) + flight_point.mass  * g  - reference_force *flight_point.CL) * self.kf
-        
-        flight_point.slope_angle, flight_point.acceleration = self._get_gamma_and_acceleration(
-            flight_point.mass, flight_point.drag, flight_point.thrust,friction,flight_point.alpha
+
+        friction = (
+            flight_point.thrust * math.sin(flight_point.alpha)
+            + flight_point.mass * g
+            - reference_force * flight_point.CL
+        ) * self.kf
+
+        (
+            flight_point.slope_angle,
+            flight_point.acceleration,
+        ) = self._get_gamma_and_acceleration(
+            flight_point.mass,
+            flight_point.drag,
+            flight_point.thrust,
+            friction,
+            flight_point.alpha,
         )
         # print('Lift off', -flight_point.mass - flight_point.drag*math.sin(flight_point.alpha) + flight_point.CL*reference_force*math.cos(flight_point.alpha) + flight_point.thrust*math.sin(flight_point.alpha) )
-        
-    def compute_aerodynamics(self, flight_point: FlightPoint):
-        
-        atm = AtmosphereSI(flight_point.altitude, delta_t=flight_point.DISA)
-        reference_force = 0.5 * atm.density * flight_point.true_airspeed ** 2 * self.reference_area
-        Cl_no_effects = self.CL0 + flight_point.alpha * self.CL_alpha
-        if  np.array(self.DCl_gd).any():
-            DCl_gd = np.interp(flight_point.alpha/const.degree, self.alpha_list,self.DCl_gd ) * np.interp(flight_point.altitude, self.H_list,self.K_H ) 
-        else:
-            DCl_gd=0
-        DCl_lg = np.interp(flight_point.alpha/const.degree, self.alpha_list,self.DCl_lg ) 
-        
 
-        CT=flight_point.CT
+    def compute_aerodynamics(self, flight_point: FlightPoint):
+
+        atm = AtmosphereSI(flight_point.altitude, delta_t=flight_point.DISA)
+        reference_force = (
+            0.5 * atm.density * flight_point.true_airspeed**2 * self.reference_area
+        )
+        Cl_no_effects = self.CL0 + flight_point.alpha * self.CL_alpha
+        if np.array(self.DCl_gd).any():
+            DCl_gd = np.interp(
+                flight_point.alpha / const.degree, self.alpha_list, self.DCl_gd
+            ) * np.interp(flight_point.altitude, self.H_list, self.K_H)
+        else:
+            DCl_gd = 0
+        DCl_lg = np.interp(
+            flight_point.alpha / const.degree, self.alpha_list, self.DCl_lg
+        )
+
+        CT = flight_point.CT
         if np.array(self.DCl0_CT).any():
-            DCl_CT= np.interp(CT, self.CT_list,self.DCl0_CT ) + np.interp(CT, self.CT_list,self.DCl_alpha_CT )* flight_point.alpha
+            DCl_CT = (
+                np.interp(CT, self.CT_list, self.DCl0_CT)
+                + np.interp(CT, self.CT_list, self.DCl_alpha_CT) * flight_point.alpha
+            )
         else:
-            DCl_CT=0
-            
-        flight_point.CL = Cl_no_effects + DCl_gd+ DCl_lg + DCl_CT
-        
+            DCl_CT = 0
+
+        flight_point.CL = Cl_no_effects + DCl_gd + DCl_lg + DCl_CT
+
         Cd_no_effects = self.polar.cd(Cl_no_effects)
-        if  np.array(self.DCd_gd).any():
-            DCd_gd = np.interp(flight_point.alpha/const.degree, self.alpha_list,self.DCd_gd ) * np.interp(flight_point.altitude, self.H_list,self.K_H ) 
+        if np.array(self.DCd_gd).any():
+            DCd_gd = np.interp(
+                flight_point.alpha / const.degree, self.alpha_list, self.DCd_gd
+            ) * np.interp(flight_point.altitude, self.H_list, self.K_H)
         else:
-            DCd_gd=0
-            
-        DCd_lg = np.interp(flight_point.alpha/const.degree, self.alpha_list,self.DCd_lg ) 
-           
-        DCd_OEI =  np.interp(CT, self.CT_list,self.DCd_OEI )
-        
-        Cd_tot =  Cd_no_effects + DCd_gd + DCd_lg 
-        
-        Cd_tot = Cd_tot+ 0.0046#+ DCd_OEI
-        
-        
-        flight_point.CD =Cd_tot
-        
-        
-        
+            DCd_gd = 0
+
+        DCd_lg = np.interp(
+            flight_point.alpha / const.degree, self.alpha_list, self.DCd_lg
+        )
+
+        DCd_OEI = np.interp(CT, self.CT_list, self.DCd_OEI)
+
+        Cd_tot = Cd_no_effects + DCd_gd + DCd_lg
+
+        Cd_tot = Cd_tot + 0.0046  # + DCd_OEI
+
+        flight_point.CD = Cd_tot
+
         flight_point.drag = flight_point.CD * reference_force
-        
+
     def compute_next_flight_point(
         self, flight_points: List[FlightPoint], time_step: float
     ) -> FlightPoint:
@@ -149,43 +176,47 @@ class IntermediateAsdSegment(ManualThrustSegment,FixedDurationSegment):
         :return: the computed next flight point
         """
 
-        
-        
-        next_point = super().compute_next_flight_point(flight_points,time_step)
-        
-        next_point.alpha = flight_points[-1].alpha
-        next_point.TP_power_rate =flight_points[-1].TP_power_rate
-        next_point.EM_power_rate =flight_points[-1].EM_power_rate
-        next_point.DISA =flight_points[-1].DISA
-        
-        return next_point        
-        
-    def _get_gamma_and_acceleration(self, mass, drag, thrust,friction,alpha) -> Tuple[float, float]:
+        next_point = super().compute_next_flight_point(flight_points, time_step)
 
-        acceleration = (thrust*math.cos(alpha)  - friction - drag) / mass
-        
+        next_point.alpha = flight_points[-1].alpha
+        next_point.TP_power_rate = flight_points[-1].TP_power_rate
+        next_point.EM_power_rate = flight_points[-1].EM_power_rate
+        next_point.DISA = flight_points[-1].DISA
+
+        return next_point
+
+    def _get_gamma_and_acceleration(
+        self, mass, drag, thrust, friction, alpha
+    ) -> Tuple[float, float]:
+
+        acceleration = (thrust * math.cos(alpha) - friction - drag) / mass
+
         return 0.0, acceleration
 
     def _compute_propulsion(self, flight_point: FlightPoint):
         flight_point.thrust_rate = self.thrust_rate
         flight_point.EM_power_rate = self.EM_power_rate
-        flight_point.TP_power_rate = self.TP_power_rate   
+        flight_point.TP_power_rate = self.TP_power_rate
         flight_point.thrust_is_regulated = False
         self.propulsion.compute_flight_points(flight_point)
-        
+
     def _complete_speed_values(self, flight_point: FlightPoint):
         """
         SAME AS IN FASTOAD ---> ONLY MODIFIED TO TKE INTO ACCOUNT DISA
-        
+
         Computes consistent values between TAS, EAS and Mach, assuming one of them is defined.
         """
-        atm = AtmosphereSI(flight_point.altitude, delta_t=flight_point.DISA)#########################################
+        atm = AtmosphereSI(
+            flight_point.altitude, delta_t=flight_point.DISA
+        )  #########################################
 
         if flight_point.true_airspeed is None:
             if flight_point.mach:
                 flight_point.true_airspeed = flight_point.mach * atm.speed_of_sound
             elif flight_point.equivalent_airspeed:
-                flight_point.true_airspeed = atm.get_true_airspeed(flight_point.equivalent_airspeed)
+                flight_point.true_airspeed = atm.get_true_airspeed(
+                    flight_point.equivalent_airspeed
+                )
             else:
                 raise FastFlightSegmentIncompleteFlightPoint(
                     "Flight point should be defined for true_airspeed, "
@@ -197,7 +228,4 @@ class IntermediateAsdSegment(ManualThrustSegment,FixedDurationSegment):
         if flight_point.equivalent_airspeed is None:
             flight_point.equivalent_airspeed = atm.get_equivalent_airspeed(
                 flight_point.true_airspeed
-            )        
-        
-        
-        
+            )

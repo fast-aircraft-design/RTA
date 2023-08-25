@@ -17,6 +17,6 @@ from .ATA25_furnishing_weight import FurnishingWeight
 from .ATA33_lighting_weight import LightsWeight
 from .ATA35_oxygen_weight import OxygenWeight
 from .ATA38_water_weight import WaterWeight
-from .ATA2580_insulation_weight  import InsulationWeight
-from .ATA5345_5347_interior_weight  import InteriorIntegrationWeight
+from .ATA2580_insulation_weight import InsulationWeight
+from .ATA5345_5347_interior_weight import InteriorIntegrationWeight
 from .ATA2510_crew_seats_weight import SeatsCrewWeight

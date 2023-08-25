@@ -53,7 +53,9 @@ class DOCFlight_RHEA(om.ExplicitComponent):
         self.options.declare("out_file", default="", types=str)
 
     def setup(self):
-        self._engine_wrapper = BundleLoader().instantiate_component(self.options["propulsion_id"])
+        self._engine_wrapper = BundleLoader().instantiate_component(
+            self.options["propulsion_id"]
+        )
         self._engine_wrapper.setup(self)
 
         # Inputs -----------------------------------------------------------------------------------
@@ -61,16 +63,23 @@ class DOCFlight_RHEA(om.ExplicitComponent):
         self.add_input("data:mission:DOC:range", np.nan, units="m")
         self.add_input("data:mission:DOC:payload", np.nan, units="kg")
         self.add_input("data:weight:aircraft:OWE", np.nan, units="kg")
-        
 
         self.add_input("data:geometry:propulsion:engine:count", 2)
         self.add_input("data:geometry:wing:area", np.nan, units="m**2")
 
-        self.add_input("data:aerodynamics:aircraft:cruise:CL", np.nan, shape=POLAR_POINT_COUNT)
-        self.add_input("data:aerodynamics:aircraft:cruise:CD", np.nan, shape=POLAR_POINT_COUNT)
+        self.add_input(
+            "data:aerodynamics:aircraft:cruise:CL", np.nan, shape=POLAR_POINT_COUNT
+        )
+        self.add_input(
+            "data:aerodynamics:aircraft:cruise:CD", np.nan, shape=POLAR_POINT_COUNT
+        )
 
-        self.add_input("data:aerodynamics:aircraft:takeoff:CL", np.nan, shape=POLAR_POINT_COUNT)
-        self.add_input("data:aerodynamics:aircraft:takeoff:CD", np.nan, shape=POLAR_POINT_COUNT)
+        self.add_input(
+            "data:aerodynamics:aircraft:takeoff:CL", np.nan, shape=POLAR_POINT_COUNT
+        )
+        self.add_input(
+            "data:aerodynamics:aircraft:takeoff:CD", np.nan, shape=POLAR_POINT_COUNT
+        )
 
         self.add_input("data:weight:aircraft:MTOW", np.nan, units="kg")
 
@@ -82,11 +91,12 @@ class DOCFlight_RHEA(om.ExplicitComponent):
         self.add_input("data:mission:DOC:takeoff:fuel", np.nan, units="kg")
 
         self.add_input("data:mission:DOC:climb:thrust_rate", np.nan)
-        self.add_input("data:mission:DOC:climb:speed", np.nan,units="m/s")
-        self.add_input("data:mission:DOC:main_route:cruise:altitude", np.nan, units="ft")
+        self.add_input("data:mission:DOC:climb:speed", np.nan, units="m/s")
+        self.add_input(
+            "data:mission:DOC:main_route:cruise:altitude", np.nan, units="ft"
+        )
         self.add_input("data:mission:DOC:descent:thrust_rate", np.nan)
-        self.add_input("data:mission:DOC:descent:speed", np.nan,units="m/s")
-        
+        self.add_input("data:mission:DOC:descent:speed", np.nan, units="m/s")
 
         self.add_input("data:mission:DOC:diversion:distance", np.nan, units="m")
         self.add_input("data:mission:DOC:diversion:altitude", np.nan, units="ft")
@@ -95,12 +105,10 @@ class DOCFlight_RHEA(om.ExplicitComponent):
         self.add_input("data:mission:DOC:taxi_in:duration", np.nan, units="s")
         self.add_input("data:mission:DOC:taxi_in:speed", np.nan, units="m/s")
         self.add_input("data:mission:DOC:taxi_in:thrust_rate", np.nan)
-        
-        
 
         # Outputs ----------------------------------------------------------------------------------
         self.add_output("data:mission:DOC:TOW", units="kg")
-        
+
         self.add_output("data:mission:DOC:initial_climb:fuel", units="kg")
         self.add_output("data:mission:DOC:main_route:climb:fuel", units="kg")
         self.add_output("data:mission:DOC:main_route:cruise:fuel", units="kg")
@@ -138,24 +146,24 @@ class DOCFlight_RHEA(om.ExplicitComponent):
 
     def compute(self, inputs, outputs, discrete_inputs=None, discrete_outputs=None):
         try:
-            delta_ZFW=100.
+            delta_ZFW = 100.0
             tol = 10
             TOW_input = inputs["data:weight:aircraft:MTOW"]
-            mission_type= 'DOC'
-            while abs(delta_ZFW)>tol:
-                
-                self.compute_mission(inputs, outputs,TOW_input,mission_type)
-                
-                delta_ZFW,TOW_input=self.compute_residuals(inputs, outputs)
-            outputs["data:mission:DOC:TOW"]=TOW_input
+            mission_type = "DOC"
+            while abs(delta_ZFW) > tol:
+
+                self.compute_mission(inputs, outputs, TOW_input, mission_type)
+
+                delta_ZFW, TOW_input = self.compute_residuals(inputs, outputs)
+            outputs["data:mission:DOC:TOW"] = TOW_input
 
         except IndexError:
-            self.compute_breguet(inputs, outputs,TOW_input)
-        
+            self.compute_breguet(inputs, outputs, TOW_input)
 
-    def compute_breguet(self, inputs, outputs,TOW_input):
+    def compute_breguet(self, inputs, outputs, TOW_input):
         propulsion_model = EngineSet(
-            self._engine_wrapper.get_model(inputs), inputs["data:geometry:propulsion:engine:count"]
+            self._engine_wrapper.get_model(inputs),
+            inputs["data:geometry:propulsion:engine:count"],
         )
         high_speed_polar = Polar(
             inputs["data:aerodynamics:aircraft:cruise:CL"],
@@ -165,36 +173,46 @@ class DOCFlight_RHEA(om.ExplicitComponent):
         breguet = Breguet(
             propulsion_model,
             max(
-                10.0, high_speed_polar.optimal_cl / high_speed_polar.cd(high_speed_polar.optimal_cl)
+                10.0,
+                high_speed_polar.optimal_cl
+                / high_speed_polar.cd(high_speed_polar.optimal_cl),
             ),
             inputs["data:mission:DOC:cruise:mach"],
             10000.0,
         )
         breguet.compute(
-            TOW_input, inputs["data:mission:DOC:range"],
+            TOW_input,
+            inputs["data:mission:DOC:range"],
         )
 
         outputs["data:mission:DOC:ZFW"] = breguet.zfw
         outputs["data:mission:DOC:fuel"] = breguet.mission_fuel
 
-    def compute_mission(self, inputs, outputs,TOW_input,mission_type):
+    def compute_mission(self, inputs, outputs, TOW_input, mission_type):
         propulsion_model = EngineSet(
-            self._engine_wrapper.get_model(inputs), inputs["data:geometry:propulsion:engine:count"]
+            self._engine_wrapper.get_model(inputs),
+            inputs["data:geometry:propulsion:engine:count"],
         )
 
         reference_area = inputs["data:geometry:wing:area"]
-        cruise_mach = inputs["data:mission:"+mission_type+":cruise:mach"]
-        flight_distance = inputs["data:mission:"+mission_type+":range"]
-        cruise_altitude = inputs["data:mission:"+mission_type+":main_route:cruise:altitude"]
-        diversion_cruise_altitude =inputs["data:mission:"+mission_type+":diversion:altitude"]
-        climb_speed=inputs["data:mission:"+mission_type+":climb:speed"]
-        descent_speed = inputs["data:mission:"+mission_type+":descent:speed"]
+        cruise_mach = inputs["data:mission:" + mission_type + ":cruise:mach"]
+        flight_distance = inputs["data:mission:" + mission_type + ":range"]
+        cruise_altitude = inputs[
+            "data:mission:" + mission_type + ":main_route:cruise:altitude"
+        ]
+        diversion_cruise_altitude = inputs[
+            "data:mission:" + mission_type + ":diversion:altitude"
+        ]
+        climb_speed = inputs["data:mission:" + mission_type + ":climb:speed"]
+        descent_speed = inputs["data:mission:" + mission_type + ":descent:speed"]
 
-        
-        
         thrust_rates = {
-            FlightPhase.CLIMB: inputs["data:mission:"+mission_type+":climb:thrust_rate"],
-            FlightPhase.DESCENT: inputs["data:mission:"+mission_type+":descent:thrust_rate"],
+            FlightPhase.CLIMB: inputs[
+                "data:mission:" + mission_type + ":climb:thrust_rate"
+            ],
+            FlightPhase.DESCENT: inputs[
+                "data:mission:" + mission_type + ":descent:thrust_rate"
+            ],
         }
         high_speed_polar = Polar(
             inputs["data:aerodynamics:aircraft:cruise:CL"],
@@ -213,18 +231,19 @@ class DOCFlight_RHEA(om.ExplicitComponent):
                 high_speed_polar=high_speed_polar,
                 cruise_mach=cruise_mach,
                 thrust_rates=thrust_rates,
-                climb_target_altitude=cruise_altitude*foot,
+                climb_target_altitude=cruise_altitude * foot,
                 climb_speed=climb_speed,
                 descent_speed=descent_speed,
-                #time_step=0.2,
+                # time_step=0.2,
             ),
             flight_distance,
         )
 
         end_of_takeoff = FlightPoint(
-            mass=TOW_input- inputs["data:mission:"+mission_type+":takeoff:fuel"],
-            true_airspeed=inputs["data:mission:"+mission_type+":takeoff:V2"],
-            altitude=inputs["data:mission:"+mission_type+":takeoff:altitude"] + 35 * foot,
+            mass=TOW_input - inputs["data:mission:" + mission_type + ":takeoff:fuel"],
+            true_airspeed=inputs["data:mission:" + mission_type + ":takeoff:V2"],
+            altitude=inputs["data:mission:" + mission_type + ":takeoff:altitude"]
+            + 35 * foot,
             ground_distance=0.0,
         )
 
@@ -237,51 +256,58 @@ class DOCFlight_RHEA(om.ExplicitComponent):
         end_of_initial_climb = FlightPoint(
             flight_points.loc[flight_points.name == "initial climb"].iloc[-1]
         )
-        end_of_climb = FlightPoint(flight_points.loc[flight_points.name == "climb"].iloc[-1])
-        end_of_cruise = FlightPoint(flight_points.loc[flight_points.name == "cruise"].iloc[-1])
-        end_of_descent = FlightPoint(flight_points.loc[flight_points.name == "descent"].iloc[-1])
+        end_of_climb = FlightPoint(
+            flight_points.loc[flight_points.name == "climb"].iloc[-1]
+        )
+        end_of_cruise = FlightPoint(
+            flight_points.loc[flight_points.name == "cruise"].iloc[-1]
+        )
+        end_of_descent = FlightPoint(
+            flight_points.loc[flight_points.name == "descent"].iloc[-1]
+        )
 
         # Set OpenMDAO outputs
-        outputs["data:mission:"+mission_type+":initial_climb:fuel"] = (
+        outputs["data:mission:" + mission_type + ":initial_climb:fuel"] = (
             end_of_takeoff.mass - end_of_initial_climb.mass
         )
-        outputs["data:mission:"+mission_type+":main_route:climb:fuel"] = (
+        outputs["data:mission:" + mission_type + ":main_route:climb:fuel"] = (
             end_of_initial_climb.mass - end_of_climb.mass
         )
-        outputs["data:mission:"+mission_type+":main_route:cruise:fuel"] = (
+        outputs["data:mission:" + mission_type + ":main_route:cruise:fuel"] = (
             end_of_climb.mass - end_of_cruise.mass
         )
-        outputs["data:mission:"+mission_type+":main_route:descent:fuel"] = (
+        outputs["data:mission:" + mission_type + ":main_route:descent:fuel"] = (
             end_of_cruise.mass - end_of_descent.mass
         )
-        outputs["data:mission:"+mission_type+":initial_climb:distance"] = (
+        outputs["data:mission:" + mission_type + ":initial_climb:distance"] = (
             end_of_initial_climb.ground_distance - end_of_takeoff.ground_distance
         )
-        outputs["data:mission:"+mission_type+":main_route:climb:distance"] = (
+        outputs["data:mission:" + mission_type + ":main_route:climb:distance"] = (
             end_of_climb.ground_distance - end_of_initial_climb.ground_distance
         )
-        outputs["data:mission:"+mission_type+":main_route:cruise:distance"] = (
+        outputs["data:mission:" + mission_type + ":main_route:cruise:distance"] = (
             end_of_cruise.ground_distance - end_of_climb.ground_distance
         )
-        outputs["data:mission:"+mission_type+":main_route:descent:distance"] = (
+        outputs["data:mission:" + mission_type + ":main_route:descent:distance"] = (
             end_of_descent.ground_distance - end_of_cruise.ground_distance
         )
-        outputs["data:mission:"+mission_type+":initial_climb:duration"] = (
+        outputs["data:mission:" + mission_type + ":initial_climb:duration"] = (
             end_of_initial_climb.time - end_of_takeoff.time
         )
-        outputs["data:mission:"+mission_type+":main_route:climb:duration"] = (
+        outputs["data:mission:" + mission_type + ":main_route:climb:duration"] = (
             end_of_climb.time - end_of_initial_climb.time
         )
-        outputs["data:mission:"+mission_type+":main_route:cruise:duration"] = (
+        outputs["data:mission:" + mission_type + ":main_route:cruise:duration"] = (
             end_of_cruise.time - end_of_climb.time
         )
-        outputs["data:mission:"+mission_type+":main_route:descent:duration"] = (
+        outputs["data:mission:" + mission_type + ":main_route:descent:duration"] = (
             end_of_descent.time - end_of_cruise.time
         )
 
         # Diversion flight =====================================================
-        diversion_distance = inputs["data:mission:"+mission_type+":diversion:distance"]
-
+        diversion_distance = inputs[
+            "data:mission:" + mission_type + ":diversion:distance"
+        ]
 
         diversion_flight_calculator = RangedFlight(
             StandardFlight(
@@ -291,23 +317,31 @@ class DOCFlight_RHEA(om.ExplicitComponent):
                 high_speed_polar=high_speed_polar,
                 cruise_mach=cruise_mach,
                 thrust_rates=thrust_rates,
-                climb_target_altitude=diversion_cruise_altitude* foot,
+                climb_target_altitude=diversion_cruise_altitude * foot,
                 climb_speed=climb_speed,
                 descent_speed=descent_speed,
             ),
             diversion_distance,
         )
-        diversion_flight_points = diversion_flight_calculator.compute_from(end_of_descent)
+        diversion_flight_points = diversion_flight_calculator.compute_from(
+            end_of_descent
+        )
 
         # Get flight points for each end of phase
         end_of_diversion_climb = FlightPoint(
-            diversion_flight_points.loc[diversion_flight_points.name == "climb"].iloc[-1]
+            diversion_flight_points.loc[diversion_flight_points.name == "climb"].iloc[
+                -1
+            ]
         )
         end_of_diversion_cruise = FlightPoint(
-            diversion_flight_points.loc[diversion_flight_points.name == "cruise"].iloc[-1]
+            diversion_flight_points.loc[diversion_flight_points.name == "cruise"].iloc[
+                -1
+            ]
         )
         end_of_diversion_descent = FlightPoint(
-            diversion_flight_points.loc[diversion_flight_points.name == "descent"].iloc[-1]
+            diversion_flight_points.loc[diversion_flight_points.name == "descent"].iloc[
+                -1
+            ]
         )
 
         # rename phases because all flight points will be concatenated later.
@@ -320,39 +354,41 @@ class DOCFlight_RHEA(om.ExplicitComponent):
         diversion_flight_points.loc[
             diversion_flight_points.name == "descent"
         ].name = "diversion descent"
-        
+
         # Set OpenMDAO outputs
-        outputs["data:mission:"+mission_type+":diversion:climb:fuel"] = (
+        outputs["data:mission:" + mission_type + ":diversion:climb:fuel"] = (
             end_of_descent.mass - end_of_diversion_climb.mass
         )
-        outputs["data:mission:"+mission_type+":diversion:cruise:fuel"] = (
+        outputs["data:mission:" + mission_type + ":diversion:cruise:fuel"] = (
             end_of_diversion_climb.mass - end_of_diversion_cruise.mass
         )
-        outputs["data:mission:"+mission_type+":diversion:descent:fuel"] = (
+        outputs["data:mission:" + mission_type + ":diversion:descent:fuel"] = (
             end_of_diversion_cruise.mass - end_of_diversion_descent.mass
         )
-        outputs["data:mission:"+mission_type+":diversion:climb:distance"] = (
+        outputs["data:mission:" + mission_type + ":diversion:climb:distance"] = (
             end_of_diversion_climb.ground_distance - end_of_descent.ground_distance
         )
-        outputs["data:mission:"+mission_type+":diversion:cruise:distance"] = (
-            end_of_diversion_cruise.ground_distance - end_of_diversion_climb.ground_distance
+        outputs["data:mission:" + mission_type + ":diversion:cruise:distance"] = (
+            end_of_diversion_cruise.ground_distance
+            - end_of_diversion_climb.ground_distance
         )
-        outputs["data:mission:"+mission_type+":diversion:descent:distance"] = (
-            end_of_diversion_descent.ground_distance - end_of_diversion_cruise.ground_distance
+        outputs["data:mission:" + mission_type + ":diversion:descent:distance"] = (
+            end_of_diversion_descent.ground_distance
+            - end_of_diversion_cruise.ground_distance
         )
-        outputs["data:mission:"+mission_type+":diversion:climb:duration"] = (
+        outputs["data:mission:" + mission_type + ":diversion:climb:duration"] = (
             end_of_diversion_climb.time - end_of_descent.time
         )
-        outputs["data:mission:"+mission_type+":diversion:cruise:duration"] = (
+        outputs["data:mission:" + mission_type + ":diversion:cruise:duration"] = (
             end_of_diversion_cruise.time - end_of_diversion_climb.time
         )
-        outputs["data:mission:"+mission_type+":diversion:descent:duration"] = (
+        outputs["data:mission:" + mission_type + ":diversion:descent:duration"] = (
             end_of_diversion_descent.time - end_of_diversion_cruise.time
         )
-        
+
         # Holding ==============================================================
 
-        holding_duration = inputs["data:mission:"+mission_type+":holding:duration"]
+        holding_duration = inputs["data:mission:" + mission_type + ":holding:duration"]
 
         holding_calculator = HoldSegment(
             target=FlightPoint(time=holding_duration),
@@ -362,16 +398,20 @@ class DOCFlight_RHEA(om.ExplicitComponent):
             name="holding",
         )
 
-        holding_flight_points = holding_calculator.compute_from(end_of_diversion_descent)
+        holding_flight_points = holding_calculator.compute_from(
+            end_of_diversion_descent
+        )
 
         end_of_holding = FlightPoint(holding_flight_points.iloc[-1])
-        outputs["data:mission:"+mission_type+":holding:fuel"] = (
+        outputs["data:mission:" + mission_type + ":holding:fuel"] = (
             end_of_diversion_descent.mass - end_of_holding.mass
         )
 
         # Taxi-in ==============================================================
-        taxi_in_duration = inputs["data:mission:"+mission_type+":taxi_in:duration"]
-        taxi_in_thrust_rate = inputs["data:mission:"+mission_type+":taxi_in:thrust_rate"]
+        taxi_in_duration = inputs["data:mission:" + mission_type + ":taxi_in:duration"]
+        taxi_in_thrust_rate = inputs[
+            "data:mission:" + mission_type + ":taxi_in:thrust_rate"
+        ]
 
         taxi_in_calculator = TaxiSegment(
             target=FlightPoint(time=taxi_in_duration),
@@ -380,27 +420,32 @@ class DOCFlight_RHEA(om.ExplicitComponent):
             name="taxi-in",
         )
         start_of_taxi_in = FlightPoint(end_of_holding)
-        start_of_taxi_in.true_airspeed = inputs["data:mission:"+mission_type+":taxi_in:speed"]
+        start_of_taxi_in.true_airspeed = inputs[
+            "data:mission:" + mission_type + ":taxi_in:speed"
+        ]
         taxi_in_flight_points = taxi_in_calculator.compute_from(end_of_holding)
 
         end_of_taxi_in = FlightPoint(taxi_in_flight_points.iloc[-1])
-        outputs["data:mission:"+mission_type+":taxi_in:fuel"] = end_of_holding.mass - end_of_taxi_in.mass
+        outputs["data:mission:" + mission_type + ":taxi_in:fuel"] = (
+            end_of_holding.mass - end_of_taxi_in.mass
+        )
 
         # Final ================================================================
         fuel_route = TOW_input - end_of_descent.mass
-        outputs["data:mission:"+mission_type+":ZFW"] =end_of_taxi_in.mass - 0.03 * fuel_route
-        outputs["data:mission:"+mission_type+":fuel"] = (
-            TOW_input - outputs["data:mission:"+mission_type+":ZFW"]
+        outputs["data:mission:" + mission_type + ":ZFW"] = (
+            end_of_taxi_in.mass - 0.03 * fuel_route
         )
-        
+        outputs["data:mission:" + mission_type + ":fuel"] = (
+            TOW_input - outputs["data:mission:" + mission_type + ":ZFW"]
+        )
 
         self.flight_points = (
             pd.concat(
                 [
                     flight_points,
-                    #diversion_flight_points,
-                    #holding_flight_points,
-                    #taxi_in_flight_points,
+                    # diversion_flight_points,
+                    # holding_flight_points,
+                    # taxi_in_flight_points,
                 ]
             )
             .reset_index(drop=True)
@@ -409,11 +454,10 @@ class DOCFlight_RHEA(om.ExplicitComponent):
 
         if self.options["out_file"]:
             self.flight_points.to_csv(self.options["out_file"])
-        
-        
-    def compute_residuals(self, inputs, outputs):        
-        payload=inputs["data:mission:DOC:payload"]
-        OWE=inputs["data:weight:aircraft:OWE"]        
-        delta_ZFW=payload+OWE-outputs["data:mission:DOC:ZFW"] 
-        new_TOW= payload+OWE+outputs["data:mission:DOC:fuel"]
-        return delta_ZFW,new_TOW
+
+    def compute_residuals(self, inputs, outputs):
+        payload = inputs["data:mission:DOC:payload"]
+        OWE = inputs["data:weight:aircraft:OWE"]
+        delta_ZFW = payload + OWE - outputs["data:mission:DOC:ZFW"]
+        new_TOW = payload + OWE + outputs["data:mission:DOC:fuel"]
+        return delta_ZFW, new_TOW

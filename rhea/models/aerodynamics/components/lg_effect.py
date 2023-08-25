@@ -21,33 +21,49 @@ from openmdao.core.explicitcomponent import ExplicitComponent
 
 
 from rhea.models.aerodynamics.constants import ALPHA_POINT_COUNT
+
+
 class ComputeDeltaLg(ExplicitComponent):
 
-    """ Computes landing gear extension effect on Cl and Cd """
-
+    """Computes landing gear extension effect on Cl and Cd"""
 
     def initialize(self):
         self.options.declare("landing_flag", default=False, types=bool)
 
     def setup(self):
 
-
         if self.options["landing_flag"]:
-            self.add_output("data:aerodynamics:aircraft:landing:lg_effect:DCL",shape=ALPHA_POINT_COUNT)
-            self.add_output("data:aerodynamics:aircraft:landing:lg_effect:DCD",shape=ALPHA_POINT_COUNT)            
+            self.add_output(
+                "data:aerodynamics:aircraft:landing:lg_effect:DCL",
+                shape=ALPHA_POINT_COUNT,
+            )
+            self.add_output(
+                "data:aerodynamics:aircraft:landing:lg_effect:DCD",
+                shape=ALPHA_POINT_COUNT,
+            )
         else:
-            self.add_output("data:aerodynamics:aircraft:takeoff:lg_effect:DCL",shape=ALPHA_POINT_COUNT)
-            self.add_output("data:aerodynamics:aircraft:takeoff:lg_effect:DCD",shape=ALPHA_POINT_COUNT)
+            self.add_output(
+                "data:aerodynamics:aircraft:takeoff:lg_effect:DCL",
+                shape=ALPHA_POINT_COUNT,
+            )
+            self.add_output(
+                "data:aerodynamics:aircraft:takeoff:lg_effect:DCD",
+                shape=ALPHA_POINT_COUNT,
+            )
 
     def compute(self, inputs, outputs):
 
- 
         if self.options["landing_flag"]:
-            outputs["data:aerodynamics:aircraft:landing:lg_effect:DCL"] = np.ones(ALPHA_POINT_COUNT) * 0.02
-            outputs["data:aerodynamics:aircraft:landing:lg_effect:DCD"] =np.ones(ALPHA_POINT_COUNT) * 0.02           
+            outputs["data:aerodynamics:aircraft:landing:lg_effect:DCL"] = (
+                np.ones(ALPHA_POINT_COUNT) * 0.02
+            )
+            outputs["data:aerodynamics:aircraft:landing:lg_effect:DCD"] = (
+                np.ones(ALPHA_POINT_COUNT) * 0.02
+            )
         else:
-            outputs["data:aerodynamics:aircraft:takeoff:lg_effect:DCL"] = np.ones(ALPHA_POINT_COUNT) * 0.02
-            outputs["data:aerodynamics:aircraft:takeoff:lg_effect:DCD"] =np.ones(ALPHA_POINT_COUNT) * 0.02
-
-
-
+            outputs["data:aerodynamics:aircraft:takeoff:lg_effect:DCL"] = (
+                np.ones(ALPHA_POINT_COUNT) * 0.02
+            )
+            outputs["data:aerodynamics:aircraft:takeoff:lg_effect:DCD"] = (
+                np.ones(ALPHA_POINT_COUNT) * 0.02
+            )

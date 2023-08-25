@@ -18,7 +18,6 @@ import numpy as np
 from openmdao.core.explicitcomponent import ExplicitComponent
 
 
-
 class SeatsCrewWeight(ExplicitComponent):
     """
     Weight estimation for crew accomadation
@@ -44,7 +43,6 @@ class SeatsCrewWeight(ExplicitComponent):
             "data:weight:furniture:seats_crew_accommodation:mass", units="kg"
         )
 
-
         self.declare_partials("*", "*", method="fd")
 
     # pylint: disable=too-many-locals
@@ -52,14 +50,12 @@ class SeatsCrewWeight(ExplicitComponent):
 
         cabin_crew = inputs["data:geometry:cabin:crew_count:commercial"]
         cockpit_crew = inputs["data:geometry:cabin:crew_count:technical"]
-   
+
         k = inputs["tuning:weight:furniture:seats_crew_accommodation:mass:k"]
-        offset = inputs[
-            "tuning:weight:furniture:seats_crew_accommodation:mass:offset"
-        ]
+        offset = inputs["tuning:weight:furniture:seats_crew_accommodation:mass:offset"]
 
         # Mass of seats and installation system
         mass_crew_seats = 20 * cockpit_crew + 10 * cabin_crew
         outputs["data:weight:furniture:seats_crew_accommodation:mass"] = (
-            k* mass_crew_seats + offset
+            k * mass_crew_seats + offset
         )

@@ -29,7 +29,9 @@ class Cd0Fuselage(ExplicitComponent):
         if self.low_speed_aero:
             self.add_input("data:aerodynamics:wing:low_speed:reynolds", val=np.nan)
             self.add_input(
-                "data:aerodynamics:aircraft:low_speed:CL", shape_by_conn=True, val=np.nan
+                "data:aerodynamics:aircraft:low_speed:CL",
+                shape_by_conn=True,
+                val=np.nan,
             )
             self.add_input("data:aerodynamics:aircraft:takeoff:mach", val=np.nan)
             self.add_output(
@@ -38,7 +40,9 @@ class Cd0Fuselage(ExplicitComponent):
             )
         else:
             self.add_input("data:aerodynamics:wing:cruise:reynolds", val=np.nan)
-            self.add_input("data:aerodynamics:aircraft:cruise:CL", shape_by_conn=True, val=np.nan)
+            self.add_input(
+                "data:aerodynamics:aircraft:cruise:CL", shape_by_conn=True, val=np.nan
+            )
             self.add_input("data:TLAR:cruise_mach", val=np.nan)
             self.add_output(
                 "data:aerodynamics:fuselage:cruise:CD0",
@@ -68,15 +72,18 @@ class Cd0Fuselage(ExplicitComponent):
             mach = inputs["data:TLAR:cruise_mach"]
             reynolds = inputs["data:aerodynamics:wing:cruise:reynolds"]
 
-        #Refeence for deltas: Conceptual Aircraft Design: An Industrial Approach. Authors:Ajoy Kumar Kundu, Mark A. Price, David Riordan Pag 493           
-        delta_cf_karman = 0.1#find formulas to estimate (cd0 should be around 7 dc)
-        delta_cf_bellyfairing = 0.2 #find formulas to estimate (cd0 should be around 15 dc) 
-
-        cf_fus_opt = 0.455 / (
-            (1 + 0.144 * mach ** 2) ** 0.65 * (math.log10(reynolds * fus_length)) ** 2.58
+        # Refeence for deltas: Conceptual Aircraft Design: An Industrial Approach. Authors:Ajoy Kumar Kundu, Mark A. Price, David Riordan Pag 493
+        delta_cf_karman = 0.1  # find formulas to estimate (cd0 should be around 7 dc)
+        delta_cf_bellyfairing = (
+            0.2  # find formulas to estimate (cd0 should be around 15 dc)
         )
 
-        cf_fus= cf_fus_opt*(1+delta_cf_karman + delta_cf_bellyfairing)
+        cf_fus_opt = 0.455 / (
+            (1 + 0.144 * mach**2) ** 0.65
+            * (math.log10(reynolds * fus_length)) ** 2.58
+        )
+
+        cf_fus = cf_fus_opt * (1 + delta_cf_karman + delta_cf_bellyfairing)
 
         cd0_friction_fus = (
             (0.98 + 0.745 * math.sqrt(height_max * width_max) / fus_length)
@@ -85,14 +92,12 @@ class Cd0Fuselage(ExplicitComponent):
             / wing_area
         )
         cd0_upsweep_fus = (
-            (0.0029 * cl ** 2 - 0.0066 * cl + 0.0043)
+            (0.0029 * cl**2 - 0.0066 * cl + 0.0043)
             * (0.67 * 3.6 * height_max * width_max)
             / wing_area
         )
-        
-         
 
-        cd0_fus = cd0_friction_fus + cd0_upsweep_fus 
+        cd0_fus = cd0_friction_fus + cd0_upsweep_fus
 
         if self.low_speed_aero:
             outputs["data:aerodynamics:fuselage:low_speed:CD0"] = cd0_fus

@@ -18,11 +18,18 @@
 import openmdao.api as om
 
 from fastoad_cs25.models.geometry.compute_aero_center import ComputeAeroCenter
-from fastoad_cs25.models.geometry.geom_components.compute_wetted_area import ComputeWettedArea
-from fastoad_cs25.models.geometry.geom_components.fuselage.compute_cnbeta_fuselage import ComputeCnBetaFuselage
+from fastoad_cs25.models.geometry.geom_components.compute_wetted_area import (
+    ComputeWettedArea,
+)
+from fastoad_cs25.models.geometry.geom_components.fuselage.compute_cnbeta_fuselage import (
+    ComputeCnBetaFuselage,
+)
 from rhea.models.geometry.geom_components import ComputeGeometry_RHEA
 from fastoad.module_management.constants import ModelDomain
-from fastoad.module_management.service_registry import RegisterOpenMDAOSystem, RegisterSubmodel
+from fastoad.module_management.service_registry import (
+    RegisterOpenMDAOSystem,
+    RegisterSubmodel,
+)
 
 
 @RegisterOpenMDAOSystem("rhea.geometry.RHEA_IN", domain=ModelDomain.GEOMETRY)
@@ -36,6 +43,3 @@ class Geometry_IN(om.Group):
         self.add_subsystem("fuselage_cnbeta", ComputeCnBetaFuselage(), promotes=["*"])
         self.add_subsystem("compute_total_area", ComputeWettedArea(), promotes=["*"])
         self.add_subsystem("compute_aero_center", ComputeAeroCenter(), promotes=["*"])
-
-
-

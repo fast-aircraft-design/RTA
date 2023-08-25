@@ -18,22 +18,20 @@ engine_params = {
     "Power_Offtake": "data:propulsion:Power_Offtake",
     "gearbox_eta": "data:propulsion:gearbox_eta",
     "d_prop": "data:geometry:propulsion:propeller:diameter",
-
     "k_gb_RTO": "settings:propulsion:ratings:RTO:k_gb",
     "k_gb_NTO": "settings:propulsion:ratings:NTO:k_gb",
     "k_gb_MCL": "settings:propulsion:ratings:MCL:k_gb",
     "k_gb_MCT": "settings:propulsion:ratings:MCT:k_gb",
     "k_gb_MCR": "settings:propulsion:ratings:MCR:k_gb",
     "k_gb_FID": "settings:propulsion:ratings:FID:k_gb",
-
     "k_psfc": "tuning:propulsion:k_psfc",
     "k_prop": "tuning:propulsion:k_prop",
-
 }
+
 
 def test_ML_TP_L1():
 
-    var_name=[]
+    var_name = []
     for var, name in engine_params.items():
         var_name.append(name)
 
@@ -45,9 +43,13 @@ def test_ML_TP_L1():
 
     engine = ML_TP_L1(**argument)
 
-    #Test scalar
+    # Test scalar
     flight_point = FlightPoint(
-        mach=0.45, altitude=6096, engine_setting=EngineSetting.CRUISE, thrust=7250, thrust_is_regulated=1.0,
+        mach=0.45,
+        altitude=6096,
+        engine_setting=EngineSetting.CRUISE,
+        thrust=7250,
+        thrust_is_regulated=1.0,
     )  # with engine_setting as int
     engine.compute_flight_points(flight_point)
     np.testing.assert_allclose(flight_point.psfc, 8.384e-8, rtol=1e-3)
@@ -61,12 +63,11 @@ def test_ML_TP_L1():
     np.testing.assert_allclose(flight_point.thrust, 31712, rtol=1e-3)
 
     flight_point = FlightPoint(
-        mach=0.3, altitude=3000, engine_setting=EngineSetting.CLIMB.value, thrust_rate=1.0
+        mach=0.3,
+        altitude=3000,
+        engine_setting=EngineSetting.CLIMB.value,
+        thrust_rate=1.0,
     )  # with engine_setting as int
     engine.compute_flight_points(flight_point)
     np.testing.assert_allclose(flight_point.thrust, 14095, rtol=1e-3)
     np.testing.assert_allclose(flight_point.psfc, 8.576e-8, rtol=1e-3)
-
-
-
-

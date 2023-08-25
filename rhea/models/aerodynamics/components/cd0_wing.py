@@ -28,7 +28,9 @@ class Cd0Wing(ExplicitComponent):
         if self.low_speed_aero:
             self.add_input("data:aerodynamics:wing:low_speed:reynolds", val=np.nan)
             self.add_input(
-                "data:aerodynamics:aircraft:low_speed:CL", shape_by_conn=True, val=np.nan
+                "data:aerodynamics:aircraft:low_speed:CL",
+                shape_by_conn=True,
+                val=np.nan,
             )
             self.add_input("data:aerodynamics:aircraft:takeoff:mach", val=np.nan)
             self.add_output(
@@ -37,7 +39,9 @@ class Cd0Wing(ExplicitComponent):
             )
         else:
             self.add_input("data:aerodynamics:wing:cruise:reynolds", val=np.nan)
-            self.add_input("data:aerodynamics:aircraft:cruise:CL", shape_by_conn=True, val=np.nan)
+            self.add_input(
+                "data:aerodynamics:aircraft:cruise:CL", shape_by_conn=True, val=np.nan
+            )
             self.add_input("data:TLAR:cruise_mach", val=np.nan)
             self.add_output(
                 "data:aerodynamics:wing:cruise:CD0",
@@ -69,12 +73,14 @@ class Cd0Wing(ExplicitComponent):
 
         ki_arrow_cd0 = 0.04
         # Friction coefficients
-        cf_wing = 0.455 / ((1 + 0.144 * mach ** 2) ** 0.65 * (np.log10(reynolds * l0_wing)) ** 2.58)
+        cf_wing = 0.455 / (
+            (1 + 0.144 * mach**2) ** 0.65 * (np.log10(reynolds * l0_wing)) ** 2.58
+        )
 
         # cd0 wing
         # factor of relative thickness
-        ke_cd0_wing = 4.688 * el_aero ** 2 + 3.146 * el_aero
-        k_phi_cd0_wing = 1 - 0.000178 * sweep_25 ** 2 - 0.0065 * sweep_25
+        ke_cd0_wing = 4.688 * el_aero**2 + 3.146 * el_aero
+        k_phi_cd0_wing = 1 - 0.000178 * sweep_25**2 - 0.0065 * sweep_25
 
         # kc_cd0_wing = (
         #     2.859 * (cl / np.cos(np.radians(sweep_25)) ** 2) ** 3
@@ -83,14 +89,13 @@ class Cd0Wing(ExplicitComponent):
         #     + 0.06
         # )  # sweep factor
 
-        kc_cd0_wing =0
+        kc_cd0_wing = 0
         cd0_wing = (
             ((ke_cd0_wing + kc_cd0_wing) * k_phi_cd0_wing + ki_arrow_cd0 + 1)
             * cf_wing
             * wet_area_wing
             / wing_area
         )
-        
 
         if self.low_speed_aero:
             outputs["data:aerodynamics:wing:low_speed:CD0"] = cd0_wing

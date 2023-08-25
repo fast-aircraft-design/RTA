@@ -26,7 +26,7 @@ class ElectricalPowerSystemWeight(ExplicitComponent):
 
     - Batteries
     - Starter/generators
-    - Inverters 
+    - Inverters
     - Control unit
     - Electrical wires for all systems
 
@@ -38,14 +38,23 @@ class ElectricalPowerSystemWeight(ExplicitComponent):
         self.add_input("data:weight:aircraft:MTOW", val=np.nan, units="kg")
 
         self.add_input(
-            "tuning:weight:systems:electric_systems:electric_generation:mass:offset", val=0.0, units="kg"
+            "tuning:weight:systems:electric_systems:electric_generation:mass:offset",
+            val=0.0,
+            units="kg",
         )
-        self.add_input("tuning:weight:systems:electric_systems:electric_generation:mass:k", val=1.0)
+        self.add_input(
+            "tuning:weight:systems:electric_systems:electric_generation:mass:k", val=1.0
+        )
 
         self.add_input("settings:weight:systems:electric_systems:mass:k_elec", val=1.0)
 
-        self.add_output("data:weight:systems:electric_systems:electric_generation:mass", units="kg")
-        self.add_output("data:weight:systems:electric_systems:electric_common_installation:mass", units="kg")
+        self.add_output(
+            "data:weight:systems:electric_systems:electric_generation:mass", units="kg"
+        )
+        self.add_output(
+            "data:weight:systems:electric_systems:electric_common_installation:mass",
+            units="kg",
+        )
 
         self.declare_partials("*", "*", method="fd")
 
@@ -55,14 +64,17 @@ class ElectricalPowerSystemWeight(ExplicitComponent):
         mtow = inputs["data:weight:aircraft:MTOW"]
 
         k = inputs["tuning:weight:systems:electric_systems:electric_generation:mass:k"]
-        offset = inputs["tuning:weight:systems:electric_systems:electric_generation:mass:offset"]
+        offset = inputs[
+            "tuning:weight:systems:electric_systems:electric_generation:mass:offset"
+        ]
 
         k_elec = inputs["settings:weight:systems:electric_systems:mass:k_elec"]
 
-
         # Mass of electric system
-        m_elec = (k_elec * (0.444 * mtow ** 0.66 + 2.54 * npax1))*k+offset
-        outputs["data:weight:systems:electric_systems:electric_generation:mass"] = m_elec*0.6
-        outputs["data:weight:systems:electric_systems:electric_common_installation:mass"] = m_elec*0.4 
-
-
+        m_elec = (k_elec * (0.444 * mtow**0.66 + 2.54 * npax1)) * k + offset
+        outputs["data:weight:systems:electric_systems:electric_generation:mass"] = (
+            m_elec * 0.6
+        )
+        outputs[
+            "data:weight:systems:electric_systems:electric_common_installation:mass"
+        ] = (m_elec * 0.4)

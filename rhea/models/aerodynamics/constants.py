@@ -12,6 +12,6 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 POLAR_POINT_COUNT = 150
-CT_POINT_COUNT = 150 #5
-H_POINT_COUNT=21
-ALPHA_POINT_COUNT=21
+CT_POINT_COUNT = 150  # 5
+H_POINT_COUNT = 21
+ALPHA_POINT_COUNT = 21

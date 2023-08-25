@@ -20,10 +20,12 @@ from openmdao.core.explicitcomponent import ExplicitComponent
 
 class ComputeMaxCGratio(ExplicitComponent):
     # TODO: Document equations. Cite sources
-    """ Maximum center of gravity ratio estimation """
+    """Maximum center of gravity ratio estimation"""
 
     def setup(self):
-        self.add_input("data:weight:aircraft:operating_empty:CG:MAC_position", val=np.nan)
+        self.add_input(
+            "data:weight:aircraft:operating_empty:CG:MAC_position", val=np.nan
+        )
         self.add_input("data:weight:aircraft:load_case_1:CG:MAC_position", val=np.nan)
         self.add_input("data:weight:aircraft:load_case_2:CG:MAC_position", val=np.nan)
         self.add_input("data:weight:aircraft:load_case_3:CG:MAC_position", val=np.nan)

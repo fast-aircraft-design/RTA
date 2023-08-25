@@ -18,16 +18,28 @@
 import openmdao.api as om
 
 from fastoad_cs25.models.geometry.compute_aero_center import ComputeAeroCenter
-from fastoad_cs25.models.geometry.geom_components.compute_wetted_area import ComputeWettedArea
+from fastoad_cs25.models.geometry.geom_components.compute_wetted_area import (
+    ComputeWettedArea,
+)
 
-from fastoad_cs25.models.geometry.geom_components.ht.compute_horizontal_tail import ComputeHorizontalTailGeometry
+from fastoad_cs25.models.geometry.geom_components.ht.compute_horizontal_tail import (
+    ComputeHorizontalTailGeometry,
+)
 
-from fastoad_cs25.models.geometry.geom_components.vt.compute_vertical_tail import ComputeVerticalTailGeometry
-from fastoad_cs25.models.geometry.geom_components.wing.compute_wing import ComputeWingGeometry
+from fastoad_cs25.models.geometry.geom_components.vt.compute_vertical_tail import (
+    ComputeVerticalTailGeometry,
+)
+from fastoad_cs25.models.geometry.geom_components.wing.compute_wing import (
+    ComputeWingGeometry,
+)
 from fastoad_cs25.models.constants import CABIN_SIZING_OPTION
-#from fastoad.models.geometry.geom_components.fuselage import ComputeCnBetaFuselage
+
+# from fastoad.models.geometry.geom_components.fuselage import ComputeCnBetaFuselage
 from fastoad.module_management.constants import ModelDomain
-from fastoad.module_management.service_registry import RegisterOpenMDAOSystem, RegisterSubmodel
+from fastoad.module_management.service_registry import (
+    RegisterOpenMDAOSystem,
+    RegisterSubmodel,
+)
 
 
 @RegisterOpenMDAOSystem("rhea.geometry.RHEA2", domain=ModelDomain.GEOMETRY)
@@ -46,16 +58,18 @@ class Geometry_RHEA2(om.Group):
 
     def setup(self):
 
-        '''if self.options[CABIN_SIZING_OPTION] == 1.0:
+        """if self.options[CABIN_SIZING_OPTION] == 1.0:
             self.add_subsystem(
                 "compute_fuselage", ComputeFuselageGeometryCabinSizing(), promotes=["*"]
             )
         else:
-            self.add_subsystem("compute_fuselage", ComputeFuselageGeometryBasic(), promotes=["*"])'''
+            self.add_subsystem("compute_fuselage", ComputeFuselageGeometryBasic(), promotes=["*"])"""
 
         self.add_subsystem("compute_wing", ComputeWingGeometry(), promotes=["*"])
-        #self.add_subsystem("fuselage_cnbeta", ComputeCnBetaFuselage(), promotes=["*"])       
-        self.add_subsystem("compute_ht", ComputeHorizontalTailGeometry(), promotes=["*"])
+        # self.add_subsystem("fuselage_cnbeta", ComputeCnBetaFuselage(), promotes=["*"])
+        self.add_subsystem(
+            "compute_ht", ComputeHorizontalTailGeometry(), promotes=["*"]
+        )
         self.add_subsystem("compute_vt", ComputeVerticalTailGeometry(), promotes=["*"])
         self.add_subsystem("compute_total_area", ComputeWettedArea(), promotes=["*"])
         self.add_subsystem("compute_aero_center", ComputeAeroCenter(), promotes=["*"])

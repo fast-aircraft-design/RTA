@@ -20,21 +20,22 @@ import openmdao.api as om
 from rhea.models.weight.cg.cg_components import ComputeGlobalCG_RHEA
 from rhea.models.weight.cg.cg_components import ComputeHybridPropulsionCG_RHEA
 
+
 class CG_RHEA(om.Group):
-    """ Model that computes the global center of gravity """
-    def __init__(self,hybrid):
+    """Model that computes the global center of gravity"""
+
+    def __init__(self, hybrid):
         super().__init__()
-        self.hybrid=hybrid
-        
+        self.hybrid = hybrid
+
     def setup(self):
-        #self.add_subsystem("compute_cg_hybrid_propulsion", ComputeHybridPropulsionCG_RHEA(self.hybrid), promotes=["*"])
+        # self.add_subsystem("compute_cg_hybrid_propulsion", ComputeHybridPropulsionCG_RHEA(self.hybrid), promotes=["*"])
         self.add_subsystem("compute_cg", ComputeGlobalCG_RHEA(), promotes=["*"])
         self.add_subsystem("aircraft", ComputeAircraftCG(), promotes=["*"])
 
 
-
 class ComputeAircraftCG(om.ExplicitComponent):
-    """ Compute position of aircraft CG from CG ratio """
+    """Compute position of aircraft CG from CG ratio"""
 
     def setup(self):
         self.add_input("data:weight:aircraft:CG:aft:MAC_position", val=np.nan)

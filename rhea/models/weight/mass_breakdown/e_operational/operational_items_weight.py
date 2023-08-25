@@ -18,7 +18,6 @@ import numpy as np
 import openmdao.api as om
 
 
-
 class OperationalItemsWeight(om.ExplicitComponent):
     """
     Weight estimation for operational items. It includes:
@@ -32,28 +31,39 @@ class OperationalItemsWeight(om.ExplicitComponent):
 
     def setup(self):
         self.add_input("data:TLAR:NPAX", val=np.nan)
-        self.add_input("settings:weight:aircraft:design_mass_per_seat", val=np.nan, units="kg")
+        self.add_input(
+            "settings:weight:aircraft:design_mass_per_seat", val=np.nan, units="kg"
+        )
         self.add_input("tuning:weight:furniture:passenger_seats:mass:k", val=1.0)
-        self.add_input("tuning:weight:furniture:passenger_seats:mass:offset", val=0.0, units="kg")
+        self.add_input(
+            "tuning:weight:furniture:passenger_seats:mass:offset", val=0.0, units="kg"
+        )
 
-        self.add_output("data:weight:operational:items:passenger_seats:mass", units="kg")
+        self.add_output(
+            "data:weight:operational:items:passenger_seats:mass", units="kg"
+        )
         self.add_output("data:weight:operational:items:unusable_fuel:mass", units="kg")
-        self.add_output("data:weight:operational:items:documents_toolkit:mass", units="kg")
-        self.add_output("data:weight:operational:items:galley_structure:mass", units="kg")
-        
+        self.add_output(
+            "data:weight:operational:items:documents_toolkit:mass", units="kg"
+        )
+        self.add_output(
+            "data:weight:operational:items:galley_structure:mass", units="kg"
+        )
+
         self.declare_partials("*", "*", method="fd")
 
     def compute(self, inputs, outputs, discrete_inputs=None, discrete_outputs=None):
 
         npax = inputs["data:TLAR:NPAX"]
-        
+
         k = inputs["tuning:weight:furniture:passenger_seats:mass:k"]
         offset = inputs["tuning:weight:furniture:passenger_seats:mass:offset"]
 
+        mass_per_seat = inputs["settings:weight:aircraft:design_mass_per_seat"]
 
-        mass_per_seat = inputs['settings:weight:aircraft:design_mass_per_seat']
-
-        outputs["data:weight:operational:items:passenger_seats:mass"] = mass_per_seat * npax
-        outputs["data:weight:operational:items:unusable_fuel:mass"] = 30.
-        outputs["data:weight:operational:items:documents_toolkit:mass"] = 15.
-        outputs["data:weight:operational:items:galley_structure:mass"] = 100.
+        outputs["data:weight:operational:items:passenger_seats:mass"] = (
+            mass_per_seat * npax
+        )
+        outputs["data:weight:operational:items:unusable_fuel:mass"] = 30.0
+        outputs["data:weight:operational:items:documents_toolkit:mass"] = 15.0
+        outputs["data:weight:operational:items:galley_structure:mass"] = 100.0

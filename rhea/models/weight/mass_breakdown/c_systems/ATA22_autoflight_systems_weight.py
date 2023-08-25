@@ -18,10 +18,9 @@ import numpy as np
 from openmdao.core.explicitcomponent import ExplicitComponent
 
 
-
 class AutoFlightSystemWeight(ExplicitComponent):
     """
-    Weight estimation for automatic flight systems 
+    Weight estimation for automatic flight systems
 
 
 
@@ -31,7 +30,11 @@ class AutoFlightSystemWeight(ExplicitComponent):
     def setup(self):
 
         self.add_input("tuning:weight:systems:automatic_flight_system:mass:k", val=1.0)
-        self.add_input("tuning:weight:systems:automatic_flight_system:mass:offset", val=0.0, units="kg")
+        self.add_input(
+            "tuning:weight:systems:automatic_flight_system:mass:offset",
+            val=0.0,
+            units="kg",
+        )
 
         self.add_output("data:weight:systems:automatic_flight_system:mass", units="kg")
 
@@ -43,6 +46,7 @@ class AutoFlightSystemWeight(ExplicitComponent):
         offset = inputs["tuning:weight:systems:automatic_flight_system:mass:offset"]
 
         # Mass of autopilot system
-        mass_autopilot = 30 
-        outputs["data:weight:systems:automatic_flight_system:mass"] = k * mass_autopilot + offset
-
+        mass_autopilot = 30
+        outputs["data:weight:systems:automatic_flight_system:mass"] = (
+            k * mass_autopilot + offset
+        )

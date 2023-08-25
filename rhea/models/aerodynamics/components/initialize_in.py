@@ -17,26 +17,31 @@
 import numpy as np
 from openmdao.core.explicitcomponent import ExplicitComponent
 
-from rhea.models.aerodynamics.constants import  CT_POINT_COUNT, ALPHA_POINT_COUNT, H_POINT_COUNT
+from rhea.models.aerodynamics.constants import (
+    CT_POINT_COUNT,
+    ALPHA_POINT_COUNT,
+    H_POINT_COUNT,
+)
 
 
 class InitializeIN(ExplicitComponent):
-
-
     def setup(self):
-        
+
         self.add_output("data:aerodynamics:aircraft:low_speed:CT", shape=CT_POINT_COUNT)
-        self.add_output("data:aerodynamics:aircraft:low_speed:alpha", units='deg',shape=ALPHA_POINT_COUNT)
-        self.add_output("data:aerodynamics:aircraft:low_speed:H", shape=H_POINT_COUNT, units='m')
-        
+        self.add_output(
+            "data:aerodynamics:aircraft:low_speed:alpha",
+            units="deg",
+            shape=ALPHA_POINT_COUNT,
+        )
+        self.add_output(
+            "data:aerodynamics:aircraft:low_speed:H", shape=H_POINT_COUNT, units="m"
+        )
+
     def compute(self, inputs, outputs):
-        CT_list = np.linspace(-2,2.,CT_POINT_COUNT)
-        alpha_list = np.linspace(-1,12.,ALPHA_POINT_COUNT)
-        H_list =np.linspace(0.,30.,H_POINT_COUNT)
-        
-        
-        
-        
+        CT_list = np.linspace(-2, 2.0, CT_POINT_COUNT)
+        alpha_list = np.linspace(-1, 12.0, ALPHA_POINT_COUNT)
+        H_list = np.linspace(0.0, 30.0, H_POINT_COUNT)
+
         outputs["data:aerodynamics:aircraft:low_speed:CT"] = CT_list
         outputs["data:aerodynamics:aircraft:low_speed:alpha"] = alpha_list
         outputs["data:aerodynamics:aircraft:low_speed:H"] = H_list

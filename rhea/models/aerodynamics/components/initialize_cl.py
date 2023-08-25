@@ -29,13 +29,21 @@ class InitializeClPolar(ExplicitComponent):
 
         self.add_input("tuning:aerodynamics:aircraft:cruise:CL:k", val=np.nan)
         self.add_input("tuning:aerodynamics:aircraft:cruise:CL:offset", val=np.nan)
-        self.add_input("tuning:aerodynamics:aircraft:cruise:CL:winglet_effect:k", val=np.nan)
-        self.add_input("tuning:aerodynamics:aircraft:cruise:CL:winglet_effect:offset", val=np.nan)
+        self.add_input(
+            "tuning:aerodynamics:aircraft:cruise:CL:winglet_effect:k", val=np.nan
+        )
+        self.add_input(
+            "tuning:aerodynamics:aircraft:cruise:CL:winglet_effect:offset", val=np.nan
+        )
 
         if self.low_speed_aero:
-            self.add_output("data:aerodynamics:aircraft:low_speed:CL", shape=POLAR_POINT_COUNT)
+            self.add_output(
+                "data:aerodynamics:aircraft:low_speed:CL", shape=POLAR_POINT_COUNT
+            )
         else:
-            self.add_output("data:aerodynamics:aircraft:cruise:CL", shape=POLAR_POINT_COUNT)
+            self.add_output(
+                "data:aerodynamics:aircraft:cruise:CL", shape=POLAR_POINT_COUNT
+            )
 
         self.declare_partials("*", "*", method="fd")
 
@@ -43,13 +51,23 @@ class InitializeClPolar(ExplicitComponent):
         k_cl = inputs["tuning:aerodynamics:aircraft:cruise:CL:k"]
         offset_cl = inputs["tuning:aerodynamics:aircraft:cruise:CL:offset"]
         k_winglet_cl = inputs["tuning:aerodynamics:aircraft:cruise:CL:winglet_effect:k"]
-        offset_winglet_cl = inputs["tuning:aerodynamics:aircraft:cruise:CL:winglet_effect:offset"]
+        offset_winglet_cl = inputs[
+            "tuning:aerodynamics:aircraft:cruise:CL:winglet_effect:offset"
+        ]
 
         # FIXME: initialization of CL range should be done more directly, without these coefficients
-        cl = np.arange(0., 1.5, 0.01) * k_cl * k_winglet_cl + offset_cl + offset_winglet_cl
+        cl = (
+            np.arange(0.0, 1.5, 0.01) * k_cl * k_winglet_cl
+            + offset_cl
+            + offset_winglet_cl
+        )
 
         if self.low_speed_aero:
-            cl = np.arange(0., 3., 0.02) * k_cl * k_winglet_cl + offset_cl + offset_winglet_cl
+            cl = (
+                np.arange(0.0, 3.0, 0.02) * k_cl * k_winglet_cl
+                + offset_cl
+                + offset_winglet_cl
+            )
             outputs["data:aerodynamics:aircraft:low_speed:CL"] = cl
         else:
             outputs["data:aerodynamics:aircraft:cruise:CL"] = cl

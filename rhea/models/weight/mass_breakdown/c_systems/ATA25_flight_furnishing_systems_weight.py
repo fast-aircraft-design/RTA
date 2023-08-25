@@ -18,7 +18,6 @@ import numpy as np
 from openmdao.core.explicitcomponent import ExplicitComponent
 
 
-
 class FlightFurnishingWeight(ExplicitComponent):
     """
     Weight estimation for flight compartment furnishing
@@ -31,10 +30,13 @@ class FlightFurnishingWeight(ExplicitComponent):
 
     Based on rough estimation of needed components mass
     """
+
     def setup(self):
 
         self.add_input("tuning:weight:systems:flight_furnishing:mass:k", val=1.0)
-        self.add_input("tuning:weight:systems:flight_furnishing:mass:offset", val=0.0, units="kg")
+        self.add_input(
+            "tuning:weight:systems:flight_furnishing:mass:offset", val=0.0, units="kg"
+        )
 
         self.add_output("data:weight:systems:flight_furnishing:mass", units="kg")
 
@@ -46,5 +48,5 @@ class FlightFurnishingWeight(ExplicitComponent):
         offset = inputs["tuning:weight:systems:flight_furnishing:mass:offset"]
 
         # Mass of flight furnishing system
-        mass_furn = 100 
+        mass_furn = 100
         outputs["data:weight:systems:flight_furnishing:mass"] = k * mass_furn + offset

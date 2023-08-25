@@ -32,6 +32,7 @@ class ComputeEngineSize(om.ExplicitComponent):
     Now restricted to only takeoff distance, as other outputs were custom RHEA
     mission performance outputs.
     """
+
     initial_RTO_power = 2051000
 
     def setup(self):
@@ -45,9 +46,19 @@ class ComputeEngineSize(om.ExplicitComponent):
         self.add_input("data:TLAR:OEI_ceiling", val=np.nan, units="m")
         self.add_input("data:TLAR:cruise_mach", val=np.nan)
 
-        self.add_output("data:propulsion:RTO_power", val=self.initial_RTO_power, units="W")
-        self.add_output("data:propulsion:Design_Thermo_Power", val=self.initial_RTO_power * 1.22, units="W")
-        self.add_output("data:propulsion:propeller:max_power", val=self.initial_RTO_power * 1.094, units="W")
+        self.add_output(
+            "data:propulsion:RTO_power", val=self.initial_RTO_power, units="W"
+        )
+        self.add_output(
+            "data:propulsion:Design_Thermo_Power",
+            val=self.initial_RTO_power * 1.22,
+            units="W",
+        )
+        self.add_output(
+            "data:propulsion:propeller:max_power",
+            val=self.initial_RTO_power * 1.094,
+            units="W",
+        )
         self.declare_partials("data:propulsion:RTO_power", "*", method="fd")
 
     def compute(self, inputs, outputs, discrete_inputs=None, discrete_outputs=None):
@@ -63,7 +74,7 @@ class ComputeEngineSize(om.ExplicitComponent):
         # Mach_target = inputs["data:TLAR:cruise_mach"]
 
         try:
-            previous_RTO_power = pd.read_csv('previous_RTO.csv', index_col=0)
+            previous_RTO_power = pd.read_csv("previous_RTO.csv", index_col=0)
             previous_RTO_power = previous_RTO_power.values[0]
         except:
             previous_RTO_power = self.initial_RTO_power
@@ -78,17 +89,19 @@ class ComputeEngineSize(om.ExplicitComponent):
         if abs(max(TOD - TOD_target)) < 10:  # 10m, 10s, 0.0
             RTO_power = previous_RTO_power
         else:
-            RTO_power = previous_RTO_power + max(delta_TTC, delta_TOD, delta_OEI_ceiling, delta_Mach)
+            RTO_power = previous_RTO_power + max(
+                delta_TTC, delta_TOD, delta_OEI_ceiling, delta_Mach
+            )
 
-        print('engine_loop')
-        print('RTO_power ' + str(previous_RTO_power))
-        print('delta_TOD' + str(TOD - TOD_target))
-        print('OEI_ceiling, Time To Climb and cruise Mach TLARs are deactivated.')
+        print("engine_loop")
+        print("RTO_power " + str(previous_RTO_power))
+        print("delta_TOD" + str(TOD - TOD_target))
+        print("OEI_ceiling, Time To Climb and cruise Mach TLARs are deactivated.")
         # print('delta_OEI_ceiling' + str(OEI_ceiling_target - OEI_ceiling))
         # print('delta_TTC' + str(TTC - TTC_target))
         # print('delta_Mach' + str(Mach_target - Mach))
-        previous_RTO_power = pd.Series(data={'RTO': float(RTO_power)})
-        previous_RTO_power.to_csv('previous_RTO.csv')
+        previous_RTO_power = pd.Series(data={"RTO": float(RTO_power)})
+        previous_RTO_power.to_csv("previous_RTO.csv")
 
         outputs["data:propulsion:RTO_power"] = RTO_power
         outputs["data:propulsion:Design_Thermo_Power"] = RTO_power * 1.22

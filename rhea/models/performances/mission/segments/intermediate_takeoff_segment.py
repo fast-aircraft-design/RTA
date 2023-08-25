@@ -18,21 +18,22 @@ from scipy.constants import g
 from fastoad.utils.physics import AtmosphereSI
 from fastoad.base.flight_point import FlightPoint
 from fastoad.models.performances.mission.segments.base import ManualThrustSegment
-from rhea.models.performances.mission.segments.initial_takeoff_segment import InitialTakeoffSegment
+from rhea.models.performances.mission.segments.initial_takeoff_segment import (
+    InitialTakeoffSegment,
+)
 import numpy as np
+
 _LOGGER = logging.getLogger(__name__)  # Logger for this module
 
 
 class IntermediateTakeoffSegment(InitialTakeoffSegment):
     """
-    Computes the intermediate take off segment where speed is modified with change rotation of angle of attack. 
+    Computes the intermediate take off segment where speed is modified with change rotation of angle of attack.
 
     The target must define a speed value among true_airspeed, equivalent_airspeed
     and mach.
     """
 
-
-        
     def compute_next_flight_point(
         self, flight_points: List[FlightPoint], time_step: float
     ) -> FlightPoint:
@@ -44,16 +45,16 @@ class IntermediateTakeoffSegment(InitialTakeoffSegment):
         :return: the computed next flight point
         """
 
-        
-        
-        next_point = super().compute_next_flight_point(flight_points,time_step)
+        next_point = super().compute_next_flight_point(flight_points, time_step)
 
-        if flight_points[-1].alpha >=  (0./ 180. * np.pi):
-            next_point.alpha = flight_points[-1].alpha + (4.5/ 180. * np.pi) * time_step  #one engine:4.2; two engine:6.5
+        if flight_points[-1].alpha >= (0.0 / 180.0 * np.pi):
+            next_point.alpha = (
+                flight_points[-1].alpha + (4.5 / 180.0 * np.pi) * time_step
+            )  # one engine:4.2; two engine:6.5
         else:
-            next_point.alpha = flight_points[-1].alpha + (1./ 180. * np.pi) * time_step   
+            next_point.alpha = (
+                flight_points[-1].alpha + (1.0 / 180.0 * np.pi) * time_step
+            )
         # if flight_points[-1].alpha >=  (0./ 180. * np.pi):
-        
-        return next_point        
-        
 
+        return next_point

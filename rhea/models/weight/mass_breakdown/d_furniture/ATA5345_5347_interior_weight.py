@@ -29,25 +29,32 @@ class InteriorIntegrationWeight(ExplicitComponent):
     - Fuselage, Seat/Cargo Attach Fittings
     - Fuselage, Equipment Attach Fittings
     - Fuselage, Door Hinge
-    
+
     Based on a rough estimation percentage of MTOW
 
     """
+
     def setup(self):
         self.add_input("data:weight:aircraft:MTOW", val=np.nan, units="kg")
 
         self.add_input("tuning:weight:furniture:interior_integration:mass:k", val=1.0)
-        self.add_input("tuning:weight:furniture:interior_integration:mass:offset", val=0.0, units="kg")
+        self.add_input(
+            "tuning:weight:furniture:interior_integration:mass:offset",
+            val=0.0,
+            units="kg",
+        )
 
         self.add_output("data:weight:furniture:interior_integration:mass", units="kg")
 
         self.declare_partials("*", "*", method="fd")
 
     def compute(self, inputs, outputs, discrete_inputs=None, discrete_outputs=None):
-        mtow=inputs["data:weight:aircraft:MTOW"]
+        mtow = inputs["data:weight:aircraft:MTOW"]
         k = inputs["tuning:weight:furniture:interior_integration:mass:k"]
         offset = inputs["tuning:weight:furniture:interior_integration:mass:offset"]
 
-        mass_furn = 0.005* mtow    
+        mass_furn = 0.005 * mtow
 
-        outputs["data:weight:furniture:interior_integration:mass"] = k * mass_furn + offset
+        outputs["data:weight:furniture:interior_integration:mass"] = (
+            k * mass_furn + offset
+        )

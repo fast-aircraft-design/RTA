@@ -18,14 +18,14 @@ Provides a parametric model for turbofan:
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-#from .openmdao import OMRubberTPEngineComponent,OMRubberTPEngineWrapper,
+# from .openmdao import OMRubberTPEngineComponent,OMRubberTPEngineWrapper,
 # from .openmdao import OMTPEngineL1Component,OMTPEngineL1Wrapper
 # from .openmdao import OMTPEngineL0Component,OMTPEngineL0Wrapper
 # from .openmdao import OMMLTPL1Component,OMMLTPL1Wrapper
 # from .openmdao import OMMLTPL1H2Component , OMMLTPL1H2Wrapper
 
 
-#from .rubberengine import ..
+# from .rubberengine import ..
 # from .TP_engine_L0 import TPEngine_L0
 # from .TP_engine_L1 import TPEngine_L1
 # from .ML_TP_L1 import ML_TP_L1

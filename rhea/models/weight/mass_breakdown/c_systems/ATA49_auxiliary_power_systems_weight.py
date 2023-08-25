@@ -30,12 +30,12 @@ class APUWeight(ExplicitComponent):
         self.add_input("data:geometry:cabin:NPAX1", val=np.nan)
         self.add_input("tuning:weight:systems:auxiliary_power_unit:mass:k", val=0.0)
         self.add_input(
-            "tuning:weight:systems:auxiliary_power_unit:mass:offset", val=0.0, units="kg"
+            "tuning:weight:systems:auxiliary_power_unit:mass:offset",
+            val=0.0,
+            units="kg",
         )
 
-
         self.add_output("data:weight:systems:auxiliary_power_unit:mass", units="kg")
-
 
         self.declare_partials("*", "*", method="fd")
 
@@ -45,11 +45,6 @@ class APUWeight(ExplicitComponent):
         k = inputs["tuning:weight:systems:auxiliary_power_unit:mass:k"]
         offset = inputs["tuning:weight:systems:auxiliary_power_unit:mass:offset"]
 
-
         # Mass of auxiliary power unit
-        mass_apu = 11.3 * npax1 ** 0.64
-        outputs["data:weight:systems:auxiliary_power_unit:mass"] = (
-            k * mass_apu + offset
-        )
-
-
+        mass_apu = 11.3 * npax1**0.64
+        outputs["data:weight:systems:auxiliary_power_unit:mass"] = k * mass_apu + offset

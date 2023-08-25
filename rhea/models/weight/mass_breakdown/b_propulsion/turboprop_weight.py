@@ -16,51 +16,57 @@ class TurbopropWeight(ExplicitComponent):
     Weight estimation for turboprop propulsion systems
     Ref. Teeuwen, Y., “Propeller Design for Conceptual Turboprop Aircraft,” Master’s thesis, Delft University of Technology, 2017.
 
-    
+
     """
 
     def setup(self):
-        self.add_input("data:propulsion:RTO_power", val=np.nan, units='W')
+        self.add_input("data:propulsion:RTO_power", val=np.nan, units="W")
         self.add_input("data:geometry:propulsion:engine:count", val=np.nan)
-        self.add_input("data:geometry:fuselage:length", val=np.nan, units='m')
-        self.add_input("data:geometry:propulsion:propeller:diameter", val=np.nan, units='m')
+        self.add_input("data:geometry:fuselage:length", val=np.nan, units="m")
+        self.add_input(
+            "data:geometry:propulsion:propeller:diameter", val=np.nan, units="m"
+        )
         self.add_input("data:geometry:propulsion:propeller:B", val=np.nan)
-        self.add_input("tuning:weight:propulsion:engine:mass:k", val=1.)
-        self.add_input("tuning:weight:propulsion:engine_controls_instrumentation:mass:k", val=1.)
-        self.add_input("tuning:weight:propulsion:propeller:mass:k",val=1.) 
-        
-        self.add_input("data:propulsion:propeller:max_power", val=np.nan, units='kW')
+        self.add_input("tuning:weight:propulsion:engine:mass:k", val=1.0)
+        self.add_input(
+            "tuning:weight:propulsion:engine_controls_instrumentation:mass:k", val=1.0
+        )
+        self.add_input("tuning:weight:propulsion:propeller:mass:k", val=1.0)
+
+        self.add_input("data:propulsion:propeller:max_power", val=np.nan, units="kW")
 
         self.add_output("data:weight:propulsion:engine:mass", units="kg")
-        self.add_output("data:weight:propulsion:engine_controls_instrumentation:mass", units="kg")
+        self.add_output(
+            "data:weight:propulsion:engine_controls_instrumentation:mass", units="kg"
+        )
         self.add_output("data:weight:propulsion:propeller:mass", units="kg")
-        
+
         self.declare_partials("*", "*", method="fd")
 
     def compute(self, inputs, outputs, discrete_inputs=None, discrete_outputs=None):
         P_nom = inputs["data:propulsion:RTO_power"]
         n_eng = inputs["data:geometry:propulsion:engine:count"]
-        l_fus=inputs["data:geometry:fuselage:length"]
-        k_eng=inputs["tuning:weight:propulsion:engine:mass:k"]
-        k_ec=inputs["tuning:weight:propulsion:engine_controls_instrumentation:mass:k"]
-        k_prop=inputs["tuning:weight:propulsion:propeller:mass:k"]
+        l_fus = inputs["data:geometry:fuselage:length"]
+        k_eng = inputs["tuning:weight:propulsion:engine:mass:k"]
+        k_ec = inputs["tuning:weight:propulsion:engine_controls_instrumentation:mass:k"]
+        k_prop = inputs["tuning:weight:propulsion:propeller:mass:k"]
         D_prop = inputs["data:geometry:propulsion:propeller:diameter"]
-        n_blades=inputs["data:geometry:propulsion:propeller:B"]
-        P_nom_prop = inputs["data:propulsion:propeller:max_power"]*1000
+        n_blades = inputs["data:geometry:propulsion:propeller:B"]
+        P_nom_prop = inputs["data:propulsion:propeller:max_power"] * 1000
 
-
-       
-        m_eng= 0.758*(P_nom/constants.hp)**0.803 #mass of dry angine and gearbox
+        m_eng = (
+            0.758 * (P_nom / constants.hp) ** 0.803
+        )  # mass of dry angine and gearbox
         # m_prop = 0.5*((D_prop*P_nom*(n_blades)**0.5)/227.2)**0.52
-        m_prop = 0.5*((D_prop*P_nom_prop*(n_blades)**0.5)/227.2)**0.52
-        m_ec=0.454*(5*n_eng+2.63*l_fus)
-        m_ess=22.31*((m_eng*n_eng)/453.59)**0.541
-        m_osc=0.07*m_eng
-        
-        m_eng_installed=(m_eng+m_osc)*n_eng+m_ess
-        
+        m_prop = 0.5 * ((D_prop * P_nom_prop * (n_blades) ** 0.5) / 227.2) ** 0.52
+        m_ec = 0.454 * (5 * n_eng + 2.63 * l_fus)
+        m_ess = 22.31 * ((m_eng * n_eng) / 453.59) ** 0.541
+        m_osc = 0.07 * m_eng
 
-        outputs["data:weight:propulsion:engine:mass"] = m_eng_installed*k_eng
-        outputs["data:weight:propulsion:engine_controls_instrumentation:mass"] = m_ec*k_ec
-        outputs["data:weight:propulsion:propeller:mass"] = m_prop*n_eng*k_prop
+        m_eng_installed = (m_eng + m_osc) * n_eng + m_ess
 
+        outputs["data:weight:propulsion:engine:mass"] = m_eng_installed * k_eng
+        outputs["data:weight:propulsion:engine_controls_instrumentation:mass"] = (
+            m_ec * k_ec
+        )
+        outputs["data:weight:propulsion:propeller:mass"] = m_prop * n_eng * k_prop

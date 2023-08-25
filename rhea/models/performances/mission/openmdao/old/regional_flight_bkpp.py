@@ -53,22 +53,31 @@ class SizingFlight_RHEA(om.ExplicitComponent):
         self.options.declare("out_file", default="", types=str)
 
     def setup(self):
-        self._engine_wrapper = BundleLoader().instantiate_component(self.options["propulsion_id"])
+        self._engine_wrapper = BundleLoader().instantiate_component(
+            self.options["propulsion_id"]
+        )
         self._engine_wrapper.setup(self)
 
         # Inputs -----------------------------------------------------------------------------------
         self.add_input("data:TLAR:cruise_mach", np.nan)
         self.add_input("data:TLAR:range", np.nan, units="m")
 
-
         self.add_input("data:geometry:propulsion:engine:count", 2)
         self.add_input("data:geometry:wing:area", np.nan, units="m**2")
 
-        self.add_input("data:aerodynamics:aircraft:cruise:CL", np.nan, shape=POLAR_POINT_COUNT)
-        self.add_input("data:aerodynamics:aircraft:cruise:CD", np.nan, shape=POLAR_POINT_COUNT)
+        self.add_input(
+            "data:aerodynamics:aircraft:cruise:CL", np.nan, shape=POLAR_POINT_COUNT
+        )
+        self.add_input(
+            "data:aerodynamics:aircraft:cruise:CD", np.nan, shape=POLAR_POINT_COUNT
+        )
 
-        self.add_input("data:aerodynamics:aircraft:takeoff:CL", np.nan, shape=POLAR_POINT_COUNT)
-        self.add_input("data:aerodynamics:aircraft:takeoff:CD", np.nan, shape=POLAR_POINT_COUNT)
+        self.add_input(
+            "data:aerodynamics:aircraft:takeoff:CL", np.nan, shape=POLAR_POINT_COUNT
+        )
+        self.add_input(
+            "data:aerodynamics:aircraft:takeoff:CD", np.nan, shape=POLAR_POINT_COUNT
+        )
 
         self.add_input("data:weight:aircraft:MTOW", np.nan, units="kg")
 
@@ -80,11 +89,12 @@ class SizingFlight_RHEA(om.ExplicitComponent):
         self.add_input("data:mission:sizing:takeoff:fuel", np.nan, units="kg")
 
         self.add_input("data:mission:sizing:climb:thrust_rate", np.nan)
-        self.add_input("data:mission:sizing:climb:speed", np.nan,units="m/s")
-        self.add_input("data:mission:sizing:main_route:cruise:altitude", np.nan, units="ft")
+        self.add_input("data:mission:sizing:climb:speed", np.nan, units="m/s")
+        self.add_input(
+            "data:mission:sizing:main_route:cruise:altitude", np.nan, units="ft"
+        )
         self.add_input("data:mission:sizing:descent:thrust_rate", np.nan)
-        self.add_input("data:mission:sizing:descent:speed", np.nan,units="m/s")
-        
+        self.add_input("data:mission:sizing:descent:speed", np.nan, units="m/s")
 
         self.add_input("data:mission:sizing:diversion:distance", np.nan, units="m")
         self.add_input("data:mission:sizing:diversion:altitude", np.nan, units="ft")
@@ -93,14 +103,13 @@ class SizingFlight_RHEA(om.ExplicitComponent):
         self.add_input("data:mission:sizing:taxi_in:duration", np.nan, units="s")
         self.add_input("data:mission:sizing:taxi_in:speed", np.nan, units="m/s")
         self.add_input("data:mission:sizing:taxi_in:thrust_rate", np.nan)
-        
-        # Inputs needed in order to use the sizing output file as input .xml for the DOC mission evaluation-----------------------------------------------------------------------------------        
+
+        # Inputs needed in order to use the sizing output file as input .xml for the DOC mission evaluation-----------------------------------------------------------------------------------
         self.add_input("data:mission:DOC:cruise:mach", np.nan)
         self.add_input("data:mission:DOC:range", np.nan, units="m")
         self.add_input("data:weight:aircraft:OWE", np.nan, units="kg")
         self.add_input("data:mission:DOC:payload", np.nan, units="kg")
 
-        
         self.add_input("data:mission:DOC:TOW", np.nan, units="kg")
 
         self.add_input("data:mission:DOC:taxi_out:fuel", np.nan, units="kg")
@@ -111,11 +120,12 @@ class SizingFlight_RHEA(om.ExplicitComponent):
         self.add_input("data:mission:DOC:takeoff:fuel", np.nan, units="kg")
 
         self.add_input("data:mission:DOC:climb:thrust_rate", np.nan)
-        self.add_input("data:mission:DOC:climb:speed", np.nan,units="m/s")
-        self.add_input("data:mission:DOC:main_route:cruise:altitude", np.nan, units="ft")
+        self.add_input("data:mission:DOC:climb:speed", np.nan, units="m/s")
+        self.add_input(
+            "data:mission:DOC:main_route:cruise:altitude", np.nan, units="ft"
+        )
         self.add_input("data:mission:DOC:descent:thrust_rate", np.nan)
-        self.add_input("data:mission:DOC:descent:speed", np.nan,units="m/s")
-        
+        self.add_input("data:mission:DOC:descent:speed", np.nan, units="m/s")
 
         self.add_input("data:mission:DOC:diversion:distance", np.nan, units="m")
         self.add_input("data:mission:DOC:diversion:altitude", np.nan, units="ft")
@@ -124,7 +134,6 @@ class SizingFlight_RHEA(om.ExplicitComponent):
         self.add_input("data:mission:DOC:taxi_in:duration", np.nan, units="s")
         self.add_input("data:mission:DOC:taxi_in:speed", np.nan, units="m/s")
         self.add_input("data:mission:DOC:taxi_in:thrust_rate", np.nan)
-     
 
         # Outputs ----------------------------------------------------------------------------------
         self.add_output("data:mission:sizing:initial_climb:fuel", units="kg")
@@ -170,7 +179,8 @@ class SizingFlight_RHEA(om.ExplicitComponent):
 
     def compute_breguet(self, inputs, outputs):
         propulsion_model = EngineSet(
-            self._engine_wrapper.get_model(inputs), inputs["data:geometry:propulsion:engine:count"]
+            self._engine_wrapper.get_model(inputs),
+            inputs["data:geometry:propulsion:engine:count"],
         )
         high_speed_polar = Polar(
             inputs["data:aerodynamics:aircraft:cruise:CL"],
@@ -180,13 +190,16 @@ class SizingFlight_RHEA(om.ExplicitComponent):
         breguet = Breguet(
             propulsion_model,
             max(
-                10.0, high_speed_polar.optimal_cl / high_speed_polar.cd(high_speed_polar.optimal_cl)
+                10.0,
+                high_speed_polar.optimal_cl
+                / high_speed_polar.cd(high_speed_polar.optimal_cl),
             ),
             inputs["data:TLAR:cruise_mach"],
             10000.0,
         )
         breguet.compute(
-            inputs["data:weight:aircraft:MTOW"], inputs["data:TLAR:range"],
+            inputs["data:weight:aircraft:MTOW"],
+            inputs["data:TLAR:range"],
         )
 
         outputs["data:mission:sizing:ZFW"] = breguet.zfw
@@ -194,18 +207,18 @@ class SizingFlight_RHEA(om.ExplicitComponent):
 
     def compute_mission(self, inputs, outputs):
         propulsion_model = EngineSet(
-            self._engine_wrapper.get_model(inputs), inputs["data:geometry:propulsion:engine:count"]
+            self._engine_wrapper.get_model(inputs),
+            inputs["data:geometry:propulsion:engine:count"],
         )
 
         reference_area = inputs["data:geometry:wing:area"]
         cruise_mach = inputs["data:TLAR:cruise_mach"]
         flight_distance = inputs["data:TLAR:range"]
         cruise_altitude = inputs["data:mission:sizing:main_route:cruise:altitude"]
-        diversion_cruise_altitude =inputs["data:mission:sizing:diversion:altitude"]
-        climb_speed=inputs["data:mission:sizing:climb:speed"]
+        diversion_cruise_altitude = inputs["data:mission:sizing:diversion:altitude"]
+        climb_speed = inputs["data:mission:sizing:climb:speed"]
         descent_speed = inputs["data:mission:sizing:descent:speed"]
-        
-        
+
         thrust_rates = {
             FlightPhase.CLIMB: inputs["data:mission:sizing:climb:thrust_rate"],
             FlightPhase.DESCENT: inputs["data:mission:sizing:descent:thrust_rate"],
@@ -227,16 +240,17 @@ class SizingFlight_RHEA(om.ExplicitComponent):
                 high_speed_polar=high_speed_polar,
                 cruise_mach=cruise_mach,
                 thrust_rates=thrust_rates,
-                climb_target_altitude=cruise_altitude*foot,
+                climb_target_altitude=cruise_altitude * foot,
                 climb_speed=climb_speed,
                 descent_speed=descent_speed,
-                #time_step=0.2,
+                # time_step=0.2,
             ),
             flight_distance,
         )
 
         end_of_takeoff = FlightPoint(
-            mass=inputs["data:weight:aircraft:MTOW"] - inputs["data:mission:sizing:takeoff:fuel"],
+            mass=inputs["data:weight:aircraft:MTOW"]
+            - inputs["data:mission:sizing:takeoff:fuel"],
             true_airspeed=inputs["data:mission:sizing:takeoff:V2"],
             altitude=inputs["data:mission:sizing:takeoff:altitude"] + 35 * foot,
             ground_distance=0.0,
@@ -251,9 +265,15 @@ class SizingFlight_RHEA(om.ExplicitComponent):
         end_of_initial_climb = FlightPoint(
             flight_points.loc[flight_points.name == "initial climb"].iloc[-1]
         )
-        end_of_climb = FlightPoint(flight_points.loc[flight_points.name == "climb"].iloc[-1])
-        end_of_cruise = FlightPoint(flight_points.loc[flight_points.name == "cruise"].iloc[-1])
-        end_of_descent = FlightPoint(flight_points.loc[flight_points.name == "descent"].iloc[-1])
+        end_of_climb = FlightPoint(
+            flight_points.loc[flight_points.name == "climb"].iloc[-1]
+        )
+        end_of_cruise = FlightPoint(
+            flight_points.loc[flight_points.name == "cruise"].iloc[-1]
+        )
+        end_of_descent = FlightPoint(
+            flight_points.loc[flight_points.name == "descent"].iloc[-1]
+        )
 
         # Set OpenMDAO outputs
         outputs["data:mission:sizing:initial_climb:fuel"] = (
@@ -296,7 +316,6 @@ class SizingFlight_RHEA(om.ExplicitComponent):
         # Diversion flight =====================================================
         diversion_distance = inputs["data:mission:sizing:diversion:distance"]
 
-
         diversion_flight_calculator = RangedFlight(
             StandardFlight(
                 propulsion=propulsion_model,
@@ -305,23 +324,31 @@ class SizingFlight_RHEA(om.ExplicitComponent):
                 high_speed_polar=high_speed_polar,
                 cruise_mach=cruise_mach,
                 thrust_rates=thrust_rates,
-                climb_target_altitude=diversion_cruise_altitude* foot,
+                climb_target_altitude=diversion_cruise_altitude * foot,
                 climb_speed=climb_speed,
                 descent_speed=descent_speed,
             ),
             diversion_distance,
         )
-        diversion_flight_points = diversion_flight_calculator.compute_from(end_of_descent)
+        diversion_flight_points = diversion_flight_calculator.compute_from(
+            end_of_descent
+        )
 
         # Get flight points for each end of phase
         end_of_diversion_climb = FlightPoint(
-            diversion_flight_points.loc[diversion_flight_points.name == "climb"].iloc[-1]
+            diversion_flight_points.loc[diversion_flight_points.name == "climb"].iloc[
+                -1
+            ]
         )
         end_of_diversion_cruise = FlightPoint(
-            diversion_flight_points.loc[diversion_flight_points.name == "cruise"].iloc[-1]
+            diversion_flight_points.loc[diversion_flight_points.name == "cruise"].iloc[
+                -1
+            ]
         )
         end_of_diversion_descent = FlightPoint(
-            diversion_flight_points.loc[diversion_flight_points.name == "descent"].iloc[-1]
+            diversion_flight_points.loc[diversion_flight_points.name == "descent"].iloc[
+                -1
+            ]
         )
 
         # rename phases because all flight points will be concatenated later.
@@ -334,7 +361,7 @@ class SizingFlight_RHEA(om.ExplicitComponent):
         diversion_flight_points.loc[
             diversion_flight_points.name == "descent"
         ].name = "diversion descent"
-        
+
         # Set OpenMDAO outputs
         outputs["data:mission:sizing:diversion:climb:fuel"] = (
             end_of_descent.mass - end_of_diversion_climb.mass
@@ -349,10 +376,12 @@ class SizingFlight_RHEA(om.ExplicitComponent):
             end_of_diversion_climb.ground_distance - end_of_descent.ground_distance
         )
         outputs["data:mission:sizing:diversion:cruise:distance"] = (
-            end_of_diversion_cruise.ground_distance - end_of_diversion_climb.ground_distance
+            end_of_diversion_cruise.ground_distance
+            - end_of_diversion_climb.ground_distance
         )
         outputs["data:mission:sizing:diversion:descent:distance"] = (
-            end_of_diversion_descent.ground_distance - end_of_diversion_cruise.ground_distance
+            end_of_diversion_descent.ground_distance
+            - end_of_diversion_cruise.ground_distance
         )
         outputs["data:mission:sizing:diversion:climb:duration"] = (
             end_of_diversion_climb.time - end_of_descent.time
@@ -363,7 +392,7 @@ class SizingFlight_RHEA(om.ExplicitComponent):
         outputs["data:mission:sizing:diversion:descent:duration"] = (
             end_of_diversion_descent.time - end_of_diversion_cruise.time
         )
-        
+
         # Holding ==============================================================
 
         holding_duration = inputs["data:mission:sizing:holding:duration"]
@@ -376,7 +405,9 @@ class SizingFlight_RHEA(om.ExplicitComponent):
             name="holding",
         )
 
-        holding_flight_points = holding_calculator.compute_from(end_of_diversion_descent)
+        holding_flight_points = holding_calculator.compute_from(
+            end_of_diversion_descent
+        )
 
         end_of_holding = FlightPoint(holding_flight_points.iloc[-1])
         outputs["data:mission:sizing:holding:fuel"] = (
@@ -398,11 +429,13 @@ class SizingFlight_RHEA(om.ExplicitComponent):
         taxi_in_flight_points = taxi_in_calculator.compute_from(end_of_holding)
 
         end_of_taxi_in = FlightPoint(taxi_in_flight_points.iloc[-1])
-        outputs["data:mission:sizing:taxi_in:fuel"] = end_of_holding.mass - end_of_taxi_in.mass
+        outputs["data:mission:sizing:taxi_in:fuel"] = (
+            end_of_holding.mass - end_of_taxi_in.mass
+        )
 
         # Final ================================================================
         fuel_route = inputs["data:weight:aircraft:MTOW"] - end_of_descent.mass
-        outputs["data:mission:sizing:ZFW"] =end_of_taxi_in.mass - 0.03 * fuel_route
+        outputs["data:mission:sizing:ZFW"] = end_of_taxi_in.mass - 0.03 * fuel_route
         outputs["data:mission:sizing:fuel"] = (
             inputs["data:weight:aircraft:MTOW"] - outputs["data:mission:sizing:ZFW"]
         )
@@ -411,9 +444,9 @@ class SizingFlight_RHEA(om.ExplicitComponent):
             pd.concat(
                 [
                     flight_points,
-                    #diversion_flight_points,
-                    #holding_flight_points,
-                    #taxi_in_flight_points,
+                    # diversion_flight_points,
+                    # holding_flight_points,
+                    # taxi_in_flight_points,
                 ]
             )
             .reset_index(drop=True)

@@ -18,18 +18,17 @@ import numpy as np
 import openmdao.api as om
 
 
-
 class FurnishingWeight(om.ExplicitComponent):
     """
     Weight estimation for furnishing weight. It includes:
-        
+
         - Toilets
         - Cargo equipments
         - Baggage racks
         - Trimming panels
         - Doors/curtains
 
-    Based on "Aircraft conceptual design synthesis", Denis Howe 
+    Based on "Aircraft conceptual design synthesis", Denis Howe
     Table (AD4.4) pag.357
     """
 
@@ -37,17 +36,19 @@ class FurnishingWeight(om.ExplicitComponent):
         self.add_input("data:weight:aircraft:MTOW", val=np.nan, units="kg")
 
         self.add_input("tuning:weight:furniture:furnishing:mass:k", val=1.0)
-        self.add_input("tuning:weight:furniture:furnishing:mass:offset", val=0.0, units="kg")
+        self.add_input(
+            "tuning:weight:furniture:furnishing:mass:offset", val=0.0, units="kg"
+        )
 
         self.add_output("data:weight:furniture:furnishing:mass", units="kg")
 
         self.declare_partials("*", "*", method="fd")
 
     def compute(self, inputs, outputs, discrete_inputs=None, discrete_outputs=None):
-        mtow=inputs["data:weight:aircraft:MTOW"]
+        mtow = inputs["data:weight:aircraft:MTOW"]
         k = inputs["tuning:weight:furniture:furnishing:mass:k"]
         offset = inputs["tuning:weight:furniture:furnishing:mass:offset"]
 
-        mass_furn = 0.04* mtow    
+        mass_furn = 0.04 * mtow
 
         outputs["data:weight:furniture:furnishing:mass"] = k * mass_furn + offset

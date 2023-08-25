@@ -20,10 +20,14 @@ from fastoad.models.performances.mission.segments.base import ManualThrustSegmen
 from scipy.constants import g
 from fastoad.utils.physics import AtmosphereSI
 import math
+
 _LOGGER = logging.getLogger(__name__)  # Logger for this module
 from fastoad.base.dict import AddKeyAttributes
 import scipy.constants as const
-from fastoad.models.performances.mission.segments.altitude_change import AltitudeChangeSegment
+from fastoad.models.performances.mission.segments.altitude_change import (
+    AltitudeChangeSegment,
+)
+
 
 class AltitudeChangeOEI(AltitudeChangeSegment):
     """
@@ -39,7 +43,7 @@ class AltitudeChangeOEI(AltitudeChangeSegment):
 
         :param flight_point: the flight point that will be completed in-place
         """
-        
+
         flight_point.engine_setting = self.engine_setting
 
         self._complete_speed_values(flight_point)
@@ -50,7 +54,9 @@ class AltitudeChangeOEI(AltitudeChangeSegment):
             self._complete_speed_values(flight_point)
 
         atm = AtmosphereSI(flight_point.altitude)
-        reference_force = 0.5 * atm.density * flight_point.true_airspeed ** 2 * self.reference_area
+        reference_force = (
+            0.5 * atm.density * flight_point.true_airspeed**2 * self.reference_area
+        )
 
         if self.polar:
             flight_point.CL = flight_point.mass * g / reference_force
@@ -60,22 +66,25 @@ class AltitudeChangeOEI(AltitudeChangeSegment):
         flight_point.drag = flight_point.CD * reference_force
 
         self._compute_propulsion(flight_point)
-        
+
         lift = flight_point.CL * reference_force
-    
-        flight_point.slope_angle, flight_point.acceleration = self._get_gamma_and_acceleration(
-            flight_point.mass, flight_point.drag, lift, flight_point.thrust)
-        
-        
-        
-        
-    def _get_gamma_and_acceleration(self, mass, drag, lift, thrust) -> Tuple[float, float]:
+
+        (
+            flight_point.slope_angle,
+            flight_point.acceleration,
+        ) = self._get_gamma_and_acceleration(
+            flight_point.mass, flight_point.drag, lift, flight_point.thrust
+        )
+
+    def _get_gamma_and_acceleration(
+        self, mass, drag, lift, thrust
+    ) -> Tuple[float, float]:
         climb_gradient = thrust / mass / g - drag / lift
         climb_gradient_penalty = climb_gradient - 0.011
         gama = np.arctan(climb_gradient)
         gama_penalty = np.arctan(climb_gradient_penalty)
-        
-        gamma = (thrust - drag) / mass / g 
+
+        gamma = (thrust - drag) / mass / g
         return gama_penalty, 0.0
 
     def compute_next_flight_point(
@@ -92,7 +101,9 @@ class AltitudeChangeOEI(AltitudeChangeSegment):
         previous = flight_points[-1]
         next_point = FlightPoint()
 
-        next_point.mass = previous.mass #- self.propulsion.get_consumed_mass(previous, time_step)
+        next_point.mass = (
+            previous.mass
+        )  # - self.propulsion.get_consumed_mass(previous, time_step)
         next_point.time = previous.time + time_step
         next_point.ground_distance = (
             previous.ground_distance
@@ -107,10 +118,10 @@ class AltitudeChangeOEI(AltitudeChangeSegment):
         elif self.target.mach == "constant":
             next_point.mach = start.mach
         else:
-            next_point.true_airspeed = previous.true_airspeed + time_step * previous.acceleration
+            next_point.true_airspeed = (
+                previous.true_airspeed + time_step * previous.acceleration
+            )
 
         # The naming is not done in complete_flight_point for not naming the start point
         next_point.name = self.name
         return next_point
-
-        

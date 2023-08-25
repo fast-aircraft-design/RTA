@@ -32,7 +32,11 @@ from components.oswald import OswaldCoefficient
 from openmdao.core.group import Group
 from openmdao.core.indepvarcomp import IndepVarComp
 from fastoad.module_management.constants import ModelDomain
-from fastoad.module_management.service_registry import RegisterOpenMDAOSystem, RegisterSubmodel
+from fastoad.module_management.service_registry import (
+    RegisterOpenMDAOSystem,
+    RegisterSubmodel,
+)
+
 
 @RegisterOpenMDAOSystem("rhea.aerodynamics.lowspeed", domain=ModelDomain.AERODYNAMICS)
 class AerodynamicsLowSpeed_RHEA(Group):
@@ -41,21 +45,37 @@ class AerodynamicsLowSpeed_RHEA(Group):
     """
 
     def setup(self):
-        self.add_subsystem("compute_low_speed_aero", ComputeAerodynamicsLowSpeed(), promotes=["*"])
+        self.add_subsystem(
+            "compute_low_speed_aero", ComputeAerodynamicsLowSpeed(), promotes=["*"]
+        )
         ivc = IndepVarComp("data:aerodynamics:aircraft:takeoff:mach", val=0.2)
         self.add_subsystem("mach_low_speed", ivc, promotes=["*"])
         self.add_subsystem(
-            "compute_oswald_coeff", OswaldCoefficient(low_speed_aero=True), promotes=["*"]
+            "compute_oswald_coeff",
+            OswaldCoefficient(low_speed_aero=True),
+            promotes=["*"],
         )
-        self.add_subsystem("comp_re", ComputeReynolds(low_speed_aero=True), promotes=["*"])
-        self.add_subsystem("initialize_cl", InitializeClPolar(low_speed_aero=True), promotes=["*"])
+        self.add_subsystem(
+            "comp_re", ComputeReynolds(low_speed_aero=True), promotes=["*"]
+        )
+        self.add_subsystem(
+            "initialize_cl", InitializeClPolar(low_speed_aero=True), promotes=["*"]
+        )
         self.add_subsystem("cd0_wing", Cd0Wing(low_speed_aero=True), promotes=["*"])
-        self.add_subsystem("cd0_fuselage", Cd0Fuselage(low_speed_aero=True), promotes=["*"])
-        self.add_subsystem("cd0_ht", Cd0HorizontalTail(low_speed_aero=True), promotes=["*"])
-        self.add_subsystem("cd0_vt", Cd0VerticalTail(low_speed_aero=True), promotes=["*"])
+        self.add_subsystem(
+            "cd0_fuselage", Cd0Fuselage(low_speed_aero=True), promotes=["*"]
+        )
+        self.add_subsystem(
+            "cd0_ht", Cd0HorizontalTail(low_speed_aero=True), promotes=["*"]
+        )
+        self.add_subsystem(
+            "cd0_vt", Cd0VerticalTail(low_speed_aero=True), promotes=["*"]
+        )
         self.add_subsystem(
             "cd0_nac_pylons", Cd0NacelleAndPylonsTP(low_speed_aero=True), promotes=["*"]
         )
         self.add_subsystem("cd0_total", Cd0Total(low_speed_aero=True), promotes=["*"])
         self.add_subsystem("cd_trim", CdTrim(low_speed_aero=True), promotes=["*"])
-        self.add_subsystem("get_polar", ComputePolar(type=PolarType.LOW_SPEED), promotes=["*"])
+        self.add_subsystem(
+            "get_polar", ComputePolar(type=PolarType.LOW_SPEED), promotes=["*"]
+        )

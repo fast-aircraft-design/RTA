@@ -18,7 +18,6 @@ import numpy as np
 from openmdao.core.explicitcomponent import ExplicitComponent
 
 
-
 class LightsWeight(ExplicitComponent):
     """
     Weight estimation for lighting systems
@@ -31,14 +30,13 @@ class LightsWeight(ExplicitComponent):
         self.add_input("data:geometry:fuselage:maximum_width", val=np.nan, units="m")
         self.add_input("data:geometry:fuselage:maximum_height", val=np.nan, units="m")
         self.add_input("data:geometry:cabin:length", val=np.nan, units="m")
- 
+
         self.add_input("tuning:weight:furniture:cabin_lighting:mass:k", val=1.0)
         self.add_input(
             "tuning:weight:furniture:cabin_lighting:mass:offset", val=0.0, units="kg"
         )
 
         self.add_output("data:weight:furniture:cabin_lighting:mass", units="kg")
-
 
         self.declare_partials("*", "*", method="fd")
 
@@ -51,7 +49,6 @@ class LightsWeight(ExplicitComponent):
         k_c24 = inputs["tuning:weight:furniture:cabin_lighting:mass:k"]
         offset_c24 = inputs["tuning:weight:furniture:cabin_lighting:mass:offset"]
 
-
         fuselage_diameter = np.sqrt(width_max * height_max)
 
         # Mass of internal lighting system
@@ -59,4 +56,3 @@ class LightsWeight(ExplicitComponent):
         outputs["data:weight:furniture:cabin_lighting:mass"] = (
             k_c24 * temp_c24 + offset_c24
         )
-

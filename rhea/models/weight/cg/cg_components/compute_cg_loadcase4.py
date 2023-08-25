@@ -20,7 +20,7 @@ from openmdao.core.explicitcomponent import ExplicitComponent
 
 class ComputeCGLoadCase4(ExplicitComponent):
     # TODO: Document equations. Cite sources
-    """ Center of gravity estimation for load case 4 """
+    """Center of gravity estimation for load case 4"""
 
     def setup(self):
         self.add_input("data:geometry:wing:MAC:length", val=np.nan, units="m")

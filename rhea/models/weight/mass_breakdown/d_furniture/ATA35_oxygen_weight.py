@@ -18,7 +18,6 @@ import numpy as np
 from openmdao.core.explicitcomponent import ExplicitComponent
 
 
-
 class OxygenWeight(ExplicitComponent):
     """
     Weight estimation for oxygen systems
@@ -27,25 +26,23 @@ class OxygenWeight(ExplicitComponent):
 
     Based on formulas in :cite:`supaero:2014`, mass contribution C26
     """
-        
 
     def setup(self):
         self.add_input("data:geometry:cabin:NPAX1", val=np.nan)
         self.add_input("tuning:weight:furniture:oxygen:mass:k", val=1.0)
-        self.add_input("tuning:weight:furniture:oxygen:mass:offset", val=0.0, units="kg")
+        self.add_input(
+            "tuning:weight:furniture:oxygen:mass:offset", val=0.0, units="kg"
+        )
 
         self.add_output("data:weight:furniture:oxygen:mass", units="kg")
 
         self.declare_partials("*", "*", method="fd")
 
     def compute(self, inputs, outputs, discrete_inputs=None, discrete_outputs=None):
-        k= inputs["tuning:weight:furniture:oxygen:mass:k"]
-        offset= inputs["tuning:weight:furniture:oxygen:mass:offset"]
+        k = inputs["tuning:weight:furniture:oxygen:mass:k"]
+        offset = inputs["tuning:weight:furniture:oxygen:mass:offset"]
         npax1 = inputs["data:geometry:cabin:NPAX1"]
-
 
         # Mass of fixed oxygen
         mass_oxy = 80 + 1.3 * npax1
         outputs["data:weight:furniture:oxygen:mass"] = k * mass_oxy + offset
-
-

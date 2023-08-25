@@ -21,7 +21,7 @@ from openmdao.core.explicitcomponent import ExplicitComponent
 class OperationalEquipmentsWeight(ExplicitComponent):
     """
     Weight estimation for aircraft operational equipment. It includes:
-        
+
         - Emergency equipment
         - Fluids/ engine oil
         - Drinkable water
@@ -35,13 +35,14 @@ class OperationalEquipmentsWeight(ExplicitComponent):
 
         self.add_output("data:weight:operational:equipment:crew:mass", units="kg")
         self.add_output("data:weight:operational:equipment:others:mass", units="kg")
-        
- 
+
         self.declare_partials("*", "*", method="fd")
 
     def compute(self, inputs, outputs, discrete_inputs=None, discrete_outputs=None):
         cockpit_crew = inputs["data:geometry:cabin:crew_count:technical"]
         cabin_crew = inputs["data:geometry:cabin:crew_count:commercial"]
 
-        outputs["data:weight:operational:equipment:crew:mass"] = 85 * cockpit_crew + 75 * cabin_crew
-        outputs["data:weight:operational:equipment:others:mass"] = 100.
+        outputs["data:weight:operational:equipment:crew:mass"] = (
+            85 * cockpit_crew + 75 * cabin_crew
+        )
+        outputs["data:weight:operational:equipment:others:mass"] = 100.0

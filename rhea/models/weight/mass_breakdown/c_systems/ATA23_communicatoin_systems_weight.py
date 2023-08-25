@@ -18,7 +18,6 @@ import numpy as np
 from openmdao.core.explicitcomponent import ExplicitComponent
 
 
-
 class CommunicationSystemWeight(ExplicitComponent):
     """
     Weight estimation for communication systems
@@ -35,7 +34,9 @@ class CommunicationSystemWeight(ExplicitComponent):
     def setup(self):
 
         self.add_input("tuning:weight:systems:communications:mass:k", val=1.0)
-        self.add_input("tuning:weight:systems:communications:mass:offset", val=0.0, units="kg")
+        self.add_input(
+            "tuning:weight:systems:communications:mass:offset", val=0.0, units="kg"
+        )
 
         self.add_output("data:weight:systems:communications:mass", units="kg")
 
@@ -47,5 +48,5 @@ class CommunicationSystemWeight(ExplicitComponent):
         offset = inputs["tuning:weight:systems:communications:mass:offset"]
 
         # Mass of communication system
-        mass_comm = 80 
+        mass_comm = 80
         outputs["data:weight:systems:communications:mass"] = k * mass_comm + offset

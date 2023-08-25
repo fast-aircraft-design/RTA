@@ -18,7 +18,11 @@ import numpy as np
 import openmdao.api as om
 from scipy.constants import g
 from fastoad.module_management.constants import ModelDomain
-from fastoad.module_management.service_registry import RegisterOpenMDAOSystem, RegisterSubmodel
+from fastoad.module_management.service_registry import (
+    RegisterOpenMDAOSystem,
+    RegisterSubmodel,
+)
+
 
 @RegisterOpenMDAOSystem("rhea.loop.wing_area", domain=ModelDomain.OTHER)
 class ComputeWingArea_RHEA(om.Group):
@@ -34,7 +38,7 @@ class ComputeWingArea_RHEA(om.Group):
 
 
 class _ComputeWingArea(om.ExplicitComponent):
-    """ Computation of wing area from needed approach speed and mission fuel """
+    """Computation of wing area from needed approach speed and mission fuel"""
 
     def setup(self):
         self.add_input("data:geometry:wing:aspect_ratio", val=np.nan)
@@ -51,12 +55,12 @@ class _ComputeWingArea(om.ExplicitComponent):
 
     def compute(self, inputs, outputs, discrete_inputs=None, discrete_outputs=None):
 
-
-
         approach_speed = inputs["data:TLAR:approach_speed"]
         mlw = inputs["data:weight:aircraft:MLW"]
         max_CL = inputs["data:aerodynamics:aircraft:landing:CL_max"]
-        wing_area_approach = 2 * mlw * g / ((approach_speed / 1.23) ** 2) / (1.225 * max_CL)
+        wing_area_approach = (
+            2 * mlw * g / ((approach_speed / 1.23) ** 2) / (1.225 * max_CL)
+        )
 
         outputs["data:geometry:wing:area"] = wing_area_approach
 
@@ -99,6 +103,6 @@ class _ComputeWingAreaConstraints(om.ExplicitComponent):
         wing_area = inputs["data:geometry:wing:area"]
 
         outputs["data:weight:aircraft:additional_fuel_capacity"] = mfw - mission_fuel
-        outputs["data:aerodynamics:aircraft:landing:additional_CL_capacity"] = cl_max - mlw * g / (
-            0.5 * 1.225 * (v_approach / 1.23) ** 2 * wing_area
-        )
+        outputs[
+            "data:aerodynamics:aircraft:landing:additional_CL_capacity"
+        ] = cl_max - mlw * g / (0.5 * 1.225 * (v_approach / 1.23) ** 2 * wing_area)

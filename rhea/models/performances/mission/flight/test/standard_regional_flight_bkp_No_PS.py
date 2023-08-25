@@ -16,22 +16,33 @@ from typing import Dict, List, Union
 
 from fastoad.constants import FlightPhase, EngineSetting
 from fastoad.models.propulsion import IPropulsion
-from scipy.constants import foot, knot,psi
+from scipy.constants import foot, knot, psi
 
 from fastoad.models.performances.mission.flight.base import AbstractSimpleFlight
-from fastoad.models.performances.mission.base import IFlightPart, AbstractManualThrustFlightPhase
-#from fastoad.models.performances.mission.flight_point import FlightPoint #v0.50a
-from fastoad.base.flight_point import FlightPoint #v0.5.2b
+from fastoad.models.performances.mission.base import (
+    IFlightPart,
+    AbstractManualThrustFlightPhase,
+)
+
+# from fastoad.models.performances.mission.flight_point import FlightPoint #v0.50a
+from fastoad.base.flight_point import FlightPoint  # v0.5.2b
 from fastoad.models.performances.mission.polar import Polar
-from fastoad.models.performances.mission.segments.altitude_change import AltitudeChangeSegment
+from fastoad.models.performances.mission.segments.altitude_change import (
+    AltitudeChangeSegment,
+)
 from fastoad.models.performances.mission.segments.cruise import CruiseSegment
 from fastoad.models.performances.mission.segments.speed_change import SpeedChangeSegment
-from rhea.models.performances.mission.segments.speed_change_cruise import SpeedChangeCruise
-from rhea.models.performances.mission.segments.descent_fixed_slope import FixedSlopeDescent
+from rhea.models.performances.mission.segments.speed_change_cruise import (
+    SpeedChangeCruise,
+)
+from rhea.models.performances.mission.segments.descent_fixed_slope import (
+    FixedSlopeDescent,
+)
 
 import numpy as np
 from scipy.optimize import root_scalar
 from fastoad.utils.physics import AtmosphereSI
+
 
 class InitialClimbPhase1(AbstractManualThrustFlightPhase):
     """
@@ -41,14 +52,18 @@ class InitialClimbPhase1(AbstractManualThrustFlightPhase):
     - Accelerates to EAS =climb_speed at constant altitude
     - Climbs up to 1500ft at constant EAS
     """
+
     def __init__(self, **kwargs):
         self.climb_speed = kwargs.pop("climb_speed")
-        super().__init__(**kwargs)        
+        super().__init__(**kwargs)
+
     @property
     def flight_sequence(self) -> List[Union[IFlightPart, str]]:
         return [
             AltitudeChangeSegment(
-                target=FlightPoint(equivalent_airspeed="constant", altitude=400.0 * foot),
+                target=FlightPoint(
+                    equivalent_airspeed="constant", altitude=400.0 * foot
+                ),
                 engine_setting=EngineSetting.TAKEOFF,
                 **self.segment_kwargs,
             ),
@@ -58,31 +73,36 @@ class InitialClimbPhase1(AbstractManualThrustFlightPhase):
                 **self.segment_kwargs,
             ),
             AltitudeChangeSegment(
-                target=FlightPoint(equivalent_airspeed="constant", altitude=1500.0 * foot),
+                target=FlightPoint(
+                    equivalent_airspeed="constant", altitude=1500.0 * foot
+                ),
                 engine_setting=EngineSetting.CLIMB,
                 **self.segment_kwargs,
             ),
         ]
 
+
 class InitialClimbPhase2(AbstractManualThrustFlightPhase):
     """
-    Preset for initial climb phase. 
+    Preset for initial climb phase.
 
     - Climbs up to 1500ft at constant EAS @TO setting
     """
+
     def __init__(self, **kwargs):
         self.climb_speed = kwargs.pop("climb_speed")
-        super().__init__(**kwargs)        
+        super().__init__(**kwargs)
+
     @property
     def flight_sequence(self) -> List[Union[IFlightPart, str]]:
         return [
             AltitudeChangeSegment(
-                target=FlightPoint(equivalent_airspeed="constant", altitude=1500.0 * foot),
+                target=FlightPoint(
+                    equivalent_airspeed="constant", altitude=1500.0 * foot
+                ),
                 engine_setting=EngineSetting.TAKEOFF,
                 **self.segment_kwargs,
             ),
-            
-
         ]
 
 
@@ -120,24 +140,29 @@ class ClimbPhaseICAOA(AbstractManualThrustFlightPhase):
 
         return [
             AltitudeChangeSegment(
-                target=FlightPoint(equivalent_airspeed="constant", altitude=3000.0 * foot),
+                target=FlightPoint(
+                    equivalent_airspeed="constant", altitude=3000.0 * foot
+                ),
                 **self.segment_kwargs,
             ),
             SpeedChangeSegment(
-                target=FlightPoint(equivalent_airspeed=self.climb_speed[0] ), **self.segment_kwargs,
+                target=FlightPoint(equivalent_airspeed=self.climb_speed[0]),
+                **self.segment_kwargs,
             ),
             AltitudeChangeSegment(
-                target=FlightPoint(equivalent_airspeed="constant", altitude=self.target_altitude),
-                **self.segment_kwargs,           
+                target=FlightPoint(
+                    equivalent_airspeed="constant", altitude=self.target_altitude
+                ),
+                **self.segment_kwargs,
                 maximum_mach=self.target_mach,
-            ), 
-
+            ),
             SpeedChangeCruise(
-                target=FlightPoint(mach=self.target_mach[0]), **self.segment_kwargs,
-                       
-            ),            
+                target=FlightPoint(mach=self.target_mach[0]),
+                **self.segment_kwargs,
+            ),
         ]
-    
+
+
 class ClimbPhase(AbstractManualThrustFlightPhase):
     """
     Preset for climb phase.
@@ -169,17 +194,20 @@ class ClimbPhase(AbstractManualThrustFlightPhase):
         self.segment_kwargs["engine_setting"] = EngineSetting.CLIMB
 
         return [
-
             AltitudeChangeSegment(
-                target=FlightPoint(equivalent_airspeed="constant", altitude=self.target_altitude),
-                **self.segment_kwargs,           
+                target=FlightPoint(
+                    equivalent_airspeed="constant", altitude=self.target_altitude
+                ),
+                **self.segment_kwargs,
                 maximum_mach=self.target_mach,
-            ), 
+            ),
             SpeedChangeCruise(
-                target=FlightPoint(mach=self.target_mach[0]), **self.segment_kwargs,
-                       
+                target=FlightPoint(mach=self.target_mach[0]),
+                **self.segment_kwargs,
             ),
         ]
+
+
 class DivClimbPhase(AbstractManualThrustFlightPhase):
     """
     Preset for climb phase.
@@ -211,23 +239,23 @@ class DivClimbPhase(AbstractManualThrustFlightPhase):
         self.segment_kwargs["engine_setting"] = EngineSetting.CLIMB
 
         return [
-        
-
             AltitudeChangeSegment(
-                target=FlightPoint(equivalent_airspeed="constant", altitude=self.target_altitude),
-                **self.segment_kwargs,           
+                target=FlightPoint(
+                    equivalent_airspeed="constant", altitude=self.target_altitude
+                ),
+                **self.segment_kwargs,
                 maximum_mach=self.target_mach,
-            ), 
+            ),
             # SpeedChangeSegment(
             #     target=FlightPoint(mach=self.target_mach[0]), **self.segment_kwargs,
-                       
             # ),
             SpeedChangeCruise(
-                target=FlightPoint(mach=self.target_mach[0]), **self.segment_kwargs,
-                       
-            ),            
-        ]    
-    
+                target=FlightPoint(mach=self.target_mach[0]),
+                **self.segment_kwargs,
+            ),
+        ]
+
+
 class AccelerationPhase(AbstractManualThrustFlightPhase):
     """
     Preset for AccelerationPhase phase.
@@ -249,18 +277,21 @@ class AccelerationPhase(AbstractManualThrustFlightPhase):
     # def compute_from(self, start: FlightPoint) -> pd.DataFrame:
     #     self.find_min_descent_time(start)
     #     self.segment_kwargs['name']='take off'
-    #     flight_points= super().compute_from(start) 
+    #     flight_points= super().compute_from(start)
     #     return flight_points
 
     @property
     def flight_sequence(self) -> List[Union[IFlightPart, str]]:
         return [
             AltitudeChangeSegment(
-                target=FlightPoint(equivalent_airspeed=self.descent_speed[0], mach="constant"),
+                target=FlightPoint(
+                    equivalent_airspeed=self.descent_speed[0], mach="constant"
+                ),
                 engine_setting=EngineSetting.CRUISE,
                 **self.segment_kwargs,
-                ),
+            ),
         ]
+
     # def find_min_descent_time(self,start):
     #     Zp = start.altitude
     #     max_delta_pressure=  6.*psi
@@ -271,8 +302,8 @@ class AccelerationPhase(AbstractManualThrustFlightPhase):
     #     Zc = root_scalar(func,x0=Zp/2)
     #     max_cabin_rd = 500*foot/60 #m/s =500ft/min
     #     TTD_min = Zc/max_cabin_rd
-            
-    
+
+
 class DescentPhase(AbstractManualThrustFlightPhase):
     """
     Preset for descent phase.
@@ -296,9 +327,8 @@ class DescentPhase(AbstractManualThrustFlightPhase):
 
     @property
     def flight_sequence(self) -> List[Union[IFlightPart, str]]:
-        #self.segment_kwargs["engine_setting"] = EngineSetting.IDLE
+        # self.segment_kwargs["engine_setting"] = EngineSetting.IDLE
         return [
-
             # AltitudeChangeSegment(
             #     target=FlightPoint(altitude=self.target_altitude, equivalent_airspeed="constant"),
             #     engine_setting=EngineSetting.IDLE,
@@ -309,9 +339,10 @@ class DescentPhase(AbstractManualThrustFlightPhase):
             #     #engine_setting=EngineSetting.CRUISE,
             #     **self.segment_kwargs,
             #     ),
-
             FixedSlopeDescent(
-                target=FlightPoint(altitude=self.target_altitude, equivalent_airspeed="constant"),
+                target=FlightPoint(
+                    altitude=self.target_altitude, equivalent_airspeed="constant"
+                ),
                 engine_setting=EngineSetting.CRUISE,
                 **self.segment_kwargs,
             ),
@@ -337,13 +368,12 @@ class StandardFlight(AbstractSimpleFlight):
         high_speed_polar: Polar,
         cruise_mach: float,
         thrust_rates: Dict[FlightPhase, float],
-        climb_speed: float= 150.*knot,
-        descent_speed: float= 180.*knot,
+        climb_speed: float = 150.0 * knot,
+        descent_speed: float = 180.0 * knot,
         cruise_distance: float = 0.0,
-        climb_target_altitude: float =  AltitudeChangeSegment.OPTIMAL_FLIGHT_LEVEL,
+        climb_target_altitude: float = AltitudeChangeSegment.OPTIMAL_FLIGHT_LEVEL,
         descent_target_altitude: float = 1500.0 * foot,
         time_step=None,
-
     ):
         """
 
@@ -367,7 +397,6 @@ class StandardFlight(AbstractSimpleFlight):
             "propulsion": propulsion,
             "reference_area": reference_area,
             "time_step": time_step,
-            
         }
 
         self.low_speed_climb_polar = low_speed_climb_polar
@@ -377,21 +406,19 @@ class StandardFlight(AbstractSimpleFlight):
         self.climb_target_altitude = climb_target_altitude
         self.descent_target_altitude = descent_target_altitude
         self.time_step = time_step
-        self.climb_speed=climb_speed
-        self.descent_speed=descent_speed
-        
-        
+        self.climb_speed = climb_speed
+        self.descent_speed = descent_speed
 
         kwargs = {
             "propulsion": propulsion,
             "reference_area": reference_area,
             "time_step": time_step,
-            #qui aggiungi tutte le variabili input di cui hai bisogno per TO
+            # qui aggiungi tutte le variabili input di cui hai bisogno per TO
         }
-               
+
         initial_climb = InitialClimbPhase1(
             **kwargs,
-            polar=low_speed_climb_polar, 
+            polar=low_speed_climb_polar,
             thrust_rate=1.0,
             name="initial climb",
             climb_speed=self.climb_speed,
@@ -404,7 +431,7 @@ class StandardFlight(AbstractSimpleFlight):
             # maximum_mach=np.array([50]),
             target_mach=self.cruise_mach,
             name="climb",
-            climb_speed=self.climb_speed,           
+            climb_speed=self.climb_speed,
         )
         cruise = CruiseSegment(
             **kwargs,
@@ -416,7 +443,7 @@ class StandardFlight(AbstractSimpleFlight):
         acceleration = AccelerationPhase(
             **kwargs,
             polar=high_speed_polar,
-            thrust_rate=thrust_rates[FlightPhase.DESCENT], #0.3 for ref
+            thrust_rate=thrust_rates[FlightPhase.DESCENT],  # 0.3 for ref
             name="acceleration descent",
             target_speed=self.descent_speed,
         )
@@ -429,8 +456,12 @@ class StandardFlight(AbstractSimpleFlight):
             descent_speed=self.descent_speed,
         )
         super().__init__(
-            cruise_distance, [initial_climb, climb], cruise, [acceleration,descent], #[descent], # [acceleration,descent], #
+            cruise_distance,
+            [initial_climb, climb],
+            cruise,
+            [acceleration, descent],  # [descent], # [acceleration,descent], #
         )
+
 
 class DiversionFlight(AbstractSimpleFlight):
     """
@@ -451,13 +482,12 @@ class DiversionFlight(AbstractSimpleFlight):
         high_speed_polar: Polar,
         cruise_mach: float,
         thrust_rates: Dict[FlightPhase, float],
-        climb_speed: float= 150.*knot,
-        descent_speed: float= 180.*knot,
+        climb_speed: float = 150.0 * knot,
+        descent_speed: float = 180.0 * knot,
         cruise_distance: float = 0.0,
-        climb_target_altitude: float =  AltitudeChangeSegment.OPTIMAL_FLIGHT_LEVEL,
+        climb_target_altitude: float = AltitudeChangeSegment.OPTIMAL_FLIGHT_LEVEL,
         descent_target_altitude: float = 1500.0 * foot,
         time_step=None,
-
     ):
         """
 
@@ -490,17 +520,14 @@ class DiversionFlight(AbstractSimpleFlight):
         self.climb_target_altitude = climb_target_altitude
         self.descent_target_altitude = descent_target_altitude
         self.time_step = time_step
-        self.climb_speed=climb_speed
-        self.descent_speed=descent_speed
-        
-        
+        self.climb_speed = climb_speed
+        self.descent_speed = descent_speed
 
         kwargs = {
             "propulsion": propulsion,
             "reference_area": reference_area,
             "time_step": time_step,
         }
-
 
         climb = DivClimbPhase(
             **kwargs,
@@ -510,7 +537,6 @@ class DiversionFlight(AbstractSimpleFlight):
             target_mach=self.cruise_mach,
             name="diversion climb",
             climb_speed=self.climb_speed,
-            
         )
         cruise = CruiseSegment(
             **kwargs,
@@ -531,5 +557,8 @@ class DiversionFlight(AbstractSimpleFlight):
         #     cruise_distance, [initial_climb, climb], cruise, [descent],
         # )
         super().__init__(
-            cruise_distance,[climb], cruise, [descent],
+            cruise_distance,
+            [climb],
+            cruise,
+            [descent],
         )

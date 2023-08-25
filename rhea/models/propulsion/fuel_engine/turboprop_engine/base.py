@@ -21,8 +21,6 @@ from fastoad.model_base.flight_point import FlightPoint
 from fastoad.model_base.propulsion import IPropulsion, IOMPropulsionWrapper
 
 
-
-
 FlightPoint.add_field("TPshaft_power")
 FlightPoint.add_field("psfc")
 FlightPoint.add_field("H2_fc")
@@ -37,7 +35,8 @@ class AbstractFuelPropulsion(IPropulsion, ABC):
 
     def get_consumed_mass(self, flight_point: FlightPoint, time_step: float) -> float:
         return time_step * flight_point.psfc * flight_point.TPshaft_power
-    
+
+
 class AbstractH2Propulsion(IPropulsion, ABC):
     """
     Propulsion model that consume any fuel should inherit from this one.
@@ -45,10 +44,15 @@ class AbstractH2Propulsion(IPropulsion, ABC):
     In inheritors, :meth:`compute_flight_points` is expected to define
     "sfc" and "thrust" in computed FlightPoint instances.
     """
+
     def get_consumed_mass(self, flight_point: FlightPoint, time_step: float) -> float:
-        return time_step * flight_point.psfc * flight_point.TPshaft_power + time_step * flight_point.H2_fc
-        #return time_step * flight_point.H2_fc 
- 
+        return (
+            time_step * flight_point.psfc * flight_point.TPshaft_power
+            + time_step * flight_point.H2_fc
+        )
+        # return time_step * flight_point.H2_fc
+
+
 class TPEngineSet(AbstractFuelPropulsion):
     def __init__(self, engine: IPropulsion, engine_count):
         """
@@ -60,7 +64,8 @@ class TPEngineSet(AbstractFuelPropulsion):
         :param engine_count:
         """
         self.engine = engine
-        self.engine_count = engine_count    
+        self.engine_count = engine_count
+
     def compute_flight_points(self, flight_points: Union[FlightPoint, pd.DataFrame]):
 
         if isinstance(flight_points, FlightPoint):
@@ -75,16 +80,29 @@ class TPEngineSet(AbstractFuelPropulsion):
         flight_points.psfc = flight_points_per_engine.psfc
         flight_points.thrust = flight_points_per_engine.thrust * self.engine_count
         flight_points.thrust_rate = flight_points_per_engine.thrust_rate
-        flight_points.TPshaft_power = flight_points_per_engine.TPshaft_power* self.engine_count
-        flight_points.TP_power_rate = flight_points_per_engine.TP_power_rate 
-        flight_points.thermo_power = flight_points_per_engine.thermo_power * self.engine_count   
-        flight_points.TP_thermal_efficiency = flight_points_per_engine.TP_thermal_efficiency
-        if flight_points_per_engine.TP_residual_thrust :
-            flight_points.TP_residual_thrust  =flight_points_per_engine.TP_residual_thrust  * self.engine_count
-        flight_points.TP_air_flow=flight_points_per_engine.TP_air_flow #* self.engine_count
-        flight_points.TP_total_pressure= flight_points_per_engine.TP_total_pressure 
-        flight_points.TP_total_temperature  =  flight_points_per_engine.TP_total_temperature
+        flight_points.TPshaft_power = (
+            flight_points_per_engine.TPshaft_power * self.engine_count
+        )
+        flight_points.TP_power_rate = flight_points_per_engine.TP_power_rate
+        flight_points.thermo_power = (
+            flight_points_per_engine.thermo_power * self.engine_count
+        )
+        flight_points.TP_thermal_efficiency = (
+            flight_points_per_engine.TP_thermal_efficiency
+        )
+        if flight_points_per_engine.TP_residual_thrust:
+            flight_points.TP_residual_thrust = (
+                flight_points_per_engine.TP_residual_thrust * self.engine_count
+            )
+        flight_points.TP_air_flow = (
+            flight_points_per_engine.TP_air_flow
+        )  # * self.engine_count
+        flight_points.TP_total_pressure = flight_points_per_engine.TP_total_pressure
+        flight_points.TP_total_temperature = (
+            flight_points_per_engine.TP_total_temperature
+        )
         flight_points.CT = flight_points_per_engine.CT
+
 
 class TPH2EngineSet(AbstractH2Propulsion):
     def __init__(self, engine: IPropulsion, engine_count):
@@ -97,7 +115,8 @@ class TPH2EngineSet(AbstractH2Propulsion):
         :param engine_count:
         """
         self.engine = engine
-        self.engine_count = engine_count    
+        self.engine_count = engine_count
+
     def compute_flight_points(self, flight_points: Union[FlightPoint, pd.DataFrame]):
 
         if isinstance(flight_points, FlightPoint):
@@ -112,15 +131,27 @@ class TPH2EngineSet(AbstractH2Propulsion):
         flight_points.psfc = flight_points_per_engine.psfc
         flight_points.thrust = flight_points_per_engine.thrust * self.engine_count
         flight_points.thrust_rate = flight_points_per_engine.thrust_rate
-        flight_points.TPshaft_power = flight_points_per_engine.TPshaft_power* self.engine_count
-        flight_points.TP_power_rate = flight_points_per_engine.TP_power_rate 
-        flight_points.thermo_power = flight_points_per_engine.thermo_power * self.engine_count   
-        flight_points.TP_thermal_efficiency = flight_points_per_engine.TP_thermal_efficiency
-        if flight_points_per_engine.TP_residual_thrust :
-            flight_points.TP_residual_thrust  =flight_points_per_engine.TP_residual_thrust  * self.engine_count
-        flight_points.TP_air_flow=flight_points_per_engine.TP_air_flow #* self.engine_count
-        flight_points.TP_total_pressure= flight_points_per_engine.TP_total_pressure 
-        flight_points.TP_total_temperature  =  flight_points_per_engine.TP_total_temperature
+        flight_points.TPshaft_power = (
+            flight_points_per_engine.TPshaft_power * self.engine_count
+        )
+        flight_points.TP_power_rate = flight_points_per_engine.TP_power_rate
+        flight_points.thermo_power = (
+            flight_points_per_engine.thermo_power * self.engine_count
+        )
+        flight_points.TP_thermal_efficiency = (
+            flight_points_per_engine.TP_thermal_efficiency
+        )
+        if flight_points_per_engine.TP_residual_thrust:
+            flight_points.TP_residual_thrust = (
+                flight_points_per_engine.TP_residual_thrust * self.engine_count
+            )
+        flight_points.TP_air_flow = (
+            flight_points_per_engine.TP_air_flow
+        )  # * self.engine_count
+        flight_points.TP_total_pressure = flight_points_per_engine.TP_total_pressure
+        flight_points.TP_total_temperature = (
+            flight_points_per_engine.TP_total_temperature
+        )
         flight_points.CT = flight_points_per_engine.CT
-        
+
         flight_points.H2_fc = flight_points_per_engine.H2_fc * self.engine_count

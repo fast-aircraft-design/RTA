@@ -20,7 +20,11 @@ from rhea.models.aerodynamics.components.lg_effect import ComputeDeltaLg
 from rhea.models.aerodynamics.components.OEI_effect import ComputeDeltaOEI
 from rhea.models.aerodynamics.components.initialize_in import InitializeIN
 from fastoad.module_management.constants import ModelDomain
-from fastoad.module_management.service_registry import RegisterOpenMDAOSystem, RegisterSubmodel
+from fastoad.module_management.service_registry import (
+    RegisterOpenMDAOSystem,
+    RegisterSubmodel,
+)
+
 
 @RegisterOpenMDAOSystem("rhea.aerodynamics.takeoff", domain=ModelDomain.AERODYNAMICS)
 class AerodynamicsTakeoffRHEA(om.Group):
@@ -31,13 +35,20 @@ class AerodynamicsTakeoffRHEA(om.Group):
     """
 
     def setup(self):
-        
-        self.add_subsystem("delta_conf", ComputeDeltaHighLift(landing_flag=False), promotes=["*"])
-        
+
+        self.add_subsystem(
+            "delta_conf", ComputeDeltaHighLift(landing_flag=False), promotes=["*"]
+        )
+
         self.add_subsystem("inizialize_inputs", InitializeIN(), promotes=["*"])
-        
-        self.add_subsystem("delta_lg", ComputeDeltaLg(landing_flag=False), promotes=["*"])
 
+        self.add_subsystem(
+            "delta_lg", ComputeDeltaLg(landing_flag=False), promotes=["*"]
+        )
 
-        self.add_subsystem("delta_OEI", ComputeDeltaOEI(landing_flag=False), promotes=["*"])
-        self.add_subsystem("polar", ComputePolar(type=PolarType.TAKEOFF), promotes=["*"])
+        self.add_subsystem(
+            "delta_OEI", ComputeDeltaOEI(landing_flag=False), promotes=["*"]
+        )
+        self.add_subsystem(
+            "polar", ComputePolar(type=PolarType.TAKEOFF), promotes=["*"]
+        )

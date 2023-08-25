@@ -18,8 +18,11 @@
 import openmdao.api as om
 
 from fastoad_cs25.models.geometry.compute_aero_center import ComputeAeroCenter
-from fastoad_cs25.models.geometry.geom_components.compute_wetted_area import ComputeWettedArea
-#from fastoad.models.geometry.geom_components.fuselage import ComputeCnBetaFuselage
+from fastoad_cs25.models.geometry.geom_components.compute_wetted_area import (
+    ComputeWettedArea,
+)
+
+# from fastoad.models.geometry.geom_components.fuselage import ComputeCnBetaFuselage
 from rhea.models.geometry.geom_components import ComputeGeometry_RHEA
 
 
@@ -27,15 +30,24 @@ from rhea.models.geometry.geom_components.fuselage.compute_fuselage import (
     ComputeFuselageGeometryBasic,
     ComputeFuselageGeometryCabinSizing,
 )
-from fastoad_cs25.models.geometry.geom_components.ht.compute_horizontal_tail import ComputeHorizontalTailGeometry
+from fastoad_cs25.models.geometry.geom_components.ht.compute_horizontal_tail import (
+    ComputeHorizontalTailGeometry,
+)
 from .geom_components.nacelle.compute_nacelle import (
     ComputeNacelleGeometry,
 )
-from fastoad_cs25.models.geometry.geom_components.vt.compute_vertical_tail import ComputeVerticalTailGeometry
-from rhea.models.geometry.geom_components.wing.compute_wing_RHEA_IN import ComputeWingGeometry_RHEA_IN
+from fastoad_cs25.models.geometry.geom_components.vt.compute_vertical_tail import (
+    ComputeVerticalTailGeometry,
+)
+from rhea.models.geometry.geom_components.wing.compute_wing_RHEA_IN import (
+    ComputeWingGeometry_RHEA_IN,
+)
 from fastoad_cs25.models.constants import CABIN_SIZING_OPTION
 from fastoad.module_management.constants import ModelDomain
-from fastoad.module_management.service_registry import RegisterOpenMDAOSystem, RegisterSubmodel
+from fastoad.module_management.service_registry import (
+    RegisterOpenMDAOSystem,
+    RegisterSubmodel,
+)
 
 
 @RegisterOpenMDAOSystem("rhea.geometry.wing_IN", domain=ModelDomain.GEOMETRY)
@@ -59,13 +71,19 @@ class Geometry_sizing_no_wing(om.Group):
                 "compute_fuselage", ComputeFuselageGeometryCabinSizing(), promotes=["*"]
             )
         else:
-            self.add_subsystem("compute_fuselage", ComputeFuselageGeometryBasic(), promotes=["*"])
+            self.add_subsystem(
+                "compute_fuselage", ComputeFuselageGeometryBasic(), promotes=["*"]
+            )
 
-        self.add_subsystem("compute_wing", ComputeWingGeometry_RHEA_IN(), promotes=["*"])
+        self.add_subsystem(
+            "compute_wing", ComputeWingGeometry_RHEA_IN(), promotes=["*"]
+        )
         self.add_subsystem(
             "compute_engine_nacelle", ComputeNacelleGeometry(), promotes=["*"]
         )
-        self.add_subsystem("compute_ht", ComputeHorizontalTailGeometry(), promotes=["*"])
+        self.add_subsystem(
+            "compute_ht", ComputeHorizontalTailGeometry(), promotes=["*"]
+        )
         self.add_subsystem("compute_vt", ComputeVerticalTailGeometry(), promotes=["*"])
         self.add_subsystem("compute_total_area", ComputeWettedArea(), promotes=["*"])
         self.add_subsystem("compute_aero_center", ComputeAeroCenter(), promotes=["*"])

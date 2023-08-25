@@ -30,7 +30,9 @@ class FuelLinesWeight(ExplicitComponent):
         self.add_input("data:weight:aircraft:MFW", val=np.nan, units="kg")
         self.add_input("data:weight:propulsion:engine:mass", val=np.nan, units="kg")
         self.add_input("tuning:weight:propulsion:fuel_lines:mass:k", val=1.0)
-        self.add_input("tuning:weight:propulsion:fuel_lines:mass:offset", val=0.0, units="kg")
+        self.add_input(
+            "tuning:weight:propulsion:fuel_lines:mass:offset", val=0.0, units="kg"
+        )
 
         self.add_output("data:weight:propulsion:fuel_system:mass", units="kg")
 
@@ -43,5 +45,5 @@ class FuelLinesWeight(ExplicitComponent):
         offset_b2 = inputs["tuning:weight:propulsion:fuel_lines:mass:offset"]
         weight_engines = inputs["data:weight:propulsion:engine:mass"]
 
-        temp_b2 = 0.02 * weight_engines + 2.0 * b_50 + 0.35 * mfw ** 0.66
+        temp_b2 = 0.02 * weight_engines + 2.0 * b_50 + 0.35 * mfw**0.66
         outputs["data:weight:propulsion:fuel_system:mass"] = k_b2 * temp_b2 + offset_b2

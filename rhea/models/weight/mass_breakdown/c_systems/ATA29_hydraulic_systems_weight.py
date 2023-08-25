@@ -31,7 +31,7 @@ class HydraulicPowerSystemWeight(ExplicitComponent):
     - valves
     - installation supports
 
-    Based on "Aircraft conceptual design synthesis", Denis Howe 
+    Based on "Aircraft conceptual design synthesis", Denis Howe
     Table (AD4.4) pag.357
     """
 
@@ -39,7 +39,9 @@ class HydraulicPowerSystemWeight(ExplicitComponent):
         self.add_input("data:weight:aircraft:MTOW", val=np.nan, units="kg")
 
         self.add_input("tuning:weight:systems:hydraulic_systems:mass:k", val=1.0)
-        self.add_input("tuning:weight:systems:hydraulic_systems:mass:offset", val=0.0, units="kg")
+        self.add_input(
+            "tuning:weight:systems:hydraulic_systems:mass:offset", val=0.0, units="kg"
+        )
 
         self.add_output("data:weight:systems:hydraulic_systems:mass", units="kg")
 
@@ -47,10 +49,10 @@ class HydraulicPowerSystemWeight(ExplicitComponent):
 
     # pylint: disable=too-many-locals
     def compute(self, inputs, outputs, discrete_inputs=None, discrete_outputs=None):
-        mtow=inputs["data:weight:aircraft:MTOW"]
+        mtow = inputs["data:weight:aircraft:MTOW"]
         k = inputs["tuning:weight:systems:hydraulic_systems:mass:k"]
         offset = inputs["tuning:weight:systems:hydraulic_systems:mass:offset"]
 
         # Mass of hydraulic power system
-        mass_hyd = 0.008*mtow
+        mass_hyd = 0.008 * mtow
         outputs["data:weight:systems:hydraulic_systems:mass"] = k * mass_hyd + offset

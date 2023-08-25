@@ -20,6 +20,7 @@ from rhea.models.weight.cg.cg import CG
 from rhea.models.weight.mass_breakdown import MassBreakdown_RHEA_OAD
 from fastoad.module_management.service_registry import RegisterOpenMDAOSystem
 
+
 @RegisterOpenMDAOSystem("rhea.weight.sizing_OAD", domain=ModelDomain.WEIGHT)
 class Weight_RHEA_sizing_OAD(om.Group):
     """
@@ -33,9 +34,11 @@ class Weight_RHEA_sizing_OAD(om.Group):
     Consistency between OWE and MTOW can be achieved by cycling with a model that computes MTOW
     from OWE, which should come from a mission computation that will assess needed block fuel.
     """
+
     def initialize(self):
         self.options.declare("hybrid", types=bool, default=False)
         self.options.declare("payload_from_npax", types=bool, default=False)
+
     def setup(self):
         self.add_subsystem("mass_breakdown", MassBreakdown_RHEA_OAD(), promotes=["*"])
         self.add_subsystem("cg", CG(hybrid=self.options["hybrid"]), promotes=["*"])

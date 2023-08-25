@@ -20,20 +20,23 @@ from openmdao.core.explicitcomponent import ExplicitComponent
 
 class ComputeCGLoadCase1(ExplicitComponent):
     # TODO: Document equations. Cite sources
-    """ Center of gravity estimation for load case 1: add fuel to OWE """
+    """Center of gravity estimation for load case 1: add fuel to OWE"""
 
     def setup(self):
         self.add_input("data:geometry:wing:MAC:length", val=np.nan, units="m")
         self.add_input("data:geometry:wing:MAC:at25percent:x", val=np.nan, units="m")
         self.add_input("data:mission:sizing:fuel", val=np.nan, units="kg")
         self.add_input("data:weight:fuel_tank:CG:x", val=np.nan, units="m")
-        self.add_input("data:weight:aircraft:operating_empty:CG:x", val=np.nan, units="m")
-        self.add_input("data:weight:aircraft:operating_empty:mass", val=np.nan, units="kg")
+        self.add_input(
+            "data:weight:aircraft:operating_empty:CG:x", val=np.nan, units="m"
+        )
+        self.add_input(
+            "data:weight:aircraft:operating_empty:mass", val=np.nan, units="kg"
+        )
 
         self.add_output("data:weight:aircraft:load_case_1:CG:MAC_position")
         self.add_output("data:weight:aircraft:load_case_1:CG:index")
         self.add_output("data:weight:aircraft:load_case_1:mass", units="kg")
-
 
         self.declare_partials("*", "*", method="fd")
 
@@ -56,5 +59,7 @@ class ComputeCGLoadCase1(ExplicitComponent):
         cg_ratio_pl_1 = (x_cg_plane_pl_1 - fa_length + 0.25 * l0_wing) / l0_wing
 
         outputs["data:weight:aircraft:load_case_1:CG:MAC_position"] = cg_ratio_pl_1
-        outputs["data:weight:aircraft:load_case_1:CG:index"] = (x_cg_plane_pl_1-fa_length)*(x_cg_plane_down + weight_pl)/150.
-        outputs["data:weight:aircraft:load_case_1:mass"] = x_cg_plane_down+weight_pl
+        outputs["data:weight:aircraft:load_case_1:CG:index"] = (
+            (x_cg_plane_pl_1 - fa_length) * (x_cg_plane_down + weight_pl) / 150.0
+        )
+        outputs["data:weight:aircraft:load_case_1:mass"] = x_cg_plane_down + weight_pl

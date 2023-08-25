@@ -18,7 +18,6 @@ import numpy as np
 from openmdao.core.explicitcomponent import ExplicitComponent
 
 
-
 class InsulationWeight(ExplicitComponent):
     """
     Weight estimation for thermo-acoustic insulation systems
@@ -32,7 +31,7 @@ class InsulationWeight(ExplicitComponent):
         self.add_input("data:geometry:fuselage:maximum_width", val=np.nan, units="m")
         self.add_input("data:geometry:fuselage:maximum_height", val=np.nan, units="m")
         self.add_input("data:geometry:cabin:length", val=np.nan, units="m")
-        
+
         self.add_input("tuning:weight:furniture:insulation:mass:k", val=1.0)
         self.add_input(
             "tuning:weight:furniture:insulation:mass:offset", val=0.0, units="kg"
@@ -40,12 +39,11 @@ class InsulationWeight(ExplicitComponent):
 
         self.add_output("data:weight:furniture:insulation:mass", units="kg")
 
-
         self.declare_partials("*", "*", method="fd")
 
     # pylint: disable=too-many-locals
     def compute(self, inputs, outputs, discrete_inputs=None, discrete_outputs=None):
-        
+
         width_max = inputs["data:geometry:fuselage:maximum_width"]
         height_max = inputs["data:geometry:fuselage:maximum_height"]
         cabin_length = inputs["data:geometry:cabin:length"]
@@ -53,11 +51,8 @@ class InsulationWeight(ExplicitComponent):
         k = inputs["tuning:weight:furniture:insulation:mass:k"]
         offset = inputs["tuning:weight:furniture:insulation:mass:offset"]
 
-
         fuselage_diameter = np.sqrt(width_max * height_max)
 
         # Mass of insulating system
         m_ins = 9.3 * fuselage_diameter * cabin_length
         outputs["data:weight:furniture:insulation:mass"] = k * m_ins + offset
-
-  

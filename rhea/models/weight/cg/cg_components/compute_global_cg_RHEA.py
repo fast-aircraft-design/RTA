@@ -15,7 +15,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from .compute_cg_loadcase1  import ComputeCGLoadCase1
+from .compute_cg_loadcase1 import ComputeCGLoadCase1
 from .compute_cg_loadcase2 import ComputeCGLoadCase2
 from .compute_cg_loadcase3 import ComputeCGLoadCase3
 from .compute_cg_ratio_aft_RHEA import ComputeCGRatioAft_RHEA
@@ -25,7 +25,7 @@ from openmdao.api import Group
 
 class ComputeGlobalCG_RHEA(Group):
     # TODO: Document equations. Cite sources
-    """ Global center of gravity estimation """
+    """Global center of gravity estimation"""
 
     def setup(self):
         self.add_subsystem("cg_ratio_aft", ComputeCGRatioAft_RHEA(), promotes=["*"])

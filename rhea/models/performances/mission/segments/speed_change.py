@@ -20,42 +20,50 @@ from fastoad.models.performances.mission.segments.base import ManualThrustSegmen
 from scipy.constants import g
 from fastoad.utils.physics import AtmosphereSI
 import math
+
 _LOGGER = logging.getLogger(__name__)  # Logger for this module
 from fastoad.base.dict import AddKeyAttributes
 import scipy.constants as const
 from fastoad.models.performances.mission.segments.speed_change import SpeedChangeSegment
-from fastoad.models.performances.mission.exceptions import FastFlightSegmentIncompleteFlightPoint
+from fastoad.models.performances.mission.exceptions import (
+    FastFlightSegmentIncompleteFlightPoint,
+)
 
-@AddKeyAttributes({"EM_power_rate": 0.0,"TP_power_rate":1.0})
+
+@AddKeyAttributes({"EM_power_rate": 0.0, "TP_power_rate": 1.0})
 class SpeedChangeSegment(SpeedChangeSegment):
     """
-    Computes a flight path segment where altitude is modified with constant speed 
+    Computes a flight path segment where altitude is modified with constant speed
     with a given thrust_rate and electric_power_rate
-    
+
     """
 
     def _compute_propulsion(self, flight_point: FlightPoint):
         flight_point.thrust_rate = self.thrust_rate
         flight_point.EM_power_rate = self.EM_power_rate
-        flight_point.TP_power_rate = self.TP_power_rate        
+        flight_point.TP_power_rate = self.TP_power_rate
         flight_point.thrust_is_regulated = False
         self.propulsion.compute_flight_points(flight_point)
 
-    def _complete_speed_values(self,flight_point: FlightPoint):
+    def _complete_speed_values(self, flight_point: FlightPoint):
         """
-        
+
         SAME AS IN FASTOAD ---> ONLY MODIFIED TO TAKE INTO ACCOUNT DISA
-        
-        
+
+
         Computes consistent values between TAS, EAS and Mach, assuming one of them is defined.
         """
-        atm = AtmosphereSI(flight_point.altitude, delta_t=flight_point.DISA)#########################################
+        atm = AtmosphereSI(
+            flight_point.altitude, delta_t=flight_point.DISA
+        )  #########################################
 
         if flight_point.true_airspeed is None:
             if flight_point.mach:
                 flight_point.true_airspeed = flight_point.mach * atm.speed_of_sound
             elif flight_point.equivalent_airspeed:
-                flight_point.true_airspeed = atm.get_true_airspeed(flight_point.equivalent_airspeed)
+                flight_point.true_airspeed = atm.get_true_airspeed(
+                    flight_point.equivalent_airspeed
+                )
             else:
                 raise FastFlightSegmentIncompleteFlightPoint(
                     "Flight point should be defined for true_airspeed, "
@@ -67,15 +75,14 @@ class SpeedChangeSegment(SpeedChangeSegment):
         if flight_point.equivalent_airspeed is None:
             flight_point.equivalent_airspeed = atm.get_equivalent_airspeed(
                 flight_point.true_airspeed
-            )        
-            
-            
+            )
+
     def complete_flight_point(self, flight_point: FlightPoint):
         """
-        
+
         SAME AS IN FASTOAD ---> ONLY MODIFIED TO TAKE INTO ACCOUNT DISA
-        
-        
+
+
         Computes data for provided flight point.
 
         Assumes that it is already defined for time, altitude, mass,
@@ -92,8 +99,12 @@ class SpeedChangeSegment(SpeedChangeSegment):
             flight_point.true_airspeed = flight_point.equivalent_airspeed = None
             self._complete_speed_values(flight_point)
 
-        atm = AtmosphereSI(flight_point.altitude, delta_t=flight_point.DISA)#########################################
-        reference_force = 0.5 * atm.density * flight_point.true_airspeed ** 2 * self.reference_area
+        atm = AtmosphereSI(
+            flight_point.altitude, delta_t=flight_point.DISA
+        )  #########################################
+        reference_force = (
+            0.5 * atm.density * flight_point.true_airspeed**2 * self.reference_area
+        )
 
         if self.polar:
             flight_point.CL = flight_point.mass * g / reference_force
@@ -103,10 +114,13 @@ class SpeedChangeSegment(SpeedChangeSegment):
         flight_point.drag = flight_point.CD * reference_force
 
         self._compute_propulsion(flight_point)
-        flight_point.slope_angle, flight_point.acceleration = self._get_gamma_and_acceleration(
+        (
+            flight_point.slope_angle,
+            flight_point.acceleration,
+        ) = self._get_gamma_and_acceleration(
             flight_point.mass, flight_point.drag, flight_point.thrust
         )
-        
+
     def compute_next_flight_point(
         self, flight_points: List[FlightPoint], time_step: float
     ) -> FlightPoint:
@@ -118,8 +132,7 @@ class SpeedChangeSegment(SpeedChangeSegment):
         :return: the computed next flight point
         """
 
-        next_point = super().compute_next_flight_point(flight_points,time_step)
-        
-        next_point.DISA =flight_points[-1].DISA
-        return next_point         
-        
+        next_point = super().compute_next_flight_point(flight_points, time_step)
+
+        next_point.DISA = flight_points[-1].DISA
+        return next_point

@@ -17,14 +17,18 @@ from typing import Tuple, List
 import pandas as pd
 from fastoad.base.flight_point import FlightPoint
 from fastoad.models.performances.mission.segments.base import ManualThrustSegment
-from scipy.constants import g,foot
+from scipy.constants import g, foot
 from fastoad.utils.physics import AtmosphereSI
 import math
+
 _LOGGER = logging.getLogger(__name__)  # Logger for this module
 from fastoad.base.dict import AddKeyAttributes
 import scipy.constants as const
 from fastoad.models.performances.mission.segments.base import RegulatedThrustSegment
-from rhea.models.performances.mission.segments.altitude_change import AltitudeChangeSegment
+from rhea.models.performances.mission.segments.altitude_change import (
+    AltitudeChangeSegment,
+)
+
 
 class FixedSlopeDescent(AltitudeChangeSegment):
     """
@@ -36,18 +40,19 @@ class FixedSlopeDescent(AltitudeChangeSegment):
     def _get_gamma_and_acceleration(self, mass, drag, thrust) -> Tuple[float, float]:
         gamma = (thrust - drag) / mass / g
         return gamma, 0.0
-        #return -3./const.degree, 0.0
+        # return -3./const.degree, 0.0
 
-    '''def _compute_propulsion(self, flight_point: FlightPoint):
+    """def _compute_propulsion(self, flight_point: FlightPoint):
         flight_point.thrust = flight_point.drag + flight_point.mass*g*(-3.*const.degree)
         flight_point.EM_power_rate = self.EM_power_rate
         flight_point.thrust_is_regulated = True
-        self.propulsion.compute_flight_points(flight_point)'''
-        
+        self.propulsion.compute_flight_points(flight_point)"""
+
     def _compute_propulsion(self, flight_point: FlightPoint):
-        flight_point.thrust = flight_point.drag + flight_point.mass*g*(-3.*const.degree)
+        flight_point.thrust = flight_point.drag + flight_point.mass * g * (
+            -3.0 * const.degree
+        )
         flight_point.EM_power_rate = self.EM_power_rate
         flight_point.TP_power_rate = self.TP_power_rate
         flight_point.thrust_is_regulated = True
-        self.propulsion.compute_flight_points(flight_point)        
-        
+        self.propulsion.compute_flight_points(flight_point)

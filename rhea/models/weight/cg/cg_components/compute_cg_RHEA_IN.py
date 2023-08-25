@@ -1,4 +1,3 @@
-
 """
     Estimation of components center of gravity
 """
@@ -17,65 +16,106 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
-
 import numpy as np
 
 from openmdao.core.explicitcomponent import ExplicitComponent
 
 
 class ComputeCG_RHEA_IN(ExplicitComponent):
-    """ Components center of gravity taken as inputs"""
+    """Components center of gravity taken as inputs"""
 
-    def __init__(self,hybrid):
+    def __init__(self, hybrid):
         super().__init__()
-        self.hybrid=hybrid
-        
+        self.hybrid = hybrid
+
     def setup(self):
 
         self.add_input("data:weight:airframe:wing:CG:x", val=np.nan, units="m")
         self.add_input("data:weight:airframe:fuselage:CG:x", val=np.nan, units="m")
-        self.add_input("data:weight:airframe:horizontal_tail:CG:x", val=np.nan, units="m")
+        self.add_input(
+            "data:weight:airframe:horizontal_tail:CG:x", val=np.nan, units="m"
+        )
         self.add_input("data:weight:airframe:vertical_tail:CG:x", val=np.nan, units="m")
-        self.add_input("data:weight:airframe:landing_gear:main:CG:x", val=np.nan, units="m")
-        self.add_input("data:weight:airframe:landing_gear:front:CG:x", val=np.nan, units="m")
-        self.add_input("data:weight:airframe:nacelle_struts:CG:x", val=np.nan, units="m")
-        
+        self.add_input(
+            "data:weight:airframe:landing_gear:main:CG:x", val=np.nan, units="m"
+        )
+        self.add_input(
+            "data:weight:airframe:landing_gear:front:CG:x", val=np.nan, units="m"
+        )
+        self.add_input(
+            "data:weight:airframe:nacelle_struts:CG:x", val=np.nan, units="m"
+        )
+
         self.add_input("data:weight:propulsion:engine:CG:x", val=np.nan, units="m")
         self.add_input("data:weight:propulsion:propeller:CG:x", val=np.nan, units="m")
-        self.add_input("data:weight:propulsion:engine_controls_instrumentation:CG:x", val=np.nan, units="m")
+        self.add_input(
+            "data:weight:propulsion:engine_controls_instrumentation:CG:x",
+            val=np.nan,
+            units="m",
+        )
         self.add_input("data:weight:propulsion:fuel_system:CG:x", val=np.nan, units="m")
-        
-        self.add_input("data:weight:systems:auxiliary_power_unit:CG:x", val=np.nan, units="m")
-        self.add_input("data:weight:systems:electric_systems:electric_generation:CG:x", val=np.nan, units="m")
-        self.add_input("data:weight:systems:electric_systems:electric_common_installation:CG:x", val=np.nan, units="m")
-        self.add_input("data:weight:systems:hydraulic_systems:CG:x", val=np.nan, units="m")
-        self.add_input("data:weight:systems:fire_protection:CG:x", val=np.nan, units="m")
-        self.add_input("data:weight:systems:flight_furnishing:CG:x", val=np.nan, units="m")
-        self.add_input("data:weight:systems:automatic_flight_system:CG:x", val=np.nan, units="m")
+
+        self.add_input(
+            "data:weight:systems:auxiliary_power_unit:CG:x", val=np.nan, units="m"
+        )
+        self.add_input(
+            "data:weight:systems:electric_systems:electric_generation:CG:x",
+            val=np.nan,
+            units="m",
+        )
+        self.add_input(
+            "data:weight:systems:electric_systems:electric_common_installation:CG:x",
+            val=np.nan,
+            units="m",
+        )
+        self.add_input(
+            "data:weight:systems:hydraulic_systems:CG:x", val=np.nan, units="m"
+        )
+        self.add_input(
+            "data:weight:systems:fire_protection:CG:x", val=np.nan, units="m"
+        )
+        self.add_input(
+            "data:weight:systems:flight_furnishing:CG:x", val=np.nan, units="m"
+        )
+        self.add_input(
+            "data:weight:systems:automatic_flight_system:CG:x", val=np.nan, units="m"
+        )
         self.add_input("data:weight:systems:communications:CG:x", val=np.nan, units="m")
         self.add_input("data:weight:systems:ECS:CG:x", val=np.nan, units="m")
         self.add_input("data:weight:systems:de-icing:CG:x", val=np.nan, units="m")
         self.add_input("data:weight:systems:navigation:CG:x", val=np.nan, units="m")
-        self.add_input("data:weight:systems:flight_controls:CG:x", val=np.nan, units="m")
-        
+        self.add_input(
+            "data:weight:systems:flight_controls:CG:x", val=np.nan, units="m"
+        )
+
         self.add_input("data:weight:furniture:furnishing:CG:x", val=np.nan, units="m")
         self.add_input("data:weight:furniture:water:CG:x", val=np.nan, units="m")
-        self.add_input("data:weight:furniture:interior_integration:CG:x", val=np.nan, units="m")
+        self.add_input(
+            "data:weight:furniture:interior_integration:CG:x", val=np.nan, units="m"
+        )
         self.add_input("data:weight:furniture:insulation:CG:x", val=np.nan, units="m")
-        self.add_input("data:weight:furniture:cabin_lighting:CG:x", val=np.nan, units="m")
-        self.add_input("data:weight:furniture:seats_crew_accommodation:CG:x", val=np.nan, units="m")
-        self.add_input("data:weight:furniture:oxygen:CG:x", val=np.nan, units="m")  
-        
-        self.add_input("data:weight:operational:items:passenger_seats:CG:x", val=np.nan, units="m")
-        self.add_input("data:weight:operational:items:unusable_fuel:CG:x", val=np.nan, units="m")
-        self.add_input("data:weight:operational:items:documents_toolkit:CG:x", val=np.nan, units="m")
-        self.add_input("data:weight:operational:items:galley_structure:CG:x", val=np.nan, units="m")
-        self.add_input("data:weight:operational:equipment:others:CG:x", val=np.nan, units="m")
-                 
-            
-           
+        self.add_input(
+            "data:weight:furniture:cabin_lighting:CG:x", val=np.nan, units="m"
+        )
+        self.add_input(
+            "data:weight:furniture:seats_crew_accommodation:CG:x", val=np.nan, units="m"
+        )
+        self.add_input("data:weight:furniture:oxygen:CG:x", val=np.nan, units="m")
 
-
-
-
-
+        self.add_input(
+            "data:weight:operational:items:passenger_seats:CG:x", val=np.nan, units="m"
+        )
+        self.add_input(
+            "data:weight:operational:items:unusable_fuel:CG:x", val=np.nan, units="m"
+        )
+        self.add_input(
+            "data:weight:operational:items:documents_toolkit:CG:x",
+            val=np.nan,
+            units="m",
+        )
+        self.add_input(
+            "data:weight:operational:items:galley_structure:CG:x", val=np.nan, units="m"
+        )
+        self.add_input(
+            "data:weight:operational:equipment:others:CG:x", val=np.nan, units="m"
+        )

@@ -25,10 +25,9 @@ from fastoad_cs25.models.geometry.profiles.profile_getter import get_profile
 from scipy import interpolate
 
 
-
 class ComputeTanksCG_RHEA(ExplicitComponent):
     # TODO: Document equations. Cite sources
-    """ Tanks center of gravity estimation """
+    """Tanks center of gravity estimation"""
 
     def initialize(self):
         self.options.declare("ratio", default=0.2, types=float)
@@ -42,14 +41,20 @@ class ComputeTanksCG_RHEA(ExplicitComponent):
         self.add_input("data:geometry:wing:spar_ratio:rear:kink", val=np.nan)
         self.add_input("data:geometry:wing:spar_ratio:rear:tip", val=np.nan)
         self.add_input("data:geometry:wing:MAC:length", val=np.nan, units="m")
-        self.add_input("data:geometry:wing:MAC:leading_edge:x:local", val=np.nan, units="m")
+        self.add_input(
+            "data:geometry:wing:MAC:leading_edge:x:local", val=np.nan, units="m"
+        )
         self.add_input("data:geometry:wing:root:chord", val=np.nan, units="m")
         self.add_input("data:geometry:wing:kink:chord", val=np.nan, units="m")
         self.add_input("data:geometry:wing:tip:chord", val=np.nan, units="m")
         self.add_input("data:geometry:wing:root:y", val=np.nan, units="m")
-        self.add_input("data:geometry:wing:kink:leading_edge:x:local", val=np.nan, units="m")
+        self.add_input(
+            "data:geometry:wing:kink:leading_edge:x:local", val=np.nan, units="m"
+        )
         self.add_input("data:geometry:wing:kink:y", val=np.nan, units="m")
-        self.add_input("data:geometry:wing:tip:leading_edge:x:local", val=np.nan, units="m")
+        self.add_input(
+            "data:geometry:wing:tip:leading_edge:x:local", val=np.nan, units="m"
+        )
         self.add_input("data:geometry:wing:tip:y", val=np.nan, units="m")
         self.add_input("data:geometry:wing:MAC:at25percent:x", val=np.nan, units="m")
         self.add_input("data:geometry:fuselage:maximum_width", val=np.nan, units="m")
@@ -57,11 +62,15 @@ class ComputeTanksCG_RHEA(ExplicitComponent):
         self.add_output("data:weight:fuel_tank:CG:x", units="m")
         self.add_output("data:weight:propulsion:fuel_system:CG:x", units="m")
         self.add_output("data:weight:operational:items:unusable_fuel:CG:x", units="m")
-        
+
         self.declare_partials("data:weight:fuel_tank:CG:x", "*", method="fd")
-        self.declare_partials("data:weight:propulsion:fuel_system:CG:x", "*", method="fd")
-        self.declare_partials("data:weight:operational:items:unusable_fuel:CG:x", "*", method="fd")
-        
+        self.declare_partials(
+            "data:weight:propulsion:fuel_system:CG:x", "*", method="fd"
+        )
+        self.declare_partials(
+            "data:weight:operational:items:unusable_fuel:CG:x", "*", method="fd"
+        )
+
     def compute(self, inputs, outputs):
 
         # TODO: decompose into a function to make the code more clear
@@ -116,7 +125,7 @@ class ComputeTanksCG_RHEA(ExplicitComponent):
         )
         # Assume in the region ourward 0.8 of the span, no tank installed
         ratio_1 = y4_wing * self.ratio / (y4_wing - y3_wing)
-        s_real_tip = (ratio_1 * (s_kink ** 0.5 - s_tip ** 0.5) + s_tip ** 0.5) ** 2
+        s_real_tip = (ratio_1 * (s_kink**0.5 - s_tip**0.5) + s_tip**0.5) ** 2
         vol_side_out = (
             (s_kink + s_real_tip + math.sqrt(s_kink * s_real_tip))
             * (y4_wing - y3_wing)
@@ -151,23 +160,34 @@ class ComputeTanksCG_RHEA(ExplicitComponent):
         height_side_inner_cg_rear = (y_side_inner_cg / (y3_wing - y2_wing)) * (
             height_kink_rear - height_root_rear
         ) + height_root_rear
-        l_side_inner_cg = (y_side_inner_cg / (y3_wing - y2_wing)) * (l_kink - l_root) + l_root
+        l_side_inner_cg = (y_side_inner_cg / (y3_wing - y2_wing)) * (
+            l_kink - l_root
+        ) + l_root
         x_side_inner_front = (y_side_inner_cg / (y3_wing - y2_wing)) * (
             x3_wing + l3_wing * front_spar_ratio_kink - l2_wing * front_spar_ratio_root
         ) + l2_wing * front_spar_ratio_root
         x_cg_side_inner = x_side_inner_front + l_side_inner_cg / 3 * (
             height_side_inner_cg_front + 2 * height_side_inner_cg_rear
         ) / (height_side_inner_cg_front + height_side_inner_cg_rear)
-        x_cg_side_inner_absolute = fa_length - 0.25 * l0_wing - x0_wing + x_cg_side_inner
+        x_cg_side_inner_absolute = (
+            fa_length - 0.25 * l0_wing - x0_wing + x_cg_side_inner
+        )
 
         y4_tank = y4_wing * (1 - self.ratio)
-        x4_tank = (x4_wing - x3_wing) * (1 - y4_wing * self.ratio / (y4_wing - y3_wing)) + x3_wing
+        x4_tank = (x4_wing - x3_wing) * (
+            1 - y4_wing * self.ratio / (y4_wing - y3_wing)
+        ) + x3_wing
         l4_tank = l4_wing + (l3_wing - l4_wing) * ratio_1
-        height_tank_front = height_tip_front + (height_kink_front - height_tip_front) * ratio_1
-        height_tank_rear = height_tip_rear + (height_kink_rear - height_tip_rear) * ratio_1
+        height_tank_front = (
+            height_tip_front + (height_kink_front - height_tip_front) * ratio_1
+        )
+        height_tank_rear = (
+            height_tip_rear + (height_kink_rear - height_tip_rear) * ratio_1
+        )
         l_tank_tip = l_tip + (l_kink - l_tip) * ratio_1
         front_spar_ratio_tank = (
-            front_spar_ratio_tip + (front_spar_ratio_kink - front_spar_ratio_tip) * ratio_1
+            front_spar_ratio_tip
+            + (front_spar_ratio_kink - front_spar_ratio_tip) * ratio_1
         )
 
         y_side_out_cg = (
@@ -182,7 +202,9 @@ class ComputeTanksCG_RHEA(ExplicitComponent):
         height_side_out_cg_rear = (y_side_out_cg / (y4_tank - y3_wing)) * (
             height_tank_rear - height_kink_rear
         ) + height_kink_rear
-        l_side_out_cg = (y_side_out_cg / (y4_tank - y3_wing)) * (l_tank_tip - l_kink) + l_kink
+        l_side_out_cg = (y_side_out_cg / (y4_tank - y3_wing)) * (
+            l_tank_tip - l_kink
+        ) + l_kink
         x_side_out_front = (
             (y_side_out_cg / (y4_tank - y3_wing))
             * (
@@ -209,8 +231,9 @@ class ComputeTanksCG_RHEA(ExplicitComponent):
         # (vol_side_out*0.8+vol_side_inner*0.8+vol_central*0.8)
 
         outputs["data:weight:fuel_tank:CG:x"] = x_cg_tank
-        outputs["data:weight:propulsion:fuel_system:CG:x"] =0.977* x_cg_tank
+        outputs["data:weight:propulsion:fuel_system:CG:x"] = 0.977 * x_cg_tank
         outputs["data:weight:operational:items:unusable_fuel:CG:x"] = x_cg_tank
+
     @staticmethod
     def _get_thickness(profile, l2_wing, relative_x):
         """

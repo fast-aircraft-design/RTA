@@ -25,6 +25,7 @@ from fastoad.utils.physics import AtmosphereSI
 from scipy.optimize import fsolve
 from fastoad.base.dict import DynamicAttributeDict, AddKeyAttributes
 
+
 class SpeedChangeClimb(SpeedChangeSegment):
     """
     Class for computing cruise flight segment and operational ceiling.
@@ -32,39 +33,34 @@ class SpeedChangeClimb(SpeedChangeSegment):
     Mach is considered constant, equal to Mach at starting point. Altitude is set **at every
     point** to get the optimum CL according to current mass.
     """
-        
+
     def compute_from(self, start: FlightPoint) -> pd.DataFrame:
-        flight_points_df = super().compute_from(start)       
+        flight_points_df = super().compute_from(start)
         ceiling = self._get_max_altitude(flight_points_df.values[-1])
-        flight_points_df['ceiling'] = ceiling[0]
+        flight_points_df["ceiling"] = ceiling[0]
         return flight_points_df
 
-
-    def _get_max_altitude(self,start):
-        
+    def _get_max_altitude(self, start):
         def evaluate_residual_rc(altitude):
 
             flight_point = FlightPoint(
-            engine_setting= self.engine_setting,
-            thrust_is_regulated =start.thrust_is_regulated,
-            mass=start.mass*0.99,
-            equivalent_airspeed =start.equivalent_airspeed ,
-            altitude=altitude,
+                engine_setting=self.engine_setting,
+                thrust_is_regulated=start.thrust_is_regulated,
+                mass=start.mass * 0.99,
+                equivalent_airspeed=start.equivalent_airspeed,
+                altitude=altitude,
             )
-            
-            self._complete_speed_values(flight_point)
-            self._compute_propulsion(flight_point) 
-            atm = AtmosphereSI(flight_point.altitude)
-            P_dyn= (0.5* atm.density * flight_point.true_airspeed**2)
-            Cl= flight_point.mass*g / (P_dyn* self.reference_area)
-            Cd = self.polar.cd(Cl) 
-            rc = 2*flight_point.thrust/(flight_point.mass*g) - Cd/Cl
-            print(flight_point.thrust)
-            min_rc = 1.524 #m/s = 300ft/min
-            return rc-min_rc
-        
-        ceiling,info,ier,msg = fsolve(evaluate_residual_rc, 6000 , full_output=True)
-        return ceiling
-        
 
-        
+            self._complete_speed_values(flight_point)
+            self._compute_propulsion(flight_point)
+            atm = AtmosphereSI(flight_point.altitude)
+            P_dyn = 0.5 * atm.density * flight_point.true_airspeed**2
+            Cl = flight_point.mass * g / (P_dyn * self.reference_area)
+            Cd = self.polar.cd(Cl)
+            rc = 2 * flight_point.thrust / (flight_point.mass * g) - Cd / Cl
+            print(flight_point.thrust)
+            min_rc = 1.524  # m/s = 300ft/min
+            return rc - min_rc
+
+        ceiling, info, ier, msg = fsolve(evaluate_residual_rc, 6000, full_output=True)
+        return ceiling

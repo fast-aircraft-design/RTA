@@ -23,11 +23,11 @@ from openmdao.core.explicitcomponent import ExplicitComponent
 # TODO: computes relative thickness and generates profiles --> decompose
 class ComputeToCWing_RHEA(ExplicitComponent):
     # TODO: Document equations. Cite sources
-    """ Wing ToC estimation 
-    
-        Reference: Aircraft Design Studies Based on the ATR 72 Author: Mihaela Florentina Niţă   
-                    Eq. (5.10.9)
-                    http://bibliothek.profscholz.de/ 
+    """Wing ToC estimation
+
+    Reference: Aircraft Design Studies Based on the ATR 72 Author: Mihaela Florentina Niţă
+                Eq. (5.10.9)
+                http://bibliothek.profscholz.de/
     """
 
     def setup(self):
@@ -40,20 +40,32 @@ class ComputeToCWing_RHEA(ExplicitComponent):
         self.add_output("data:geometry:wing:tip:thickness_ratio")
 
         self.declare_partials("data:geometry:wing:thickness_ratio", "*", method="fd")
-        self.declare_partials("data:geometry:wing:root:thickness_ratio", "*", method="fd")
-        self.declare_partials("data:geometry:wing:kink:thickness_ratio", "*", method="fd")
-        self.declare_partials("data:geometry:wing:tip:thickness_ratio", "*", method="fd")
+        self.declare_partials(
+            "data:geometry:wing:root:thickness_ratio", "*", method="fd"
+        )
+        self.declare_partials(
+            "data:geometry:wing:kink:thickness_ratio", "*", method="fd"
+        )
+        self.declare_partials(
+            "data:geometry:wing:tip:thickness_ratio", "*", method="fd"
+        )
 
     def compute(self, inputs, outputs):
         cruise_mach = inputs["data:TLAR:cruise_mach"]
         sweep_25 = inputs["data:geometry:wing:sweep_25"]
-        Cl_des=0.8
-        
-        el_aero= 0.127*cruise_mach**(-0.204)*math.cos(sweep_25 / 180.0 * math.pi)**0.573*Cl_des**0.065*0.921**0.556
+        Cl_des = 0.8
+
+        el_aero = (
+            0.127
+            * cruise_mach ** (-0.204)
+            * math.cos(sweep_25 / 180.0 * math.pi) ** 0.573
+            * Cl_des**0.065
+            * 0.921**0.556
+        )
         # Relative thickness
-        el_emp =4./3 * el_aero
-        el_break =  el_aero
-        el_ext = 2./3 * el_emp
+        el_emp = 4.0 / 3 * el_aero
+        el_break = el_aero
+        el_ext = 2.0 / 3 * el_emp
 
         outputs["data:geometry:wing:thickness_ratio"] = el_aero
         outputs["data:geometry:wing:root:thickness_ratio"] = el_emp

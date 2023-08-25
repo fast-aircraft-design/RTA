@@ -19,7 +19,8 @@ import pandas as pd
 
 from fastoad.model_base.flight_point import FlightPoint
 from fastoad.model_base.propulsion import IPropulsion
-#from rhea.models.propulsion.fuel_engine.turboprop_engine.base import AbstractFuelPropulsion
+
+# from rhea.models.propulsion.fuel_engine.turboprop_engine.base import AbstractFuelPropulsion
 FlightPoint.add_field("TPshaft_power")
 FlightPoint.add_field("EMshaft_power")
 FlightPoint.add_field("psfc")
@@ -27,6 +28,8 @@ FlightPoint.add_field("H2_fc")
 FlightPoint.add_field("EM_power_rate")
 FlightPoint.add_field("BAT_ec")
 FlightPoint.add_field("BAT_power")
+
+
 class AbstractHybridPropulsion(IPropulsion, ABC):
     """
     Propulsion model that consume any fuel should inherit from this one.
@@ -36,29 +39,29 @@ class AbstractHybridPropulsion(IPropulsion, ABC):
     """
 
     def get_consumed_mass(self, flight_point: FlightPoint, time_step: float) -> float:
-        #return time_step * flight_point.sfc * flight_point.thrust
-        return time_step * flight_point.psfc * flight_point.TPshaft_power + time_step * flight_point.H2_fc
-
-
-
+        # return time_step * flight_point.sfc * flight_point.thrust
+        return (
+            time_step * flight_point.psfc * flight_point.TPshaft_power
+            + time_step * flight_point.H2_fc
+        )
 
 
 class HybridEngineSet(AbstractHybridPropulsion):
-    
-    #def __init__(self, engine: IPropulsion, engine_count, motor_count):
+
+    # def __init__(self, engine: IPropulsion, engine_count, motor_count):
     def __init__(self, engine: IPropulsion, engine_count):
-       """
-       Class for modelling an assembly of identical fuel engines.
+        """
+        Class for modelling an assembly of identical fuel engines.
 
-       Thrust is supposed equally distributed among them.
+        Thrust is supposed equally distributed among them.
 
-       :param engine: the engine model
-       :param engine_count:
-       """
-       self.engine = engine
-       self.engine_count = engine_count #number of gasturbines
-       self.motor_count = engine.motor_count #number of electrical motors
-       
+        :param engine: the engine model
+        :param engine_count:
+        """
+        self.engine = engine
+        self.engine_count = engine_count  # number of gasturbines
+        self.motor_count = engine.motor_count  # number of electrical motors
+
     def compute_flight_points(self, flight_points: Union[FlightPoint, pd.DataFrame]):
 
         if isinstance(flight_points, FlightPoint):
@@ -70,40 +73,66 @@ class HybridEngineSet(AbstractHybridPropulsion):
             flight_points_per_engine.thrust = flight_points.thrust / self.engine_count
 
         self.engine.compute_flight_points(flight_points_per_engine)
-        
+
         # flight_points.psfc = flight_points_per_engine.psfc
         flight_points.psfc = float(flight_points_per_engine.psfc or 0)
         flight_points.thrust = flight_points_per_engine.thrust * self.engine_count
         flight_points.thrust_rate = flight_points_per_engine.thrust_rate
-        
-        # flight_points.TPshaft_power = flight_points_per_engine.TPshaft_power* self.engine_count
-        flight_points.TPshaft_power = float(flight_points_per_engine.TPshaft_power or 0)* self.engine_count
-        flight_points.TP_power_rate = flight_points_per_engine.TP_power_rate 
-        
-        flight_points.thermo_power = float(flight_points_per_engine.thermo_power or 0) * self.engine_count
-        
-        flight_points.CT = flight_points_per_engine.CT
-        
-        flight_points.TP_thermal_efficiency = flight_points_per_engine.TP_thermal_efficiency
-        if flight_points_per_engine.TP_residual_thrust :
-            flight_points.TP_residual_thrust  =flight_points_per_engine.TP_residual_thrust  * self.engine_count
-        flight_points.TP_air_flow=flight_points_per_engine.TP_air_flow #* self.engine_count
-        flight_points.TP_total_pressure= flight_points_per_engine.TP_total_pressure 
-        flight_points.TP_total_temperature  =  flight_points_per_engine.TP_total_temperature
 
-        flight_points.shaft_power = flight_points_per_engine.shaft_power * self.engine_count
-        flight_points.power_rate = flight_points_per_engine.power_rate         
-        flight_points.EMshaft_power = flight_points_per_engine.EMshaft_power * self.motor_count
-        flight_points.FC_power = float(flight_points_per_engine.FC_power or 0) * self.motor_count
-        
-        flight_points.FC_stack_power = float(flight_points_per_engine.FC_stack_power or 0) * self.motor_count
-        
-        flight_points.EM_power_rate = flight_points_per_engine.EM_power_rate 
-        flight_points.H2_fc = float(flight_points_per_engine.H2_fc or 0) * self.motor_count
-        
-        flight_points.BAT_ec = float(flight_points_per_engine.BAT_ec or 0)* self.motor_count
-        flight_points.BAT_power = float(flight_points_per_engine.BAT_power or 0) * self.motor_count
-       
+        # flight_points.TPshaft_power = flight_points_per_engine.TPshaft_power* self.engine_count
+        flight_points.TPshaft_power = (
+            float(flight_points_per_engine.TPshaft_power or 0) * self.engine_count
+        )
+        flight_points.TP_power_rate = flight_points_per_engine.TP_power_rate
+
+        flight_points.thermo_power = (
+            float(flight_points_per_engine.thermo_power or 0) * self.engine_count
+        )
+
+        flight_points.CT = flight_points_per_engine.CT
+
+        flight_points.TP_thermal_efficiency = (
+            flight_points_per_engine.TP_thermal_efficiency
+        )
+        if flight_points_per_engine.TP_residual_thrust:
+            flight_points.TP_residual_thrust = (
+                flight_points_per_engine.TP_residual_thrust * self.engine_count
+            )
+        flight_points.TP_air_flow = (
+            flight_points_per_engine.TP_air_flow
+        )  # * self.engine_count
+        flight_points.TP_total_pressure = flight_points_per_engine.TP_total_pressure
+        flight_points.TP_total_temperature = (
+            flight_points_per_engine.TP_total_temperature
+        )
+
+        flight_points.shaft_power = (
+            flight_points_per_engine.shaft_power * self.engine_count
+        )
+        flight_points.power_rate = flight_points_per_engine.power_rate
+        flight_points.EMshaft_power = (
+            flight_points_per_engine.EMshaft_power * self.motor_count
+        )
+        flight_points.FC_power = (
+            float(flight_points_per_engine.FC_power or 0) * self.motor_count
+        )
+
+        flight_points.FC_stack_power = (
+            float(flight_points_per_engine.FC_stack_power or 0) * self.motor_count
+        )
+
+        flight_points.EM_power_rate = flight_points_per_engine.EM_power_rate
+        flight_points.H2_fc = (
+            float(flight_points_per_engine.H2_fc or 0) * self.motor_count
+        )
+
+        flight_points.BAT_ec = (
+            float(flight_points_per_engine.BAT_ec or 0) * self.motor_count
+        )
+        flight_points.BAT_power = (
+            float(flight_points_per_engine.BAT_power or 0) * self.motor_count
+        )
+
         flight_points.FC_efficiency = flight_points_per_engine.FC_efficiency
         flight_points.FC_airflow = flight_points_per_engine.FC_airflow
         flight_points.V_cell = flight_points_per_engine.V_cell
@@ -114,5 +143,3 @@ class HybridEngineSet(AbstractHybridPropulsion):
         flight_points.I_stack = flight_points_per_engine.I_stack
         flight_points.I_pack = flight_points_per_engine.I_pack
         flight_points.I_core = flight_points_per_engine.I_core
-        
-    

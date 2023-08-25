@@ -36,14 +36,12 @@ class ComputeAerodynamicsLowSpeed(ExplicitComponent):
         self.add_input("data:geometry:wing:root:chord", val=np.nan, units="m")
         self.add_input("data:geometry:wing:area", val=np.nan, units="m**2")
         self.add_input("data:geometry:wing:tip:thickness_ratio", val=np.nan)
-        self.add_input("tuning:aerodynamics:aircraft:low_speed:CL_alpha:k",val=1)
-        self.add_input("tuning:aerodynamics:aircraft:low_speed:CL0_clean:k",val=1)
+        self.add_input("tuning:aerodynamics:aircraft:low_speed:CL_alpha:k", val=1)
+        self.add_input("tuning:aerodynamics:aircraft:low_speed:CL0_clean:k", val=1)
 
-        
         self.add_output("data:aerodynamics:aircraft:low_speed:CL_alpha", units="1/rad")
         self.add_output("data:aerodynamics:aircraft:low_speed:CL0_clean")
 
-        
         self.declare_partials("*", "*", method="fd")
 
     def compute(self, inputs, outputs):
@@ -56,13 +54,13 @@ class ComputeAerodynamicsLowSpeed(ExplicitComponent):
         el_ext = inputs["data:geometry:wing:tip:thickness_ratio"]
         sweep_25 = inputs["data:geometry:wing:sweep_25"]
         wing_area = inputs["data:geometry:wing:area"]
-        
+
         k_alpha = inputs["tuning:aerodynamics:aircraft:low_speed:CL_alpha:k"]
         k_0 = inputs["tuning:aerodynamics:aircraft:low_speed:CL0_clean:k"]
-        
+
         mach = 0.2
 
-        beta = sqrt(1 - mach ** 2)
+        beta = sqrt(1 - mach**2)
         d_f = sqrt(width_max * height_max)
         fact_F = 1.07 * (1 + d_f / span) ** 2
         lambda_wing_eff = lambda_wing * (1 + 1.9 * l4_wing * el_ext / span)
@@ -74,10 +72,10 @@ class ComputeAerodynamicsLowSpeed(ExplicitComponent):
                 2
                 + sqrt(
                     4
-                    + lambda_wing_eff ** 2
-                    * beta ** 2
-                    / 0.95 ** 2
-                    * (1 + (tan(sweep_25 / 180.0 * pi)) ** 2 / beta ** 2)
+                    + lambda_wing_eff**2
+                    * beta**2
+                    / 0.95**2
+                    * (1 + (tan(sweep_25 / 180.0 * pi)) ** 2 / beta**2)
                 )
             )
             * (wing_area - l2_wing * width_max)
@@ -85,5 +83,7 @@ class ComputeAerodynamicsLowSpeed(ExplicitComponent):
             * fact_F
         )
 
-        outputs["data:aerodynamics:aircraft:low_speed:CL_alpha"] = cl_alpha_wing_low*k_alpha
-        outputs["data:aerodynamics:aircraft:low_speed:CL0_clean"] = 0.2 *k_0
+        outputs["data:aerodynamics:aircraft:low_speed:CL_alpha"] = (
+            cl_alpha_wing_low * k_alpha
+        )
+        outputs["data:aerodynamics:aircraft:low_speed:CL0_clean"] = 0.2 * k_0

@@ -20,8 +20,9 @@ from typing import Union, Sequence, Tuple, Optional
 import os
 import numpy as np
 from fastoad.constants import FlightPhase
-#from fastoad.models.propulsion import IPropulsion
-#from models.propulsion import IPropulsion
+
+# from fastoad.models.propulsion import IPropulsion
+# from models.propulsion import IPropulsion
 from fastoad_cs25.models.propulsion.fuel_propulsion.rubber_engine.exceptions import (
     FastRubberEngineInconsistentInputParametersError,
 )
@@ -33,15 +34,16 @@ from .engine_components.Propeller import Propeller
 
 # Logger for this module
 _LOGGER = logging.getLogger(__name__)
-#from fastoad.base.dict import AddKeyAttributes
+# from fastoad.base.dict import AddKeyAttributes
 
-#AddKeyAttributes(["psfc","shaft_power", "power_rate","thermo_power","TP_thermal_efficiency","TP_residual_thrust","TP_air_flow","TP_total_pressure","TP_total_temperature","fuel_mass"
-                 # ,"H2_mass","TPshaft_power","EMshaft_power","FC_power","TP_power_rate","EM_power_rate","H2_fc","CT"])(FlightPoint)
+# AddKeyAttributes(["psfc","shaft_power", "power_rate","thermo_power","TP_thermal_efficiency","TP_residual_thrust","TP_air_flow","TP_total_pressure","TP_total_temperature","fuel_mass"
+# ,"H2_mass","TPshaft_power","EMshaft_power","FC_power","TP_power_rate","EM_power_rate","H2_fc","CT"])(FlightPoint)
 
 
-script_path = os.path.abspath(__file__) # i.e. /path/to/dir/foobar.py
-rhea_path = script_path.split('\\models')[0]
-RHEA_path=script_path.split('\\rhea')[0]
+script_path = os.path.abspath(__file__)  # i.e. /path/to/dir/foobar.py
+rhea_path = script_path.split("\\models")[0]
+RHEA_path = script_path.split("\\rhea")[0]
+
 
 class TPEngine_L0(AbstractFuelPropulsion):
     def __init__(
@@ -50,19 +52,15 @@ class TPEngine_L0(AbstractFuelPropulsion):
         Design_Thermo_Power: float,
         Power_Offtake: float,
         gearbox_eta: float,
-        d_prop:float,
-
-                
+        d_prop: float,
         k_gb_RTO: float,
         k_gb_NTO: float,
         k_gb_MCL: float,
         k_gb_MCT: float,
         k_gb_MCR: float,
-        k_gb_FID: float, 
-        
-        k_psfc:float,
-        k_prop:float,
-
+        k_gb_FID: float,
+        k_psfc: float,
+        k_prop: float,
     ):
         """
         Parametric turboprop engine.
@@ -90,19 +88,17 @@ class TPEngine_L0(AbstractFuelPropulsion):
         self.Design_Thermo_Power = Design_Thermo_Power
         self.Power_Offtake = Power_Offtake
         self.gearbox_eta = gearbox_eta
-        self.d_prop=d_prop
-        
-        
-        self.k_gb_RTO=k_gb_RTO
-        self.k_gb_NTO=k_gb_NTO
-        self.k_gb_MCL=k_gb_MCL
-        self.k_gb_MCT=k_gb_MCT
-        self.k_gb_MCR=k_gb_MCR
-        self.k_gb_FID= k_gb_FID
-        
-        self.k_psfc = k_psfc
-        self.k_prop= k_prop
+        self.d_prop = d_prop
 
+        self.k_gb_RTO = k_gb_RTO
+        self.k_gb_NTO = k_gb_NTO
+        self.k_gb_MCL = k_gb_MCL
+        self.k_gb_MCT = k_gb_MCT
+        self.k_gb_MCR = k_gb_MCR
+        self.k_gb_FID = k_gb_FID
+
+        self.k_psfc = k_psfc
+        self.k_prop = k_prop
 
     def compute_flight_points(self, flight_points: Union[FlightPoint, pd.DataFrame]):
         # pylint: disable=too-many-arguments  # they define the trajectory
@@ -120,83 +116,85 @@ class TPEngine_L0(AbstractFuelPropulsion):
         :param thrust: required thrust (unit=N)
         :return: SFC (in kg/s/N), thrust rate, thrust (in N)
         """
-        Prop_fid='ADT'
+        Prop_fid = "ADT"
 
-        
-        
-        mach =np.asarray(flight_points.mach)
-        altitude=  np.asarray(flight_points.altitude)
-        thrust_rate=np.asarray(flight_points.thrust_rate)
-        thrust=np.asarray(flight_points.thrust)
+        mach = np.asarray(flight_points.mach)
+        altitude = np.asarray(flight_points.altitude)
+        thrust_rate = np.asarray(flight_points.thrust_rate)
+        thrust = np.asarray(flight_points.thrust)
         phase = flight_points.engine_setting
         thrust_is_regulated = flight_points.thrust_is_regulated
 
         atmosphere = Atmosphere(altitude, altitude_in_feet=False)
-        
+
         a = atmosphere.speed_of_sound
 
-
-
-        if mach ==0:
+        if mach == 0:
             mach = 0.025
         V_TAS = mach * a
-        #V_EAS = atmosphere.get_equivalent_airspeed(V_TAS) / constants.knot
+        # V_EAS = atmosphere.get_equivalent_airspeed(V_TAS) / constants.knot
 
         if thrust_is_regulated is not None:
-            thrust_is_regulated = np.asarray(np.round(thrust_is_regulated, 0), dtype=bool)
+            thrust_is_regulated = np.asarray(
+                np.round(thrust_is_regulated, 0), dtype=bool
+            )
 
-        
         thrust_is_regulated, thrust_rate, thrust = self._check_thrust_inputs(
             thrust_is_regulated, thrust_rate, thrust
         )
         thrust_is_regulated = np.asarray(np.round(thrust_is_regulated, 0), dtype=bool)
-        max_shaft_power,max_thermo_power,gearbox_limit_power = self.max_power(atmosphere, mach, phase)
+        max_shaft_power, max_thermo_power, gearbox_limit_power = self.max_power(
+            atmosphere, mach, phase
+        )
         # max_thrust =self.power_to_thrust(atmosphere, mach,phase,max_shaft_power)
-        T_prop, eta =Propeller().select('power_to_thrust',Prop_fid,self,atmosphere, mach,phase, max_shaft_power)
-        
+        T_prop, eta = Propeller().select(
+            "power_to_thrust", Prop_fid, self, atmosphere, mach, phase, max_shaft_power
+        )
+
         #######RESIDUAL THRUST
         # max_thrust=T_prop+FR
-        max_thrust=T_prop
-        FR=0
-        
+        max_thrust = T_prop
+        FR = 0
 
         if not thrust_is_regulated:
-            if thrust_rate==1:
-                power_rate =1
-                shaft_power=max_shaft_power
-                thrust=thrust_rate*max_thrust
+            if thrust_rate == 1:
+                power_rate = 1
+                shaft_power = max_shaft_power
+                thrust = thrust_rate * max_thrust
             else:
-                thrust=thrust_rate*max_thrust
+                thrust = thrust_rate * max_thrust
                 # shaft_power = self.thrust_to_power(atmosphere, mach,phase,thrust)
-                shaft_power,eta =Propeller().select('thrust_to_power',Prop_fid,self,atmosphere, mach,phase,thrust)
-                T_prop=shaft_power*self.gearbox_eta*eta/V_TAS
-                FR=thrust-T_prop                      
-                power_rate=shaft_power/max_shaft_power
+                shaft_power, eta = Propeller().select(
+                    "thrust_to_power", Prop_fid, self, atmosphere, mach, phase, thrust
+                )
+                T_prop = shaft_power * self.gearbox_eta * eta / V_TAS
+                FR = thrust - T_prop
+                power_rate = shaft_power / max_shaft_power
         else:
-            power_rate=thrust_rate
+            power_rate = thrust_rate
             # shaft_power=self.thrust_to_power(atmosphere, mach,phase,thrust)
-            shaft_power,eta= Propeller().select('thrust_to_power',Prop_fid,self,atmosphere, mach,phase,thrust)
-            T_prop=shaft_power*self.gearbox_eta*eta/V_TAS 
-            FR=thrust-T_prop
+            shaft_power, eta = Propeller().select(
+                "thrust_to_power", Prop_fid, self, atmosphere, mach, phase, thrust
+            )
+            T_prop = shaft_power * self.gearbox_eta * eta / V_TAS
+            FR = thrust - T_prop
 
-        
         thrust_rate = np.asarray(thrust_rate)
         thrust = np.asarray(thrust)
-        
-        shaft_power = np.asarray(shaft_power) 
+
+        shaft_power = np.asarray(shaft_power)
         power_rate = np.asarray(power_rate)
-        
 
         # We compute thrust values from thrust rates when needed
-        idx =  np.logical_not(thrust_is_regulated)
-        if np.size(max_thrust) == 1:  #se scalare
+        idx = np.logical_not(thrust_is_regulated)
+        if np.size(max_thrust) == 1:  # se scalare
             maximum_thrust = max_thrust
-            maximum_shaft_power= max_shaft_power
+            maximum_shaft_power = max_shaft_power
             out_thrust_rate = thrust_rate
             out_thrust = thrust
-            out_power_rate=power_rate
-            out_power=shaft_power
-        else:                           #se vettore
+            out_power_rate = power_rate
+            out_power = shaft_power
+        else:  # se vettore
             out_thrust_rate = (
                 np.full(np.shape(max_thrust), thrust_rate.item())
                 if np.size(thrust_rate) == 1
@@ -206,48 +204,57 @@ class TPEngine_L0(AbstractFuelPropulsion):
                 np.full(np.shape(max_shaft_power), power_rate.item())
                 if np.size(power_rate) == 1
                 else power_rate
-            )            
+            )
             out_thrust = (
-                np.full(np.shape(max_thrust), thrust.item()) if np.size(thrust) == 1 else thrust
+                np.full(np.shape(max_thrust), thrust.item())
+                if np.size(thrust) == 1
+                else thrust
             )
             out_power = (
-                np.full(np.shape(max_shaft_power), shaft_power.item()) if np.size(shaft_power) == 1 else shaft_power
+                np.full(np.shape(max_shaft_power), shaft_power.item())
+                if np.size(shaft_power) == 1
+                else shaft_power
             )
 
             maximum_thrust = max_thrust[idx]
-            maximum_shaft_power =max_shaft_power[idx]
+            maximum_shaft_power = max_shaft_power[idx]
 
         out_thrust[idx] = out_thrust_rate[idx] * maximum_thrust
-        out_power[idx]=out_power_rate[idx]*maximum_shaft_power
+        out_power[idx] = out_power_rate[idx] * maximum_shaft_power
 
         # thrust_rate is obtained from entire thrust vector (could be optimized if needed,
         # as some thrust rates that are computed may have been provided as input)
         out_thrust_rate = out_thrust / max_thrust
-        out_power_rate = out_power/max_shaft_power
-        
-        #if mach>0.4:
-         #   print(phase)
+        out_power_rate = out_power / max_shaft_power
+
+        # if mach>0.4:
+        #   print(phase)
 
         # Now SFC can be computed
-        psfc_0 =self.sfc_at_max_power() #lb/hp/hr 
-        psfc = psfc_0 * self.sfc_ratio(atmosphere, mach, out_power_rate, out_power) #lb/hp/hr 
-        ff=psfc*constants.lb/constants.hour* out_power/constants.hp #Kg/s
-        tsfc = ff/out_thrust
+        psfc_0 = self.sfc_at_max_power()  # lb/hp/hr
+        psfc = psfc_0 * self.sfc_ratio(
+            atmosphere, mach, out_power_rate, out_power
+        )  # lb/hp/hr
+        ff = psfc * constants.lb / constants.hour * out_power / constants.hp  # Kg/s
+        tsfc = ff / out_thrust
 
-
-        if phase==1:
-            RPS=1200/60
+        if phase == 1:
+            RPS = 1200 / 60
         else:
-            RPS=984/60
-        flight_points.CT = out_thrust/(atmosphere.density*RPS**2*self.d_prop**4)  
-        flight_points.psfc = psfc*constants.lb/constants.hour/constants.hp*self.k_psfc
+            RPS = 984 / 60
+        flight_points.CT = out_thrust / (
+            atmosphere.density * RPS**2 * self.d_prop**4
+        )
+        flight_points.psfc = (
+            psfc * constants.lb / constants.hour / constants.hp * self.k_psfc
+        )
         flight_points.thrust_rate = out_thrust_rate
         flight_points.thrust = out_thrust
         flight_points.TPshaft_power = out_power
         flight_points.TP_power_rate = out_power_rate
-        flight_points.thermo_power = max_thermo_power 
+        flight_points.thermo_power = max_thermo_power
         flight_points.TP_residual_thrust = FR
-        flight_points.sfc=tsfc
+        flight_points.sfc = tsfc
 
     @staticmethod
     def _check_thrust_inputs(
@@ -270,7 +277,9 @@ class TPEngine_L0(AbstractFuelPropulsion):
             # As OpenMDAO may provide floats that could be slightly different
             # from 0. or 1., a rounding operation is needed before converting
             # to booleans
-            thrust_is_regulated = np.asarray(np.round(thrust_is_regulated, 0), dtype=bool)
+            thrust_is_regulated = np.asarray(
+                np.round(thrust_is_regulated, 0), dtype=bool
+            )
         if thrust_rate is not None:
             thrust_rate = np.asarray(thrust_rate)
         if thrust is not None:
@@ -324,8 +333,7 @@ class TPEngine_L0(AbstractFuelPropulsion):
 
         return thrust_is_regulated, thrust_rate, thrust
 
-    def sfc_at_max_power(
-        self) -> np.ndarray:
+    def sfc_at_max_power(self) -> np.ndarray:
         """
         Computation of Specific Fuel Consumption at maximum shaft power (RTO).
 
@@ -335,48 +343,54 @@ class TPEngine_L0(AbstractFuelPropulsion):
         :return: SFC (in lb/hp/hr )
         """
 
-
-        sfc = 2.2381*(self.RTO_power/constants.hp)**(-0.21)
+        sfc = 2.2381 * (self.RTO_power / constants.hp) ** (-0.21)
         return sfc
 
-    def sfc_ratio(self,
+    def sfc_ratio(
+        self,
         atmosphere: Atmosphere,
         mach: Union[float, Sequence[float]],
         power_rate: Union[float, Sequence[float]],
         shaft_power: Union[float, Sequence[float]],
-
-        )-> np.ndarray:
+    ) -> np.ndarray:
 
         """
         Computation of ratio :math:`\\frac{SFC(P)}{SFC(Pmax)}`, given altitude, mach
         and power_rate :math:`\\frac{F}{Fmax}`.
-        
+
 
 
         :param altitude:
         :param thrust_rate:
         :return: SFC ratio
         """
-        
-        method= 'Stuckl'
-  
-        atmosphere_0=Atmosphere(0, altitude_in_feet=False) 
-        
-        if method== 'Stagliano':
-            k_h= 1-0.3549*(1-(atmosphere.density/atmosphere_0.density))+0.1894*(1-(atmosphere.density/atmosphere_0.density))**2
-            k_m=1-0.0231*mach-0.3051*mach**2
-            k_throttle=1./(0.258* math.log(power_rate)+1)  
 
-            k_SFC = k_h*k_m*k_throttle
-        elif method== 'Stuckl':
-            #p_factor = shaft_power/(self.RTO_power/constants.hp ) * (atmosphere.density/atmosphere_0.density)**0.5/(atmosphere.temperature/atmosphere_0.temperature)
-            p_factor =power_rate * (atmosphere.density/atmosphere_0.density)**0.5/(atmosphere.temperature/atmosphere_0.temperature)
-            if mach>0.43:
-                a=1
-            k_SFC = 1. /(0.258* math.log(p_factor)+1)  
+        method = "Stuckl"
 
-                                 
-        return k_SFC    
+        atmosphere_0 = Atmosphere(0, altitude_in_feet=False)
+
+        if method == "Stagliano":
+            k_h = (
+                1
+                - 0.3549 * (1 - (atmosphere.density / atmosphere_0.density))
+                + 0.1894 * (1 - (atmosphere.density / atmosphere_0.density)) ** 2
+            )
+            k_m = 1 - 0.0231 * mach - 0.3051 * mach**2
+            k_throttle = 1.0 / (0.258 * math.log(power_rate) + 1)
+
+            k_SFC = k_h * k_m * k_throttle
+        elif method == "Stuckl":
+            # p_factor = shaft_power/(self.RTO_power/constants.hp ) * (atmosphere.density/atmosphere_0.density)**0.5/(atmosphere.temperature/atmosphere_0.temperature)
+            p_factor = (
+                power_rate
+                * (atmosphere.density / atmosphere_0.density) ** 0.5
+                / (atmosphere.temperature / atmosphere_0.temperature)
+            )
+            if mach > 0.43:
+                a = 1
+            k_SFC = 1.0 / (0.258 * math.log(p_factor) + 1)
+
+        return k_SFC
 
     def max_power(
         self,
@@ -394,94 +408,100 @@ class TPEngine_L0(AbstractFuelPropulsion):
         :param phase: flight phase which influences engine rating (max mechanical power)
         :return: maximum power (in W)
         """
-        '''    TAXI_IN = 0
+        """    TAXI_IN = 0
     TAKEOFF = 1
     CLIMB = 2
     CRUISE = 3
     DESCENT = 5
     LANDING = 6
-    TAXI_OUT = 7'''
+    TAXI_OUT = 7"""
         altitude = atmosphere.get_altitude(altitude_in_feet=False)
         mach = np.asarray(mach)
 
-  
+        if phase == 2:  #'MCL'
+            max_power_rating = self.k_gb_MCL * self.RTO_power / constants.hp
+        elif phase == 4:  #'FID'
+            max_power_rating = self.k_gb_FID * self.RTO_power / constants.hp
 
-        if phase == 2: #'MCL' 
-            max_power_rating = self.k_gb_MCL*self.RTO_power  /constants.hp
-        elif phase == 4:#'FID' 
-            max_power_rating =  self.k_gb_FID * self.RTO_power/constants.hp
-                
-        elif phase == 1:#'TO' 
-            max_power_rating =self.k_gb_NTO *self.RTO_power/constants.hp
+        elif phase == 1:  #'TO'
+            max_power_rating = self.k_gb_NTO * self.RTO_power / constants.hp
 
-            
-        elif phase == 9 :
-            max_power_rating =self.k_gb_MCT*self.RTO_power/constants.hp
-            
-        elif phase == 3: #'CRZ' 
-            max_power_rating =self.k_gb_MCR*self.RTO_power/constants.hp
-        elif phase == 8:#'RTO' 
-            max_power_rating = self.k_gb_RTO*self.RTO_power/constants.hp #Watt =2400. hp 
-                    
+        elif phase == 9:
+            max_power_rating = self.k_gb_MCT * self.RTO_power / constants.hp
+
+        elif phase == 3:  #'CRZ'
+            max_power_rating = self.k_gb_MCR * self.RTO_power / constants.hp
+        elif phase == 8:  #'RTO'
+            max_power_rating = (
+                self.k_gb_RTO * self.RTO_power / constants.hp
+            )  # Watt =2400. hp
+
         else:
-            max_power_rating =self.RTO_power/constants.hp  
+            max_power_rating = self.RTO_power / constants.hp
 
+        def compute_powerlapse_coeff(Alt, Mach, method):
 
-        def compute_powerlapse_coeff(Alt,Mach,method):
-          
-            atmosphere_0=Atmosphere(0, altitude_in_feet=False) 
-            
-            if method== 'Scholtz_average':
-                A=1.371
-                m=0.273
-                n=0.885
-            elif method== 'Loftin':
-                A=1.089
-                m=0.091
-                n=0.924      
-            elif method== 'McCormick':
-                A=1.883
-                m=0.740
-                n=0.929         
-            elif method== 'Russel':
-                A=1.725
-                m=0.267
-                n=0.966  
-            elif method== 'Bruning':
-                A=1.121
-                m=0.168
-                n=0.755              
-            elif method== 'Schaufele':
-                A=1.036
-                m=0.101
-                n=0.851              
-            elif method== 'Pw127e':
-                A=1.257
-                m=0.068031
-                n=0.814051      
-            
-            if method == 'Stagliano':
-                k_P = (0.7887*Mach**2 - 0.0396*Mach + 1.)*(atmosphere.density/atmosphere_0.density)**0.7 
-            elif method == 'Stuckl':
-                k_P = (Mach**2 + 1.)*(atmosphere.density/atmosphere_0.density)**0.7 
+            atmosphere_0 = Atmosphere(0, altitude_in_feet=False)
+
+            if method == "Scholtz_average":
+                A = 1.371
+                m = 0.273
+                n = 0.885
+            elif method == "Loftin":
+                A = 1.089
+                m = 0.091
+                n = 0.924
+            elif method == "McCormick":
+                A = 1.883
+                m = 0.740
+                n = 0.929
+            elif method == "Russel":
+                A = 1.725
+                m = 0.267
+                n = 0.966
+            elif method == "Bruning":
+                A = 1.121
+                m = 0.168
+                n = 0.755
+            elif method == "Schaufele":
+                A = 1.036
+                m = 0.101
+                n = 0.851
+            elif method == "Pw127e":
+                A = 1.257
+                m = 0.068031
+                n = 0.814051
+
+            if method == "Stagliano":
+                k_P = (0.7887 * Mach**2 - 0.0396 * Mach + 1.0) * (
+                    atmosphere.density / atmosphere_0.density
+                ) ** 0.7
+            elif method == "Stuckl":
+                k_P = (Mach**2 + 1.0) * (
+                    atmosphere.density / atmosphere_0.density
+                ) ** 0.7
             else:
-                k_P = A*Mach**m*(atmosphere.density/atmosphere_0.density)**n 
-                if Mach<0.31:
-                    k_P = A*0.31**m*(atmosphere.density/atmosphere_0.density)**n #for Mach less than 0.3 k_p is too low (limit of validity)
-            
+                k_P = A * Mach**m * (atmosphere.density / atmosphere_0.density) ** n
+                if Mach < 0.31:
+                    k_P = (
+                        A * 0.31**m * (atmosphere.density / atmosphere_0.density) ** n
+                    )  # for Mach less than 0.3 k_p is too low (limit of validity)
+
             return k_P
 
+        method_P_name = "Scholtz_average"  # Scholtz_average
+        K_powerlapse = compute_powerlapse_coeff(altitude, mach, method_P_name)
 
-        method_P_name= 'Scholtz_average' #Scholtz_average
-        K_powerlapse = compute_powerlapse_coeff(altitude,mach,method_P_name)
-        
-        max_thermo_power = self.RTO_power/constants.hp  *K_powerlapse
+        max_thermo_power = self.RTO_power / constants.hp * K_powerlapse
 
-        if max_thermo_power>max_power_rating:
-            max_shaft_power=max_power_rating #hp #gearbox mechanical limit 
+        if max_thermo_power > max_power_rating:
+            max_shaft_power = max_power_rating  # hp #gearbox mechanical limit
         else:
-            max_shaft_power=max_thermo_power
-            
-        #return max_shaft_power*constants.hp,max_thermo_power*constants.hp  
-        return max_shaft_power*constants.hp,max_thermo_power*constants.hp, max_power_rating*constants.hp
-    
+            max_shaft_power = max_thermo_power
+
+        # return max_shaft_power*constants.hp,max_thermo_power*constants.hp
+        return (
+            max_shaft_power * constants.hp,
+            max_thermo_power * constants.hp,
+            max_power_rating * constants.hp,
+        )

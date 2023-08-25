@@ -19,9 +19,6 @@ import numpy as np
 from openmdao.core.explicitcomponent import ExplicitComponent
 
 
-
-
-
 class ComputeGeometry_RHEA(ExplicitComponent):
     """
     This module computes total aircraft wet area, cnbetafuselage and aero center.
@@ -32,26 +29,42 @@ class ComputeGeometry_RHEA(ExplicitComponent):
 
         self.add_input("data:geometry:wing:MAC:at25percent:x", val=np.nan, units="m")
         self.add_input("data:geometry:wing:MAC:length", val=np.nan, units="m")
-        self.add_input("data:geometry:wing:MAC:leading_edge:x:local", val=np.nan, units="m")
-        self.add_input("data:geometry:horizontal_tail:MAC:at25percent:x:local", val=np.nan, units="m")
-        self.add_input("data:geometry:horizontal_tail:MAC:at25percent:x:from_wingMAC25", val=np.nan, units="m")        
-            # Fuselage parameters
+        self.add_input(
+            "data:geometry:wing:MAC:leading_edge:x:local", val=np.nan, units="m"
+        )
+        self.add_input(
+            "data:geometry:horizontal_tail:MAC:at25percent:x:local",
+            val=np.nan,
+            units="m",
+        )
+        self.add_input(
+            "data:geometry:horizontal_tail:MAC:at25percent:x:from_wingMAC25",
+            val=np.nan,
+            units="m",
+        )
+        # Fuselage parameters
         self.add_input("data:geometry:fuselage:length", val=np.nan, units="m")
         self.add_input("data:geometry:fuselage:maximum_width", val=np.nan, units="m")
         self.add_input("data:geometry:fuselage:front_length", val=np.nan, units="m")
         self.add_input("data:geometry:fuselage:rear_length", val=np.nan, units="m")
-    
+
         # Horizontal Tail parameters
 
-        self.add_input("data:geometry:horizontal_tail:root:chord", val=np.nan, units="m")
+        self.add_input(
+            "data:geometry:horizontal_tail:root:chord", val=np.nan, units="m"
+        )
         self.add_input("data:geometry:horizontal_tail:tip:chord", val=np.nan, units="m")
         self.add_input("data:geometry:horizontal_tail:span", val=np.nan, units="m")
-        self.add_input("data:geometry:horizontal_tail:sweep_0", val=np.nan, units="deg")    
-    
+        self.add_input("data:geometry:horizontal_tail:sweep_0", val=np.nan, units="deg")
+
         # Wing parameters
-        
-        self.add_input("data:geometry:wing:kink:leading_edge:x:local", val=np.nan, units="m")
-        self.add_input("data:geometry:wing:tip:leading_edge:x:local", val=np.nan, units="m")
+
+        self.add_input(
+            "data:geometry:wing:kink:leading_edge:x:local", val=np.nan, units="m"
+        )
+        self.add_input(
+            "data:geometry:wing:tip:leading_edge:x:local", val=np.nan, units="m"
+        )
         self.add_input("data:geometry:wing:root:y", val=np.nan, units="m")
         self.add_input("data:geometry:wing:kink:y", val=np.nan, units="m")
         self.add_input("data:geometry:wing:tip:y", val=np.nan, units="m")

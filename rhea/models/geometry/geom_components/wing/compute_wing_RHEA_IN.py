@@ -15,12 +15,22 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from fastoad_cs25.models.geometry.geom_components.wing.components.compute_b_50 import ComputeB50
+from fastoad_cs25.models.geometry.geom_components.wing.components.compute_b_50 import (
+    ComputeB50,
+)
 from fastoad_cs25.models.aerodynamics.components.compute_cl_alpha import ComputeCLAlpha
-from fastoad_cs25.models.geometry.geom_components.wing.components.compute_l1_l4 import ComputeL1AndL4Wing
-from fastoad_cs25.models.geometry.geom_components.wing.components.compute_l2_l3 import ComputeL2AndL3Wing
-from fastoad_cs25.models.geometry.geom_components.wing.components.compute_mac_wing import ComputeMACWing
-from fastoad_cs25.models.geometry.geom_components.wing.components.compute_mfw import ComputeMFW
+from fastoad_cs25.models.geometry.geom_components.wing.components.compute_l1_l4 import (
+    ComputeL1AndL4Wing,
+)
+from fastoad_cs25.models.geometry.geom_components.wing.components.compute_l2_l3 import (
+    ComputeL2AndL3Wing,
+)
+from fastoad_cs25.models.geometry.geom_components.wing.components.compute_mac_wing import (
+    ComputeMACWing,
+)
+from fastoad_cs25.models.geometry.geom_components.wing.components.compute_mfw import (
+    ComputeMFW,
+)
 from fastoad_cs25.models.geometry.geom_components.wing.components.compute_sweep_wing import (
     ComputeSweepWing,
 )
@@ -28,15 +38,19 @@ from .components.compute_toc_wing_RHEA import ComputeToCWing_RHEA
 from .components.compute_wet_area_wing import (
     ComputeWetAreaWing,
 )
-from fastoad_cs25.models.geometry.geom_components.wing.components.compute_x_wing import ComputeXWing
-from fastoad_cs25.models.geometry.geom_components.wing.components.compute_y_wing import ComputeYWing
+from fastoad_cs25.models.geometry.geom_components.wing.components.compute_x_wing import (
+    ComputeXWing,
+)
+from fastoad_cs25.models.geometry.geom_components.wing.components.compute_y_wing import (
+    ComputeYWing,
+)
 
 from openmdao.api import Group
 
 
 class ComputeWingGeometry_RHEA_IN(Group):
     # TODO: Document equations. Cite sources
-    """ Wing geometry estimation """
+    """Wing geometry estimation"""
 
     def setup(self):
         # self.add_subsystem("y_wing", ComputeYWing(), promotes=["*"])

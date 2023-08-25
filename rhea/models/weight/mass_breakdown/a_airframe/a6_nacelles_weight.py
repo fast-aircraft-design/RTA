@@ -26,12 +26,16 @@ class NacellesWeight(om.ExplicitComponent):
     """
 
     def setup(self):
-        self.add_input("data:geometry:propulsion:nacelle:wetted_area", val=np.nan, units="m**2")
+        self.add_input(
+            "data:geometry:propulsion:nacelle:wetted_area", val=np.nan, units="m**2"
+        )
         self.add_input("data:geometry:propulsion:layout", val=np.nan)
         self.add_input("data:weight:propulsion:engine:mass", val=np.nan, units="kg")
         self.add_input("data:geometry:propulsion:engine:count", val=np.nan)
         self.add_input("tuning:weight:airframe:nacelle:mass:k", val=1.0)
-        self.add_input("tuning:weight:airframe:nacelle:mass:offset", val=0.0, units="kg")
+        self.add_input(
+            "tuning:weight:airframe:nacelle:mass:offset", val=0.0, units="kg"
+        )
 
         self.add_output("data:weight:airframe:nacelle_struts:mass", units="kg")
 
@@ -48,7 +52,7 @@ class NacellesWeight(om.ExplicitComponent):
         if propulsion_layout == 1.0:
             temp_a6 = (
                 1.2
-                * wet_area_nacelle ** 0.5
+                * wet_area_nacelle**0.5
                 * n_engines
                 * (23 + 0.588 * (weight_engine / n_engines) ** 0.708)
             )

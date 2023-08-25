@@ -14,20 +14,27 @@
 
 from typing import Tuple
 import pandas as pd
+
 # from fastoad.models.performances.mission.segments.base import FixedDurationSegment
 from typing import Dict, List, Union
 from fastoad.constants import FlightPhase, EngineSetting
 from fastoad.models.propulsion import IPropulsion
-from scipy.constants import foot, knot,g
-from fastoad.base.flight_point import FlightPoint #v0.5.2b
+from scipy.constants import foot, knot, g
+from fastoad.base.flight_point import FlightPoint  # v0.5.2b
 from fastoad.models.performances.mission.polar import Polar
 from fastoad.utils.physics import AtmosphereSI
 import numpy as np
 from fastoad.models.performances.mission.base import IFlightPart
 from rhea.models.performances.mission.base import AbstractManualThrustFlightPhaseExt
-from rhea.models.performances.mission.segments.initial_takeoff_segment import InitialTakeoffSegment
-from rhea.models.performances.mission.segments.intermediate_takeoff_segment import IntermediateTakeoffSegment
-from rhea.models.performances.mission.segments.final_takeoff_segment import FinalTakeoffSegment
+from rhea.models.performances.mission.segments.initial_takeoff_segment import (
+    InitialTakeoffSegment,
+)
+from rhea.models.performances.mission.segments.intermediate_takeoff_segment import (
+    IntermediateTakeoffSegment,
+)
+from rhea.models.performances.mission.segments.final_takeoff_segment import (
+    FinalTakeoffSegment,
+)
 import math
 import copy
 
@@ -43,47 +50,36 @@ class TakeOffSegment(AbstractManualThrustFlightPhaseExt):
     the initial value.
     """
 
-
     def __init__(self, **kwargs):
         self.vmca = kwargs.pop("vmca")
         # self.vr = kwargs.pop("vr")
         # self.vlo = kwargs.pop("vlo")
-        #self.vef=kwargs.pop("vef")
-        
-        self.vr = kwargs['vr']
-        self.vlo = kwargs['vlo']
-        
-        super().__init__(**kwargs)    
+        # self.vef=kwargs.pop("vef")
 
-        
+        self.vr = kwargs["vr"]
+        self.vlo = kwargs["vlo"]
+
+        super().__init__(**kwargs)
+
     @property
     def flight_sequence(self) -> List[Union[IFlightPart, str]]:
         return [
             InitialTakeoffSegment(
-                target=FlightPoint(equivalent_airspeed = self.vr),
+                target=FlightPoint(equivalent_airspeed=self.vr),
                 engine_setting=EngineSetting.TAKEOFF,
                 # name ='1st take off segment',
                 **self.segment_kwargs,
-         
             ),
             IntermediateTakeoffSegment(
-                target=FlightPoint(equivalent_airspeed = self.vlo),
+                target=FlightPoint(equivalent_airspeed=self.vlo),
                 engine_setting=EngineSetting.TAKEOFF,
                 # name='2nd take off segment',
                 **self.segment_kwargs,
-                
             ),
             FinalTakeoffSegment(
-                target=FlightPoint(altitude=35. * foot),
+                target=FlightPoint(altitude=35.0 * foot),
                 engine_setting=EngineSetting.TAKEOFF,
                 # name='3rd take off segment',
                 **self.segment_kwargs,
-                
-            ),            
-            
+            ),
         ]
- 
-
-            
-        
-

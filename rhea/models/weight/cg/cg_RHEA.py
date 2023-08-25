@@ -23,30 +23,37 @@ from fastoad.models.weight.cg.cg_components import ComputeWingCG
 from fastoad.models.weight.cg.cg_components import ComputeHTcg
 from rhea.models.weight.cg.cg_components import ComputeTanksCG_RHEA
 from rhea.models.weight.cg.cg_components import ComputePropulsionCG_RHEA
-from rhea.models.weight.cg.cg_components import  ComputeOthersCG_RHEA
+from rhea.models.weight.cg.cg_components import ComputeOthersCG_RHEA
 from rhea.models.weight.cg.cg_components import ComputeHybridPropulsionCG_RHEA
 
+
 class CG_RHEA(om.Group):
-    """ Model that computes the global center of gravity """
-    def __init__(self,hybrid):
+    """Model that computes the global center of gravity"""
+
+    def __init__(self, hybrid):
         super().__init__()
-        self.hybrid=hybrid
-        
+        self.hybrid = hybrid
+
     def setup(self):
         self.add_subsystem("ht_cg", ComputeHTcg(), promotes=["*"])
         self.add_subsystem("vt_cg", ComputeVTcg(), promotes=["*"])
         self.add_subsystem("compute_cg_wing", ComputeWingCG(), promotes=["*"])
-        self.add_subsystem("compute_cg_tanks", ComputeTanksCG_RHEA(), promotes=["*"])       
-        self.add_subsystem("compute_cg_propulsion", ComputePropulsionCG_RHEA(), promotes=["*"])
-        self.add_subsystem("compute_cg_hybrid_propulsion", ComputeHybridPropulsionCG_RHEA(self.hybrid), promotes=["*"])
-        self.add_subsystem("compute_cg_others", ComputeOthersCG_RHEA(), promotes=["*"])        
+        self.add_subsystem("compute_cg_tanks", ComputeTanksCG_RHEA(), promotes=["*"])
+        self.add_subsystem(
+            "compute_cg_propulsion", ComputePropulsionCG_RHEA(), promotes=["*"]
+        )
+        self.add_subsystem(
+            "compute_cg_hybrid_propulsion",
+            ComputeHybridPropulsionCG_RHEA(self.hybrid),
+            promotes=["*"],
+        )
+        self.add_subsystem("compute_cg_others", ComputeOthersCG_RHEA(), promotes=["*"])
         self.add_subsystem("compute_cg", ComputeGlobalCG_RHEA(), promotes=["*"])
         self.add_subsystem("aircraft", ComputeAircraftCG(), promotes=["*"])
 
 
-
 class ComputeAircraftCG(om.ExplicitComponent):
-    """ Compute position of aircraft CG from CG ratio """
+    """Compute position of aircraft CG from CG ratio"""
 
     def setup(self):
         self.add_input("data:weight:aircraft:CG:aft:MAC_position", val=np.nan)

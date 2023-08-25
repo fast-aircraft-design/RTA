@@ -50,19 +50,29 @@ class WingWeight(om.ExplicitComponent):
         self.add_input("tuning:weight:airframe:wing:mass:offset", val=0.0, units="kg")
         self.add_input("tuning:weight:airframe:wing:bending_sizing:mass:k", val=1.0)
         self.add_input(
-            "tuning:weight:airframe:wing:bending_sizing:mass:offset", val=0.0, units="kg"
+            "tuning:weight:airframe:wing:bending_sizing:mass:offset",
+            val=0.0,
+            units="kg",
         )
         self.add_input("tuning:weight:airframe:wing:shear_sizing:mass:k", val=1.0)
-        self.add_input("tuning:weight:airframe:wing:shear_sizing:mass:offset", val=0.0, units="kg")
+        self.add_input(
+            "tuning:weight:airframe:wing:shear_sizing:mass:offset", val=0.0, units="kg"
+        )
         self.add_input("tuning:weight:airframe:wing:ribs:mass:k", val=1.0)
-        self.add_input("tuning:weight:airframe:wing:ribs:mass:offset", val=0.0, units="kg")
+        self.add_input(
+            "tuning:weight:airframe:wing:ribs:mass:offset", val=0.0, units="kg"
+        )
         self.add_input("tuning:weight:airframe:wing:reinforcements:mass:k", val=1.0)
         self.add_input(
-            "tuning:weight:airframe:wing:reinforcements:mass:offset", val=0.0, units="kg"
+            "tuning:weight:airframe:wing:reinforcements:mass:offset",
+            val=0.0,
+            units="kg",
         )
         self.add_input("tuning:weight:airframe:wing:secondary_parts:mass:k", val=1.0)
         self.add_input(
-            "tuning:weight:airframe:wing:secondary_parts:mass:offset", val=0.0, units="kg"
+            "tuning:weight:airframe:wing:secondary_parts:mass:offset",
+            val=0.0,
+            units="kg",
         )
         self.add_input("settings:weight:airframe:wing:mass:k_voil", val=1.0)
         self.add_input("settings:weight:airframe:wing:mass:k_mvo", val=1.39)
@@ -109,7 +119,8 @@ class WingWeight(om.ExplicitComponent):
         temp_a11 = (
             5.922e-5
             * k_voil
-            * ((max_nm / (l2_wing * toc_mean)) * (span / np.cos(sweep_25)) ** 2.0) ** 0.9
+            * ((max_nm / (l2_wing * toc_mean)) * (span / np.cos(sweep_25)) ** 2.0)
+            ** 0.9
         )
         weight_a11 = k_a11 * temp_a11 + offset_a11
 
@@ -126,8 +137,8 @@ class WingWeight(om.ExplicitComponent):
         # weight_a14 = k_a14 * temp_a14 + offset_a14
 
         # A15=Mass of the wing due to secondary parts
-        temp_a15 = 0.3285 * k_voil * mtow ** 0.35 * cantilevered_area * k_mvo
+        temp_a15 = 0.3285 * k_voil * mtow**0.35 * cantilevered_area * k_mvo
         weight_a15 = k_a15 * temp_a15 + offset_a15
 
-        temp_a1 = weight_a11 + weight_a12 + weight_a13 + weight_a15 #+ weight_a14
+        temp_a1 = weight_a11 + weight_a12 + weight_a13 + weight_a15  # + weight_a14
         outputs["data:weight:airframe:wing:mass"] = k_a1 * temp_a1 + offset_a1

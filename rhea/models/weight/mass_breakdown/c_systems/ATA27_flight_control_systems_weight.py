@@ -18,7 +18,6 @@ import numpy as np
 from openmdao.core.explicitcomponent import ExplicitComponent
 
 
-
 class FlightControlsSystemWeight(ExplicitComponent):
     """
     Weight estimation for mechanical flight control systems
@@ -30,7 +29,7 @@ class FlightControlsSystemWeight(ExplicitComponent):
     - sticks/pedals
     - miscellaneous equipment
 
-    Based on "Aircraft conceptual design synthesis", Denis Howe 
+    Based on "Aircraft conceptual design synthesis", Denis Howe
     Table (AD4.4) pag.357
     """
 
@@ -38,7 +37,9 @@ class FlightControlsSystemWeight(ExplicitComponent):
         self.add_input("data:weight:aircraft:MTOW", val=np.nan, units="kg")
 
         self.add_input("tuning:weight:systems:flight_controls:mass:k", val=1.0)
-        self.add_input("tuning:weight:systems:flight_controls:mass:offset", val=0.0, units="kg")
+        self.add_input(
+            "tuning:weight:systems:flight_controls:mass:offset", val=0.0, units="kg"
+        )
 
         self.add_output("data:weight:systems:flight_controls:mass", units="kg")
 
@@ -46,10 +47,10 @@ class FlightControlsSystemWeight(ExplicitComponent):
 
     # pylint: disable=too-many-locals
     def compute(self, inputs, outputs, discrete_inputs=None, discrete_outputs=None):
-        mtow=inputs["data:weight:aircraft:MTOW"]
+        mtow = inputs["data:weight:aircraft:MTOW"]
         k = inputs["tuning:weight:systems:flight_controls:mass:k"]
         offset = inputs["tuning:weight:systems:flight_controls:mass:offset"]
 
         # Mass of mechanical flight control system
-        mass_fc = 0.01*mtow
+        mass_fc = 0.01 * mtow
         outputs["data:weight:systems:flight_controls:mass"] = k * mass_fc + offset

@@ -20,16 +20,20 @@ from openmdao.core.explicitcomponent import ExplicitComponent
 
 class ComputeFlightControlCG(ExplicitComponent):
     # TODO: Document equations. Cite sources
-    """ Control surfaces center of gravity estimation """
+    """Control surfaces center of gravity estimation"""
 
     def setup(self):
         self.add_input("data:geometry:wing:MAC:length", val=np.nan, units="m")
-        self.add_input("data:geometry:wing:MAC:leading_edge:x:local", val=np.nan, units="m")
+        self.add_input(
+            "data:geometry:wing:MAC:leading_edge:x:local", val=np.nan, units="m"
+        )
         self.add_input("data:geometry:wing:MAC:y", val=np.nan, units="m")
         self.add_input("data:geometry:wing:root:chord", val=np.nan, units="m")
         self.add_input("data:geometry:wing:kink:chord", val=np.nan, units="m")
         self.add_input("data:geometry:wing:root:y", val=np.nan, units="m")
-        self.add_input("data:geometry:wing:kink:leading_edge:x:local", val=np.nan, units="m")
+        self.add_input(
+            "data:geometry:wing:kink:leading_edge:x:local", val=np.nan, units="m"
+        )
         self.add_input("data:geometry:wing:kink:y", val=np.nan, units="m")
         self.add_input("data:geometry:wing:MAC:at25percent:x", val=np.nan, units="m")
 
@@ -51,7 +55,9 @@ class ComputeFlightControlCG(ExplicitComponent):
         # TODO: build generic functions to estimate the chord, leading edge,
         # trailing edge with respect to span wise position
         x_leading_edge = x3_wing * (y0_wing - y2_wing) / (y3_wing - y2_wing)
-        l_cg_control = l2_wing + (y0_wing - y2_wing) / (y3_wing - y2_wing) * (l3_wing - l2_wing)
+        l_cg_control = l2_wing + (y0_wing - y2_wing) / (y3_wing - y2_wing) * (
+            l3_wing - l2_wing
+        )
         x_cg_control = x_leading_edge + l_cg_control
         x_cg_control_absolute = fa_length - 0.25 * l0_wing - x0_wing + x_cg_control
 

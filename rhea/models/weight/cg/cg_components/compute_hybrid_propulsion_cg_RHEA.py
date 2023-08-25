@@ -1,4 +1,3 @@
-
 """
     Estimation of propulsion center of gravity
 """
@@ -17,31 +16,34 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 
-
 import numpy as np
 
 from openmdao.core.explicitcomponent import ExplicitComponent
 
 
 class ComputeHybridPropulsionCG_RHEA(ExplicitComponent):
-    """ Propulsion center of gravity estimation as a function of wing position"""
+    """Propulsion center of gravity estimation as a function of wing position"""
 
-    def __init__(self,hybrid):
+    def __init__(self, hybrid):
         super().__init__()
-        self.hybrid=hybrid
-        
+        self.hybrid = hybrid
+
     def setup(self):
 
-        self.add_output("data:weight:propulsion:electric_systems:fuel_cell:CG:x", val=10, units="m")
-        self.add_output("data:weight:propulsion:electric_systems:battery:CG:x", val=10, units="m")
-        self.add_output("data:weight:propulsion:electric_systems:power_electronics:CG:x", val=10, units="m")
-        self.add_output("data:weight:propulsion:electric_systems:motor:CG:x", val=10, units="m")
-        self.add_output("data:weight:propulsion:electric_systems:H2_storage:CG:x", val=10, units="m")
-
-            
-           
-
-
-
-
-
+        self.add_output(
+            "data:weight:propulsion:electric_systems:fuel_cell:CG:x", val=10, units="m"
+        )
+        self.add_output(
+            "data:weight:propulsion:electric_systems:battery:CG:x", val=10, units="m"
+        )
+        self.add_output(
+            "data:weight:propulsion:electric_systems:power_electronics:CG:x",
+            val=10,
+            units="m",
+        )
+        self.add_output(
+            "data:weight:propulsion:electric_systems:motor:CG:x", val=10, units="m"
+        )
+        self.add_output(
+            "data:weight:propulsion:electric_systems:H2_storage:CG:x", val=10, units="m"
+        )

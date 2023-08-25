@@ -1,4 +1,3 @@
-
 """
     Estimation of propulsion center of gravity
 """
@@ -20,26 +19,31 @@ import math
 from math import sqrt
 
 import numpy as np
+
 # from fastoad.models.geometry import resources
 # from importlib_resources import open_text
 from openmdao.core.explicitcomponent import ExplicitComponent
+
 # from scipy import interpolate
 
 
 class ComputePropulsionCG_RHEA(ExplicitComponent):
-    """ Propulsion center of gravity estimation as a function of wing position"""
-
+    """Propulsion center of gravity estimation as a function of wing position"""
 
     def setup(self):
         self.add_input("data:geometry:propulsion:engine:y_ratio", val=np.nan)
         self.add_input("data:geometry:wing:span", val=np.nan, units="m")
         self.add_input("data:geometry:wing:MAC:length", val=np.nan, units="m")
-        self.add_input("data:geometry:wing:MAC:leading_edge:x:local", val=np.nan, units="m")
+        self.add_input(
+            "data:geometry:wing:MAC:leading_edge:x:local", val=np.nan, units="m"
+        )
         self.add_input("data:geometry:wing:root:chord", val=np.nan, units="m")
         self.add_input("data:geometry:wing:root:y", val=np.nan, units="m")
         self.add_input("data:geometry:wing:kink:chord", val=np.nan, units="m")
         self.add_input("data:geometry:wing:kink:y", val=np.nan, units="m")
-        self.add_input("data:geometry:wing:kink:leading_edge:x:local", val=np.nan, units="m")
+        self.add_input(
+            "data:geometry:wing:kink:leading_edge:x:local", val=np.nan, units="m"
+        )
         self.add_input("data:geometry:wing:MAC:at25percent:x", val=np.nan, units="m")
         self.add_input("data:geometry:propulsion:nacelle:length", val=np.nan, units="m")
 
@@ -47,10 +51,11 @@ class ComputePropulsionCG_RHEA(ExplicitComponent):
         self.add_output("data:weight:propulsion:propeller:CG:x", units="m")
         self.add_output("data:weight:airframe:nacelle_struts:CG:x", units="m")
 
-        
-        self.declare_partials("data:weight:propulsion:engine:CG:x","*",method="fd")
-        self.declare_partials("data:weight:propulsion:propeller:CG:x","*",method="fd")
-        self.declare_partials("data:weight:airframe:nacelle_struts:CG:x","*",method="fd")
+        self.declare_partials("data:weight:propulsion:engine:CG:x", "*", method="fd")
+        self.declare_partials("data:weight:propulsion:propeller:CG:x", "*", method="fd")
+        self.declare_partials(
+            "data:weight:airframe:nacelle_struts:CG:x", "*", method="fd"
+        )
 
     def compute(self, inputs, outputs):
         y_ratio_engine = inputs["data:geometry:propulsion:engine:y_ratio"]
@@ -65,15 +70,11 @@ class ComputePropulsionCG_RHEA(ExplicitComponent):
         fa_length = inputs["data:geometry:wing:MAC:at25percent:x"]
         nac_length = inputs["data:geometry:propulsion:nacelle:length"]
 
-
-
-
-
-
-
         y_nacell = y_ratio_engine * span / 2
 
-        l_wing_nac = l3_wing + (l2_wing - l3_wing) * (y3_wing - y_nacell) / (y3_wing - y2_wing)
+        l_wing_nac = l3_wing + (l2_wing - l3_wing) * (y3_wing - y_nacell) / (
+            y3_wing - y2_wing
+        )
         delta_x_nacell = 0.05 * l_wing_nac
         x_nacell_cg = (
             x3_wing * (y_nacell - y2_wing) / (y3_wing - y2_wing)
@@ -82,6 +83,7 @@ class ComputePropulsionCG_RHEA(ExplicitComponent):
         )
         x_nacell_cg_absolute = fa_length - 0.25 * l0_wing - (x0_wing - x_nacell_cg)
         outputs["data:weight:propulsion:engine:CG:x"] = x_nacell_cg_absolute
-        outputs["data:weight:propulsion:propeller:CG:x"] = 0.85*x_nacell_cg_absolute
-        outputs["data:weight:airframe:nacelle_struts:CG:x"] = 1.025 *x_nacell_cg_absolute
-
+        outputs["data:weight:propulsion:propeller:CG:x"] = 0.85 * x_nacell_cg_absolute
+        outputs["data:weight:airframe:nacelle_struts:CG:x"] = (
+            1.025 * x_nacell_cg_absolute
+        )

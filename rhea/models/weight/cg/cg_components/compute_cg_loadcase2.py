@@ -20,7 +20,7 @@ from openmdao.core.explicitcomponent import ExplicitComponent
 
 class ComputeCGLoadCase2(ExplicitComponent):
     # TODO: Document equations. Cite sources
-    """ Center of gravity estimation for load case 2: add cargo weight (50-50) + fuel weight to OWE  """
+    """Center of gravity estimation for load case 2: add cargo weight (50-50) + fuel weight to OWE"""
 
     def setup(self):
         self.add_input("data:geometry:wing:MAC:length", val=np.nan, units="m")
@@ -30,12 +30,20 @@ class ComputeCGLoadCase2(ExplicitComponent):
         self.add_input("data:TLAR:NPAX", val=np.nan)
         self.add_input("data:mission:sizing:fuel", val=np.nan, units="kg")
         self.add_input("data:weight:fuel_tank:CG:x", val=np.nan, units="m")
-        self.add_input("data:weight:aircraft:operating_empty:CG:x", val=np.nan, units="m")
-        self.add_input("data:weight:aircraft:operating_empty:mass", val=np.nan, units="kg")
-        
-        self.add_input("settings:weight:aircraft:payload:design_mass_per_passenger", val=np.nan, units="kg")
+        self.add_input(
+            "data:weight:aircraft:operating_empty:CG:x", val=np.nan, units="m"
+        )
+        self.add_input(
+            "data:weight:aircraft:operating_empty:mass", val=np.nan, units="kg"
+        )
+
+        self.add_input(
+            "settings:weight:aircraft:payload:design_mass_per_passenger",
+            val=np.nan,
+            units="kg",
+        )
         self.add_input("settings:weight:aircraft:payload:fret_ratio", val=np.nan)
-        
+
         self.add_output("data:weight:aircraft:load_case_2:CG:MAC_position")
         self.add_output("data:weight:aircraft:load_case_2:CG:index")
         self.add_output("data:weight:aircraft:load_case_2:mass")
@@ -52,16 +60,15 @@ class ComputeCGLoadCase2(ExplicitComponent):
         x_cg_plane_up = x_cg_plane_aft * x_cg_plane_down
         fw = inputs["data:mission:sizing:fuel"]
         cg_tank = inputs["data:weight:fuel_tank:CG:x"]
-        
+
         fret_ratio = inputs["settings:weight:aircraft:payload:fret_ratio"]
         m_pax = inputs["settings:weight:aircraft:payload:design_mass_per_passenger"]
 
-        weight_rear_fret = npax * 0.15*m_pax*(1-fret_ratio)
-        weight_front_fret = npax * 0.15*m_pax*fret_ratio
+        weight_rear_fret = npax * 0.15 * m_pax * (1 - fret_ratio)
+        weight_front_fret = npax * 0.15 * m_pax * fret_ratio
         weight_pl = weight_rear_fret + weight_front_fret
         x_cg_pl_2 = (
-            weight_rear_fret * cg_rear_fret
-            + weight_front_fret * cg_front_fret
+            weight_rear_fret * cg_rear_fret + weight_front_fret * cg_front_fret
         ) / (weight_pl)
         x_cg_plane_pl_2 = (x_cg_plane_up + weight_pl * x_cg_pl_2 + fw * cg_tank) / (
             x_cg_plane_down + weight_pl + fw
@@ -69,5 +76,9 @@ class ComputeCGLoadCase2(ExplicitComponent):
         cg_ratio_pl_2 = (x_cg_plane_pl_2 - fa_length + 0.25 * l0_wing) / l0_wing
 
         outputs["data:weight:aircraft:load_case_2:CG:MAC_position"] = cg_ratio_pl_2
-        outputs["data:weight:aircraft:load_case_2:CG:index"] = (x_cg_plane_pl_2-fa_length)*(x_cg_plane_down + weight_pl+ fw)/150.
-        outputs["data:weight:aircraft:load_case_2:mass"] =x_cg_plane_down + weight_pl+ fw
+        outputs["data:weight:aircraft:load_case_2:CG:index"] = (
+            (x_cg_plane_pl_2 - fa_length) * (x_cg_plane_down + weight_pl + fw) / 150.0
+        )
+        outputs["data:weight:aircraft:load_case_2:mass"] = (
+            x_cg_plane_down + weight_pl + fw
+        )

@@ -20,9 +20,10 @@ import numpy as np
 import openmdao.api as om
 import scipy.constants as constants
 
+
 class ComputeNacelleGeometry(om.ExplicitComponent):
     # TODO: Document equations. Cite sources
-    """ Nacelle geometry estimation """
+    """Nacelle geometry estimation"""
 
     def setup(self):
 
@@ -40,10 +41,10 @@ class ComputeNacelleGeometry(om.ExplicitComponent):
         # self.add_input("data:geometry:wing:MAC:at25percent:x", val=np.nan, units="m")
         # self.add_input("data:geometry:fuselage:length", val=np.nan, units="m")
         self.add_input("data:geometry:fuselage:maximum_width", val=np.nan, units="m")
-        
+
         self.add_input("data:propulsion:Design_Thermo_Power", np.nan, units="W")
         self.add_input("data:propulsion:electric_systems:P_nom", 0, units="W")
-        
+
         self.add_output("data:geometry:propulsion:pylon:length", units="m")
         # self.add_output("data:geometry:propulsion:fan:length", units="m")
         self.add_output("data:geometry:propulsion:nacelle:length", units="m")
@@ -55,65 +56,68 @@ class ComputeNacelleGeometry(om.ExplicitComponent):
         # self.add_output("data:weight:propulsion:engine:CG:x", units="m")
 
         self.declare_partials(
-            "data:geometry:propulsion:nacelle:diameter",             
+            "data:geometry:propulsion:nacelle:diameter",
             [
                 "data:propulsion:Design_Thermo_Power",
-                "data:propulsion:electric_systems:P_nom"
-            ], method="fd"
+                "data:propulsion:electric_systems:P_nom",
+            ],
+            method="fd",
         )
         self.declare_partials(
-            "data:geometry:propulsion:nacelle:length",            
+            "data:geometry:propulsion:nacelle:length",
             [
                 "data:propulsion:Design_Thermo_Power",
-                "data:propulsion:electric_systems:P_nom"
-            ], method="fd"
+                "data:propulsion:electric_systems:P_nom",
+            ],
+            method="fd",
         )
-        
+
         self.declare_partials(
-            "data:geometry:landing_gear:height",             
+            "data:geometry:landing_gear:height",
             [
                 "data:propulsion:Design_Thermo_Power",
-                "data:propulsion:electric_systems:P_nom"
-            ], method="fd"
+                "data:propulsion:electric_systems:P_nom",
+            ],
+            method="fd",
         )
         # self.declare_partials(
         #     "data:geometry:propulsion:fan:length", "data:propulsion:Design_Thermo_Power", method="fd"
         # )
         self.declare_partials(
-            "data:geometry:propulsion:pylon:length", 
+            "data:geometry:propulsion:pylon:length",
             [
                 "data:propulsion:Design_Thermo_Power",
-                "data:propulsion:electric_systems:P_nom"
-            ]
-            , method="fd"
+                "data:propulsion:electric_systems:P_nom",
+            ],
+            method="fd",
         )
         self.declare_partials(
             "data:geometry:propulsion:nacelle:y",
-            [   
+            [
                 "data:propulsion:electric_systems:P_nom",
                 "data:propulsion:Design_Thermo_Power",
                 "data:geometry:fuselage:maximum_width",
                 "data:geometry:propulsion:engine:y_ratio",
-                "data:geometry:wing:span"
+                "data:geometry:wing:span",
             ],
-            method="fd"
+            method="fd",
         )
 
         self.declare_partials(
             "data:geometry:propulsion:nacelle:wetted_area",
             [
-             "data:propulsion:Design_Thermo_Power",
-             "data:propulsion:electric_systems:P_nom"
+                "data:propulsion:Design_Thermo_Power",
+                "data:propulsion:electric_systems:P_nom",
             ],
-            method="fd"
+            method="fd",
         )
         self.declare_partials(
-            "data:geometry:propulsion:pylon:wetted_area", 
+            "data:geometry:propulsion:pylon:wetted_area",
             [
-                "data:propulsion:Design_Thermo_Power", 
-               "data:propulsion:electric_systems:P_nom",
-             ],
-            method="fd"
+                "data:propulsion:Design_Thermo_Power",
+                "data:propulsion:electric_systems:P_nom",
+            ],
+            method="fd",
         )
 
     def compute(self, inputs, outputs):
@@ -135,12 +139,20 @@ class ComputeNacelleGeometry(om.ExplicitComponent):
         Design_Thermo_Power = inputs["data:propulsion:Design_Thermo_Power"]
         Design_Elec_Power = inputs["data:propulsion:electric_systems:P_nom"]
 
-    	 # calculation of gas turbine dimensions    
+        # calculation of gas turbine dimensions
         # nac_dia = 0.25*(Design_Thermo_Power)**0.12
         # nac_length = 0.12*(Design_Thermo_Power/1000 )**0.373
-        nac_length = 4.14*((Design_Thermo_Power + Design_Elec_Power)/constants.hp )**0.373*constants.inch
-        nac_dia = 9.48*((Design_Thermo_Power + Design_Elec_Power)/constants.hp )**0.12*constants.inch
-        
+        nac_length = (
+            4.14
+            * ((Design_Thermo_Power + Design_Elec_Power) / constants.hp) ** 0.373
+            * constants.inch
+        )
+        nac_dia = (
+            9.48
+            * ((Design_Thermo_Power + Design_Elec_Power) / constants.hp) ** 0.12
+            * constants.inch
+        )
+
         lg_height = 1.4 * nac_dia
         # The nominal thrust must be used in lbf
 
@@ -155,7 +167,9 @@ class ComputeNacelleGeometry(om.ExplicitComponent):
         elif propulsion_layout == 2:
             y_nacell = b_f / 2.0 + 0.5 * nac_dia
         else:
-            raise ValueError("Value of data:geometry:propulsion:layout can only be 1 or 2")
+            raise ValueError(
+                "Value of data:geometry:propulsion:layout can only be 1 or 2"
+            )
 
         # l_wing_nac = l3_wing + (l2_wing - l3_wing) * (y3_wing - y_nacell) / (y3_wing - y2_wing)
 
@@ -178,8 +192,8 @@ class ComputeNacelleGeometry(om.ExplicitComponent):
         # outputs["data:weight:propulsion:engine:CG:x"] = x_nacell_cg_absolute
 
         # Wet surfaces
-        wet_area_nac = np.pi*nac_dia*nac_length*1.1 #to take into account pylon
-        wet_area_pylon = 0.
+        wet_area_nac = np.pi * nac_dia * nac_length * 1.1  # to take into account pylon
+        wet_area_pylon = 0.0
 
         outputs["data:geometry:propulsion:nacelle:wetted_area"] = wet_area_nac
         outputs["data:geometry:propulsion:pylon:wetted_area"] = wet_area_pylon

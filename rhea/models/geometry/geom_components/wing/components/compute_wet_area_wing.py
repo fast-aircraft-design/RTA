@@ -20,10 +20,10 @@ from openmdao.core.explicitcomponent import ExplicitComponent
 
 class ComputeWetAreaWing(ExplicitComponent):
     # TODO: Document equations. Cite sources
-    """ Wing wet area estimation 
-    
+    """Wing wet area estimation
+
     Reference: Aircraft Design:A Conceptual Approach. Daniel P. Raymer.  Eq (7.11) Pag. 150
-        
+
     """
 
     def setup(self):
@@ -46,7 +46,8 @@ class ComputeWetAreaWing(ExplicitComponent):
         )
         self.declare_partials(
             "data:geometry:wing:wetted_area",
-            [   "data:geometry:wing:thickness_ratio",
+            [
+                "data:geometry:wing:thickness_ratio",
                 "data:geometry:wing:area",
                 "data:geometry:wing:root:chord",
                 # "data:geometry:fuselage:maximum_width",
@@ -60,9 +61,9 @@ class ComputeWetAreaWing(ExplicitComponent):
         y2_wing = inputs["data:geometry:wing:root:y"]
         # width_max = inputs["data:geometry:fuselage:maximum_width"]
         el_aero = inputs["data:geometry:wing:thickness_ratio"]
-        
-        s_pf = wing_area -2* l2_wing * y2_wing
-        #wet_area_wing = 2 * (wing_area - width_max * l2_wing)
-        wet_area_wing = s_pf*(1.977+0.52*el_aero)
+
+        s_pf = wing_area - 2 * l2_wing * y2_wing
+        # wet_area_wing = 2 * (wing_area - width_max * l2_wing)
+        wet_area_wing = s_pf * (1.977 + 0.52 * el_aero)
         outputs["data:geometry:wing:outer_area"] = s_pf
         outputs["data:geometry:wing:wetted_area"] = wet_area_wing

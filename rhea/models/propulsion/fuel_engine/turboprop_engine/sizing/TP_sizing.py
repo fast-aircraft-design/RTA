@@ -32,7 +32,9 @@ from fastoad.module_management.constants import ModelDomain
 from fastoad.module_management.service_registry import RegisterOpenMDAOSystem
 
 
-@RegisterOpenMDAOSystem("rhea.propulsion.turboprop_sizing", domain=ModelDomain.PROPULSION)
+@RegisterOpenMDAOSystem(
+    "rhea.propulsion.turboprop_sizing", domain=ModelDomain.PROPULSION
+)
 class TP_sizing(ExplicitComponent):
     """
     Performs sizing of the turboprop based on input thermodynamic and mechanical power. Determines off-design parameters.
@@ -44,7 +46,9 @@ class TP_sizing(ExplicitComponent):
         self.add_input("data:propulsion:Power_Offtake", np.nan, units="W")
         self.add_input("data:propulsion:gearbox_eta", np.nan)
         self.add_input("data:propulsion:L1_engine:fuel", np.nan)
-        self.add_input("data:propulsion:L1_engine:turbine_inlet_temperature", np.nan, units="K")
+        self.add_input(
+            "data:propulsion:L1_engine:turbine_inlet_temperature", np.nan, units="K"
+        )
 
         self.add_input("data:propulsion:L1_engine:inlet:inlet_eta_pol", np.nan)
         self.add_input("data:propulsion:L1_engine:inlet:inlet_pressure_ratio", np.nan)
@@ -53,7 +57,9 @@ class TP_sizing(ExplicitComponent):
         self.add_input("data:propulsion:L1_engine:hpc:hpc_eta_pol", np.nan)
         self.add_input("data:propulsion:L1_engine:hpc:hpc_pressure_ratio", np.nan)
         self.add_input("data:propulsion:L1_engine:combustor:combustor_eta", np.nan)
-        self.add_input("data:propulsion:L1_engine:combustor:combustor_pressure_ratio", np.nan)
+        self.add_input(
+            "data:propulsion:L1_engine:combustor:combustor_pressure_ratio", np.nan
+        )
         self.add_input("data:propulsion:L1_engine:hpt:hpt_eta_pol", np.nan)
         self.add_input("data:propulsion:L1_engine:hpt:hpt_eta_mech", np.nan)
         self.add_input("data:propulsion:L1_engine:lpt:lpt_eta_pol", np.nan)
@@ -75,15 +81,37 @@ class TP_sizing(ExplicitComponent):
 
     def compute(self, inputs, outputs, discrete_inputs=None, discrete_outputs=None):
         Design_Thermo_Power = inputs["data:propulsion:Design_Thermo_Power"]
-        inlet_pressure_ratio = inputs["data:propulsion:L1_engine:inlet:inlet_pressure_ratio"]
-        combustor_pressure_ratio = inputs["data:propulsion:L1_engine:combustor:combustor_pressure_ratio"]
+        inlet_pressure_ratio = inputs[
+            "data:propulsion:L1_engine:inlet:inlet_pressure_ratio"
+        ]
+        combustor_pressure_ratio = inputs[
+            "data:propulsion:L1_engine:combustor:combustor_pressure_ratio"
+        ]
         T4 = inputs["data:propulsion:L1_engine:turbine_inlet_temperature"]
         # temperature, density, pressure, visc, a = atmosphere(0., 0)
-        altitude = 0.
+        altitude = 0.0
         atmosphere = Atmosphere(altitude, altitude_in_feet=False)
 
-        shaft_power_adim, fuel_to_air_ratio, specific_energy, jet_power_adim, residual_thrust_nd, tau_ram, tau_lpc, tau_hpc, tau_b, pi_pt, tau_pt, pi_hpc, pi_lpc, pi_ram, pi_hpt, pi_lpt, tau_t, M_out_sizing = self.compute_static_power_adim(
-            inputs)
+        (
+            shaft_power_adim,
+            fuel_to_air_ratio,
+            specific_energy,
+            jet_power_adim,
+            residual_thrust_nd,
+            tau_ram,
+            tau_lpc,
+            tau_hpc,
+            tau_b,
+            pi_pt,
+            tau_pt,
+            pi_hpc,
+            pi_lpc,
+            pi_ram,
+            pi_hpt,
+            pi_lpt,
+            tau_t,
+            M_out_sizing,
+        ) = self.compute_static_power_adim(inputs)
 
         air_flow = (Design_Thermo_Power) / (shaft_power_adim)
         total_flow = air_flow * (1 + fuel_to_air_ratio)
@@ -95,19 +123,31 @@ class TP_sizing(ExplicitComponent):
         # L_gt = 0.12*(design_TO_Shaft_Power/1000 + 22400./1000)**0.373
 
         # calculation of off-design constants
-        # M_out_sizing= self.nozzle.M_out_sizing  
+        # M_out_sizing= self.nozzle.M_out_sizing
         pi_t_sizing = pi_pt / (pi_hpt * pi_lpt)
         tau_t_sizing = tau_t
         k1 = (tau_hpc - 1) * (tau_lpc * tau_ram) / tau_b
         k2 = (tau_lpc - 1) * tau_ram / tau_b
-        k0 = air_flow * T4 ** 0.5 / (
-                    atmosphere.pressure * pi_ram * pi_lpc * pi_hpc * inlet_pressure_ratio * combustor_pressure_ratio)
+        k0 = (
+            air_flow
+            * T4**0.5
+            / (
+                atmosphere.pressure
+                * pi_ram
+                * pi_lpc
+                * pi_hpc
+                * inlet_pressure_ratio
+                * combustor_pressure_ratio
+            )
+        )
 
         #         # calculation of thermal efficiency
         thermal_power = fuel_flow * specific_energy
         ESHP = shaft_power_adim * air_flow + jet_power_adim * air_flow
         jet_thrust = residual_thrust_nd * air_flow
-        thermal_efficiency = (shaft_power_adim * air_flow + jet_power_adim * air_flow) / thermal_power
+        thermal_efficiency = (
+            shaft_power_adim * air_flow + jet_power_adim * air_flow
+        ) / thermal_power
 
         outputs["data:propulsion:L1_engine:sizing:k0"] = k0
         outputs["data:propulsion:L1_engine:sizing:k1"] = k1
@@ -120,22 +160,22 @@ class TP_sizing(ExplicitComponent):
         """
         Computation of maximum available power.
 
-        Uses model described in 
+        Uses model described in
 
         :param atmosphere: Atmosphere instance at intended altitude (should be <=20km)
         :param mach: Mach number(s) (should be between 0.05 and 1.0)
         :param phase: flight phase which influences engine rating (max mechanical power)
         :param delta_t4: (unit=K) difference between T4 at flight point and design T4
-        
+
         :return: maximum power (in W)
         """
-        '''    TAXI_IN = 0
+        """    TAXI_IN = 0
                 TAKEOFF = 1
                 CLIMB = 2
                 CRUISE = 3
                 DESCENT = 5
                 LANDING = 6
-                TAXI_OUT = 7'''
+                TAXI_OUT = 7"""
 
         Power_Offtake = inputs["data:propulsion:Power_Offtake"]
         fuel_type = inputs["data:propulsion:L1_engine:fuel"]
@@ -145,7 +185,9 @@ class TP_sizing(ExplicitComponent):
         # LP_bleed= inputs["data:propulsion:L1_engine:LP_bleed"]
 
         inlet_eta_pol = inputs["data:propulsion:L1_engine:inlet:inlet_eta_pol"]
-        inlet_pressure_ratio = inputs["data:propulsion:L1_engine:inlet:inlet_pressure_ratio"]
+        inlet_pressure_ratio = inputs[
+            "data:propulsion:L1_engine:inlet:inlet_pressure_ratio"
+        ]
         lpc_eta_pol = inputs["data:propulsion:L1_engine:lpc:lpc_eta_pol"]
         lpc_pressure_ratio = inputs["data:propulsion:L1_engine:lpc:lpc_pressure_ratio"]
 
@@ -153,7 +195,9 @@ class TP_sizing(ExplicitComponent):
         hpc_pressure_ratio = inputs["data:propulsion:L1_engine:hpc:hpc_pressure_ratio"]
 
         combustor_eta = inputs["data:propulsion:L1_engine:combustor:combustor_eta"]
-        combustor_pressure_ratio = inputs["data:propulsion:L1_engine:combustor:combustor_pressure_ratio"]
+        combustor_pressure_ratio = inputs[
+            "data:propulsion:L1_engine:combustor:combustor_pressure_ratio"
+        ]
 
         hpt_eta_pol = inputs["data:propulsion:L1_engine:hpt:hpt_eta_pol"]
         hpt_eta_mech = inputs["data:propulsion:L1_engine:hpt:hpt_eta_mech"]
@@ -165,10 +209,12 @@ class TP_sizing(ExplicitComponent):
         pt_eta_mech = inputs["data:propulsion:L1_engine:pt:pt_eta_mech"]
 
         nozzle_eta_pol = inputs["data:propulsion:L1_engine:nozzle:nozzle_eta_pol"]
-        nozzle_pressure_ratio = inputs["data:propulsion:L1_engine:nozzle:nozzle_pressure_ratio"]
+        nozzle_pressure_ratio = inputs[
+            "data:propulsion:L1_engine:nozzle:nozzle_pressure_ratio"
+        ]
         nozzle_area_ratio = inputs["data:propulsion:L1_engine:nozzle:nozzle_area_ratio"]
 
-        altitude = 0.  # atmosphere.get_altitude(altitude_in_feet=False)
+        altitude = 0.0  # atmosphere.get_altitude(altitude_in_feet=False)
         mach = 0.01  # np.asarray(mach)
         atmosphere = Atmosphere(altitude, altitude_in_feet=False)
 
@@ -212,7 +258,9 @@ class TP_sizing(ExplicitComponent):
         combustor.htf = fuel.specific_energy
         # combustor.TIT                                      = T4
         # flow through the high pressor comprresor
-        combustor.compute_design(T4, combustor_pressure_ratio, combustor_eta, atmosphere.temperature)
+        combustor.compute_design(
+            T4, combustor_pressure_ratio, combustor_eta, atmosphere.temperature
+        )
         #        print 'combustor', self.TP['T4'],combustor.stagnation_pressure_out,combustor.stagnation_enthalpy_out,combustor.fuel_to_air_ratio
 
         # link the high pressure turbine to the combustor
@@ -222,7 +270,7 @@ class TP_sizing(ExplicitComponent):
         hpt.fuel_to_air_ratio = combustor.fuel_to_air_ratio
         # link the high pressure turbine to the high pressure compressor
         hpt.compressor_work = hpc.work_done
-        hpt.bleed_offtake = 1.
+        hpt.bleed_offtake = 1.0
 
         # flow through the high pressure turbine
         hpt.compute(Power_Offtake, hpt_eta_mech, hpt_eta_pol)
@@ -233,7 +281,7 @@ class TP_sizing(ExplicitComponent):
         lpt.stagnation_temperature_in = hpt.stagnation_temperature_out
         lpt.stagnation_pressure_in = hpt.stagnation_pressure_out
         lpt.fuel_to_air_ratio = combustor.fuel_to_air_ratio
-        lpt.bleed_offtake = 1.
+        lpt.bleed_offtake = 1.0
 
         # link the low pressure turbine to the low_pressure_compresor
         lpt.compressor_work = lpc.work_done
@@ -251,8 +299,15 @@ class TP_sizing(ExplicitComponent):
 
         # compute the thrust
 
-        thrust.compute_design(atmosphere, mach, lpt.bleed_offtake * hpt.bleed_offtake, pt_eta_mech, pt_eta_pol,
-                              nozzle_pressure_ratio, nozzle_eta_pol)
+        thrust.compute_design(
+            atmosphere,
+            mach,
+            lpt.bleed_offtake * hpt.bleed_offtake,
+            pt_eta_mech,
+            pt_eta_pol,
+            nozzle_pressure_ratio,
+            nozzle_eta_pol,
+        )
 
         # link the power turbine to the low pressure turbine
         # link the power turbine to the low pressure turbine
@@ -264,7 +319,7 @@ class TP_sizing(ExplicitComponent):
         pt.stagnation_pressure_in = lpt.stagnation_pressure_out
         pt.fuel_to_air_ratio = lpt.fuel_to_air_ratio
         pt.nozzle_u_out = thrust.nozzle_u_out
-        pt.bleed_offtake = 1.
+        pt.bleed_offtake = 1.0
 
         # flow through the power turbine
         pt.compute_design(pt_eta_mech, nozzle_area_ratio)
@@ -302,4 +357,23 @@ class TP_sizing(ExplicitComponent):
         pi_lpt = lpt.stagnation_pressure_in / lpt.stagnation_pressure_out
         tau_t = pt.stagnation_temperature_out / hpt.stagnation_temperature_in
         M_out_sizing = nozzle.M_out_sizing
-        return shaft_power_adim, fuel_to_air_ratio, specific_energy, jet_power_adim, residual_thrust_nd, tau_ram, tau_lpc, tau_hpc, tau_b, pi_pt, tau_pt, pi_hpc, pi_lpc, pi_ram, pi_hpt, pi_lpt, tau_t, M_out_sizing
+        return (
+            shaft_power_adim,
+            fuel_to_air_ratio,
+            specific_energy,
+            jet_power_adim,
+            residual_thrust_nd,
+            tau_ram,
+            tau_lpc,
+            tau_hpc,
+            tau_b,
+            pi_pt,
+            tau_pt,
+            pi_hpc,
+            pi_lpc,
+            pi_ram,
+            pi_hpt,
+            pi_lpt,
+            tau_t,
+            M_out_sizing,
+        )

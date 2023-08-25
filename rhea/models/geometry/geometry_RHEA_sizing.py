@@ -16,8 +16,12 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import openmdao.api as om
-from fastoad.module_management.service_registry import RegisterOpenMDAOSystem, RegisterSubmodel
+from fastoad.module_management.service_registry import (
+    RegisterOpenMDAOSystem,
+    RegisterSubmodel,
+)
 from fastoad_cs25.models.geometry.compute_aero_center import ComputeAeroCenter
+
 # from fastoad_cs25.models.geometry.geom_components import ComputeTotalArea
 # from fastoad_cs25.models.geometry.geom_components.vt import ComputeVerticalTailGeometry
 # from fastoad_cs25.models.geometry.geom_components.ht import ComputeHorizontalTailGeometry
@@ -33,6 +37,7 @@ from fastoad_cs25.models.geometry.constants import (
     SERVICE_WING_GEOMETRY,
 )
 from fastoad.module_management.constants import ModelDomain
+
 # from fastoad_cs25.models.geometry.geom_components.fuselage import ComputeCnBetaFuselage
 # from rhea.models.geometry.geom_components import ComputeGeometry_RHEA
 
@@ -70,17 +75,29 @@ class Geometry_sizing(om.Group):
                 "compute_fuselage", ComputeFuselageGeometryCabinSizing(), promotes=["*"]
             )
         else:
-            self.add_subsystem("compute_fuselage", ComputeFuselageGeometryBasic(), promotes=["*"])
+            self.add_subsystem(
+                "compute_fuselage", ComputeFuselageGeometryBasic(), promotes=["*"]
+            )
 
         self.add_subsystem("compute_wing", ComputeWingGeometry_RHEA(), promotes=["*"])
         self.add_subsystem(
             "compute_engine_nacelle", ComputeNacelleGeometry(), promotes=["*"]
         )
-        self.add_subsystem("compute_ht",
-                           RegisterSubmodel.get_submodel(SERVICE_HORIZONTAL_TAIL_GEOMETRY), promotes=["*"])
+        self.add_subsystem(
+            "compute_ht",
+            RegisterSubmodel.get_submodel(SERVICE_HORIZONTAL_TAIL_GEOMETRY),
+            promotes=["*"],
+        )
 
-        self.add_subsystem("compute_vt", RegisterSubmodel.get_submodel(SERVICE_VERTICAL_TAIL_GEOMETRY), promotes=["*"])
-        self.add_subsystem("compute_total_area",
-                           RegisterSubmodel.get_submodel(SERVICE_AIRCRAFT_WETTED_AREA), promotes=["*"])
+        self.add_subsystem(
+            "compute_vt",
+            RegisterSubmodel.get_submodel(SERVICE_VERTICAL_TAIL_GEOMETRY),
+            promotes=["*"],
+        )
+        self.add_subsystem(
+            "compute_total_area",
+            RegisterSubmodel.get_submodel(SERVICE_AIRCRAFT_WETTED_AREA),
+            promotes=["*"],
+        )
 
         self.add_subsystem("compute_aero_center", ComputeAeroCenter(), promotes=["*"])

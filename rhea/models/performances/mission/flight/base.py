@@ -20,33 +20,31 @@ from scipy.optimize import root_scalar
 
 from fastoad.models.performances.mission.flight.base import RangedFlight as RF
 
+
 class RangedFlight(RF):
     """
     Computes a flight so that it covers the specified distance.
     """
 
-
     def compute_from(self, start: FlightPoint) -> pd.DataFrame:
         def compute_flight(cruise_distance):
             old_cruise_distance = cruise_distance
-            
-            if cruise_distance<0:   #fix for convergence when GT power too low
-                cruise_distance=100.
-                
+
+            if cruise_distance < 0:  # fix for convergence when GT power too low
+                cruise_distance = 100.0
+
             self.flight.cruise_distance = cruise_distance
-            
-            
+
             self.flight_points = self.flight.compute_from(start)
             obtained_distance = (
                 self.flight_points.iloc[-1].ground_distance
                 - self.flight_points.iloc[0].ground_distance
             )
-            
-            target = self.flight_distance - obtained_distance
-            if old_cruise_distance<0:   #fix for convergence when GT power too low
-                print('WARNING: Cruise distance did not converge')
 
-                
+            target = self.flight_distance - obtained_distance
+            if old_cruise_distance < 0:  # fix for convergence when GT power too low
+                print("WARNING: Cruise distance did not converge")
+
             return target
 
         root_scalar(

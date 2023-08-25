@@ -25,20 +25,18 @@ class CompleteMissionOutputs(om.ExplicitComponent):
 
     def setup(self):
 
-
-        self.add_input("data:TLAR:NPAX", val=1.)
+        self.add_input("data:TLAR:NPAX", val=1.0)
         self.add_input("data:mission:sizing:block_fuel", units="kg")
         self.add_input("data:weight:aircraft:payload", units="kg")
         self.add_output("data:mission:sizing:block_fuel_pax")
         self.add_output("data:mission:sizing:block_fuel_pax_gross")
 
+    def compute(self, inputs, outputs, discrete_inputs=None, discrete_outputs=None):
+        NPAX = inputs["data:TLAR:NPAX"]
+        block_fuel = inputs["data:mission:sizing:block_fuel"]
+        max_pax_gross = (
+            inputs["data:weight:aircraft:payload"] / 95
+        )  # payload instead of max_payload
 
-    def compute(self, inputs, outputs, discrete_inputs=None, discrete_outputs=None):     
-        NPAX =inputs["data:TLAR:NPAX"]
-        block_fuel =inputs["data:mission:sizing:block_fuel"]
-        max_pax_gross =inputs["data:weight:aircraft:payload"]/95 #payload instead of max_payload
-        
-        outputs["data:mission:sizing:block_fuel_pax"] = block_fuel/NPAX     
-        outputs["data:mission:sizing:block_fuel_pax_gross"] = block_fuel/max_pax_gross                
-
-
+        outputs["data:mission:sizing:block_fuel_pax"] = block_fuel / NPAX
+        outputs["data:mission:sizing:block_fuel_pax_gross"] = block_fuel / max_pax_gross
