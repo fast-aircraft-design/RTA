@@ -25,6 +25,23 @@ phases:
         target:
           time: ~duration
   takeoff:
+    parts:
+      - segment: transition
+        target:
+          delta_altitude:
+            value: ~safety_altitude
+            unit: ft
+            default: 35
+          delta_mass: -~fuel
+          time:
+            value: ~duration
+            unit: s
+            default: 1.0
+          true_airspeed: ~V2
+      - segment: mass_input
+        target:
+          mass: data:mission:sizing:TOW
+  takeoff_simulation:
     engine_setting: takeoff
     polar:
       CL: data:aerodynamics:aircraft:takeoff:CL
