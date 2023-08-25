@@ -135,8 +135,8 @@ class ML_TP_L1(AbstractFuelPropulsion):
         V_TAS = mach*a
         #V_EAS = atmosphere.get_equivalent_airspeed(V_TAS)/constants.knot
         # print(altitude,mach,V_TAS,phase)
-        if mach ==0:
-            mach = 0.025
+        # if mach ==0:
+        #     mach = 0.025
 
         if thrust_is_regulated is not None:
             thrust_is_regulated = np.asarray(np.round(thrust_is_regulated, 0), dtype=bool)
