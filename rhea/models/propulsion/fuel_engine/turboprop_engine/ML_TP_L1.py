@@ -28,13 +28,13 @@ from fastoad.models.propulsion.fuel_propulsion.rubber_engine.exceptions import (
 from fastoad.utils.physics import Atmosphere
 import pandas as pd
 from fastoad.base.flight_point import FlightPoint
-from models.propulsion.fuel_engine.turboprop_engine.base import AbstractFuelPropulsion
+from rhea.models.propulsion.fuel_engine.turboprop_engine.base import AbstractFuelPropulsion
 from scipy.optimize import fsolve
 
 # Logger for this module
 _LOGGER = logging.getLogger(__name__)
 from fastoad.base.dict import AddKeyAttributes
-from models.propulsion.fuel_engine.turboprop_engine.engine_components.Propeller import Propeller
+from rhea.models.propulsion.fuel_engine.turboprop_engine.engine_components.Propeller import Propeller
 
 AddKeyAttributes(["psfc","shaft_power", "power_rate","thermo_power","TP_thermal_efficiency","TP_residual_thrust","TP_air_flow","TP_total_pressure","TP_total_temperature","fuel_mass" 
                   ,"H2_mass","TPshaft_power","EMshaft_power","FC_power","TP_power_rate","EM_power_rate","H2_fc","CT"])(FlightPoint)
