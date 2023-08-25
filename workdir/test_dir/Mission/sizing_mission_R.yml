@@ -130,6 +130,7 @@ phases:
             unit: ft
           equivalent_airspeed: constant
   holding:
+    engine_setting: cruise
     time_step:
       value: settings:mission~
       default: 60.0

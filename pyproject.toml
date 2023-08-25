@@ -13,6 +13,6 @@ authors = ["Vincenzo PALLADINO <VINCENZO.PALLADINO@atr-aircraft.com>"]
 # doing again the commit including changes in docs/requirements.txt will succeed.
 python = "^3.8, <3.10"
 fast-oad = "^1.5.1"
-scikit-learn = "^1.0.2"
+scikit-learn = "0.24.2"
 pytest = "^7.4.0"
 importlib-resources = "3.3.0"

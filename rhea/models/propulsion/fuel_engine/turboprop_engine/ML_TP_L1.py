@@ -225,7 +225,7 @@ class ML_TP_L1(AbstractFuelPropulsion):
 
         # Now SFC can be computed
         # psfc_0 =self.sfc_at_max_power() #lb/hp/hr 
-        psfc =  self.psfc(atmosphere, mach, out_power_rate,phase) #kg/hp/hr 
+        psfc =  self.psfc(atmosphere, mach, out_power_rate,phase) * self.k_psfc #kg/hp/hr
         ff=psfc/constants.hour* out_power/constants.hp #Kg/s
         tsfc = ff/out_thrust
 
@@ -240,7 +240,7 @@ class ML_TP_L1(AbstractFuelPropulsion):
         # flight_points.CT = out_thrust/(atmosphere.density*0.5*V_TAS**2*61) #61=Sref
         # flight_points.CT = out_thrust/reference_force
         # print(out_thrust/(atmosphere.density*0.5*V_TAS**2*61),out_thrust/reference_force)
-        flight_points.psfc = psfc/constants.hour/constants.hp *self.k_psfc
+        flight_points.psfc = psfc/constants.hour/constants.hp
         flight_points.thrust_rate = out_thrust_rate
         flight_points.thrust = out_thrust
         flight_points.TPshaft_power = out_power
