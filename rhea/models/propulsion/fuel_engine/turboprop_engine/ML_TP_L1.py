@@ -11,7 +11,7 @@
 #  GNU General Public License for more details.
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
-import pickle
+import joblib
 from sklearn.preprocessing import PolynomialFeatures
 from scipy import constants
 import logging
@@ -20,24 +20,28 @@ from typing import Union, Sequence, Tuple, Optional
 import os
 import numpy as np
 from fastoad.constants import FlightPhase
-from fastoad.models.propulsion import IPropulsion
+from fastoad.module_management.service_registry import RegisterPropulsion
+# from fastoad.module_management.constants import ModelDomain
+#from fastoad.models.propulsion import IPropulsion
 #from models.propulsion import IPropulsion
-from fastoad.models.propulsion.fuel_propulsion.rubber_engine.exceptions import (
+from fastoad_cs25.models.propulsion.fuel_propulsion.rubber_engine.exceptions import (
     FastRubberEngineInconsistentInputParametersError,
 )
-from fastoad.utils.physics import Atmosphere
+from fastoad.model_base.atmosphere import Atmosphere
+from fastoad.model_base.propulsion import IOMPropulsionWrapper
 import pandas as pd
-from fastoad.base.flight_point import FlightPoint
-from rhea.models.propulsion.fuel_engine.turboprop_engine.base import AbstractFuelPropulsion
+from fastoad.model_base.flight_point import FlightPoint
+from .base import AbstractFuelPropulsion
+
 from scipy.optimize import fsolve
 
 # Logger for this module
 _LOGGER = logging.getLogger(__name__)
-from fastoad.base.dict import AddKeyAttributes
-from rhea.models.propulsion.fuel_engine.turboprop_engine.engine_components.Propeller import Propeller
+# from fastoad.base.dict import AddKeyAttributes
+from .engine_components.Propeller import Propeller
 
-AddKeyAttributes(["psfc","shaft_power", "power_rate","thermo_power","TP_thermal_efficiency","TP_residual_thrust","TP_air_flow","TP_total_pressure","TP_total_temperature","fuel_mass" 
-                  ,"H2_mass","TPshaft_power","EMshaft_power","FC_power","TP_power_rate","EM_power_rate","H2_fc","CT"])(FlightPoint)
+# AddKeyAttributes(["psfc","shaft_power", "power_rate","thermo_power","TP_thermal_efficiency","TP_residual_thrust","TP_air_flow","TP_total_pressure","TP_total_temperature","fuel_mass"
+                #  ,"H2_mass","TPshaft_power","EMshaft_power","FC_power","TP_power_rate","EM_power_rate","H2_fc","CT"])(FlightPoint)
 
 
 script_path = os.path.abspath(__file__) # i.e. /path/to/dir/foobar.py
@@ -129,9 +133,11 @@ class ML_TP_L1(AbstractFuelPropulsion):
         atmosphere = Atmosphere(altitude, altitude_in_feet=False)
         a = atmosphere.speed_of_sound
         V_TAS = mach*a
-        V_EAS = atmosphere.get_equivalent_airspeed(V_TAS)/constants.knot
+        #V_EAS = atmosphere.get_equivalent_airspeed(V_TAS)/constants.knot
         # print(altitude,mach,V_TAS,phase)
-        
+        # if mach ==0:
+        #     mach = 0.025
+
         if thrust_is_regulated is not None:
             thrust_is_regulated = np.asarray(np.round(thrust_is_regulated, 0), dtype=bool)
 
@@ -219,7 +225,7 @@ class ML_TP_L1(AbstractFuelPropulsion):
 
         # Now SFC can be computed
         # psfc_0 =self.sfc_at_max_power() #lb/hp/hr 
-        psfc =  self.psfc(atmosphere, mach, out_power_rate,phase) #kg/hp/hr 
+        psfc =  self.psfc(atmosphere, mach, out_power_rate,phase) * self.k_psfc #kg/hp/hr
         ff=psfc/constants.hour* out_power/constants.hp #Kg/s
         tsfc = ff/out_thrust
 
@@ -234,13 +240,14 @@ class ML_TP_L1(AbstractFuelPropulsion):
         # flight_points.CT = out_thrust/(atmosphere.density*0.5*V_TAS**2*61) #61=Sref
         # flight_points.CT = out_thrust/reference_force
         # print(out_thrust/(atmosphere.density*0.5*V_TAS**2*61),out_thrust/reference_force)
-        flight_points.psfc = psfc/constants.hour/constants.hp *self.k_psfc
+        flight_points.psfc = psfc/constants.hour/constants.hp
         flight_points.thrust_rate = out_thrust_rate
         flight_points.thrust = out_thrust
         flight_points.TPshaft_power = out_power
         flight_points.TP_power_rate = out_power_rate
         flight_points.thermo_power = max_thermo_power 
         flight_points.TP_residual_thrust = FR
+        flight_points.sfc = tsfc
         #return tsfc, out_thrust_rate, out_thrust,out_power,out_power_rate,max_thermo_power
 
     @staticmethod
@@ -378,7 +385,7 @@ class ML_TP_L1(AbstractFuelPropulsion):
             x=poly.fit_transform(np.array([altitude,mach],dtype=object).reshape(1,-1)) 
 
 
-        loaded_model = pickle.load(open(filename, 'rb'))
+        loaded_model = joblib.load(open(filename, 'rb'))
         psfc = loaded_model.predict(x)[0]
 
                                  
@@ -441,7 +448,7 @@ class ML_TP_L1(AbstractFuelPropulsion):
 
         poly = PolynomialFeatures(degree=3)
         x=poly.fit_transform(np.array([altitude,mach], dtype=object).reshape(1,-1))
-        loaded_model = pickle.load(open(filename, 'rb'))
+        loaded_model = joblib.load(open(filename, 'rb'))
         K_powerlapse = loaded_model.predict(x)[0]
         
         # if altitude>=19000.:
@@ -470,7 +477,7 @@ class ML_TP_L1(AbstractFuelPropulsion):
         
         altitude = atmosphere.get_altitude(altitude_in_feet=True)
         filename = os.path.join(rhea_path,'resources/gasturbine/TP_L1/Metamodels/TP_L1_FR_Ratio.sav')
-        loaded_model = pickle.load(open(filename, 'rb'))
+        loaded_model = joblib.load(open(filename, 'rb'))
         
         poly = PolynomialFeatures(degree=3)
         x=poly.fit_transform(np.array([altitude*constants.foot,mach,throttle],dtype=object).reshape(1,-1))

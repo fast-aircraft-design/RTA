@@ -15,11 +15,11 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from rhea.models.weight.cg.cg_components.compute_cg_loadcase1  import ComputeCGLoadCase1
-from rhea.models.weight.cg.cg_components.compute_cg_loadcase2 import ComputeCGLoadCase2
-from rhea.models.weight.cg.cg_components.compute_cg_loadcase3 import ComputeCGLoadCase3
-from rhea.models.weight.cg.cg_components.compute_cg_ratio_aft import ComputeCGRatioAft
-from rhea.models.weight.cg.cg_components.compute_max_cg_ratio import ComputeMaxCGratio
+from .compute_cg_loadcase1 import ComputeCGLoadCase1
+from .compute_cg_loadcase2 import ComputeCGLoadCase2
+from .compute_cg_loadcase3 import ComputeCGLoadCase3
+from .compute_cg_ratio_aft import ComputeCGRatioAft
+from .compute_max_cg_ratio import ComputeMaxCGratio
 from openmdao.api import Group
 
 

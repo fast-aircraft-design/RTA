@@ -10,17 +10,17 @@ import logging
 #from models.propulsion import IPropulsion
 
 import pandas as pd
-from fastoad.base.flight_point import FlightPoint
-from models.propulsion.fuel_engine.turboprop_engine.base import AbstractFuelPropulsion
+from fastoad.model_base.flight_point import FlightPoint
+#from models.propulsion.fuel_engine.turboprop_engine.base import AbstractFuelPropulsion
 from typing import Union, Sequence, Tuple, Optional
-from models.propulsion.fuel_engine.turboprop_engine.ML_TP_L1 import ML_TP_L1
+from .ML_TP_L1 import ML_TP_L1
 
 # Logger for this module
 _LOGGER = logging.getLogger(__name__)
-from fastoad.base.dict import AddKeyAttributes
+#from fastoad.base.dict import AddKeyAttributes
 
-AddKeyAttributes(["psfc","shaft_power", "power_rate","thermo_power","TP_thermal_efficiency","TP_residual_thrust","TP_air_flow","TP_total_pressure","TP_total_temperature","fuel_mass" 
-                  ,"H2_mass","TPshaft_power","EMshaft_power","FC_power","TP_power_rate","EM_power_rate","H2_fc","CT"])(FlightPoint)
+#AddKeyAttributes(["psfc","shaft_power", "power_rate","thermo_power","TP_thermal_efficiency","TP_residual_thrust","TP_air_flow","TP_total_pressure","TP_total_temperature","fuel_mass"
+                 # ,"H2_mass","TPshaft_power","EMshaft_power","FC_power","TP_power_rate","EM_power_rate","H2_fc","CT"])(FlightPoint)
 
 
 class ML_TP_L1_H2_burn(ML_TP_L1):

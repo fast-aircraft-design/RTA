@@ -11,9 +11,9 @@
 #  GNU General Public License for more details.
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
-import pickle
+# import pickle
 
-from sklearn.preprocessing import PolynomialFeatures
+# from sklearn.preprocessing import PolynomialFeatures
 from scipy import constants
 import logging
 import math
@@ -22,29 +22,29 @@ import os
 
 import numpy as np
 from fastoad.constants import FlightPhase
-from fastoad.models.propulsion import IPropulsion
+#from fastoad.models.propulsion import IPropulsion
 #from models.propulsion import IPropulsion
-from fastoad.models.propulsion.fuel_propulsion.rubber_engine.exceptions import (
-    FastRubberEngineInconsistentInputParametersError,
-)
-from fastoad.utils.physics import Atmosphere
+# from fastoad.models.propulsion.fuel_propulsion.rubber_engine.exceptions import (
+#     FastRubberEngineInconsistentInputParametersError,
+# )
+from fastoad.model_base.atmosphere import Atmosphere
 import pandas as pd
-from fastoad.base.flight_point import FlightPoint
+from fastoad.model_base.flight_point import FlightPoint
 #from models.propulsion.fuel_engine.hybrid_engine import AbstractHybridPropulsion
-from models.propulsion.fuel_engine.hybrid_engine.base import AbstractHybridPropulsion
+from .base import AbstractHybridPropulsion
 # Logger for this module
 _LOGGER = logging.getLogger(__name__)
 
 #from models.propulsion.fuel_engine.hybrid_engine.engine_components.Battery_L0 import Battery
-from models.propulsion.fuel_engine.hybrid_engine.engine_components.ElectricMotor import ElectricMotor
-from models.propulsion.fuel_engine.hybrid_engine.engine_components.Fuel_cell_L1 import Fuel_cell
-from models.propulsion.fuel_engine.hybrid_engine.engine_components.IDC import IDC
-from models.propulsion.fuel_engine.turboprop_engine.ML_TP_L1 import ML_TP_L1
-from models.propulsion.fuel_engine.turboprop_engine.engine_components.Propeller import Propeller
-from fastoad.base.dict import AddKeyAttributes
+from .engine_components.ElectricMotor import ElectricMotor
+from .engine_components.Fuel_cell_L1 import Fuel_cell
+from .engine_components.IDC import IDC
+from ..turboprop_engine.ML_TP_L1 import ML_TP_L1
+from ..turboprop_engine.engine_components.Propeller import Propeller
+#from fastoad.base.dict import AddKeyAttributes
 
-AddKeyAttributes(["psfc","shaft_power", "power_rate","thermo_power","TP_thermal_efficiency","TP_residual_thrust","TP_air_flow","TP_total_pressure","TP_total_temperature","fuel_mass" 
-                  ,"H2_mass","TPshaft_power","EMshaft_power","FC_power","TP_power_rate","EM_power_rate","H2_fc","FC_efficiency","FC_airflow","V_cell","V_stack","V_pack","V_core","I_cell","I_stack","I_pack","I_core"])(FlightPoint)
+#AddKeyAttributes(["psfc","shaft_power", "power_rate","thermo_power","TP_thermal_efficiency","TP_residual_thrust","TP_air_flow","TP_total_pressure","TP_total_temperature","fuel_mass"
+  #                ,"H2_mass","TPshaft_power","EMshaft_power","FC_power","TP_power_rate","EM_power_rate","H2_fc","FC_efficiency","FC_airflow","V_cell","V_stack","V_pack","V_core","I_cell","I_stack","I_pack","I_core"])(FlightPoint)
 
 Prop_fid='ADT'
 class PHFCEngine_ML_L1(AbstractHybridPropulsion):

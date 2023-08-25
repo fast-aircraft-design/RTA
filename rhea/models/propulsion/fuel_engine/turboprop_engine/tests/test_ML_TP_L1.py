@@ -3,7 +3,7 @@ import os.path as pth
 import numpy as np
 from fastoad.io import VariableIO
 from ..ML_TP_L1 import ML_TP_L1
-from fastoad.base.flight_point import FlightPoint
+from fastoad.model_base import FlightPoint
 from fastoad.constants import EngineSetting
 
 DATA_FOLDER_PATH = pth.join(pth.dirname(__file__), "data")
@@ -47,11 +47,18 @@ def test_ML_TP_L1():
 
     #Test scalar
     flight_point = FlightPoint(
+        mach=0.45, altitude=6096, engine_setting=EngineSetting.CRUISE, thrust=7250, thrust_is_regulated=1.0,
+    )  # with engine_setting as int
+    engine.compute_flight_points(flight_point)
+    np.testing.assert_allclose(flight_point.psfc, 8.384e-8, rtol=1e-3)
+    np.testing.assert_allclose(flight_point.thrust_rate, 0.874, rtol=1e-3)
+
+    flight_point = FlightPoint(
         mach=0, altitude=0, engine_setting=EngineSetting.TAKEOFF, thrust_rate=0.8
     )  # with engine_setting as EngineSetting
     engine.compute_flight_points(flight_point)
-    np.testing.assert_allclose(flight_point.thrust, 31712, rtol=1e-3)
     np.testing.assert_allclose(flight_point.psfc, 1.02e-7, rtol=1e-3)
+    np.testing.assert_allclose(flight_point.thrust, 31712, rtol=1e-3)
 
     flight_point = FlightPoint(
         mach=0.3, altitude=3000, engine_setting=EngineSetting.CLIMB.value, thrust_rate=1.0
@@ -60,11 +67,6 @@ def test_ML_TP_L1():
     np.testing.assert_allclose(flight_point.thrust, 14095, rtol=1e-3)
     np.testing.assert_allclose(flight_point.psfc, 8.576e-8, rtol=1e-3)
 
-    flight_point = FlightPoint(
-        mach=0.45, altitude=6096, engine_setting=EngineSetting.CRUISE, thrust=7250, thrust_is_regulated=1.0,
-    )  # with engine_setting as int
-    engine.compute_flight_points(flight_point)
-    np.testing.assert_allclose(flight_point.thrust_rate, 0.874, rtol=1e-3)
-    np.testing.assert_allclose(flight_point.psfc, 8.384e-8, rtol=1e-3)
+
 
 

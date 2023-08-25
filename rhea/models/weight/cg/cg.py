@@ -16,16 +16,28 @@
 
 import numpy as np
 import openmdao.api as om
+from fastoad.module_management.service_registry import RegisterSubmodel
+from .cg_components import ComputeFlightControlCG
+from .cg_components import ComputeGlobalCG
+# from fastoad_cs25.models.weight.cg.cg_components import ComputeVTcg
+# from fastoad_cs25.models.weight.cg.cg_components import ComputeWingCG
+# from fastoad_cs25.models.weight.cg.cg_components import ComputeHTcg
+from .cg_components import ComputeTanksCG_RHEA
+from .cg_components import ComputePropulsionCG_RHEA
+from .cg_components import ComputeOthersCG
+# from fastoad_cs25.models.weight.cg.cg_components import UpdateMLG
+from fastoad_cs25.models.weight.cg.constants import (
+    SERVICE_AIRCRAFT_CG,
+    SERVICE_FLIGHT_CONTROLS_CG,
+    SERVICE_GLOBAL_CG,
+    SERVICE_HORIZONTAL_TAIL_CG,
+    SERVICE_MLG_CG,
+    SERVICE_OTHERS_CG,
+    SERVICE_TANKS_CG,
+    SERVICE_VERTICAL_TAIL_CG,
+    SERVICE_WING_CG,
+)
 
-from rhea.models.weight.cg.cg_components import ComputeFlightControlCG
-from rhea.models.weight.cg.cg_components import ComputeGlobalCG
-from fastoad.models.weight.cg.cg_components import ComputeVTcg
-from fastoad.models.weight.cg.cg_components import ComputeWingCG
-from fastoad.models.weight.cg.cg_components import ComputeHTcg
-from rhea.models.weight.cg.cg_components import ComputeTanksCG_RHEA
-from rhea.models.weight.cg.cg_components import ComputePropulsionCG_RHEA
-from rhea.models.weight.cg.cg_components import  ComputeOthersCG
-from fastoad.models.weight.cg.cg_components import UpdateMLG
 
 class CG(om.Group):
     """ Model that computes the global center of gravity """
@@ -34,15 +46,15 @@ class CG(om.Group):
         self.hybrid=hybrid
         
     def setup(self):
-        self.add_subsystem("ht_cg", ComputeHTcg(), promotes=["*"])
-        self.add_subsystem("vt_cg", ComputeVTcg(), promotes=["*"])
-        self.add_subsystem("compute_cg_wing", ComputeWingCG(), promotes=["*"])
+        self.add_subsystem("ht_cg", RegisterSubmodel.get_submodel(SERVICE_HORIZONTAL_TAIL_CG), promotes=["*"])
+        self.add_subsystem("vt_cg", RegisterSubmodel.get_submodel(SERVICE_VERTICAL_TAIL_CG), promotes=["*"])
+        self.add_subsystem("compute_cg_wing", RegisterSubmodel.get_submodel(SERVICE_WING_CG), promotes=["*"])
         self.add_subsystem("compute_cg_flight_controls", ComputeFlightControlCG(), promotes=["*"])        
         self.add_subsystem("compute_cg_tanks", ComputeTanksCG_RHEA(), promotes=["*"])       
         self.add_subsystem("compute_cg_propulsion", ComputePropulsionCG_RHEA(), promotes=["*"])
         self.add_subsystem("compute_cg_others", ComputeOthersCG(), promotes=["*"])        
         self.add_subsystem("compute_cg", ComputeGlobalCG(), promotes=["*"])
-        self.add_subsystem("update_mlg", UpdateMLG(), promotes=["*"])
+        self.add_subsystem("update_mlg", RegisterSubmodel.get_submodel(SERVICE_MLG_CG), promotes=["*"])
 
         self.add_subsystem("aircraft", ComputeAircraftCG(), promotes=["*"])
 

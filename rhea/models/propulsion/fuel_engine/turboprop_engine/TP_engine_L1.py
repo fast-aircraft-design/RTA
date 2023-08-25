@@ -11,8 +11,8 @@
 #  GNU General Public License for more details.
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
-import pickle
-from sklearn.preprocessing import PolynomialFeatures
+# import pickle
+
 from scipy import constants
 import logging
 import math
@@ -20,36 +20,36 @@ from typing import Union, Sequence, Tuple, Optional
 import os
 import numpy as np
 from fastoad.constants import FlightPhase
-from fastoad.models.propulsion import IPropulsion
+#from fastoad.models.propulsion import IPropulsion
 #from models.propulsion import IPropulsion
-from fastoad.models.propulsion.fuel_propulsion.rubber_engine.exceptions import (
+from fastoad_cs25.models.propulsion.fuel_propulsion.rubber_engine.exceptions import (
     FastRubberEngineInconsistentInputParametersError,
 )
-from fastoad.utils.physics import Atmosphere
-from models.propulsion.fuel_engine.turboprop_engine.engine_components.Ram import Ram
-from models.propulsion.fuel_engine.turboprop_engine.engine_components.Compression_Nozzle import Compression_Nozzle
-from models.propulsion.fuel_engine.turboprop_engine.engine_components.Low_Pressure_Compressor import LPC
-from models.propulsion.fuel_engine.turboprop_engine.engine_components.High_Pressure_Compressor import HPC
-from models.propulsion.fuel_engine.turboprop_engine.engine_components.Combustor import Combustor
-from models.propulsion.fuel_engine.turboprop_engine.engine_components.Low_Pressure_Turbine import LPT
-from models.propulsion.fuel_engine.turboprop_engine.engine_components.High_Pressure_Turbine import HPT
-from models.propulsion.fuel_engine.turboprop_engine.engine_components.Power_Turbine import Power_Turbine
-from models.propulsion.fuel_engine.turboprop_engine.engine_components.Expansion_Nozzle import Expansion_Nozzle
-from models.propulsion.fuel_engine.turboprop_engine.engine_components.Thrust import Thrust
-from models.propulsion.fuel_engine.turboprop_engine.engine_components.Fuel_Data import Fuel_data
+from fastoad.model_base.atmosphere import Atmosphere
+from ..turboprop_engine.engine_components.Ram import Ram
+from ..turboprop_engine.engine_components.Compression_Nozzle import Compression_Nozzle
+from ..turboprop_engine.engine_components.Low_Pressure_Compressor import LPC
+from ..turboprop_engine.engine_components.High_Pressure_Compressor import HPC
+from ..turboprop_engine.engine_components.Combustor import Combustor
+from ..turboprop_engine.engine_components.Low_Pressure_Turbine import LPT
+from ..turboprop_engine.engine_components.High_Pressure_Turbine import HPT
+from ..turboprop_engine.engine_components.Power_Turbine import Power_Turbine
+from ..turboprop_engine.engine_components.Expansion_Nozzle import Expansion_Nozzle
+from ..turboprop_engine.engine_components.Thrust import Thrust
+from ..turboprop_engine.engine_components.Fuel_Data import Fuel_data
 import time
 from scipy.optimize import root_scalar, fsolve
 import pandas as pd
 # from fastoad.models.propulsion.fuel_propulsion.base import AbstractFuelPropulsion
-from models.propulsion.fuel_engine.turboprop_engine.base import AbstractFuelPropulsion
-from fastoad.base.flight_point import FlightPoint
-from fastoad.base.dict import AddKeyAttributes
-from models.propulsion.fuel_engine.turboprop_engine.engine_components.Propeller import Propeller
+from ..turboprop_engine.base import AbstractFuelPropulsion
+from fastoad.model_base.flight_point import FlightPoint
+#from fastoad.model_base.dict import AddKeyAttributes
+from ..turboprop_engine.engine_components.Propeller import Propeller
 
 # Logger for this module
 _LOGGER = logging.getLogger(__name__)
-AddKeyAttributes(["psfc","shaft_power", "power_rate","thermo_power","TP_thermal_efficiency","TP_residual_thrust","TP_air_flow","TP_total_pressure","TP_total_temperature","fuel_mass" 
-                  ,"H2_mass","TPshaft_power","EMshaft_power","FC_power","TP_power_rate","EM_power_rate","H2_fc"])(FlightPoint)
+#AddKeyAttributes(["psfc","shaft_power", "power_rate","thermo_power","TP_thermal_efficiency","TP_residual_thrust","TP_air_flow","TP_total_pressure","TP_total_temperature","fuel_mass"
+                  #,"H2_mass","TPshaft_power","EMshaft_power","FC_power","TP_power_rate","EM_power_rate","H2_fc"])(FlightPoint)
 
 
 class TPEngine_L1(AbstractFuelPropulsion):
@@ -154,7 +154,7 @@ class TPEngine_L1(AbstractFuelPropulsion):
         self.nozzle_pressure_ratio=nozzle_pressure_ratio
         self.nozzle_area_ratio=nozzle_area_ratio
         
-        self.k0 =k0
+        self.k0 = k0
         self.k1 =k1
         self.k2 =k2
         self.tau_t_sizing = tau_t_sizing
@@ -221,8 +221,12 @@ class TPEngine_L1(AbstractFuelPropulsion):
         atmosphere = Atmosphere(altitude, altitude_in_feet=False)
         
         a = atmosphere.speed_of_sound
+
+        if mach ==0:
+            mach = 0.025
+
         V_TAS = mach*a
-        V_EAS = atmosphere.get_equivalent_airspeed(V_TAS)/constants.knot
+        #V_EAS = atmosphere.equivalent_airspeed(V_TAS)/constants.knot
         
         thrust_is_regulated = flight_points.thrust_is_regulated
 
@@ -342,8 +346,8 @@ class TPEngine_L1(AbstractFuelPropulsion):
         flight_points.TP_residual_thrust  =engine_charac[1]
         flight_points.TP_air_flow=engine_charac[4]
         flight_points.TP_total_pressure= thermo_data.Pt.values.tolist()
-        flight_points.TP_total_temperature  =  thermo_data.Tt.values.tolist()  
-        
+        flight_points.TP_total_temperature  =  thermo_data.Tt.values.tolist()
+        flight_points.sfc = tsfc
         
         # return for debug
         # return max_shaft_power,max_thermo_power,Shp_gb_limit,engine_charac, thermo_data
@@ -688,25 +692,25 @@ class TPEngine_L1(AbstractFuelPropulsion):
             design_power=Shp_gb_limit
         #print(design_power/constants.hp)
     
-        thermo_dict = {'Tt': [np.asscalar(ram.stagnation_pressure) ,
-                              np.asscalar(inlet.stagnation_pressure_out),
-                              np.asscalar(lpc.stagnation_temperature_out),          
-                              np.asscalar(hpc.stagnation_temperature_out),          
-                              np.asscalar(combustor.stagnation_temperature_out),          
-                              np.asscalar(hpt.stagnation_temperature_out),         
-                              np.asscalar(lpt.stagnation_temperature_out),          
-                              np.asscalar(pt.stagnation_temperature_out),         
-                              np.asscalar(nozzle.stagnation_temperature_out)
+        thermo_dict = {'Tt': [ram.stagnation_pressure.item() ,
+                              inlet.stagnation_pressure_out.item(),
+                              lpc.stagnation_temperature_out.item(),
+                              hpc.stagnation_temperature_out.item(),
+                              combustor.stagnation_temperature_out.item(),
+                              hpt.stagnation_temperature_out.item(),
+                              lpt.stagnation_temperature_out.item(),
+                              pt.stagnation_temperature_out.item(),
+                              nozzle.stagnation_temperature_out.item()
                               ],
-                        'Pt':[np.asscalar(ram.stagnation_pressure) ,
-                              np.asscalar(inlet.stagnation_pressure_out),
-                              np.asscalar(lpc.stagnation_pressure_out),
-                              np.asscalar(hpc.stagnation_pressure_out) ,
-                              np.asscalar(combustor.stagnation_pressure_out),  
-                              np.asscalar(hpt.stagnation_pressure_out),  
-                              np.asscalar(lpt.stagnation_pressure_out) ,        
-                              np.asscalar(pt.stagnation_pressure_out) ,
-                              np.asscalar(nozzle.stagnation_pressure_out)                        
+                        'Pt':[ram.stagnation_pressure.item() ,
+                              inlet.stagnation_pressure_out.item(),
+                              lpc.stagnation_pressure_out.item(),
+                              hpc.stagnation_pressure_out.item() ,
+                              combustor.stagnation_pressure_out.item(),
+                              hpt.stagnation_pressure_out.item(),
+                              lpt.stagnation_pressure_out.item() ,
+                              pt.stagnation_pressure_out.item() ,
+                              nozzle.stagnation_pressure_out.item()
                               ] }          
         
         thermo_data= pd.DataFrame(data=thermo_dict)  

@@ -11,11 +11,12 @@ from numpy.testing import assert_allclose
 from fastoad import api
 from fastoad.io import VariableIO
 from fastoad.io.configuration.configuration import FASTOADProblemConfigurator
-from fastoad.openmdao.utils import get_problem_after_setup
+
 
 DATA_FOLDER_PATH = pth.join(pth.dirname(__file__), "data")
 RESULTS_FOLDER_PATH = pth.join(pth.dirname(__file__), "results")
-CONFIGURATION_FILE = "oad_sizing.toml"
+CONFIGURATION_FILE = "oad_process.yml"
+MISSION_FILE = "sizing_mission_R.yml"
 SOURCE_FILE = "problem_outputs.xml"
 RESULTS_FOLDER = "problem_folder"
 
@@ -46,11 +47,13 @@ def run_non_regression_test(
     # Copy of configuration file and generation of problem instance ------------------
     api.generate_configuration_file(configuration_file_path)  # just ensure folders are created...
     shutil.copy(pth.join(DATA_FOLDER_PATH, conf_file), configuration_file_path)
-    problem = FASTOADProblemConfigurator(configuration_file_path).get_problem()
+    shutil.copy(pth.join(DATA_FOLDER_PATH, MISSION_FILE), pth.join(results_folder_path, MISSION_FILE))
+    configurator = FASTOADProblemConfigurator(configuration_file_path)
 
     # Generation and reading of inputs ----------------------------------------
     ref_inputs = pth.join(DATA_FOLDER_PATH, legacy_result_file)
-    get_problem_after_setup(problem).write_needed_inputs(ref_inputs)
+    configurator.write_needed_inputs(ref_inputs)
+    problem = configurator.get_problem()
     problem.read_inputs()
     problem.setup()
 
