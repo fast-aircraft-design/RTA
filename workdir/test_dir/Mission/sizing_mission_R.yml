@@ -25,22 +25,31 @@ phases:
         target:
           time: ~duration
   takeoff:
+    engine_setting: takeoff
+    polar:
+      CL: data:aerodynamics:aircraft:takeoff:CL
+      CD: data:aerodynamics:aircraft:takeoff:CD
+      alpha: data:aerodynamics:aircraft:low_speed:alpha
+    thrust_rate: 1.0
+    isa_offset: ~ISA_offset
     parts:
-      - segment: transition
+      - segment: takeoff
+        wheels_friction: ~friction_coefficient_no_brake
+        rotation_equivalent_airspeed:
+          value: ~Vr
+        rotation_rate:
+          value: ~rotation_rate
+          default: 0.0523
+          units: rad/s
+        rotation_alpha_limit:
+          value: ~rotation_alpha_limit
+          default: 0.3489
+          units: rad
+        end_time_step: 0.05
         target:
           delta_altitude:
-            value: ~safety_altitude
+            value: 35
             unit: ft
-            default: 35
-          delta_mass: -~fuel
-          time:
-            value: ~duration
-            unit: s
-            default: 1.0
-          true_airspeed: ~V2
-      - segment: mass_input
-        target:
-          mass: data:mission:sizing:TOW
 
   initial_climb:
     engine_setting: takeoff

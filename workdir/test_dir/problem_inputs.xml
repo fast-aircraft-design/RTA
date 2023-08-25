@@ -74,9 +74,9 @@
       </wing>
     </geometry>
     <propulsion>
-      <Design_Thermo_Power units="W" is_input="True">2497648.194206328</Design_Thermo_Power>
+      <Design_Thermo_Power units="W" is_input="True">2500000.0</Design_Thermo_Power>
       <Power_Offtake units="W" is_input="True">7500.0</Power_Offtake>
-      <RTO_power units="W" is_input="True">2047252.6182019084</RTO_power>
+      <RTO_power units="W" is_input="True">2050000.0</RTO_power>
       <gearbox_eta is_input="True">0.99</gearbox_eta>
       <L1_engine>
         <fuel is_input="True">0.0</fuel>
@@ -124,7 +124,7 @@
       </electric_systems>
       <propeller>
         <disk_loading units="kW/m**2" is_input="True">184.99</disk_loading>
-        <max_power units="kW" is_input="True">2239.694364312888</max_power>
+        <max_power units="kW" is_input="True">2250.0</max_power>
       </propeller>
     </propulsion>
     <handling_qualities>
@@ -147,14 +147,14 @@
     <mission>
       <sizing>
         <ISA_offset units="degK" is_input="True">0.0<!--Input defined by the mission.--></ISA_offset>
-        <reserve_coefficient is_input="True">0.03<!--Input defined by the mission.--></reserve_coefficient>
+        <reserve_coefficient is_input="True">0.05<!--Input defined by the mission.--></reserve_coefficient>
         <climb>
           <thrust_rate is_input="True">1.0<!--thrust rate (between 0.0 and 1.0) during climb phase in sizing mission--></thrust_rate>
           <first_segment>
             <CAS units="knot" is_input="True">150<!--Input defined by the mission.--></CAS>
           </first_segment>
           <second_segment>
-            <CAS units="knot" is_input="True">190.0<!--Input defined by the mission.--></CAS>
+            <CAS units="knot" is_input="True">170.0<!--Input defined by the mission.--></CAS>
           </second_segment>
         </climb>
         <descent>
@@ -174,20 +174,27 @@
           <true_airspeed units="m/s" is_input="True">1.0<!--Input defined by the mission.--></true_airspeed>
         </start>
         <takeoff>
-          <V2 units="m/s" is_input="True">60.0<!--Input defined by the mission.--></V2>
+          <ISA_offset is_input="True">0.0<!--Input defined by the mission.--></ISA_offset>
+          <V2 units="m/s" is_input="True">60<!--Input defined by the mission.--></V2>
+          <Vr is_input="True">55<!--Input defined by the mission.--></Vr>
           <duration units="s" is_input="True">60.0<!--duration of takeoff phase in sizing mission--></duration>
           <flap_angle units="deg" is_input="True">15.0<!--flap angle during takeoff phase in sizing mission--></flap_angle>
-          <fuel units="kg" is_input="True">30.0<!--mass of consumed fuel during takeoff phase in sizing mission--></fuel>
-          <safety_altitude units="ft" is_input="True">35<!--Input defined by the mission.--></safety_altitude>
+          <friction_coefficient_no_brake is_input="True">0.004<!--Input defined by the mission.--></friction_coefficient_no_brake>
+          <fuel units="kg" is_input="True">10.0<!--mass of consumed fuel during takeoff phase in sizing mission--></fuel>
+          <rotation_alpha_limit is_input="True">0.3489<!--Input defined by the mission.--></rotation_alpha_limit>
+          <rotation_rate is_input="True">0.0523<!--Input defined by the mission.--></rotation_rate>
+          <safety_altitude units="ft" is_input="True">35.0<!--Input defined by the mission.--></safety_altitude>
           <slat_angle units="deg" is_input="True">0.0<!--slat angle during takeoff phase in sizing mission--></slat_angle>
         </takeoff>
         <taxi_in>
           <duration units="s" is_input="True">60.0<!--duration of taxi-in phase in sizing mission--></duration>
-          <thrust_rate is_input="True">0.01<!--thrust rate (between 0.0 and 1.0) during taxi-in phase in sizing mission--></thrust_rate>
+          <thrust_rate is_input="True">0.3<!--thrust rate (between 0.0 and 1.0) during taxi-in phase in sizing mission--></thrust_rate>
           <true_airspeed units="m/s" is_input="True">15.0<!--Input defined by the mission.--></true_airspeed>
         </taxi_in>
         <taxi_out>
+          <altitude units="ft" is_input="True">0.0<!--Input defined by the mission.--></altitude>
           <duration units="s" is_input="True">360.0<!--duration of taxi-out phase in sizing mission--></duration>
+          <thrust_rate is_input="True">0.3<!--Input defined by the mission.--></thrust_rate>
           <true_airspeed units="m/s" is_input="True">15.0<!--Input defined by the mission.--></true_airspeed>
         </taxi_out>
         <main_route>
