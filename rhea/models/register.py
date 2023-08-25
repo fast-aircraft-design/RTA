@@ -48,9 +48,6 @@ from propulsion.fuel_engine.hybrid_engine.sizing import BoP_sizing
 
 from fastoad.module_management import OpenMDAOSystemRegistry
 from fastoad.module_management.constants import ModelDomain
-#from fastoad.models.performances import BreguetFromMTOW
-#from performances.breguet_RHEA import BreguetFromOWE_RHEA, BreguetFromMTOW_RHEA
-from propulsion.fuel_engine.turboprop_engine import  OMTPEngineL0Component,OMTPEngineL1Component
 from propulsion.fuel_engine.complete_propulsion_inputs import CompletePropulsionInputs
 """
 The place where to register RHEA internal models.
