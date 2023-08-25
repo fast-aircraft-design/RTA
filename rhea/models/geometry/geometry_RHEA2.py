@@ -17,17 +17,20 @@
 
 import openmdao.api as om
 
-from fastoad.models.geometry.compute_aero_center import ComputeAeroCenter
-from fastoad.models.geometry.geom_components import ComputeTotalArea
+from fastoad_cs25.models.geometry.compute_aero_center import ComputeAeroCenter
+from fastoad_cs25.models.geometry.geom_components.compute_wetted_area import ComputeWettedArea
 
-from fastoad.models.geometry.geom_components.ht import ComputeHorizontalTailGeometry
+from fastoad_cs25.models.geometry.geom_components.ht.compute_horizontal_tail import ComputeHorizontalTailGeometry
 
-from fastoad.models.geometry.geom_components.vt import ComputeVerticalTailGeometry
-from fastoad.models.geometry.geom_components.wing.compute_wing import ComputeWingGeometry
-from fastoad.models.options import CABIN_SIZING_OPTION
-from fastoad.models.geometry.geom_components.fuselage import ComputeCnBetaFuselage
+from fastoad_cs25.models.geometry.geom_components.vt.compute_vertical_tail import ComputeVerticalTailGeometry
+from fastoad_cs25.models.geometry.geom_components.wing.compute_wing import ComputeWingGeometry
+from fastoad_cs25.models.constants import CABIN_SIZING_OPTION
+#from fastoad.models.geometry.geom_components.fuselage import ComputeCnBetaFuselage
+from fastoad.module_management.constants import ModelDomain
+from fastoad.module_management.service_registry import RegisterOpenMDAOSystem, RegisterSubmodel
 
 
+@RegisterOpenMDAOSystem("rhea.geometry.RHEA2", domain=ModelDomain.GEOMETRY)
 class Geometry_RHEA2(om.Group):
     """
     Computes geometric characteristics of the (tube-wing) aircraft:
@@ -54,5 +57,5 @@ class Geometry_RHEA2(om.Group):
         #self.add_subsystem("fuselage_cnbeta", ComputeCnBetaFuselage(), promotes=["*"])       
         self.add_subsystem("compute_ht", ComputeHorizontalTailGeometry(), promotes=["*"])
         self.add_subsystem("compute_vt", ComputeVerticalTailGeometry(), promotes=["*"])
-        self.add_subsystem("compute_total_area", ComputeTotalArea(), promotes=["*"])
+        self.add_subsystem("compute_total_area", ComputeWettedArea(), promotes=["*"])
         self.add_subsystem("compute_aero_center", ComputeAeroCenter(), promotes=["*"])

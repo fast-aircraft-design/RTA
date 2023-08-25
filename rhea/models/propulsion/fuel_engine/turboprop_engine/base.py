@@ -17,10 +17,16 @@ from typing import Union
 
 import pandas as pd
 
-from fastoad.base.flight_point import FlightPoint
-from fastoad.models.propulsion import IPropulsion
+from fastoad.model_base.flight_point import FlightPoint
+from fastoad.model_base.propulsion import IPropulsion, IOMPropulsionWrapper
 
 
+
+
+FlightPoint.add_field("TPshaft_power")
+FlightPoint.add_field("psfc")
+FlightPoint.add_field("H2_fc")
+# class AbstractFuelPropulsion(IPropulsion, ABC):
 class AbstractFuelPropulsion(IPropulsion, ABC):
     """
     Propulsion model that consume any fuel should inherit from this one.
@@ -39,7 +45,6 @@ class AbstractH2Propulsion(IPropulsion, ABC):
     In inheritors, :meth:`compute_flight_points` is expected to define
     "sfc" and "thrust" in computed FlightPoint instances.
     """
- 
     def get_consumed_mass(self, flight_point: FlightPoint, time_step: float) -> float:
         return time_step * flight_point.psfc * flight_point.TPshaft_power + time_step * flight_point.H2_fc
         #return time_step * flight_point.H2_fc 

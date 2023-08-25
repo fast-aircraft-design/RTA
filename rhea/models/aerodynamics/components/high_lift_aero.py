@@ -22,11 +22,11 @@ from openmdao.core.explicitcomponent import ExplicitComponent
 
 # from rhea.resources.aerodynamics.Experimental_data.Cl_low_speed_ATR72 import Cl_low_speed_ATR72
 # from rhea.resources.aerodynamics.Experimental_data.Cd_low_speed_ATR72 import Cd_low_speed_ATR72
-from fastoad.models.aerodynamics.constants import POLAR_POINT_COUNT
+from fastoad_cs25.models.aerodynamics.constants import POLAR_POINT_COUNT
 from importlib_resources import open_text
 from scipy import interpolate
 
-from fastoad.models.aerodynamics.components import resources
+from fastoad_cs25.models.aerodynamics.components import resources
 
 LIFT_EFFECTIVENESS_FILENAME = "interpolation of lift effectiveness.txt"
 

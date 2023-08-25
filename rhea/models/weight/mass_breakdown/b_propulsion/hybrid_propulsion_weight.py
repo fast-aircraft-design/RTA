@@ -5,23 +5,24 @@ Created on Mon Sep 14 10:12:50 2020
 @author: LA202059
 """
 
-
+from fastoad.module_management.service_registry import RegisterSubmodel
 import numpy as np
 from openmdao.core.explicitcomponent import ExplicitComponent
 from scipy import constants
 import os
-import pickle
+import joblib
 import pandas as pd
-from fastoad.utils.physics import Atmosphere
+from fastoad.model_base.atmosphere import Atmosphere
 from scipy import interpolate
 from fastoad.constants import FlightPhase
-from models.propulsion.fuel_engine.hybrid_engine.engine_components.Fuel_cell_L1 import Fuel_cell
-from models.propulsion.fuel_engine.constants import POWER_RATE_COUNT
+from rhea.models.propulsion.fuel_engine.hybrid_engine.engine_components.Fuel_cell_L1 import Fuel_cell
+from rhea.models.propulsion.fuel_engine.constants import POWER_RATE_COUNT
 import math
 
 script_path = os.path.abspath(__file__) # i.e. /path/to/dir/foobar.py
 rhea_path = script_path.split('\\models')[0]
 RHEA_path=script_path.split('\\rhea')[0]
+
 
 class HybridPropulsionWeight(ExplicitComponent):
     """
@@ -228,9 +229,9 @@ class HybridPropulsionWeight(ExplicitComponent):
 
                    
         filename =os.path.join(rhea_path,'resources/hybrid_systems/thermal_management/Metamodels/Radiator_weight_model.sav')
-        weight_model = pickle.load(open(filename, 'rb'))
+        weight_model = joblib.load(open(filename, 'rb'))
         filename =os.path.join(rhea_path,'resources/hybrid_systems/thermal_management/Metamodels/Radiator_area_model.sav')
-        area_model = pickle.load(open(filename, 'rb'))  
+        area_model = joblib.load(open(filename, 'rb'))
         
         # Thermo/aero parameters
 

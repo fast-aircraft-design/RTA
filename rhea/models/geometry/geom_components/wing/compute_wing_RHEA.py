@@ -15,21 +15,21 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from fastoad.models.geometry.geom_components.wing.components.compute_b_50 import ComputeB50
-from fastoad.models.geometry.geom_components.wing.components.compute_cl_alpha import ComputeCLalpha
-from fastoad.models.geometry.geom_components.wing.components.compute_l1_l4 import ComputeL1AndL4Wing
-from fastoad.models.geometry.geom_components.wing.components.compute_l2_l3 import ComputeL2AndL3Wing
-from fastoad.models.geometry.geom_components.wing.components.compute_mac_wing import ComputeMACWing
-from fastoad.models.geometry.geom_components.wing.components.compute_mfw import ComputeMFW
-from fastoad.models.geometry.geom_components.wing.components.compute_sweep_wing import (
+from fastoad_cs25.models.geometry.geom_components.wing.components.compute_b_50 import ComputeB50
+from fastoad_cs25.models.aerodynamics.components.compute_cl_alpha import ComputeCLAlpha
+from fastoad_cs25.models.geometry.geom_components.wing.components.compute_l1_l4 import ComputeL1AndL4Wing
+from fastoad_cs25.models.geometry.geom_components.wing.components.compute_l2_l3 import ComputeL2AndL3Wing
+from fastoad_cs25.models.geometry.geom_components.wing.components.compute_mac_wing import ComputeMACWing
+from fastoad_cs25.models.geometry.geom_components.wing.components.compute_mfw import ComputeMFW
+from fastoad_cs25.models.geometry.geom_components.wing.components.compute_sweep_wing import (
     ComputeSweepWing,
 )
-from rhea.models.geometry.geom_components.wing.components.compute_toc_wing_RHEA import ComputeToCWing_RHEA
-from models.geometry.geom_components.wing.components.compute_wet_area_wing import (
+from .components.compute_toc_wing_RHEA import ComputeToCWing_RHEA
+from .components.compute_wet_area_wing import (
     ComputeWetAreaWing,
 )
-from fastoad.models.geometry.geom_components.wing.components.compute_x_wing import ComputeXWing
-from fastoad.models.geometry.geom_components.wing.components.compute_y_wing import ComputeYWing
+from fastoad_cs25.models.geometry.geom_components.wing.components.compute_x_wing import ComputeXWing
+from fastoad_cs25.models.geometry.geom_components.wing.components.compute_y_wing import ComputeYWing
 
 from openmdao.api import Group
 
@@ -48,5 +48,5 @@ class ComputeWingGeometry_RHEA(Group):
         self.add_subsystem("sweep_wing", ComputeSweepWing(), promotes=["*"])
         self.add_subsystem("toc_wing", ComputeToCWing_RHEA(), promotes=["*"])
         self.add_subsystem("wetarea_wing", ComputeWetAreaWing(), promotes=["*"])
-        self.add_subsystem("clapha_wing", ComputeCLalpha(), promotes=["*"])
+        # self.add_subsystem("clapha_wing", ComputeCLAlpha(), promotes=["*"])
         self.add_subsystem("mfw", ComputeMFW(), promotes=["*"])

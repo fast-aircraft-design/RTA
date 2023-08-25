@@ -16,29 +16,40 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import openmdao.api as om
+from fastoad.module_management.service_registry import RegisterOpenMDAOSystem, RegisterSubmodel
+from fastoad_cs25.models.geometry.compute_aero_center import ComputeAeroCenter
+# from fastoad_cs25.models.geometry.geom_components import ComputeTotalArea
+# from fastoad_cs25.models.geometry.geom_components.vt import ComputeVerticalTailGeometry
+# from fastoad_cs25.models.geometry.geom_components.ht import ComputeHorizontalTailGeometry
 
-from fastoad.models.geometry.compute_aero_center import ComputeAeroCenter
-from fastoad.models.geometry.geom_components import ComputeTotalArea
-from fastoad.models.geometry.geom_components.fuselage import ComputeCnBetaFuselage
-from rhea.models.geometry.geom_components import ComputeGeometry_RHEA
+from fastoad_cs25.models.geometry.constants import (
+    SERVICE_AIRCRAFT_AERODYNAMIC_CENTER,
+    SERVICE_AIRCRAFT_WETTED_AREA,
+    SERVICE_FUSELAGE_GEOMETRY_BASIC,
+    SERVICE_FUSELAGE_GEOMETRY_WITH_CABIN_SIZING,
+    SERVICE_HORIZONTAL_TAIL_GEOMETRY,
+    SERVICE_NACELLE_PYLON_GEOMETRY,
+    SERVICE_VERTICAL_TAIL_GEOMETRY,
+    SERVICE_WING_GEOMETRY,
+)
+from fastoad.module_management.constants import ModelDomain
+# from fastoad_cs25.models.geometry.geom_components.fuselage import ComputeCnBetaFuselage
+# from rhea.models.geometry.geom_components import ComputeGeometry_RHEA
 
-
-from rhea.models.geometry.geom_components.fuselage.compute_fuselage import (
+from .geom_components.fuselage.compute_fuselage import (
     ComputeFuselageGeometryBasic,
     ComputeFuselageGeometryCabinSizing,
 )
-from fastoad.models.geometry.geom_components.ht import ComputeHorizontalTailGeometry
-from models.geometry.geom_components.nacelle.compute_nacelle import (
+
+from .geom_components.nacelle.compute_nacelle import (
     ComputeNacelleGeometry,
 )
-from fastoad.models.geometry.geom_components.vt import ComputeVerticalTailGeometry
-from rhea.models.geometry.geom_components.wing.compute_wing_RHEA import ComputeWingGeometry_RHEA
-from fastoad.models.options import CABIN_SIZING_OPTION
+
+from .geom_components.wing.compute_wing_RHEA import ComputeWingGeometry_RHEA
+from fastoad_cs25.models.constants import CABIN_SIZING_OPTION
 
 
-
-
-
+@RegisterOpenMDAOSystem("rhea.geometry.sizing", domain=ModelDomain.GEOMETRY)
 class Geometry_sizing(om.Group):
     """
     Computes geometric characteristics of the (tube-wing) aircraft:
@@ -50,11 +61,11 @@ class Geometry_sizing(om.Group):
     """
 
     def initialize(self):
-        self.options.declare(CABIN_SIZING_OPTION, types=float, default=1.0)
+        self.options.declare(CABIN_SIZING_OPTION, types=bool, default=True)
 
     def setup(self):
 
-        if self.options[CABIN_SIZING_OPTION] == 1.0:
+        if self.options[CABIN_SIZING_OPTION]:
             self.add_subsystem(
                 "compute_fuselage", ComputeFuselageGeometryCabinSizing(), promotes=["*"]
             )
@@ -65,7 +76,11 @@ class Geometry_sizing(om.Group):
         self.add_subsystem(
             "compute_engine_nacelle", ComputeNacelleGeometry(), promotes=["*"]
         )
-        self.add_subsystem("compute_ht", ComputeHorizontalTailGeometry(), promotes=["*"])
-        self.add_subsystem("compute_vt", ComputeVerticalTailGeometry(), promotes=["*"])
-        self.add_subsystem("compute_total_area", ComputeTotalArea(), promotes=["*"])
+        self.add_subsystem("compute_ht",
+                           RegisterSubmodel.get_submodel(SERVICE_HORIZONTAL_TAIL_GEOMETRY), promotes=["*"])
+
+        self.add_subsystem("compute_vt", RegisterSubmodel.get_submodel(SERVICE_VERTICAL_TAIL_GEOMETRY), promotes=["*"])
+        self.add_subsystem("compute_total_area",
+                           RegisterSubmodel.get_submodel(SERVICE_AIRCRAFT_WETTED_AREA), promotes=["*"])
+
         self.add_subsystem("compute_aero_center", ComputeAeroCenter(), promotes=["*"])

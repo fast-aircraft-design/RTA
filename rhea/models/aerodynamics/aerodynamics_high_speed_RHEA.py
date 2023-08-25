@@ -14,25 +14,24 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from models.aerodynamics.components.cd0_fuselage import Cd0Fuselage
-from fastoad.models.aerodynamics.components.cd0_ht import Cd0HorizontalTail
-from models.aerodynamics.components.cd0_nacelle_pylons_TP import Cd0NacelleAndPylonsTP
-from models.aerodynamics.components.cd0_total import Cd0Total
-from fastoad.models.aerodynamics.components.cd0_vt import Cd0VerticalTail
-from models.aerodynamics.components.cd0_wing import Cd0Wing
-from fastoad.models.aerodynamics.components.cd_compressibility import CdCompressibility
-from fastoad.models.aerodynamics.components.cd_trim import CdTrim
+from components.cd0_fuselage import Cd0Fuselage
+from fastoad_cs25.models.aerodynamics.components.cd0_ht import Cd0HorizontalTail
+from components.cd0_nacelle_pylons_TP import Cd0NacelleAndPylonsTP
+from components.cd0_total import Cd0Total
+from fastoad_cs25.models.aerodynamics.components.cd0_vt import Cd0VerticalTail
+from components.cd0_wing import Cd0Wing
+from fastoad_cs25.models.aerodynamics.components.cd_compressibility import CdCompressibility
+from fastoad_cs25.models.aerodynamics.components.cd_trim import CdTrim
 from rhea.models.aerodynamics.components.compute_polar import ComputePolar
-from fastoad.models.aerodynamics.components.compute_reynolds import ComputeReynolds
+from fastoad_cs25.models.aerodynamics.components.compute_reynolds import ComputeReynolds
 from rhea.models.aerodynamics.components.initialize_cl import InitializeClPolar
-from models.aerodynamics.components.oswald import OswaldCoefficient
+from components.oswald import OswaldCoefficient
 from openmdao.core.group import Group
+from fastoad.module_management.constants import ModelDomain
+from fastoad.module_management.service_registry import RegisterOpenMDAOSystem, RegisterSubmodel
+from fastoad_cs25.models.aerodynamics.constants import SERVICE_CL_ALPHA
 
-
-
-
-
-
+@RegisterOpenMDAOSystem("rhea.aerodynamics.highspeed", domain=ModelDomain.AERODYNAMICS)
 class AerodynamicsHighSpeed_RHEA(Group):
     """
     Computes aerodynamic polar of the aircraft in cruise conditions.
@@ -45,6 +44,7 @@ class AerodynamicsHighSpeed_RHEA(Group):
         self.add_subsystem("compute_oswald_coeff", OswaldCoefficient(), promotes=["*"])
         self.add_subsystem("comp_re", ComputeReynolds(), promotes=["*"])
         self.add_subsystem("initialize_cl", InitializeClPolar(), promotes=["*"])
+        self.add_subsystem("compute_CL_alpha", RegisterSubmodel.get_submodel(SERVICE_CL_ALPHA), promotes=['*'])
         self.add_subsystem("cd0_wing", Cd0Wing(), promotes=["*"])
         self.add_subsystem("cd0_fuselage", Cd0Fuselage(), promotes=["*"])
         self.add_subsystem("cd0_ht", Cd0HorizontalTail(), promotes=["*"])

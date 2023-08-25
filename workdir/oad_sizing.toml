@@ -1,7 +1,7 @@
 title = "Sample OAD Process"
 
 # List of folder paths where user added custom registered OpenMDAO components
-module_folders = ['C:\Users\vinx0\OneDrive\Desktop\RHEA\rhea\models']
+module_folders = ['D:\aprunet\rhea_antoine_prunet\rhea\models']
 
 # Input and output files
 input_file = "./problem_inputs.xml"
@@ -38,7 +38,7 @@ driver = "om.ScipyOptimizeDriver(tol=1e-6, optimizer='COBYLA')"
     [model.performance_TO]
         id ="rhea.performances.TOFL"
         propulsion_id = "rhea.wrapper.propulsion.ML_TP_L1"
-        out_file = "C:/Users/vinx0/OneDrive/Desktop/RHEA/workdir/TO_flight_points.csv"
+        out_file = "D:/aprunet/rhea_antoine_prunet/workdir/workdir/TO_flight_points.csv"
         prop_fid ="ADT"
         
     [model.performance_OEI]
@@ -49,7 +49,7 @@ driver = "om.ScipyOptimizeDriver(tol=1e-6, optimizer='COBYLA')"
     [model.performance]
         id = "rhea.performances.sizing_flight"   
         propulsion_id = "rhea.wrapper.propulsion.ML_TP_L1" #TP_engine_L1
-        out_file = "C:/Users/vinx0/OneDrive/Desktop/RHEA/workdir/flight_points.csv"
+        out_file = "D:/aprunet/rhea_antoine_prunet/workdir/flight_points.csv"
              
     [model.hq_tail_sizing]
         id = "fastoad.handling_qualities.tail_sizing"

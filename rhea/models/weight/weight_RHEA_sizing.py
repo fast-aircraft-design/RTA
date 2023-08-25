@@ -16,10 +16,13 @@ Weight computation (mass and CG)
 
 import openmdao.api as om
 
-from rhea.models.weight.cg.cg import CG
-from rhea.models.weight.mass_breakdown import MassBreakdown
+from fastoad.module_management.service_registry import RegisterOpenMDAOSystem, RegisterSubmodel
+from .cg.cg import CG
+from .mass_breakdown import MassBreakdown
+from fastoad.module_management.constants import ModelDomain
 
 
+@RegisterOpenMDAOSystem("rhea.weight.sizing", domain=ModelDomain.WEIGHT)
 class Weight_RHEA_sizing(om.Group):
     """
     Computes masses and Centers of Gravity for each part of the empty operating aircraft, among

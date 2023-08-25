@@ -1,0 +1,77 @@
+title = "Sample OAD Process"
+
+# List of folder paths where user added custom registered OpenMDAO components
+module_folders = ['C:\Users\vinx0\OneDrive\Desktop\RHEA\rhea\models']
+
+# Input and output files
+input_file = "./problem_inputs.xml"
+output_file = "./problem_outputs.xml"
+
+# Definition of problem driver assuming the OpenMDAO convention "import openmdao.api as om"
+driver = "om.ScipyOptimizeDriver(tol=1e-6, optimizer='COBYLA')"
+
+# Definition of OpenMDAO model
+[model]
+    # Solvers are defined assuming the OpenMDAO convention "import openmdao.api as om"
+    nonlinear_solver = "om.NonlinearBlockGS(maxiter=200)"
+    linear_solver = "om.DirectSolver()"
+
+    # Although "model" is a mandatory name for the top level of the model, its
+    # sub-components can be freely named by user
+    [model.geometry]
+        # An OpenMDAO component is identified by its "id"
+        id = "rhea.geometry.sizing"       
+    [model.propulsion.propeller]
+        id = "rhea.propulsion.propeller_sizing" 
+    [model.propulsion.gasturbine]
+        id = "rhea.propulsion.turboprop_sizing"                 
+    [model.weight]
+        id = "rhea.weight.sizing"
+    [model.mtow]
+        id = "fastoad.loop.mtow"
+    [model.aerodynamics_highspeed]
+        id = "rhea.aerodynamics.highspeed"
+    [model.aerodynamics_lowspeed]
+        id = "rhea.aerodynamics.lowspeed"   
+    [model.aerodynamics_takeoff]
+        id = "rhea.aerodynamics.takeoff"
+    [model.performance_TO]
+        id ="rhea.performances.TOFL"
+        propulsion_id = "rhea.wrapper.propulsion.ML_TP_L1"
+        out_file = "C:/Users/vinx0/OneDrive/Desktop/RHEA/workdir/test_2/sizing/TO_flight_points.csv"
+        prop_fid ="ADT"
+        
+    [model.performance_OEI]
+        id ="rhea.performances.OEI"
+        propulsion_id = "rhea.wrapper.propulsion.ML_TP_L1"
+        prop_fid ="ADT"
+        
+    [model.performance]
+        id = "rhea.performances.sizing_flight"   
+        propulsion_id = "rhea.wrapper.propulsion.ML_TP_L1" #TP_engine_L1
+        out_file = "C:/Users/vinx0/OneDrive/Desktop/RHEA/workdir/test_2/sizing/flight_points.csv"
+             
+    [model.hq_tail_sizing]
+        id = "fastoad.handling_qualities.tail_sizing"
+    [model.hq_static_margin]
+        id = "fastoad.handling_qualities.static_margin"
+    [model.wing_position]
+        id = "rhea.loop.wing_position"        
+    [model.wing_area]
+        id = "rhea.loop.wing_area"
+    [model.engine_size]
+        id = "rhea.loop.engine_size"
+        
+[optimization]  # This section is needed only if optimization process is run
+    [[optimization.design_var]]
+        name = "data:geometry:wing:MAC:at25percent:x"
+        lower = 16.0
+        upper = 18.0
+
+    [[optimization.constraint]]
+        name = "data:handling_qualities:static_margin"
+        lower = 0.05
+        upper = 0.1
+
+    [[optimization.objective]]
+        name = "data:mission:sizing:fuel"

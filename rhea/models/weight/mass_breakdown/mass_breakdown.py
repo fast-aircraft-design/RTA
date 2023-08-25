@@ -14,11 +14,11 @@
 
 import openmdao.api as om
 
-from fastoad.models.options import PAYLOAD_FROM_NPAX
+from fastoad_cs25.models.constants import PAYLOAD_FROM_NPAX
 
-from rhea.models.weight.mass_breakdown.a_airframe import WingWeight, NacellesWeight
+from .a_airframe import WingWeight, NacellesWeight
 
-from fastoad.models.weight.mass_breakdown.a_airframe import (
+from fastoad_cs25.models.weight.mass_breakdown.a_airframe import (
     FuselageWeight,
     EmpennageWeight,
     # FlightControlsWeight,
@@ -26,10 +26,10 @@ from fastoad.models.weight.mass_breakdown.a_airframe import (
     # PylonsWeight,
     # PaintWeight,
 )
-from rhea.models.weight.mass_breakdown.b_propulsion.fuel_lines_weight import (
+from .b_propulsion.fuel_lines_weight import (
     FuelLinesWeight,
 )
-from rhea.models.weight.mass_breakdown.c_systems import (
+from .c_systems import (
     ECSWeight,
     AutoFlightSystemWeight,
     CommunicationSystemWeight,
@@ -42,8 +42,8 @@ from rhea.models.weight.mass_breakdown.c_systems import (
     NavigationSystemWeight,
     APUWeight,
 )
-from fastoad.models.weight.mass_breakdown.cs25 import Loads
-from rhea.models.weight.mass_breakdown.d_furniture import (
+from fastoad_cs25.models.weight.mass_breakdown.cs25 import Loads
+from .d_furniture import (
     LightsWeight,
     WaterWeight,
     OxygenWeight,
@@ -53,12 +53,12 @@ from rhea.models.weight.mass_breakdown.d_furniture import (
     InteriorIntegrationWeight,
 )
 
-from rhea.models.weight.mass_breakdown.e_operational import OperationalEquipmentsWeight,OperationalItemsWeight
+from .e_operational import OperationalEquipmentsWeight,OperationalItemsWeight
 
-from fastoad.models.weight.mass_breakdown.e_crew import CrewWeight
-from fastoad.models.weight.mass_breakdown.payload import ComputePayload
-from fastoad.models.weight.mass_breakdown.update_mlw_and_mzfw import UpdateMLWandMZFW
-from rhea.models.weight.mass_breakdown.b_propulsion.turboprop_weight import TurbopropWeight
+from fastoad_cs25.models.weight.mass_breakdown.e_crew import CrewWeight
+from fastoad_cs25.models.weight.mass_breakdown.payload import ComputePayload
+from fastoad_cs25.models.weight.mass_breakdown.update_mlw_and_mzfw import UpdateMLWandMZFW
+from .b_propulsion.turboprop_weight import TurbopropWeight
 
 
 class MTOWComputation(om.AddSubtractComp):

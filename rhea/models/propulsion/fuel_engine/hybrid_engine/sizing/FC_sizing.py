@@ -15,16 +15,16 @@ Weight computation (mass and CG)
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import openmdao.api as om
-from fastoad.models.options import OpenMdaoOptionDispatcherGroup
+#from fastoad.models.options import OpenMdaoOptionDispatcherGroup
 #from fastoad.models.weight.cg.cg import ComputeAircraftCG
 # from rhea.models.weight.cg.cg_RHEA import CG_RHEA
 # from rhea.models.weight.mass_breakdown import MassBreakdown_RHEA
 import numpy as np
-from fastoad.utils.physics import Atmosphere
+#from fastoad.utils.physics import Atmosphere
 from openmdao.core.explicitcomponent import ExplicitComponent
-from models.propulsion.fuel_engine.hybrid_engine.engine_components.ElectricMotor import ElectricMotor
+from ..engine_components.ElectricMotor import ElectricMotor
 # from models.propulsion.fuel_engine.hybrid_engine.engine_components.Fuel_cell_L1 import Fuel_cell
-from models.propulsion.fuel_engine.hybrid_engine.engine_components.IDC import IDC
+from ..engine_components.IDC import IDC
 import scipy.constants as const
 from scipy.interpolate import interp1d
 

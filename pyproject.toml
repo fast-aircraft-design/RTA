@@ -12,10 +12,7 @@ authors = ["Vincenzo PALLADINO <VINCENZO.PALLADINO@atr-aircraft.com>"]
 # the commit fail because "files were modified by this hook". In that case,
 # doing again the commit including changes in docs/requirements.txt will succeed.
 python = "^3.8, <3.10"
-fast-oad = "0.5.4b0"
-importlib-resources = "3.3.0"
-scikit-learn = "0.24.2"
-openmdao = "3.6.0"
-numpy = "1.20.3"
-networkx = "2.5"
+fast-oad = "^1.5.1"
+scikit-learn = "1.3.0"
 pytest = "^7.4.0"
+importlib-resources = "3.3.0"

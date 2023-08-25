@@ -20,10 +20,10 @@ import math
 from math import sqrt
 
 import numpy as np
-from fastoad.models.geometry import resources
-from importlib_resources import open_text
+# from fastoad.models.geometry import resources
+# from importlib_resources import open_text
 from openmdao.core.explicitcomponent import ExplicitComponent
-from scipy import interpolate
+# from scipy import interpolate
 
 
 class ComputePropulsionCG_RHEA(ExplicitComponent):

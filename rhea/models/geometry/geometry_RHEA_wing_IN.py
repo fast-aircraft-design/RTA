@@ -17,9 +17,9 @@
 
 import openmdao.api as om
 
-from fastoad.models.geometry.compute_aero_center import ComputeAeroCenter
-from fastoad.models.geometry.geom_components import ComputeTotalArea
-from fastoad.models.geometry.geom_components.fuselage import ComputeCnBetaFuselage
+from fastoad_cs25.models.geometry.compute_aero_center import ComputeAeroCenter
+from fastoad_cs25.models.geometry.geom_components.compute_wetted_area import ComputeWettedArea
+#from fastoad.models.geometry.geom_components.fuselage import ComputeCnBetaFuselage
 from rhea.models.geometry.geom_components import ComputeGeometry_RHEA
 
 
@@ -27,18 +27,18 @@ from rhea.models.geometry.geom_components.fuselage.compute_fuselage import (
     ComputeFuselageGeometryBasic,
     ComputeFuselageGeometryCabinSizing,
 )
-from fastoad.models.geometry.geom_components.ht import ComputeHorizontalTailGeometry
-from models.geometry.geom_components.nacelle.compute_nacelle import (
+from fastoad_cs25.models.geometry.geom_components.ht.compute_horizontal_tail import ComputeHorizontalTailGeometry
+from .geom_components.nacelle.compute_nacelle import (
     ComputeNacelleGeometry,
 )
-from fastoad.models.geometry.geom_components.vt import ComputeVerticalTailGeometry
+from fastoad_cs25.models.geometry.geom_components.vt.compute_vertical_tail import ComputeVerticalTailGeometry
 from rhea.models.geometry.geom_components.wing.compute_wing_RHEA_IN import ComputeWingGeometry_RHEA_IN
-from fastoad.models.options import CABIN_SIZING_OPTION
+from fastoad_cs25.models.constants import CABIN_SIZING_OPTION
+from fastoad.module_management.constants import ModelDomain
+from fastoad.module_management.service_registry import RegisterOpenMDAOSystem, RegisterSubmodel
 
 
-
-
-
+@RegisterOpenMDAOSystem("rhea.geometry.wing_IN", domain=ModelDomain.GEOMETRY)
 class Geometry_sizing_no_wing(om.Group):
     """
     Computes geometric characteristics of the (tube-wing) aircraft:
@@ -67,5 +67,5 @@ class Geometry_sizing_no_wing(om.Group):
         )
         self.add_subsystem("compute_ht", ComputeHorizontalTailGeometry(), promotes=["*"])
         self.add_subsystem("compute_vt", ComputeVerticalTailGeometry(), promotes=["*"])
-        self.add_subsystem("compute_total_area", ComputeTotalArea(), promotes=["*"])
+        self.add_subsystem("compute_total_area", ComputeWettedArea(), promotes=["*"])
         self.add_subsystem("compute_aero_center", ComputeAeroCenter(), promotes=["*"])
