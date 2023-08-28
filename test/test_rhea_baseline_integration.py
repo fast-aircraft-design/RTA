@@ -6,11 +6,14 @@ import numpy as np
 import openmdao.api as om
 import pandas as pd
 import pytest
+from fastoad.module_management._plugins import FastoadLoader
 from numpy.testing import assert_allclose
 
 from fastoad import api
 from fastoad.io import VariableIO
 from fastoad.io.configuration.configuration import FASTOADProblemConfigurator
+
+FastoadLoader()
 
 
 DATA_FOLDER_PATH = pth.join(pth.dirname(__file__), "data")
@@ -19,6 +22,7 @@ CONFIGURATION_FILE = "oad_process.yml"
 MISSION_FILE = "sizing_mission_R.yml"
 SOURCE_FILE = "problem_outputs.xml"
 RESULTS_FOLDER = "problem_folder"
+
 
 @pytest.fixture(scope="module")
 def cleanup():
@@ -34,6 +38,7 @@ def test_non_regression_mission(cleanup):
         tolerance=1.0e-2,
     )
 
+
 def run_non_regression_test(
     conf_file,
     legacy_result_file,
@@ -45,9 +50,14 @@ def run_non_regression_test(
     configuration_file_path = pth.join(results_folder_path, conf_file)
 
     # Copy of configuration file and generation of problem instance ------------------
-    api.generate_configuration_file(configuration_file_path)  # just ensure folders are created...
+    api.generate_configuration_file(
+        configuration_file_path
+    )  # just ensure folders are created...
     shutil.copy(pth.join(DATA_FOLDER_PATH, conf_file), configuration_file_path)
-    shutil.copy(pth.join(DATA_FOLDER_PATH, MISSION_FILE), pth.join(results_folder_path, MISSION_FILE))
+    shutil.copy(
+        pth.join(DATA_FOLDER_PATH, MISSION_FILE),
+        pth.join(results_folder_path, MISSION_FILE),
+    )
     configurator = FASTOADProblemConfigurator(configuration_file_path)
 
     # Generation and reading of inputs ----------------------------------------
@@ -63,12 +73,16 @@ def run_non_regression_test(
 
     try:
         problem.model.performance.flight_points.to_csv(
-            pth.join(results_folder_path, "flight_points.csv"), sep="\t", decimal=",",
+            pth.join(results_folder_path, "flight_points.csv"),
+            sep="\t",
+            decimal=",",
         )
     except AttributeError:
         pass
     om.view_connections(
-        problem, outfile=pth.join(results_folder_path, "connections.html"), show_browser=False
+        problem,
+        outfile=pth.join(results_folder_path, "connections.html"),
+        show_browser=False,
     )
 
     # Check that weight-performances loop correctly converged
@@ -84,7 +98,8 @@ def run_non_regression_test(
     )
     assert_allclose(
         problem["data:weight:aircraft:MZFW"],
-        problem["data:weight:aircraft:OWE"] + problem["data:weight:aircraft:max_payload"],
+        problem["data:weight:aircraft:OWE"]
+        + problem["data:weight:aircraft:max_payload"],
         atol=1,
     )
 
@@ -119,6 +134,8 @@ def run_non_regression_test(
     print(df.sort_values(by=["abs_rel_delta"]))
 
     if check_only_mtow:
-        assert np.all(df.abs_rel_delta.loc[df.name == "data:weight:aircraft:MTOW"] < tolerance)
+        assert np.all(
+            df.abs_rel_delta.loc[df.name == "data:weight:aircraft:MTOW"] < tolerance
+        )
     else:
         assert np.all(df.abs_rel_delta < tolerance)

@@ -15,27 +15,27 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from components.cd0_fuselage import Cd0Fuselage
-from fastoad_cs25.models.aerodynamics.components.cd0_ht import Cd0HorizontalTail
-from components.cd0_nacelle_pylons_TP import Cd0NacelleAndPylonsTP
-from components.cd0_total import Cd0Total
-from fastoad_cs25.models.aerodynamics.components.cd0_vt import Cd0VerticalTail
-from components.cd0_wing import Cd0Wing
-from fastoad_cs25.models.aerodynamics.components.cd_trim import CdTrim
-from rhea.models.aerodynamics.components.compute_low_speed_aero import (
-    ComputeAerodynamicsLowSpeed,
-)
-from rhea.models.aerodynamics.components.compute_polar import ComputePolar, PolarType
-from fastoad_cs25.models.aerodynamics.components.compute_reynolds import ComputeReynolds
-from rhea.models.aerodynamics.components.initialize_cl import InitializeClPolar
-from components.oswald import OswaldCoefficient
-from openmdao.core.group import Group
-from openmdao.core.indepvarcomp import IndepVarComp
 from fastoad.module_management.constants import ModelDomain
 from fastoad.module_management.service_registry import (
     RegisterOpenMDAOSystem,
-    RegisterSubmodel,
 )
+from fastoad_cs25.models.aerodynamics.components.cd0_ht import Cd0HorizontalTail
+from fastoad_cs25.models.aerodynamics.components.cd0_vt import Cd0VerticalTail
+from fastoad_cs25.models.aerodynamics.components.cd_trim import CdTrim
+from fastoad_cs25.models.aerodynamics.components.compute_reynolds import ComputeReynolds
+from openmdao.core.group import Group
+from openmdao.core.indepvarcomp import IndepVarComp
+
+from rhea.models.aerodynamics.components.compute_low_speed_aero import (
+    ComputeAerodynamicsLowSpeed,
+)
+from .components.cd0_fuselage import Cd0Fuselage
+from .components.cd0_nacelle_pylons_TP import Cd0NacelleAndPylonsTP
+from .components.cd0_total import Cd0Total
+from .components.cd0_wing import Cd0Wing
+from .components.compute_polar import ComputePolar, PolarType
+from .components.initialize_cl import InitializeClPolar
+from .components.oswald import OswaldCoefficient
 
 
 @RegisterOpenMDAOSystem("rhea.aerodynamics.lowspeed", domain=ModelDomain.AERODYNAMICS)

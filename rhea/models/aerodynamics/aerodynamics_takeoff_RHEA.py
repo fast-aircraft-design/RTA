@@ -12,18 +12,16 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import openmdao.api as om
-from rhea.models.aerodynamics.components.compute_polar import ComputePolar, PolarType
-
-from rhea.models.aerodynamics.components.high_lift_aero import ComputeDeltaHighLift
-from rhea.models.aerodynamics.components.lg_effect import ComputeDeltaLg
-
-from rhea.models.aerodynamics.components.OEI_effect import ComputeDeltaOEI
-from rhea.models.aerodynamics.components.initialize_in import InitializeIN
 from fastoad.module_management.constants import ModelDomain
 from fastoad.module_management.service_registry import (
     RegisterOpenMDAOSystem,
-    RegisterSubmodel,
 )
+
+from .components.OEI_effect import ComputeDeltaOEI
+from .components.compute_polar import ComputePolar, PolarType
+from .components.high_lift_aero import ComputeDeltaHighLift
+from .components.initialize_in import InitializeIN
+from .components.lg_effect import ComputeDeltaLg
 
 
 @RegisterOpenMDAOSystem("rhea.aerodynamics.takeoff", domain=ModelDomain.AERODYNAMICS)
