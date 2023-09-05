@@ -22,133 +22,209 @@ import matplotlib.pyplot as plt
 
 COLS = plotly.colors.DEFAULT_PLOTLY_COLORS
 
-def plot_double(x,y1,y2,x_label,y1_label,y2_label):
-    
+
+def plot_double(x, y1, y2, x_label, y1_label, y2_label):
+
     fig, ax1 = plt.subplots()
-    color = 'tab:red'
+    color = "tab:red"
     ax1.set_xlabel(x_label)
     ax1.set_ylabel(y1_label, color=color)
     ax1.plot(x, y1, color=color)
 
-
-    ax1.tick_params(axis='y', labelcolor=color)
+    ax1.tick_params(axis="y", labelcolor=color)
     ax2 = ax1.twinx()  # instantiate a second axes that shares the same x-axis
 
-    color = 'tab:blue'
+    color = "tab:blue"
     ax2.set_ylabel(y2_label, color=color)  # we already handled the x-label with ax1
-    ax2.tick_params(axis='y', labelcolor=color)
-    ax2.plot(x,y2, color=color)
+    ax2.tick_params(axis="y", labelcolor=color)
+    ax2.plot(x, y2, color=color)
     plt.show()
 
-def loading_diagram_plot(aircraft_file_path: str, name=None, fig=None, file_formatter=None, dist_ref=None, pl_ref=None
-) -> go.FigureWidget:
-    results = VariableIO(aircraft_file_path, file_formatter).read()    
 
-    #Certified ATR72 limits
-    index_in_flight=[-27.6,-41.5,-24.7839648,49.00784,25.794]
-    weight_in_flight=[12000,18000,22800,22800,12000]
-    
-    index_TO_LD=[-29.478,-25.333,-30.5,-15.4724752,42.00672,22.109]
-    weight_TO_LD=[12800,15000,18000,22800,22800,12000]
-    
-    #Operational standard limits
-    index_op=[-16.665,-14.545,-22.136,-3.8,32,13.003,10.746]
-    weight_op=[13500,14688,18000,23000,23000,14688,13500]
-    
-    OWE_index= np.asarray(results["data:weight:aircraft:operating_empty:CG:index"].value)[0]
-    Fuel_index = np.asarray(results["data:weight:aircraft:load_case_1:CG:index"].value)[0]
-    Cargo_index = np.asarray(results["data:weight:aircraft:load_case_2:CG:index"].value)[0]
-    Pax_index = np.asarray(results["data:weight:aircraft:load_case_3:CG:index"].value)[0]
-    
-    OWE_weight = np.asarray(results["data:weight:aircraft:operating_empty:mass"].value)[0]
+def loading_diagram_plot(
+    aircraft_file_path: str,
+    name=None,
+    fig=None,
+    file_formatter=None,
+    dist_ref=None,
+    pl_ref=None,
+) -> go.FigureWidget:
+    results = VariableIO(aircraft_file_path, file_formatter).read()
+
+    # Certified ATR72 limits
+    index_in_flight = [-27.6, -41.5, -24.7839648, 49.00784, 25.794]
+    weight_in_flight = [12000, 18000, 22800, 22800, 12000]
+
+    index_TO_LD = [-29.478, -25.333, -30.5, -15.4724752, 42.00672, 22.109]
+    weight_TO_LD = [12800, 15000, 18000, 22800, 22800, 12000]
+
+    # Operational standard limits
+    index_op = [-16.665, -14.545, -22.136, -3.8, 32, 13.003, 10.746]
+    weight_op = [13500, 14688, 18000, 23000, 23000, 14688, 13500]
+
+    OWE_index = np.asarray(
+        results["data:weight:aircraft:operating_empty:CG:index"].value
+    )[0]
+    Fuel_index = np.asarray(results["data:weight:aircraft:load_case_1:CG:index"].value)[
+        0
+    ]
+    Cargo_index = np.asarray(
+        results["data:weight:aircraft:load_case_2:CG:index"].value
+    )[0]
+    Pax_index = np.asarray(results["data:weight:aircraft:load_case_3:CG:index"].value)[
+        0
+    ]
+
+    OWE_weight = np.asarray(results["data:weight:aircraft:operating_empty:mass"].value)[
+        0
+    ]
     Fuel_weight = np.asarray(results["data:weight:aircraft:load_case_1:mass"].value)[0]
     Cargo_weight = np.asarray(results["data:weight:aircraft:load_case_2:mass"].value)[0]
     Pax_weight = np.asarray(results["data:weight:aircraft:load_case_3:mass"].value)[0]
-    
+
     fig = go.Figure()
-    
-    scatter = go.Scatter(x=np.array(index_in_flight), y=np.array(weight_in_flight),line=dict(color="darkblue"),name='In flight')
-    scatter2 = go.Scatter(x=np.array(index_TO_LD), y=np.array(weight_TO_LD),line=dict(color="red"),name='TO/LD')
-    scatter3 = go.Scatter(x=np.array(index_op), y=np.array(weight_op),line=dict(color="green"),name='Operational')
-    
-    scatter4 = go.Scatter(x=np.array([OWE_index,Fuel_index,Cargo_index,Pax_index]), y=np.array([OWE_weight,Fuel_weight,Cargo_weight,Pax_weight]), line=dict(color="Crimson",dash='dash'), marker = dict(symbol='diamond'),name='Result')
-    
+
+    scatter = go.Scatter(
+        x=np.array(index_in_flight),
+        y=np.array(weight_in_flight),
+        line=dict(color="darkblue"),
+        name="In flight",
+    )
+    scatter2 = go.Scatter(
+        x=np.array(index_TO_LD),
+        y=np.array(weight_TO_LD),
+        line=dict(color="red"),
+        name="TO/LD",
+    )
+    scatter3 = go.Scatter(
+        x=np.array(index_op),
+        y=np.array(weight_op),
+        line=dict(color="green"),
+        name="Operational",
+    )
+
+    scatter4 = go.Scatter(
+        x=np.array([OWE_index, Fuel_index, Cargo_index, Pax_index]),
+        y=np.array([OWE_weight, Fuel_weight, Cargo_weight, Pax_weight]),
+        line=dict(color="Crimson", dash="dash"),
+        marker=dict(symbol="diamond"),
+        name="Result",
+    )
+
     fig.add_trace(scatter)
     fig.add_trace(scatter2)
     fig.add_trace(scatter3)
     fig.add_trace(scatter4)
     fig = go.FigureWidget(fig)
-    
+
     fig.update_layout(
-        title_text="Loading diagram", title_x=0.5, xaxis_title="index", yaxis_title="Weight",
+        title_text="Loading diagram",
+        title_x=0.5,
+        xaxis_title="index",
+        yaxis_title="Weight",
     )
-    return fig    
+    return fig
 
-def payload_range_plot(aircraft_file_path: str, name=None, fig=None, file_formatter=None, dist_ref=None, pl_ref=None,color=None
+
+def payload_range_plot(
+    aircraft_file_path: str,
+    name=None,
+    fig=None,
+    file_formatter=None,
+    dist_ref=None,
+    pl_ref=None,
+    color=None,
 ) -> go.FigureWidget:
-    variables = VariableIO(aircraft_file_path, file_formatter).read()    
+    variables = VariableIO(aircraft_file_path, file_formatter).read()
     ranges = np.asarray(variables["data:mission:payload_range:range"].value)
-    payloads = np.asarray(variables["data:mission:payload_range:payload"].value)   
-
-
+    payloads = np.asarray(variables["data:mission:payload_range:payload"].value)
 
     if fig is None:
         fig = go.Figure()
 
     if pl_ref is None:
 
-        scatter = go.Scatter(x=np.delete(ranges[1:],1), y=np.delete(payloads[1:],1),line=dict(color=color),name=name)
-        scatter2 = go.Scatter(x=np.array([ranges[0],ranges[2],ranges[3]]), y=np.array([payloads[0],payloads[2],payloads[3]]), line=dict(color=color),name=name,showlegend=False)
-    
-
+        scatter = go.Scatter(
+            x=np.delete(ranges[1:], 1),
+            y=np.delete(payloads[1:], 1),
+            line=dict(color=color),
+            name=name,
+        )
+        scatter2 = go.Scatter(
+            x=np.array([ranges[0], ranges[2], ranges[3]]),
+            y=np.array([payloads[0], payloads[2], payloads[3]]),
+            line=dict(color=color),
+            name=name,
+            showlegend=False,
+        )
 
     else:
-        scatter = go.Scatter(x=dist_ref, y=pl_ref,line=dict(color=color),name=name)
-        scatter2 = go.Scatter(x=np.array([0,dist_ref[2]]), y=np.array([pl_ref[2],pl_ref[2]]), line=dict(color=color,dash='dash'),name=name,showlegend=False)
-       
+        scatter = go.Scatter(x=dist_ref, y=pl_ref, line=dict(color=color), name=name)
+        scatter2 = go.Scatter(
+            x=np.array([0, dist_ref[2]]),
+            y=np.array([pl_ref[2], pl_ref[2]]),
+            line=dict(color=color, dash="dash"),
+            name=name,
+            showlegend=False,
+        )
 
     fig.add_trace(scatter)
     fig.add_trace(scatter2)
 
     fig = go.FigureWidget(fig)
-    
+
     fig.update_layout(
-        title_text="Payload range", title_x=0.5, xaxis_title="range", yaxis_title="Payload",
+        title_text="Payload range",
+        title_x=0.5,
+        xaxis_title="range",
+        yaxis_title="Payload",
     )
-    
-    return fig    
 
-def payload_range_plot2(aircraft_file_path: str, name=None, fig=None, file_formatter=None, dist_ref=None, pl_ref=None,color=None
+    return fig
+
+
+def payload_range_plot2(
+    aircraft_file_path: str,
+    name=None,
+    fig=None,
+    file_formatter=None,
+    dist_ref=None,
+    pl_ref=None,
+    color=None,
 ) -> go.FigureWidget:
-    variables = VariableIO(aircraft_file_path, file_formatter).read()    
+    variables = VariableIO(aircraft_file_path, file_formatter).read()
     ranges = np.asarray(variables["data:mission:payload_range:range"].value)
-    payloads = np.asarray(variables["data:mission:payload_range:payload"].value)   
-
-
+    payloads = np.asarray(variables["data:mission:payload_range:payload"].value)
 
     if fig is None:
         fig = go.Figure()
 
     if pl_ref is None:
 
-        scatter = go.Scatter(x=np.delete(ranges,1), y=np.delete(payloads,1),line=dict(color=color),name=name)
-
-
+        scatter = go.Scatter(
+            x=np.delete(ranges, 1),
+            y=np.delete(payloads, 1),
+            line=dict(color=color),
+            name=name,
+        )
 
     else:
-        scatter = go.Scatter(x=dist_ref, y=pl_ref,line=dict(color=color),name=name)
-       
+        scatter = go.Scatter(x=dist_ref, y=pl_ref, line=dict(color=color), name=name)
 
     fig.add_trace(scatter)
 
     fig = go.FigureWidget(fig)
-    
+
     fig.update_layout(
-        title_text="Payload range", title_x=0.5, xaxis_title="range", yaxis_title="Payload",
+        title_text="Payload range",
+        title_x=0.5,
+        xaxis_title="range",
+        yaxis_title="Payload",
     )
-    
-    return fig  
-    
+
+    return fig
+
+
 def wing_geometry_plot(
     aircraft_file_path: str, name=None, fig=None, file_formatter=None
 ) -> go.FigureWidget:
@@ -166,8 +242,12 @@ def wing_geometry_plot(
     """
     variables = VariableIO(aircraft_file_path, file_formatter).read()
 
-    wing_kink_leading_edge_x = variables["data:geometry:wing:kink:leading_edge:x:local"].value[0]
-    wing_tip_leading_edge_x = variables["data:geometry:wing:tip:leading_edge:x:local"].value[0]
+    wing_kink_leading_edge_x = variables[
+        "data:geometry:wing:kink:leading_edge:x:local"
+    ].value[0]
+    wing_tip_leading_edge_x = variables[
+        "data:geometry:wing:tip:leading_edge:x:local"
+    ].value[0]
     wing_root_y = variables["data:geometry:wing:root:y"].value[0]
     wing_kink_y = variables["data:geometry:wing:kink:y"].value[0]
     wing_tip_y = variables["data:geometry:wing:tip:y"].value[0]
@@ -177,7 +257,17 @@ def wing_geometry_plot(
 
     # pylint: disable=invalid-name # that's a common naming
     y = np.array(
-        [0, wing_root_y, wing_kink_y, wing_tip_y, wing_tip_y, wing_kink_y, wing_root_y, 0, 0]
+        [
+            0,
+            wing_root_y,
+            wing_kink_y,
+            wing_tip_y,
+            wing_tip_y,
+            wing_kink_y,
+            wing_root_y,
+            0,
+            0,
+        ]
     )
     # pylint: disable=invalid-name # that's a common naming
     y = np.concatenate((-y, y))
@@ -211,7 +301,10 @@ def wing_geometry_plot(
     fig = go.FigureWidget(fig)
 
     fig.update_layout(
-        title_text="Wing Geometry", title_x=0.5, xaxis_title="y", yaxis_title="x",
+        title_text="Wing Geometry",
+        title_x=0.5,
+        xaxis_title="y",
+        yaxis_title="x",
     )
 
     return fig
@@ -236,8 +329,12 @@ def aircraft_geometry_plot(
     variables = VariableIO(aircraft_file_path, file_formatter).read()
 
     # Wing parameters
-    wing_kink_leading_edge_x = variables["data:geometry:wing:kink:leading_edge:x:local"].value[0]
-    wing_tip_leading_edge_x = variables["data:geometry:wing:tip:leading_edge:x:local"].value[0]
+    wing_kink_leading_edge_x = variables[
+        "data:geometry:wing:kink:leading_edge:x:local"
+    ].value[0]
+    wing_tip_leading_edge_x = variables[
+        "data:geometry:wing:tip:leading_edge:x:local"
+    ].value[0]
     wing_root_y = variables["data:geometry:wing:root:y"].value[0]
     wing_kink_y = variables["data:geometry:wing:kink:y"].value[0]
     wing_tip_y = variables["data:geometry:wing:tip:y"].value[0]
@@ -246,7 +343,17 @@ def aircraft_geometry_plot(
     wing_tip_chord = variables["data:geometry:wing:tip:chord"].value[0]
 
     y_wing = np.array(
-        [0, wing_root_y, wing_kink_y, wing_tip_y, wing_tip_y, wing_kink_y, wing_root_y, 0, 0]
+        [
+            0,
+            wing_root_y,
+            wing_kink_y,
+            wing_tip_y,
+            wing_tip_y,
+            wing_kink_y,
+            wing_root_y,
+            0,
+            0,
+        ]
     )
 
     x_wing = np.array(
@@ -274,7 +381,13 @@ def aircraft_geometry_plot(
     y_ht = np.array([0, ht_span / 2.0, ht_span / 2.0, 0.0, 0.0])
 
     x_ht = np.array(
-        [0, ht_tip_leading_edge_x, ht_tip_leading_edge_x + ht_tip_chord, ht_root_chord, 0]
+        [
+            0,
+            ht_tip_leading_edge_x,
+            ht_tip_leading_edge_x + ht_tip_chord,
+            ht_root_chord,
+            0,
+        ]
     )
 
     # Fuselage parameters
@@ -308,8 +421,12 @@ def aircraft_geometry_plot(
     # CGs
     wing_25mac_x = variables["data:geometry:wing:MAC:at25percent:x"].value[0]
     wing_mac_length = variables["data:geometry:wing:MAC:length"].value[0]
-    local_wing_mac_le_x = variables["data:geometry:wing:MAC:leading_edge:x:local"].value[0]
-    local_ht_25mac_x = variables["data:geometry:horizontal_tail:MAC:at25percent:x:local"].value[0]
+    local_wing_mac_le_x = variables[
+        "data:geometry:wing:MAC:leading_edge:x:local"
+    ].value[0]
+    local_ht_25mac_x = variables[
+        "data:geometry:horizontal_tail:MAC:at25percent:x:local"
+    ].value[0]
     ht_distance_from_wing = variables[
         "data:geometry:horizontal_tail:MAC:at25percent:x:from_wingMAC25"
     ].value[0]
@@ -339,14 +456,22 @@ def aircraft_geometry_plot(
     fig = go.FigureWidget(fig)
 
     fig.update_layout(
-        title_text="Aircraft Geometry", title_x=0.5, xaxis_title="y", yaxis_title="x",
+        title_text="Aircraft Geometry",
+        title_x=0.5,
+        xaxis_title="y",
+        yaxis_title="x",
     )
 
     return fig
 
 
 def drag_polar_plot(
-    aircraft_file_path: str, name=None, fig=None, file_formatter=None, Cl_list=None, Cd_list=None
+    aircraft_file_path: str,
+    name=None,
+    fig=None,
+    file_formatter=None,
+    Cl_list=None,
+    Cd_list=None,
 ) -> go.FigureWidget:
     """
     Returns a figure plot of the aircraft drag polar.
@@ -362,18 +487,18 @@ def drag_polar_plot(
     """
     if Cl_list is None:
         variables = VariableIO(aircraft_file_path, file_formatter).read()
-    
+
         # pylint: disable=invalid-name # that's a common naming
         cd = np.asarray(variables["data:aerodynamics:aircraft:cruise:CD"].value)
         # pylint: disable=invalid-name # that's a common naming
         cl = np.asarray(variables["data:aerodynamics:aircraft:cruise:CL"].value)
-    
+
         # TODO: remove filtering one models provide proper bounds
         cd_short = cd[cd <= 0.3]
         cl_short = cl[cd <= 2.0]
     else:
-        cd_short=Cd_list
-        cl_short=Cl_list
+        cd_short = Cd_list
+        cl_short = Cl_list
 
     if fig is None:
         fig = go.Figure()
@@ -385,7 +510,10 @@ def drag_polar_plot(
     fig = go.FigureWidget(fig)
 
     fig.update_layout(
-        title_text="Drag Polar", title_x=0.5, xaxis_title="Cd", yaxis_title="Cl",
+        title_text="Drag Polar",
+        title_x=0.5,
+        xaxis_title="Cd",
+        yaxis_title="Cl",
     )
 
     return fig
@@ -430,7 +558,10 @@ def mass_breakdown_bar_plot(
         fig = make_subplots(
             rows=1,
             cols=2,
-            subplot_titles=("Maximum Take-Off Weight Breakdown", "Overall Weight Empty Breakdown"),
+            subplot_titles=(
+                "Maximum Take-Off Weight Breakdown",
+                "Overall Weight Empty Breakdown",
+            ),
         )
 
     # Same color for each aircraft configuration
@@ -438,10 +569,16 @@ def mass_breakdown_bar_plot(
 
     # weight_labels = ["MTOW", "OWE", "Fuel - Mission", "Payload"]
     # weight_values = [MTOW, OWE, fuel_mission, payload]
-    weight_labels = ["MTOW", "OWE", "Fuel - Mission", "H2 - Mission","Payload"]
-    weight_values = [MTOW, OWE, fuel_mission,H2_mission ,payload]    
+    weight_labels = ["MTOW", "OWE", "Fuel - Mission", "H2 - Mission", "Payload"]
+    weight_values = [MTOW, OWE, fuel_mission, H2_mission, payload]
     fig.add_trace(
-        go.Bar(name="", x=weight_labels, y=weight_values, marker_color=COLS[i], showlegend=False),
+        go.Bar(
+            name="",
+            x=weight_labels,
+            y=weight_values,
+            marker_color=COLS[i],
+            showlegend=False,
+        ),
         row=1,
         col=1,
     )
@@ -449,7 +586,9 @@ def mass_breakdown_bar_plot(
     weight_labels = ["Airframe", "Propulsion", "Systems", "Furniture", "Operational"]
     weight_values = [airframe, propulsion, systems, furniture, operational]
     fig.add_trace(
-        go.Bar(name=name, x=weight_labels, y=weight_values, marker_color=COLS[i]), row=1, col=2,
+        go.Bar(name=name, x=weight_labels, y=weight_values, marker_color=COLS[i]),
+        row=1,
+        col=2,
     )
 
     fig.update_layout(yaxis_title="[kg]")
@@ -473,8 +612,12 @@ def mass_breakdown_sun_plot(aircraft_file_path: str, file_formatter=None):
 
     systems = variables["data:weight:systems:mass"].value[0]
     C11 = variables["data:weight:systems:auxiliary_power_unit:mass"].value[0]
-    C12 = variables["data:weight:systems:electric_systems:electric_generation:mass"].value[0]
-    C13 = variables["data:weight:systems:electric_systems:electric_common_installation:mass"].value[0]    
+    C12 = variables[
+        "data:weight:systems:electric_systems:electric_generation:mass"
+    ].value[0]
+    C13 = variables[
+        "data:weight:systems:electric_systems:electric_common_installation:mass"
+    ].value[0]
     C14 = variables["data:weight:systems:hydraulic_systems:mass"].value[0]
     C15 = variables["data:weight:systems:fire_protection:mass"].value[0]
     C16 = variables["data:weight:systems:flight_furnishing:mass"].value[0]
@@ -484,7 +627,6 @@ def mass_breakdown_sun_plot(aircraft_file_path: str, file_formatter=None):
     C20 = variables["data:weight:systems:de-icing:mass"].value[0]
     C21 = variables["data:weight:systems:navigation:mass"].value[0]
     C22 = variables["data:weight:systems:flight_controls:mass"].value[0]
-
 
     furniture = variables["data:weight:furniture:mass"].value[0]
     D2 = variables["data:weight:furniture:furnishing:mass"].value[0]
@@ -502,8 +644,7 @@ def mass_breakdown_sun_plot(aircraft_file_path: str, file_formatter=None):
     O5 = variables["data:weight:operational:items:galley_structure:mass"].value[0]
     O6 = variables["data:weight:operational:equipment:crew:mass"].value[0]
     O7 = variables["data:weight:operational:equipment:others:mass"].value[0]
-    
-    
+
     airframe = variables["data:weight:airframe:mass"].value[0]
     wing = variables["data:weight:airframe:wing:mass"].value[0]
     fuselage = variables["data:weight:airframe:fuselage:mass"].value[0]
@@ -516,31 +657,40 @@ def mass_breakdown_sun_plot(aircraft_file_path: str, file_formatter=None):
     propulsion = variables["data:weight:propulsion:mass"].value[0]
     B1 = variables["data:weight:propulsion:engine:mass"].value[0]
     B2 = variables["data:weight:propulsion:propeller:mass"].value[0]
-    B3 = variables["data:weight:propulsion:engine_controls_instrumentation:mass"].value[0]
+    B3 = variables["data:weight:propulsion:engine_controls_instrumentation:mass"].value[
+        0
+    ]
     B4 = variables["data:weight:propulsion:fuel_system:mass"].value[0]
-    
+
     try:
-        B5 = variables["data:weight:propulsion:electric_systems:fuel_cell:mass"].value[0]
+        B5 = variables["data:weight:propulsion:electric_systems:fuel_cell:mass"].value[
+            0
+        ]
         B6 = variables["data:weight:propulsion:electric_systems:motor:mass"].value[0]
-        B12 = variables["data:weight:propulsion:electric_systems:power_electronics:mass"].value[0]
+        B12 = variables[
+            "data:weight:propulsion:electric_systems:power_electronics:mass"
+        ].value[0]
         B7 = variables["data:weight:propulsion:electric_systems:cooling:mass"].value[0]
-        B10 = variables["data:weight:propulsion:electric_systems:H2_distribution:mass"].value[0]
+        B10 = variables[
+            "data:weight:propulsion:electric_systems:H2_distribution:mass"
+        ].value[0]
         B11 = variables["data:weight:propulsion:electric_systems:cables:mass"].value[0]
         B8 = variables["data:weight:propulsion:electric_systems:battery:mass"].value[0]
-        B9 = variables["data:weight:propulsion:electric_systems:H2_storage:mass"].value[0] 
+        B9 = variables["data:weight:propulsion:electric_systems:H2_storage:mass"].value[
+            0
+        ]
     except ValueError:
-        B5=0
-        B6=0
-        B7=0
-        B10=0
-        B11=0
-        B8=0
-        B9=0   
-        B12=0
-        
-    
+        B5 = 0
+        B6 = 0
+        B7 = 0
+        B10 = 0
+        B11 = 0
+        B8 = 0
+        B9 = 0
+        B12 = 0
+
     margin_policy = variables["data:weight:aircraft_empty:contingency"].value[0]
-    
+
     MTOW = variables["data:weight:aircraft:MTOW"].value[0]
     OWE = variables["data:weight:aircraft:OWE"].value[0]
     payload = variables["data:weight:aircraft:payload"].value[0]
@@ -551,7 +701,11 @@ def mass_breakdown_sun_plot(aircraft_file_path: str, file_formatter=None):
     if round(MTOW, 6) == round(OWE + payload + fuel_mission, 6):
         MTOW = OWE + payload + fuel_mission
 
-    fig = make_subplots(1, 2, specs=[[{"type": "domain"}, {"type": "domain"}]],)
+    fig = make_subplots(
+        1,
+        2,
+        specs=[[{"type": "domain"}, {"type": "domain"}]],
+    )
 
     # fig.add_trace(
     #     go.Sunburst(
@@ -604,8 +758,13 @@ def mass_breakdown_sun_plot(aircraft_file_path: str, file_formatter=None):
                 + str(int(H2_mission))
                 + " [kg] ("
                 + str(round(H2_mission / MTOW * 100, 1))
-                + "%)",                
-                "OWE" + "<br>" + str(int(OWE)) + " [kg] (" + str(round(OWE / MTOW * 100, 1)) + "%)",
+                + "%)",
+                "OWE"
+                + "<br>"
+                + str(int(OWE))
+                + " [kg] ("
+                + str(round(OWE / MTOW * 100, 1))
+                + "%)",
             ],
             parents=[
                 "",
@@ -614,7 +773,7 @@ def mass_breakdown_sun_plot(aircraft_file_path: str, file_formatter=None):
                 "MTOW" + "<br>" + str(int(MTOW)) + " [kg]",
                 "MTOW" + "<br>" + str(int(MTOW)) + " [kg]",
             ],
-            values=[MTOW, payload, fuel_mission,H2_mission, OWE],
+            values=[MTOW, payload, fuel_mission, H2_mission, OWE],
             branchvalues="total",
         ),
         1,
@@ -654,15 +813,20 @@ def mass_breakdown_sun_plot(aircraft_file_path: str, file_formatter=None):
         + "%)"
     )
     operational_str = (
-        "operational" + "<br>" + str(int(operational)) + " [kg] (" + str(round(operational / OWE * 100, 1)) + "%)"
+        "operational"
+        + "<br>"
+        + str(int(operational))
+        + " [kg] ("
+        + str(round(operational / OWE * 100, 1))
+        + "%)"
     )
 
     contingency_str = (
-        "margin policy" 
-        + "<br>" 
-        + str(int(margin_policy)) 
-        + " [kg] (" 
-        + str(round(margin_policy / OWE * 100, 1)) 
+        "margin policy"
+        + "<br>"
+        + str(int(margin_policy))
+        + " [kg] ("
+        + str(round(margin_policy / OWE * 100, 1))
         + "%)"
     )
 
@@ -689,8 +853,8 @@ def mass_breakdown_sun_plot(aircraft_file_path: str, file_formatter=None):
                 "fuel_system",
                 "fuel_cell",
                 "motor",
-                "power_electronics", 
-                "cooling", 
+                "power_electronics",
+                "cooling",
                 "H2_distribution",
                 "cables",
                 "battery",
@@ -742,9 +906,9 @@ def mass_breakdown_sun_plot(aircraft_file_path: str, file_formatter=None):
                 propulsion_str,
                 propulsion_str,
                 propulsion_str,
-                propulsion_str,   
                 propulsion_str,
-                propulsion_str,          
+                propulsion_str,
+                propulsion_str,
                 propulsion_str,
                 propulsion_str,
                 propulsion_str,
@@ -768,11 +932,11 @@ def mass_breakdown_sun_plot(aircraft_file_path: str, file_formatter=None):
                 furniture_str,
                 furniture_str,
                 furniture_str,
-                operational_str,                
-                operational_str,  
-                operational_str,  
-                operational_str,  
-                operational_str,  
+                operational_str,
+                operational_str,
+                operational_str,
+                operational_str,
+                operational_str,
                 operational_str,
             ],
             values=[
@@ -838,7 +1002,8 @@ def mass_breakdown_sun_plot(aircraft_file_path: str, file_formatter=None):
 
     return fig
 
-def drag_breakdown_sun_plot(aircraft_file_path: str,Cl_cruise, file_formatter=None):
+
+def drag_breakdown_sun_plot(aircraft_file_path: str, Cl_cruise, file_formatter=None):
     """
     Returns a figure sunburst plot of the mass breakdown.
     On the left a MTOW sunburst and on the right a OWE sunburst.
@@ -851,42 +1016,116 @@ def drag_breakdown_sun_plot(aircraft_file_path: str,Cl_cruise, file_formatter=No
     :return: sunburst plot figure
     """
     variables = VariableIO(aircraft_file_path, file_formatter).read()
-    Cl_rhea =np.asarray(variables["data:aerodynamics:aircraft:cruise:CL"].value)
+    Cl_rhea = np.asarray(variables["data:aerodynamics:aircraft:cruise:CL"].value)
     # Cd_rhea =  np.asarray(variables["data:aerodynamics:aircraft:cruise:CD"].value)
-    
-    # Cl_cruise=0.45
-    idx= list(Cl_rhea).index(Cl_cruise)
-    Cd_cruise =  np.asarray(variables["data:aerodynamics:aircraft:cruise:CD"].value[idx])*10**4
-    
-    k_e =  np.asarray(variables["data:aerodynamics:aircraft:cruise:induced_drag_coefficient"].value)[0]
-    k_winglet = np.asarray(variables["tuning:aerodynamics:aircraft:cruise:CD:winglet_effect:k"].value)[0]
-    Cdi_rhea =k_e* Cl_cruise**2*10**4*k_winglet
-    
-    Cd0_rhea_w =  np.asarray(variables["data:aerodynamics:wing:cruise:CD0"].value[idx])*10**4
-    Cd0_rhea_f =  np.asarray(variables["data:aerodynamics:fuselage:cruise:CD0"].value[idx])*10**4
-    Cd0_rhea_ht =  np.asarray(variables["data:aerodynamics:horizontal_tail:cruise:CD0"].value)[0]*10**4
-    Cd0_rhea_vt =  np.asarray(variables["data:aerodynamics:vertical_tail:cruise:CD0"].value)[0]*10**4
-    Cd0_rhea_nac =  np.asarray(variables["data:aerodynamics:nacelles:cruise:CD0"].value)[0]*10**4
-    
-    Cd_0 =  np.asarray(variables["data:aerodynamics:aircraft:cruise:CD0"].value[idx])*10**4
-    Cd0_parasitic= Cd_0-(Cd0_rhea_nac+Cd0_rhea_vt+Cd0_rhea_ht+Cd0_rhea_f+Cd0_rhea_w)
-    
-    Cd_c =  np.asarray(variables["data:aerodynamics:aircraft:cruise:CD:compressibility"].value[idx])*10**4
-    Cd_trim =  np.asarray(variables["data:aerodynamics:aircraft:cruise:CD:trim"].value[idx])*10**4
-    
-    # cd0_tot=Cd0_rhea_w+Cd0_rhea_f+Cd0_rhea_ht+Cd0_rhea_vt+Cd0_rhea_nac    
-    
-    fig =go.Figure(go.Sunburst(
-        labels=["Cd", "Cd0" , "Cdi", "Cdc", "Cdtrim", "Cd0_w", "Cd0_f", "Cd0_nac", "Cd0_ht",'Cd0_vt','Cd0_paras'],
-        parents=["", "Cd", "Cd", "Cd", "Cd","Cd0" , "Cd0" , "Cd0" , "Cd0" ,"Cd0" ,"Cd0"  ],
-        values=[Cd_cruise,Cd_0, Cdi_rhea, Cd_c, Cd_trim, Cd0_rhea_w, Cd0_rhea_f, Cd0_rhea_nac, Cd0_rhea_ht, Cd0_rhea_vt,Cd0_parasitic],
-        branchvalues="total"))
-    
-    fig.update_layout(title_text="Cruise Drag Breakdown", title_x=0.5)#,margin = dict(t=0, l=0, r=0, b=0))
-    
 
+    # Cl_cruise=0.45
+    idx = list(Cl_rhea).index(Cl_cruise)
+    Cd_cruise = (
+        np.asarray(variables["data:aerodynamics:aircraft:cruise:CD"].value[idx])
+        * 10**4
+    )
+
+    k_e = np.asarray(
+        variables["data:aerodynamics:aircraft:cruise:induced_drag_coefficient"].value
+    )[0]
+    k_winglet = np.asarray(
+        variables["tuning:aerodynamics:aircraft:cruise:CD:winglet_effect:k"].value
+    )[0]
+    Cdi_rhea = k_e * Cl_cruise**2 * 10**4 * k_winglet
+
+    Cd0_rhea_w = (
+        np.asarray(variables["data:aerodynamics:wing:cruise:CD0"].value[idx]) * 10**4
+    )
+    Cd0_rhea_f = (
+        np.asarray(variables["data:aerodynamics:fuselage:cruise:CD0"].value[idx])
+        * 10**4
+    )
+    Cd0_rhea_ht = (
+        np.asarray(variables["data:aerodynamics:horizontal_tail:cruise:CD0"].value)[0]
+        * 10**4
+    )
+    Cd0_rhea_vt = (
+        np.asarray(variables["data:aerodynamics:vertical_tail:cruise:CD0"].value)[0]
+        * 10**4
+    )
+    Cd0_rhea_nac = (
+        np.asarray(variables["data:aerodynamics:nacelles:cruise:CD0"].value)[0]
+        * 10**4
+    )
+
+    Cd_0 = (
+        np.asarray(variables["data:aerodynamics:aircraft:cruise:CD0"].value[idx])
+        * 10**4
+    )
+    Cd0_parasitic = Cd_0 - (
+        Cd0_rhea_nac + Cd0_rhea_vt + Cd0_rhea_ht + Cd0_rhea_f + Cd0_rhea_w
+    )
+
+    Cd_c = (
+        np.asarray(
+            variables["data:aerodynamics:aircraft:cruise:CD:compressibility"].value[idx]
+        )
+        * 10**4
+    )
+    Cd_trim = (
+        np.asarray(variables["data:aerodynamics:aircraft:cruise:CD:trim"].value[idx])
+        * 10**4
+    )
+
+    # cd0_tot=Cd0_rhea_w+Cd0_rhea_f+Cd0_rhea_ht+Cd0_rhea_vt+Cd0_rhea_nac
+
+    fig = go.Figure(
+        go.Sunburst(
+            labels=[
+                "Cd",
+                "Cd0",
+                "Cdi",
+                "Cdc",
+                "Cdtrim",
+                "Cd0_w",
+                "Cd0_f",
+                "Cd0_nac",
+                "Cd0_ht",
+                "Cd0_vt",
+                "Cd0_paras",
+            ],
+            parents=[
+                "",
+                "Cd",
+                "Cd",
+                "Cd",
+                "Cd",
+                "Cd0",
+                "Cd0",
+                "Cd0",
+                "Cd0",
+                "Cd0",
+                "Cd0",
+            ],
+            values=[
+                Cd_cruise,
+                Cd_0,
+                Cdi_rhea,
+                Cd_c,
+                Cd_trim,
+                Cd0_rhea_w,
+                Cd0_rhea_f,
+                Cd0_rhea_nac,
+                Cd0_rhea_ht,
+                Cd0_rhea_vt,
+                Cd0_parasitic,
+            ],
+            branchvalues="total",
+        )
+    )
+
+    fig.update_layout(
+        title_text="Cruise Drag Breakdown", title_x=0.5
+    )  # ,margin = dict(t=0, l=0, r=0, b=0))
 
     return fig
+
 
 # def drag_breakdown_bar_plot(aircraft_file_path: str, file_formatter=None):
 #     """
@@ -903,28 +1142,28 @@ def drag_breakdown_sun_plot(aircraft_file_path: str,Cl_cruise, file_formatter=No
 #     variables = VariableIO(aircraft_file_path, file_formatter).read()
 #     Cl_rhea =np.asarray(variables["data:aerodynamics:aircraft:cruise:CL"].value)
 #     # Cd_rhea =  np.asarray(variables["data:aerodynamics:aircraft:cruise:CD"].value)
-    
+
 #     Cl_cruise=0.6
 #     idx= list(Cl_rhea).index(Cl_cruise)
 #     Cd_cruise =  np.asarray(variables["data:aerodynamics:aircraft:cruise:CD"].value[idx])*10**4
-    
+
 #     k_e =  np.asarray(variables["data:aerodynamics:aircraft:cruise:induced_drag_coefficient"].value)[0]
 #     Cdi_rhea =k_e* Cl_cruise**2*10**4
-    
+
 #     Cd0_rhea_w =  np.asarray(variables["data:aerodynamics:wing:cruise:CD0"].value[idx])*10**4
 #     Cd0_rhea_f =  np.asarray(variables["data:aerodynamics:fuselage:cruise:CD0"].value[idx])*10**4
 #     Cd0_rhea_ht =  np.asarray(variables["data:aerodynamics:horizontal_tail:cruise:CD0"].value)[0]*10**4
 #     Cd0_rhea_vt =  np.asarray(variables["data:aerodynamics:vertical_tail:cruise:CD0"].value)[0]*10**4
 #     Cd0_rhea_nac =  np.asarray(variables["data:aerodynamics:nacelles:cruise:CD0"].value)[0]*10**4
-    
+
 #     Cd_0 =  np.asarray(variables["data:aerodynamics:aircraft:cruise:CD0"].value[idx])*10**4
-    
+
 #     Cd_c =  np.asarray(variables["data:aerodynamics:aircraft:cruise:CD:compressibility"].value[idx])*10**4
 #     Cd_trim =  np.asarray(variables["data:aerodynamics:aircraft:cruise:CD:trim"].value[idx])*10**4
-    
+
 
 #     components=['Cdtot','Cdo', 'Cdi', 'Cdc','Cdtrim']
-    
+
 #     fig = go.Figure(data=[
 #         go.Bar(name='wing', x=components, y=[0,Cd0_rhea_w, 0, 0,0 ]),
 #         go.Bar(name='fuselage', x=components, y=[0,Cd0_rhea_f, 0, 0,0]),
@@ -932,8 +1171,8 @@ def drag_breakdown_sun_plot(aircraft_file_path: str,Cl_cruise, file_formatter=No
 #         go.Bar(name='HT', x=components, y=[0,Cd0_rhea_ht, 0, 0,0]),
 #         go.Bar(name='VT', x=components, y=[0,Cd0_rhea_vt, 0, 0,0]),
 #         go.Bar(name='aircraft', x=components, y=[Cd_cruise,0, Cdi_rhea, Cd_c,Cd_trim])
-    
-        
+
+
 #     ])
 #     # Change the bar mode
 #     fig.update_layout(barmode='stack', title='Cruise drag breakdown',
@@ -942,10 +1181,10 @@ def drag_breakdown_sun_plot(aircraft_file_path: str,Cl_cruise, file_formatter=No
 #             titlefont_size=16,
 #             tickfont_size=14,
 #         ),title_x=0.5)
-    
+
 #     return fig
 def drag_breakdown_bar_plot(
-    aircraft_file_path: str,Cl_cruise, name=None, fig=None, file_formatter=None
+    aircraft_file_path: str, Cl_cruise, name=None, fig=None, file_formatter=None
 ) -> go.FigureWidget:
     """
     Returns a figure sunburst plot of the mass breakdown.
@@ -958,65 +1197,138 @@ def drag_breakdown_bar_plot(
                            be assumed.
     :return: sunburst plot figure
     """
-    
-    if aircraft_file_path=='ATR72_ref_data' and Cl_cruise==0.45:
-        Cd_cruise=378 
-        Cd0_rhea_w= 93
-        Cd0_rhea_f= 100.6
-        Cd0_rhea_nac=29
-        Cd0_rhea_ht=15.5
-        Cd0_rhea_vt=18.6
-        Cd0_parasitic=61.3
-        Cdi_rhea=60
-        Cd_c=0 
-        Cd_trim =0
-        Cd_0=256.7+Cd0_parasitic
-    else:    
-        variables = VariableIO(aircraft_file_path, file_formatter).read()
-        Cl_rhea =np.asarray(variables["data:aerodynamics:aircraft:cruise:CL"].value)
-        # Cd_rhea =  np.asarray(variables["data:aerodynamics:aircraft:cruise:CD"].value)
-        
-        # Cl_cruise=0.55
-        idx= list(Cl_rhea).index(Cl_cruise)
-        Cd_cruise =  np.asarray(variables["data:aerodynamics:aircraft:cruise:CD"].value[idx])*10**4
-        
-        k_e =  np.asarray(variables["data:aerodynamics:aircraft:cruise:induced_drag_coefficient"].value)[0]
-        k_winglet = np.asarray(variables["tuning:aerodynamics:aircraft:cruise:CD:winglet_effect:k"].value)[0]
-        
-        Cdi_rhea =k_e* Cl_cruise**2*10**4*k_winglet 
-        
-        Cd0_rhea_w =  np.asarray(variables["data:aerodynamics:wing:cruise:CD0"].value[idx])*10**4
-        Cd0_rhea_f =  np.asarray(variables["data:aerodynamics:fuselage:cruise:CD0"].value[idx])*10**4
-        Cd0_rhea_ht =  np.asarray(variables["data:aerodynamics:horizontal_tail:cruise:CD0"].value)[0]*10**4
-        Cd0_rhea_vt =  np.asarray(variables["data:aerodynamics:vertical_tail:cruise:CD0"].value)[0]*10**4
-        Cd0_rhea_nac =  np.asarray(variables["data:aerodynamics:nacelles:cruise:CD0"].value)[0]*10**4
-        
-        Cd_0 =  np.asarray(variables["data:aerodynamics:aircraft:cruise:CD0"].value[idx])*10**4
-        Cd0_parasitic= Cd_0-(Cd0_rhea_nac+Cd0_rhea_vt+Cd0_rhea_ht+Cd0_rhea_f+Cd0_rhea_w)
-        Cd_c =  np.asarray(variables["data:aerodynamics:aircraft:cruise:CD:compressibility"].value[idx])*10**4
-        Cd_trim =  np.asarray(variables["data:aerodynamics:aircraft:cruise:CD:trim"].value[idx])*10**4
-    
 
-    components=['Cdtot','Cd0 - Cd0_para', 'Cd0_w', 'Cd0_f', 'Cd0_nac', 'Cd0_ht', 'Cd0_vt', 'Cd0_para' ,'Cdi', 'Cdc','Cdtrim']
+    if aircraft_file_path == "ATR72_ref_data" and Cl_cruise == 0.45:
+        Cd_cruise = 378
+        Cd0_rhea_w = 93
+        Cd0_rhea_f = 100.6
+        Cd0_rhea_nac = 29
+        Cd0_rhea_ht = 15.5
+        Cd0_rhea_vt = 18.6
+        Cd0_parasitic = 61.3
+        Cdi_rhea = 60
+        Cd_c = 0
+        Cd_trim = 0
+        Cd_0 = 256.7 + Cd0_parasitic
+    else:
+        variables = VariableIO(aircraft_file_path, file_formatter).read()
+        Cl_rhea = np.asarray(variables["data:aerodynamics:aircraft:cruise:CL"].value)
+        # Cd_rhea =  np.asarray(variables["data:aerodynamics:aircraft:cruise:CD"].value)
+
+        # Cl_cruise=0.55
+        idx = list(Cl_rhea).index(Cl_cruise)
+        Cd_cruise = (
+            np.asarray(variables["data:aerodynamics:aircraft:cruise:CD"].value[idx])
+            * 10**4
+        )
+
+        k_e = np.asarray(
+            variables[
+                "data:aerodynamics:aircraft:cruise:induced_drag_coefficient"
+            ].value
+        )[0]
+        k_winglet = np.asarray(
+            variables["tuning:aerodynamics:aircraft:cruise:CD:winglet_effect:k"].value
+        )[0]
+
+        Cdi_rhea = k_e * Cl_cruise**2 * 10**4 * k_winglet
+
+        Cd0_rhea_w = (
+            np.asarray(variables["data:aerodynamics:wing:cruise:CD0"].value[idx])
+            * 10**4
+        )
+        Cd0_rhea_f = (
+            np.asarray(variables["data:aerodynamics:fuselage:cruise:CD0"].value[idx])
+            * 10**4
+        )
+        Cd0_rhea_ht = (
+            np.asarray(variables["data:aerodynamics:horizontal_tail:cruise:CD0"].value)[
+                0
+            ]
+            * 10**4
+        )
+        Cd0_rhea_vt = (
+            np.asarray(variables["data:aerodynamics:vertical_tail:cruise:CD0"].value)[0]
+            * 10**4
+        )
+        Cd0_rhea_nac = (
+            np.asarray(variables["data:aerodynamics:nacelles:cruise:CD0"].value)[0]
+            * 10**4
+        )
+
+        Cd_0 = (
+            np.asarray(variables["data:aerodynamics:aircraft:cruise:CD0"].value[idx])
+            * 10**4
+        )
+        Cd0_parasitic = Cd_0 - (
+            Cd0_rhea_nac + Cd0_rhea_vt + Cd0_rhea_ht + Cd0_rhea_f + Cd0_rhea_w
+        )
+        Cd_c = (
+            np.asarray(
+                variables["data:aerodynamics:aircraft:cruise:CD:compressibility"].value[
+                    idx
+                ]
+            )
+            * 10**4
+        )
+        Cd_trim = (
+            np.asarray(
+                variables["data:aerodynamics:aircraft:cruise:CD:trim"].value[idx]
+            )
+            * 10**4
+        )
+
+    components = [
+        "Cdtot",
+        "Cd0 - Cd0_para",
+        "Cd0_w",
+        "Cd0_f",
+        "Cd0_nac",
+        "Cd0_ht",
+        "Cd0_vt",
+        "Cd0_para",
+        "Cdi",
+        "Cdc",
+        "Cdtrim",
+    ]
     if fig is None:
         fig = go.Figure()
-        
+
     fig.add_trace(
-        go.Bar( x=components, 
-               y=[Cd_cruise,Cd_0-Cd0_parasitic, Cd0_rhea_w, Cd0_rhea_f, Cd0_rhea_nac, Cd0_rhea_ht, Cd0_rhea_vt,Cd0_parasitic, Cdi_rhea, Cd_c, Cd_trim ],
-               name=name
-               ))
+        go.Bar(
+            x=components,
+            y=[
+                Cd_cruise,
+                Cd_0 - Cd0_parasitic,
+                Cd0_rhea_w,
+                Cd0_rhea_f,
+                Cd0_rhea_nac,
+                Cd0_rhea_ht,
+                Cd0_rhea_vt,
+                Cd0_parasitic,
+                Cdi_rhea,
+                Cd_c,
+                Cd_trim,
+            ],
+            name=name,
+        )
+    )
     # Change the bar mode
     fig = go.FigureWidget(fig)
-    
-    fig.update_layout(barmode='group', title='Cruise drag breakdown',title_x=0.5,
+
+    fig.update_layout(
+        barmode="group",
+        title="Cruise drag breakdown",
+        title_x=0.5,
         yaxis=dict(
-            title='CD 10**4',
+            title="CD 10**4",
             titlefont_size=16,
             tickfont_size=14,
-        ))
-    
+        ),
+    )
+
     return fig
+
 
 def wetted_surface_bar_plot(
     aircraft_file_path: str, name=None, fig=None, file_formatter=None
@@ -1035,29 +1347,33 @@ def wetted_surface_bar_plot(
     """
     variables = VariableIO(aircraft_file_path, file_formatter).read()
 
-    S_wet_w=np.asarray(variables["data:geometry:wing:wetted_area"].value)[0]
-    S_wet_f=np.asarray(variables["data:geometry:fuselage:wetted_area"].value)[0] 
-    S_wet_ht=np.asarray(variables["data:geometry:horizontal_tail:wetted_area"].value)[0] 
-    S_wet_vt=np.asarray(variables["data:geometry:vertical_tail:wetted_area"].value)[0] 
-    S_wet_nac=np.asarray(variables["data:geometry:propulsion:nacelle:wetted_area"].value)[0] 
-    S_wet_tot=np.asarray(variables["data:geometry:aircraft:wetted_area"].value)[0] 
-
+    S_wet_w = np.asarray(variables["data:geometry:wing:wetted_area"].value)[0]
+    S_wet_f = np.asarray(variables["data:geometry:fuselage:wetted_area"].value)[0]
+    S_wet_ht = np.asarray(variables["data:geometry:horizontal_tail:wetted_area"].value)[
+        0
+    ]
+    S_wet_vt = np.asarray(variables["data:geometry:vertical_tail:wetted_area"].value)[0]
+    S_wet_nac = np.asarray(
+        variables["data:geometry:propulsion:nacelle:wetted_area"].value
+    )[0]
+    S_wet_tot = np.asarray(variables["data:geometry:aircraft:wetted_area"].value)[0]
 
     if fig is None:
         fig = go.Figure()
 
-    areas = ['wing', 'fuselage', 'ht', 'vt', 'nacelle', 'aircraft']
+    areas = ["wing", "fuselage", "ht", "vt", "nacelle", "aircraft"]
 
-    fig.add_trace(go.Bar(
-        x=areas,
-        y=[S_wet_w, S_wet_f, S_wet_ht, S_wet_vt, S_wet_nac, S_wet_tot],
-        name=name
-    ))
-
+    fig.add_trace(
+        go.Bar(
+            x=areas,
+            y=[S_wet_w, S_wet_f, S_wet_ht, S_wet_vt, S_wet_nac, S_wet_tot],
+            name=name,
+        )
+    )
 
     fig = go.FigureWidget(fig)
 
     fig.update_layout(
-        title_text="Wet Areas", title_x=0.5, yaxis_title="m**2",barmode='group'
+        title_text="Wet Areas", title_x=0.5, yaxis_title="m**2", barmode="group"
     )
     return fig

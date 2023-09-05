@@ -50,7 +50,6 @@ rhea_path = script_path.split("models")[0]
 RHEA_path = script_path.split("rhea")[0]
 
 
-
 class ML_TP_L1(AbstractFuelPropulsion):
     def __init__(
         self,
@@ -123,7 +122,6 @@ class ML_TP_L1(AbstractFuelPropulsion):
         :return: SFC (in kg/s/N), thrust rate, thrust (in N)
         """
 
-        
         Prop_fid = "ADT"
         mach = np.asarray(flight_points.mach)
         altitude = np.asarray(flight_points.altitude)

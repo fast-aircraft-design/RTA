@@ -14,16 +14,18 @@
 
 from typing import Tuple
 import pandas as pd
+
 # from fastoad.models.performances.mission.segments.base import FixedDurationSegment
 from fastoad.models.performances.mission.segments.base import ManualThrustSegment
 from typing import Dict, List, Union
 from fastoad.constants import FlightPhase, EngineSetting
 from fastoad.models.propulsion import IPropulsion
-from scipy.constants import foot, knot,g
-from fastoad.base.flight_point import FlightPoint #v0.5.2b
+from scipy.constants import foot, knot, g
+from fastoad.base.flight_point import FlightPoint  # v0.5.2b
 from fastoad.models.performances.mission.polar import Polar
 from fastoad.utils.physics import AtmosphereSI
 import numpy as np
+
 
 class TakeOffSegment(ManualThrustSegment):
 
@@ -43,41 +45,42 @@ class TakeOffSegment(ManualThrustSegment):
     #: Using this value will tell to target the nearest flight level to altitude
     # with max lift/drag ratio.
     OPTIMAL_FLIGHT_LEVEL = -20000.0
-    
-    
-    #################################################
-        V_MCA = self.aircraft.vars_sizing_mission['V_MCA'] * math.sqrt(derate_ratio)    
-    
-    
-        wing_area = self.aircraft.vars_geometry['wing_area']
-        span = self.aircraft.vars_geometry['span']
-        
-        flap_angle = self.aircraft.vars_sizing_mission['flap_angle_to']
-        slat_angle = self.aircraft.vars_sizing_mission['slat_angle_to']       
-        Cz_0_clean = self.aircraft.vars_aerodynamics['Cz_0_AOA_takeoff']
-        k_dcz = self.aircraft.vars_kfactors_aero['K_Cl_to']
-        k_dczf = self.aircraft.vars_kfactors_aero['K_Clf_to']
-        k_cxgd =self.aircraft.vars_kfactors_aero['K_Cxgd_to']
-        Cz_ground = (Cz_0_clean +self.aerodynamics.compute_delta_cz_highlift(flap_angle,slat_angle,0.2)*k_dczf)
-        Cl_alpha = self.aircraft.vars_aerodynamics['Cz_alpha_low']     
- 
-        time_step = 0.05
-        weight = TOW
-        takeoff_l = 0
-        Mach = 0.000001
-        V = 0
-        time = 0
-        alpha = -1.5/ 180. * math.pi
-        Cz= Cz_ground+alpha * Cl_alpha
-    
-    
 
-    
+    #################################################
+    V_MCA = self.aircraft.vars_sizing_mission["V_MCA"] * math.sqrt(derate_ratio)
+
+    wing_area = self.aircraft.vars_geometry["wing_area"]
+    span = self.aircraft.vars_geometry["span"]
+
+    flap_angle = self.aircraft.vars_sizing_mission["flap_angle_to"]
+    slat_angle = self.aircraft.vars_sizing_mission["slat_angle_to"]
+    Cz_0_clean = self.aircraft.vars_aerodynamics["Cz_0_AOA_takeoff"]
+    k_dcz = self.aircraft.vars_kfactors_aero["K_Cl_to"]
+    k_dczf = self.aircraft.vars_kfactors_aero["K_Clf_to"]
+    k_cxgd = self.aircraft.vars_kfactors_aero["K_Cxgd_to"]
+    Cz_ground = (
+        Cz_0_clean
+        + self.aerodynamics.compute_delta_cz_highlift(flap_angle, slat_angle, 0.2)
+        * k_dczf
+    )
+    Cl_alpha = self.aircraft.vars_aerodynamics["Cz_alpha_low"]
+
+    time_step = 0.05
+    weight = TOW
+    takeoff_l = 0
+    Mach = 0.000001
+    V = 0
+    time = 0
+    alpha = -1.5 / 180.0 * math.pi
+    Cz = Cz_ground + alpha * Cl_alpha
+
     ###################################################
 
     def compute_from(self, start: FlightPoint) -> pd.DataFrame:
         start = FlightPoint(start)
-        self.complete_flight_point(start)  # needed to ensure all speed values are computed.
+        self.complete_flight_point(
+            start
+        )  # needed to ensure all speed values are computed.
 
         if self.target.altitude and self.target.altitude < 0.0:
             # Target altitude will be modified along the process, so we keep track
@@ -110,7 +113,9 @@ class TakeOffSegment(ManualThrustSegment):
             # Now, let's compute target Mach number
             atm = AtmosphereSI(max(self.target.altitude, current.altitude))
             if target_speed.equivalent_airspeed:
-                target_speed.true_airspeed = atm.get_true_airspeed(target_speed.equivalent_airspeed)
+                target_speed.true_airspeed = atm.get_true_airspeed(
+                    target_speed.equivalent_airspeed
+                )
             if target_speed.true_airspeed:
                 target_speed.mach = target_speed.true_airspeed / atm.speed_of_sound
 
@@ -125,7 +130,9 @@ class TakeOffSegment(ManualThrustSegment):
                 self.target.altitude = optimal_altitude
             else:  # self.target.CL == self.OPTIMAL_FLIGHT_LEVEL:
                 flight_level = 1000 * foot
-                self.target.altitude = flight_level * np.floor(optimal_altitude / flight_level)
+                self.target.altitude = flight_level * np.floor(
+                    optimal_altitude / flight_level
+                )
 
         if self.target.altitude:
             return self.target.altitude - current.altitude
@@ -139,5 +146,3 @@ class TakeOffSegment(ManualThrustSegment):
     def _get_gamma_and_acceleration(self, mass, drag, thrust) -> Tuple[float, float]:
         gamma = (thrust - drag) / mass / g
         return gamma, 0.0
-
-
