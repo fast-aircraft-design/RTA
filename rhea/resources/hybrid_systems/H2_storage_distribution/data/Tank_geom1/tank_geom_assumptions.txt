@@ -1,1 +1,0 @@
-p_v=4 ; p_fill=2, geometry=ellipsoide; psi = 1 phi = 1 lmbda = 0.5
