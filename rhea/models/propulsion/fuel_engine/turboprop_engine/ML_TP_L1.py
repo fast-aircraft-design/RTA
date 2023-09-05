@@ -46,8 +46,9 @@ from .engine_components.Propeller import Propeller
 
 
 script_path = os.path.abspath(__file__)  # i.e. /path/to/dir/foobar.py
-rhea_path = script_path.split("\\models")[0]
-RHEA_path = script_path.split("\\rhea")[0]
+rhea_path = script_path.split("models")[0]
+RHEA_path = script_path.split("rhea")[0]
+
 
 
 class ML_TP_L1(AbstractFuelPropulsion):
@@ -121,6 +122,8 @@ class ML_TP_L1(AbstractFuelPropulsion):
         :param thrust: required thrust (unit=N)
         :return: SFC (in kg/s/N), thrust rate, thrust (in N)
         """
+
+        
         Prop_fid = "ADT"
         mach = np.asarray(flight_points.mach)
         altitude = np.asarray(flight_points.altitude)
