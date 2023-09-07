@@ -24,10 +24,6 @@ from openmdao.core.explicitcomponent import ExplicitComponent
 class ComputeCG_RHEA_IN(ExplicitComponent):
     """Components center of gravity taken as inputs"""
 
-    def __init__(self, hybrid):
-        super().__init__()
-        self.hybrid = hybrid
-
     def setup(self):
 
         self.add_input("data:weight:airframe:wing:CG:x", val=np.nan, units="m")

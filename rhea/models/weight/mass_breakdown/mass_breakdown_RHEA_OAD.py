@@ -164,7 +164,6 @@ class PropulsionWeight(om.Group):
         self.add_subsystem(
             "turboprop_weight", TurbopropWeight(), promotes=["*"]
         )  # to add once we do the sizing of the turboprop
-        # if self.hybrid:
         self.add_subsystem("ATA28", FuelLinesWeight(), promotes=["*"])
 
         self.add_subsystem(

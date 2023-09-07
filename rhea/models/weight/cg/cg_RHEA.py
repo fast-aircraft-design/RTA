@@ -24,15 +24,13 @@ from fastoad.models.weight.cg.cg_components import ComputeHTcg
 from rhea.models.weight.cg.cg_components import ComputeTanksCG_RHEA
 from rhea.models.weight.cg.cg_components import ComputePropulsionCG_RHEA
 from rhea.models.weight.cg.cg_components import ComputeOthersCG_RHEA
-from rhea.models.weight.cg.cg_components import ComputeHybridPropulsionCG_RHEA
 
 
 class CG_RHEA(om.Group):
     """Model that computes the global center of gravity"""
 
-    def __init__(self, hybrid):
+    def __init__(self):
         super().__init__()
-        self.hybrid = hybrid
 
     def setup(self):
         self.add_subsystem("ht_cg", ComputeHTcg(), promotes=["*"])
@@ -41,11 +39,6 @@ class CG_RHEA(om.Group):
         self.add_subsystem("compute_cg_tanks", ComputeTanksCG_RHEA(), promotes=["*"])
         self.add_subsystem(
             "compute_cg_propulsion", ComputePropulsionCG_RHEA(), promotes=["*"]
-        )
-        self.add_subsystem(
-            "compute_cg_hybrid_propulsion",
-            ComputeHybridPropulsionCG_RHEA(),
-            promotes=["*"],
         )
         self.add_subsystem("compute_cg_others", ComputeOthersCG_RHEA(), promotes=["*"])
         self.add_subsystem("compute_cg", ComputeGlobalCG_RHEA(), promotes=["*"])

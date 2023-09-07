@@ -38,29 +38,26 @@ class MassBreakdown_RHEA(om.Group):
     Evaluates the remaining available payload mass.
     """
 
-    def __init__(self, hybrid, payload_from_npax, out_file):
+    def __init__(self, payload_from_npax, out_file):
         super().__init__()
-        self.hybrid = hybrid
         self.payload_from_npax = payload_from_npax
         self.out_file = out_file
 
     # def initialize(self):
     # self.options.declare(PAYLOAD_FROM_NPAX, types=bool, default=True)
 
-    # self.options.declare("hybrid",types=bool)
 
     def setup(self):
 
         self.add_subsystem(
             "owe",
-            OperatingWeightEmpty(self.hybrid, self.payload_from_npax, self.out_file),
+            OperatingWeightEmpty(self.payload_from_npax, self.out_file),
             promotes=["*"],
         )
         # if self.payload_from_npax:
         #     self.add_subsystem("payload", ComputePayload(), promotes=["*"])
         # else:
         #     self.add_subsystem("payload", ComputePayloadfromOWE(), promotes=["*"])
-        # self.add_subsystem("owe", OperatingWeightEmpty(self.hybrid), promotes=["*"])
 
 
 class ComputePayloadfromOWE(om.ExplicitComponent):
@@ -155,14 +152,10 @@ class OperatingWeightEmpty(om.Group):
     This group aggregates weight from all components of the aircraft.
     """
 
-    def __init__(self, hybrid, payload_from_npax, out_file):
+    def __init__(self, payload_from_npax, out_file):
         super().__init__()
-        self.hybrid = hybrid
         self.payload_from_npax = payload_from_npax
         self.out_file = out_file
-
-    # def initialize(self):
-    #     self.options.declare("hybrid",types=bool, default=True)
 
     def setup(self):
 
@@ -193,7 +186,6 @@ class OperatingWeightEmpty(om.Group):
         self.add_subsystem(
             "turboprop_weight", TurbopropWeight(), promotes=["*"]
         )  # to add once we do the sizing of the turboprop
-        # if self.hybrid:
         self.add_subsystem("ATA28", FuelLinesWeight(), promotes=["*"])
 
         self.add_subsystem(

@@ -31,7 +31,6 @@ class Weight_RHEA_IN(om.Group):
     """
 
     def initialize(self):
-        self.options.declare("hybrid", types=bool, default=False)
         self.options.declare("payload_from_npax", types=bool, default=False)
         self.options.declare("out_file", default="", types=str)
 
@@ -42,10 +41,9 @@ class Weight_RHEA_IN(om.Group):
         self.add_subsystem(
             "mass_breakdown",
             MassBreakdown_RHEA(
-                hybrid=self.options["hybrid"],
                 payload_from_npax=self.options["payload_from_npax"],
                 out_file=self.options["out_file"],
             ),
             promotes=["*"],
         )
-        self.add_subsystem("cg", CG_RHEA(hybrid=self.options["hybrid"]), promotes=["*"])
+        self.add_subsystem("cg", CG_RHEA(), promotes=["*"])
