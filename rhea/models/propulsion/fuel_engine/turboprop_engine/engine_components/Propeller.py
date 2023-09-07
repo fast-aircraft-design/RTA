@@ -10,10 +10,6 @@ from typing import Union, Sequence, Tuple, Optional
 
 from scipy.optimize import fsolve
 
-script_path = os.path.abspath(__file__)
-rhea_path = script_path.split("\\models")[0]
-RHEA_path = script_path.split("\\rhea")[0]
-
 
 class Propeller(object):
     def select(self, function, fidelity, data, atmosphere, mach, phase, P_T):
@@ -21,110 +17,6 @@ class Propeller(object):
         func = getattr(self, function + "_" + fidelity)
 
         return func(data, atmosphere, mach, phase, P_T)
-
-    def power_to_thrust_ML(
-        self,
-        data,
-        atmosphere: Atmosphere,
-        mach: Union[float, Sequence[float]],
-        phase: Union[FlightPhase, Sequence],
-        shaft_power: Union[float, Sequence[float]],
-    ) -> np.ndarray:
-        """
-        Computation of propeller thrust given propeller shaft power.
-
-        :param shaft_power: shaft_power in W
-        :param atmosphere: Atmosphere instance at intended altitude
-        :param mach: Mach number(s)
-        :return: thrust (in N)
-        """
-
-        shp_prop = shaft_power * data.gearbox_eta / constants.hp
-        altitude = atmosphere.get_altitude(altitude_in_feet=True)
-        a = atmosphere.speed_of_sound
-        V_TAS = mach * a / constants.knot
-        DISA = atmosphere._return_value(atmosphere.delta_t)
-        # DISA=0
-        # print(altitude,V_TAS,shp_prop,mach,a)
-        RC, _ = data.phase_to_rc(phase)
-
-        # prop eta interp
-        # if phase == 1 or phase==8 or phase==9:
-        #     eta=0.
-        #     poly = PolynomialFeatures(degree=3)
-        #     x=poly.fit_transform(np.array([altitude,mach],dtype=object).reshape(1,-1))
-        #     filename = os.path.join(rhea_path,'resources/gasturbine/PW100/Metamodels/PW100_TO_FN.sav')
-        #     loaded_model = pickle.load(open(filename, 'rb'))
-        #     T_prop =loaded_model.predict(x)[0] *10 #daN to N
-        if phase == 1 or phase == 8 or phase == 9:
-            eta = 0.0
-            poly = PolynomialFeatures(poly_degree=3)
-            x = poly.fit_transform(
-                np.array([altitude, mach, DISA], dtype=object).reshape(1, -1)
-            )
-            T_prop = data.dict_metamodels[RC]["fn"].predict(x)[0] * 10
-
-        else:
-            poly = PolynomialFeatures(poly_degree=4)
-            x = poly.fit_transform(
-                np.array([altitude, V_TAS, shp_prop], dtype=object).reshape(1, -1)
-            )
-            filename = os.path.join(
-                rhea_path,
-                "resources/propeller/H568F/Metamodels/NP82/power_to_eta_4th_degree.sav",
-            )
-            warnings.simplefilter("ignore", category=UserWarning)
-            loaded_model = joblib.load(open(filename, "rb"))
-            eta = data.k_prop * loaded_model.predict(x)[0]
-            T_prop = eta * shp_prop * constants.hp / (V_TAS * constants.knot)  # N
-
-        return T_prop, eta
-
-    def thrust_to_power_ML(
-        self,
-        data,
-        atmosphere: Atmosphere,
-        mach: Union[float, Sequence[float]],
-        phase: Union[FlightPhase, Sequence],
-        thrust: Union[float, Sequence],
-    ) -> np.ndarray:
-        """
-        Computation of propeller shaft power given propeller thrust WITHOUT FR.
-
-
-        :param atmosphere: Atmosphere instance at intended altitude
-        :param mach: Mach number(s)
-        :return: thrust (in N)
-        """
-
-        altitude = atmosphere.get_altitude(altitude_in_feet=True)
-        a = atmosphere.speed_of_sound
-        V_TAS = mach * a / constants.knot
-
-        def func(shp_prop, altitude, V_TAS, thrust):
-            poly = PolynomialFeatures(poly_degree=4)
-            x = poly.fit_transform(
-                np.array([altitude, V_TAS, shp_prop], dtype=object).reshape(1, -1)
-            )
-            # filename ='C:/Users/LA202059/Desktop/RHEA/rhea/resources/propeller/H568F/Metamodels/NP82/power_to_eta_4th_degree.sav'
-            filename = os.path.join(
-                rhea_path,
-                "resources/propeller/H568F/Metamodels/NP82/power_to_eta_4th_degree.sav",
-            )
-            warnings.simplefilter("ignore", category=UserWarning)
-            loaded_model = joblib.load(open(filename, "rb"))
-            eta = loaded_model.predict(x)[0]
-            shp = thrust * (V_TAS * constants.knot) / eta / constants.hp
-            return shp_prop - shp
-
-        initial_value = (V_TAS * constants.knot) * thrust / 0.9 / constants.hp
-        shp_prop = fsolve(func, initial_value, args=(altitude, V_TAS, thrust))[0]
-
-        eta = V_TAS * constants.knot * thrust / (shp_prop * constants.hp)
-
-        shaft_power = shp_prop / data.gearbox_eta * constants.hp
-
-        return shaft_power, eta
 
     def power_to_thrust_ADT(
         self,
