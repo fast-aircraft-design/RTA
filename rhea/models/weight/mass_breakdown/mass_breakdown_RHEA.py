@@ -46,7 +46,6 @@ class MassBreakdown_RHEA(om.Group):
     # def initialize(self):
     # self.options.declare(PAYLOAD_FROM_NPAX, types=bool, default=True)
 
-
     def setup(self):
 
         self.add_subsystem(
