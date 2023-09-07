@@ -43,9 +43,6 @@
 # from propulsion.fuel_engine.turboprop_engine.sizing import TP_sizing
 # from propulsion.fuel_engine.turboprop_engine.sizing import Prop_sizing
 #
-# from propulsion.fuel_engine.hybrid_engine.sizing import FC_sizing
-# from propulsion.fuel_engine.hybrid_engine.sizing import BoP_sizing
-#
 # from fastoad.module_management import OpenMDAOSystemRegistry
 # from fastoad.module_management.constants import ModelDomain
 # #from fastoad.models.performances import BreguetFromMTOW

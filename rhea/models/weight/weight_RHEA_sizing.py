@@ -40,9 +40,8 @@ class Weight_RHEA_sizing(om.Group):
     """
 
     def initialize(self):
-        self.options.declare("hybrid", types=bool, default=False)
         self.options.declare("payload_from_npax", types=bool, default=False)
 
     def setup(self):
         self.add_subsystem("mass_breakdown", MassBreakdown(), promotes=["*"])
-        self.add_subsystem("cg", CG(hybrid=self.options["hybrid"]), promotes=["*"])
+        self.add_subsystem("cg", CG(), promotes=["*"])

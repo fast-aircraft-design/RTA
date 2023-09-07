@@ -17,7 +17,6 @@ import openmdao.api as om
 from fastoad_cs25.models.constants import PAYLOAD_FROM_NPAX
 
 from .a_airframe import WingWeight, NacellesWeight
-from .b_propulsion.hybrid_propulsion_weight import HybridPropulsionWeight
 
 from fastoad_cs25.models.weight.mass_breakdown.a_airframe import (
     FuselageWeight,
@@ -167,10 +166,6 @@ class PropulsionWeight(om.Group):
         )  # to add once we do the sizing of the turboprop
         # if self.hybrid:
         self.add_subsystem("ATA28", FuelLinesWeight(), promotes=["*"])
-
-        self.add_subsystem(
-            "hybrid_propulsion_weight", HybridPropulsionWeight(), promotes=["*"]
-        )
 
         self.add_subsystem(
             "propulsion_weight_sum",

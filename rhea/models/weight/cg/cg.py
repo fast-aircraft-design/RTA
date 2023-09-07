@@ -44,9 +44,8 @@ from fastoad_cs25.models.weight.cg.constants import (
 class CG(om.Group):
     """Model that computes the global center of gravity"""
 
-    def __init__(self, hybrid):
+    def __init__(self):
         super().__init__()
-        self.hybrid = hybrid
 
     def setup(self):
         self.add_subsystem(

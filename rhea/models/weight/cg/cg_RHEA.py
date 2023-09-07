@@ -44,7 +44,7 @@ class CG_RHEA(om.Group):
         )
         self.add_subsystem(
             "compute_cg_hybrid_propulsion",
-            ComputeHybridPropulsionCG_RHEA(self.hybrid),
+            ComputeHybridPropulsionCG_RHEA(),
             promotes=["*"],
         )
         self.add_subsystem("compute_cg_others", ComputeOthersCG_RHEA(), promotes=["*"])
