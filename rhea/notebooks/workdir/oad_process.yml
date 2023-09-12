@@ -53,7 +53,7 @@ model:
   performance:
     id: fastoad.performances.mission
     propulsion_id: rhea.wrapper.propulsion.ML_TP_L1
-    mission_file_path: ..\data\sizing_mission_R.yml
+    mission_file_path: ../data/sizing_mission_R.yml
     use_initializer_iteration: false
     out_file: flight_points.csv
     adjust_fuel: true
