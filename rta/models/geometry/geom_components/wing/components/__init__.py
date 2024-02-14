@@ -15,7 +15,7 @@ Estimation of wing geometry (components)
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from .compute_toc_wing_RHEA import ComputeToCWing_RHEA
-from .compute_wet_area_wing import ComputeWetAreaWing
+from .compute_wet_area_wing import ComputeWetAreaWingRTA
 
 # TODO: Determine wether wing drawing shall be included or not
 # from .wing_drawing import WingDrawing

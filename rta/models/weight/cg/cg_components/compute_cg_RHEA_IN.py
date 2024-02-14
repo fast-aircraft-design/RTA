@@ -39,7 +39,7 @@ class ComputeCG_RHEA_IN(ExplicitComponent):
             "data:weight:airframe:landing_gear:front:CG:x", val=np.nan, units="m"
         )
         self.add_input(
-            "data:weight:airframe:nacelle_struts:CG:x", val=np.nan, units="m"
+            "data:weight:airframe:nacelle:CG:x", val=np.nan, units="m"
         )
 
         self.add_input("data:weight:propulsion:engine:CG:x", val=np.nan, units="m")

@@ -18,7 +18,6 @@
 from fastoad_cs25.models.geometry.geom_components.wing.components.compute_b_50 import (
     ComputeB50,
 )
-from fastoad_cs25.models.aerodynamics.components.compute_cl_alpha import ComputeCLAlpha
 from fastoad_cs25.models.geometry.geom_components.wing.components.compute_l1_l4 import (
     ComputeL1AndL4Wing,
 )
@@ -34,9 +33,9 @@ from fastoad_cs25.models.geometry.geom_components.wing.components.compute_mfw im
 from fastoad_cs25.models.geometry.geom_components.wing.components.compute_sweep_wing import (
     ComputeSweepWing,
 )
-from .components.compute_toc_wing_RHEA import ComputeToCWing_RHEA
-from .components.compute_wet_area_wing import (
-    ComputeWetAreaWing,
+from .components.compute_toc_wing_rta import ComputeToCWingRTA
+from .components.compute_wet_area_wing_rta import (
+    ComputeWetAreaWingRTA,
 )
 from fastoad_cs25.models.geometry.geom_components.wing.components.compute_x_wing import (
     ComputeXWing,
@@ -60,7 +59,6 @@ class ComputeWingGeometry_RHEA(Group):
         self.add_subsystem("mac_wing", ComputeMACWing(), promotes=["*"])
         self.add_subsystem("b50_wing", ComputeB50(), promotes=["*"])
         self.add_subsystem("sweep_wing", ComputeSweepWing(), promotes=["*"])
-        self.add_subsystem("toc_wing", ComputeToCWing_RHEA(), promotes=["*"])
-        self.add_subsystem("wetarea_wing", ComputeWetAreaWing(), promotes=["*"])
-        # self.add_subsystem("clapha_wing", ComputeCLAlpha(), promotes=["*"])
+        self.add_subsystem("toc_wing", ComputeToCWingRTA(), promotes=["*"])
+        self.add_subsystem("wetarea_wing", ComputeWetAreaWingRTA(), promotes=["*"])
         self.add_subsystem("mfw", ComputeMFW(), promotes=["*"])

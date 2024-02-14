@@ -1,10 +1,10 @@
 [tool.poetry]
-name = "RHEA"
+name = "RTA"
 version = "0.0.1"
-description = "Conceptual aircraft design platform for conventional and hybrid 80 seat aircraft"
+description = "Conceptual aircraft design platform for conventional 80 seat aircraft"
 authors = ["Vincenzo PALLADINO <VINCENZO.PALLADINO@atr-aircraft.com>"]
 packages = [
-    { include = "rhea" },
+    { include = "rta" },
 ]
 [tool.poetry.dependencies]
 # IMPORTANT: when modifying this list, docs/requirements.txt must be updated for
@@ -21,4 +21,4 @@ importlib-resources = "3.3.0"
 black = "22.3.0"
 
 [tool.poetry.plugins."fastoad.plugins"]
-"rhea" = "rhea"
+"rta" = "rta"

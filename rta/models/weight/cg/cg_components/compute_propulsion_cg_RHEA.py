@@ -49,12 +49,12 @@ class ComputePropulsionCG_RHEA(ExplicitComponent):
 
         self.add_output("data:weight:propulsion:engine:CG:x", units="m")
         self.add_output("data:weight:propulsion:propeller:CG:x", units="m")
-        self.add_output("data:weight:airframe:nacelle_struts:CG:x", units="m")
+        self.add_output("data:weight:airframe:nacelle:CG:x", units="m")
 
         self.declare_partials("data:weight:propulsion:engine:CG:x", "*", method="fd")
         self.declare_partials("data:weight:propulsion:propeller:CG:x", "*", method="fd")
         self.declare_partials(
-            "data:weight:airframe:nacelle_struts:CG:x", "*", method="fd"
+            "data:weight:airframe:nacelle:CG:x", "*", method="fd"
         )
 
     def compute(self, inputs, outputs):
@@ -70,20 +70,20 @@ class ComputePropulsionCG_RHEA(ExplicitComponent):
         fa_length = inputs["data:geometry:wing:MAC:at25percent:x"]
         nac_length = inputs["data:geometry:propulsion:nacelle:length"]
 
-        y_nacell = y_ratio_engine * span / 2
+        y_nacelle = y_ratio_engine * span / 2
 
-        l_wing_nac = l3_wing + (l2_wing - l3_wing) * (y3_wing - y_nacell) / (
+        l_wing_nac = l3_wing + (l2_wing - l3_wing) * (y3_wing - y_nacelle) / (
             y3_wing - y2_wing
         )
         delta_x_nacell = 0.05 * l_wing_nac
-        x_nacell_cg = (
-            x3_wing * (y_nacell - y2_wing) / (y3_wing - y2_wing)
+        x_nacelle_cg = (
+            x3_wing * (y_nacelle - y2_wing) / (y3_wing - y2_wing)
             - delta_x_nacell
             - 0.2 * nac_length
         )
-        x_nacell_cg_absolute = fa_length - 0.25 * l0_wing - (x0_wing - x_nacell_cg)
-        outputs["data:weight:propulsion:engine:CG:x"] = x_nacell_cg_absolute
-        outputs["data:weight:propulsion:propeller:CG:x"] = 0.85 * x_nacell_cg_absolute
-        outputs["data:weight:airframe:nacelle_struts:CG:x"] = (
-            1.025 * x_nacell_cg_absolute
+        x_nacelle_cg_absolute = fa_length - 0.25 * l0_wing - (x0_wing - x_nacelle_cg)
+        outputs["data:weight:propulsion:engine:CG:x"] = x_nacelle_cg_absolute
+        outputs["data:weight:propulsion:propeller:CG:x"] = 0.85 * x_nacelle_cg_absolute
+        outputs["data:weight:airframe:nacelle:CG:x"] = (
+            1.025 * x_nacelle_cg_absolute
         )

@@ -19,7 +19,6 @@ from .compute_cg_ratio_aft_RHEA import ComputeCGRatioAft_RHEA
 from .compute_cg_ratio_aft import ComputeCGRatioAft
 from .compute_cg_tanks_RHEA import ComputeTanksCG_RHEA
 
-from .compute_cg_others_RHEA import ComputeOthersCG_RHEA
 from .compute_global_cg_RHEA import ComputeGlobalCG_RHEA
 from .compute_global_cg import ComputeGlobalCG
 

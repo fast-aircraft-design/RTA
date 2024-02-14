@@ -16,47 +16,38 @@ Estimation of nacelles weight
 
 import numpy as np
 import openmdao.api as om
+from scipy.constants import pound
 
+# TODO: this should calculate the weight fo nacelles but it is based on nacelle weight calculation from CS25
 
 class NacellesWeight(om.ExplicitComponent):
     """
     Weight estimation for nacelle struts
 
-    Based on formula in :cite:`supaero:2014`, mass contribution A6
+    Based on Roskam Part V, Chap 5, eq 5.33
     """
 
     def setup(self):
         self.add_input(
-            "data:geometry:propulsion:nacelle:wetted_area", val=np.nan, units="m**2"
+            "data:propulsion:RTO_power", val=np.nan, units="hp"
         )
-        self.add_input("data:geometry:propulsion:layout", val=np.nan)
-        self.add_input("data:weight:propulsion:engine:mass", val=np.nan, units="kg")
         self.add_input("data:geometry:propulsion:engine:count", val=np.nan)
         self.add_input("tuning:weight:airframe:nacelle:mass:k", val=1.0)
         self.add_input(
             "tuning:weight:airframe:nacelle:mass:offset", val=0.0, units="kg"
         )
 
-        self.add_output("data:weight:airframe:nacelle_struts:mass", units="kg")
+        self.add_output("data:weight:airframe:nacelle:mass", units="kg")
 
         self.declare_partials("*", "*", method="fd")
 
     def compute(self, inputs, outputs, discrete_inputs=None, discrete_outputs=None):
-        wet_area_nacelle = inputs["data:geometry:propulsion:nacelle:wetted_area"]
-        weight_engine = inputs["data:weight:propulsion:engine:mass"]
+        rto_power = inputs["data:propulsion:RTO_power"]
         n_engines = inputs["data:geometry:propulsion:engine:count"]
         k_a6 = inputs["tuning:weight:airframe:nacelle:mass:k"]
         offset_a6 = inputs["tuning:weight:airframe:nacelle:mass:offset"]
-        propulsion_layout = np.round(inputs["data:geometry:propulsion:layout"])
 
-        if propulsion_layout == 1.0:
-            temp_a6 = (
-                1.2
-                * wet_area_nacelle**0.5
-                * n_engines
-                * (23 + 0.588 * (weight_engine / n_engines) ** 0.708)
-            )
-        else:
-            temp_a6 = 0.08 * weight_engine
+        # This mass refers to all nacelles mass
+        temp_a6 = rto_power * n_engines * 0.14 * pound
 
-        outputs["data:weight:airframe:nacelle_struts:mass"] = k_a6 * temp_a6 + offset_a6
+        outputs["data:weight:airframe:nacelle:mass"] = k_a6 * temp_a6 + offset_a6

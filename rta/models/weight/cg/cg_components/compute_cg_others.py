@@ -33,6 +33,8 @@ class ComputeOthersCG(ExplicitComponent):
         self.add_input("data:geometry:fuselage:front_length", val=np.nan, units="m")
         self.add_input("data:geometry:fuselage:rear_length", val=np.nan, units="m")
         self.add_input("data:weight:propulsion:engine:CG:x", val=np.nan, units="m")
+        self.add_input("data:weight:fuel_tank:CG:x", val=np.nan, units="m")
+
         self.add_input(
             "data:weight:operational:items:passenger_seats:CG:x", val=np.nan, units="m"
         )
@@ -49,6 +51,7 @@ class ComputeOthersCG(ExplicitComponent):
         self.add_output(
             "data:weight:propulsion:engine_controls_instrumentation:CG:x", units="m"
         )
+        self.add_output("data:weight:propulsion:fuel_system:CG:x", units="m")
 
         self.add_output("data:weight:systems:auxiliary_power_unit:CG:x", units="m")
         self.add_output(
@@ -85,6 +88,7 @@ class ComputeOthersCG(ExplicitComponent):
         )
         self.add_output("data:weight:operational:equipment:others:CG:x", units="m")
         self.add_output("data:weight:operational:equipment:crew:CG:x", units="m")
+        self.add_output("data:weight:operational:items:unusable_fuel:CG:x", units="m")
 
         self.add_output("data:weight:payload:PAX:CG:x", units="m")
         self.add_output("data:weight:payload:rear_fret:CG:x", units="m")
@@ -184,6 +188,12 @@ class ComputeOthersCG(ExplicitComponent):
             ],
             method="fd",
         )
+        self.declare_partials(
+            "data:weight:propulsion:fuel_system:CG:x", "data:weight:fuel_tank:CG:x", method="fd"
+        )
+        self.declare_partials(
+            "data:weight:operational:items:unusable_fuel:CG:x", "data:weight:fuel_tank:CG:x", method="fd"
+        )
 
     def compute(self, inputs, outputs):
         x0_wing = inputs["data:geometry:wing:MAC:leading_edge:x:local"]
@@ -201,6 +211,7 @@ class ComputeOthersCG(ExplicitComponent):
             "data:geometry:cabin:seats:economical:count_by_row"
         ]
         ls_eco = inputs["data:geometry:cabin:seats:economical:length"]
+        x_cg_tank = inputs["data:weight:fuel_tank:CG:x"]
 
         x_cg_a2 = 0.45 * fus_length
 
@@ -254,6 +265,7 @@ class ComputeOthersCG(ExplicitComponent):
         outputs["data:weight:airframe:landing_gear:front:CG:x"] = x_cg_a52
 
         outputs["data:weight:propulsion:engine_controls_instrumentation:CG:x"] = x_cg_b4
+        outputs["data:weight:propulsion:fuel_system:CG:x"] = 0.977 * x_cg_tank
 
         outputs["data:weight:systems:auxiliary_power_unit:CG:x"] = x_cg_c11
         outputs[
@@ -282,6 +294,8 @@ class ComputeOthersCG(ExplicitComponent):
         outputs["data:weight:furniture:interior_integration:CG:x"] = x_cg_e5
         outputs["data:weight:operational:items:documents_toolkit:CG:x"] = x_cg_e7
         outputs["data:weight:operational:items:galley_structure:CG:x"] = x_cg_e8
+
+        outputs["data:weight:operational:items:unusable_fuel:CG:x"] = x_cg_tank
         outputs["data:weight:operational:equipment:crew:CG:x"] = x_cg_e9
 
         outputs["data:weight:payload:PAX:CG:x"] = x_cg_pl

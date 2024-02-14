@@ -192,8 +192,8 @@ class ComputeNacelleGeometry(om.ExplicitComponent):
         # outputs["data:weight:propulsion:engine:CG:x"] = x_nacell_cg_absolute
 
         # Wet surfaces
-        wet_area_nac = np.pi * nac_dia * nac_length * 1.1  # to take into account pylon
-        wet_area_pylon = 0.0
+        wet_area_nac = np.pi * nac_dia * nac_length
+        wet_area_pylon = 1.1 * wet_area_nac
 
         outputs["data:geometry:propulsion:nacelle:wetted_area"] = wet_area_nac
         outputs["data:geometry:propulsion:pylon:wetted_area"] = wet_area_pylon

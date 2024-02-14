@@ -13,7 +13,5 @@ Estimation of Aircraft Weight
 #  GNU General Public License for more details.
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-from .mass_breakdown_RHEA import MassBreakdown_RHEA
 from .mass_breakdown import MassBreakdown
-from .mass_breakdown_RHEA_OAD import MassBreakdown_RHEA_OAD
+

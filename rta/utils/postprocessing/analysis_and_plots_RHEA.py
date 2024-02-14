@@ -652,7 +652,7 @@ def mass_breakdown_sun_plot(aircraft_file_path: str, file_formatter=None):
     v_tail = variables["data:weight:airframe:vertical_tail:mass"].value[0]
     landing_gear_1 = variables["data:weight:airframe:landing_gear:main:mass"].value[0]
     landing_gear_2 = variables["data:weight:airframe:landing_gear:front:mass"].value[0]
-    engine_nacelle = variables["data:weight:airframe:nacelle_struts:mass"].value[0]
+    engine_nacelle = variables["data:weight:airframe:pylon:mass"].value[0]
 
     propulsion = variables["data:weight:propulsion:mass"].value[0]
     B1 = variables["data:weight:propulsion:engine:mass"].value[0]

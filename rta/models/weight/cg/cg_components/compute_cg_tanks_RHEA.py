@@ -18,13 +18,11 @@
 import math
 
 import numpy as np
-from fastoad_cs25.models.geometry.profiles import resources
-from importlib.resources import open_text
 from openmdao.core.explicitcomponent import ExplicitComponent
 from fastoad_cs25.models.geometry.profiles.profile_getter import get_profile
 from scipy import interpolate
 
-
+# TODO: remove, replace by CS25 (identical model but better without kink), think about replacing the airfoil by a subsonic airfoil, move fuel_system and unusable_fuel CG calculation elsewhere
 class ComputeTanksCG_RHEA(ExplicitComponent):
     # TODO: Document equations. Cite sources
     """Tanks center of gravity estimation"""
@@ -71,7 +69,7 @@ class ComputeTanksCG_RHEA(ExplicitComponent):
             "data:weight:operational:items:unusable_fuel:CG:x", "*", method="fd"
         )
 
-    def compute(self, inputs, outputs):
+    def compute(self, inputs, outputs, **kwargs):
 
         # TODO: decompose into a function to make the code more clear
         x_up = []
