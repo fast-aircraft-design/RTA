@@ -18,10 +18,15 @@
 import math
 
 import numpy as np
-from fastoad_cs25.models.aerodynamics.constants import POLAR_POINT_COUNT
+from fastoad.module_management.service_registry import RegisterSubmodel
+from fastoad_cs25.models.aerodynamics.constants import POLAR_POINT_COUNT, SERVICE_CD0_NACELLES_PYLONS
 from openmdao.core.explicitcomponent import ExplicitComponent
 
+"""
+In legacy RHEA code, the wet_area of the pylon was forced to 0. Can be removed from this file
+"""
 
+@RegisterSubmodel(SERVICE_CD0_NACELLES_PYLONS, 'rta.submodel.aerodynamics.CD0.nacelles')
 class Cd0NacelleAndPylonsTP(ExplicitComponent):
     def initialize(self):
         self.options.declare("low_speed_aero", default=False, types=bool)
@@ -86,11 +91,7 @@ class Cd0NacelleAndPylonsTP(ExplicitComponent):
             n_engines * (1 + ke_cd0_pylon) * cf_pylon * wet_area_pylon / wing_area
         )
 
-        # cd0 Nacelles
-        # e_fan = 0.22
-        # kn_cd0_nac = 1 + 0.05 + 5.8 * e_fan / fan_length
-        cd0_int_nac = 0.0005  # 0.0002
-        # cd0_nac_hs = n_engines * (kn_cd0_nac * cf_nac_hs * wet_area_nac / wing_area + cd0_int_nac)
+        cd0_int_nac = 0.0005 # subject to discussion
         cd0_nac = n_engines * (cf_nac * wet_area_nac / wing_area + cd0_int_nac)
 
         if self.low_speed_aero:

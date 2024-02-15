@@ -56,12 +56,14 @@ class AerodynamicsHighSpeed_RHEA(Group):
             RegisterSubmodel.get_submodel(SERVICE_CL_ALPHA),
             promotes=["*"],
         )
+        # From here to Cd0_total, can be replaced by cs-25
         self.add_subsystem("cd0_wing", Cd0Wing(), promotes=["*"])
         self.add_subsystem("cd0_fuselage", Cd0Fuselage(), promotes=["*"])
         self.add_subsystem("cd0_ht", Cd0HorizontalTail(), promotes=["*"])
         self.add_subsystem("cd0_vt", Cd0VerticalTail(), promotes=["*"])
         self.add_subsystem("cd0_nac_pylons", Cd0NacelleAndPylonsTP(), promotes=["*"])
         self.add_subsystem("cd0_total", Cd0Total(), promotes=["*"])
+        #
         self.add_subsystem("cd_comp", CdCompressibility(), promotes=["*"])
         self.add_subsystem("cd_trim", CdTrim(), promotes=["*"])
         self.add_subsystem("get_polar", ComputePolar(), promotes=["*"])

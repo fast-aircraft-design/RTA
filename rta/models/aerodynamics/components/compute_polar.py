@@ -26,6 +26,10 @@ class PolarType(Enum):
     TAKEOFF = "takeoff"
     LANDING = "landing"
 
+"""
+Does not use landing gear drag or ground effect.
+Hence would replace by cs25 as it is very similar.
+"""
 
 class ComputePolar(ExplicitComponent):
 

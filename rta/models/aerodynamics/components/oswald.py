@@ -20,7 +20,12 @@ import math
 import numpy as np
 from openmdao.core.explicitcomponent import ExplicitComponent
 
-
+"""
+Identique à cs25 à un facteur près, voir commentaire ci-dessous
+Sensibilité au mach imperceptible avec la formulation actuelle.
+Nita arrive à un oswald factor plus faible ~0.77 au lieu de 0.89 en croisière.
+Référence inconnue pour la formule du coefficient d'oswald.
+"""
 class OswaldCoefficient(ExplicitComponent):
     # TODO: Document equations. Cite sources (M. Nita and D. Scholz)
     # FIXME: output the real Oswald coefficient (coef_e instead of coef_k)
@@ -84,7 +89,7 @@ class OswaldCoefficient(ExplicitComponent):
             ke_m = -0.001521 * ((mach - 0.05) / 0.3 - 1) ** 10.82 + 1
 
         ke_f = 1 - 2 * (df / span) ** 2
-        coef_e = e_theory * ke_f * ke_m * 0.95
+        coef_e = e_theory * ke_f * ke_m * 0.95 # Only difference with CS25, 0.9 is used for cs25
         coef_k = 1.0 / (math.pi * aspect_ratio * coef_e)
 
         if self.options["low_speed_aero"]:

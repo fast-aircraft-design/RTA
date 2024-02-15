@@ -15,9 +15,19 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import numpy as np
+from fastoad.module_management.service_registry import RegisterSubmodel
+from fastoad_cs25.models.aerodynamics.constants import SERVICE_CD0_SUM
 from openmdao.core.explicitcomponent import ExplicitComponent
 
+"""
+Pylon drag should be removed. Or its wet surface area be taken as 0.
+Facteur technologique de la trainée parasite à conserver.
+Submodule spécifique jusitifé
+Does not use OEI effect or landing gear drag
+"""
 
+
+@RegisterSubmodel(SERVICE_CD0_SUM, "rta.submodel.aerodynamics.CD0.sum")
 class Cd0Total(ExplicitComponent):
     def initialize(self):
         self.options.declare("low_speed_aero", default=False, types=bool)
@@ -58,7 +68,6 @@ class Cd0Total(ExplicitComponent):
             self.add_input("data:aerodynamics:horizontal_tail:cruise:CD0", val=np.nan)
             self.add_input("data:aerodynamics:vertical_tail:cruise:CD0", val=np.nan)
             self.add_input("data:aerodynamics:nacelles:cruise:CD0", val=np.nan)
-            self.add_input("data:aerodynamics:pylons:cruise:CD0", val=np.nan)
             self.add_output(
                 "data:aerodynamics:aircraft:cruise:CD0",
                 copy_shape="data:aerodynamics:wing:cruise:CD0",
@@ -66,7 +75,7 @@ class Cd0Total(ExplicitComponent):
 
         self.declare_partials("*", "*", method="fd")
 
-    def compute(self, inputs, outputs):
+    def compute(self, inputs, outputs, **kwargs):
         wet_area_total = inputs["data:geometry:aircraft:wetted_area"]
         k_techno = inputs["tuning:aerodynamics:aircraft:cruise:CD:parasite:k"]
         if self.low_speed_aero:
@@ -75,16 +84,13 @@ class Cd0Total(ExplicitComponent):
             cd0_ht = inputs["data:aerodynamics:horizontal_tail:low_speed:CD0"]
             cd0_vt = inputs["data:aerodynamics:vertical_tail:low_speed:CD0"]
             cd0_nac = inputs["data:aerodynamics:nacelles:low_speed:CD0"]
-            cd0_pylon = inputs["data:aerodynamics:pylons:low_speed:CD0"]
         else:
             cd0_wing = inputs["data:aerodynamics:wing:cruise:CD0"]
             cd0_fus = inputs["data:aerodynamics:fuselage:cruise:CD0"]
             cd0_ht = inputs["data:aerodynamics:horizontal_tail:cruise:CD0"]
             cd0_vt = inputs["data:aerodynamics:vertical_tail:cruise:CD0"]
             cd0_nac = inputs["data:aerodynamics:nacelles:cruise:CD0"]
-            cd0_pylon = inputs["data:aerodynamics:pylons:cruise:CD0"]
 
-        # k_techno = 1.85
         k_parasite = (
             -2.39 * pow(10, -12) * wet_area_total**3
             + 2.58 * pow(10, -8) * wet_area_total**2
@@ -92,7 +98,7 @@ class Cd0Total(ExplicitComponent):
             + 0.163
         )
 
-        cd0_total_hs = cd0_wing + cd0_fus + cd0_ht + cd0_vt + cd0_nac + cd0_pylon
+        cd0_total_hs = cd0_wing + cd0_fus + cd0_ht + cd0_vt + cd0_nac
         cd0_total = cd0_total_hs * (1.0 + k_parasite * k_techno)
 
         if self.low_speed_aero:

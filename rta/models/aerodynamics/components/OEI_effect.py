@@ -26,7 +26,10 @@ from rta.models.aerodynamics.constants import CT_POINT_COUNT
 
 class ComputeDeltaOEI(ExplicitComponent):
 
-    """Computes One engine inoperative effect on Cd"""
+    """
+    Computes One engine inoperative effect on Cd. Based on Raymer page 290 eq 12.40
+    Trim effects calculation is not referenced
+    """
 
     def initialize(self):
         self.options.declare("landing_flag", default=False, types=bool)
@@ -78,7 +81,6 @@ class ComputeDeltaOEI(ExplicitComponent):
         wing_area = inputs["data:geometry:wing:area"]
         vt_area = inputs["data:geometry:vertical_tail:area"]
         lp_vt = inputs["data:geometry:vertical_tail:MAC:at25percent:x:from_wingMAC25"]
-        # dCd_feather  = inputs["data:aerodynamics:aircraft:low_speed:DCD_feather"]
         dCd_feather = (
             1.0
             / (wing_area / constants.foot**2)
@@ -88,7 +90,7 @@ class ComputeDeltaOEI(ExplicitComponent):
                 / (8 * math.pi)
                 * (math.pi * (d_prop / 2.0 / constants.foot) ** 2)
             )
-        )  # ref.Raymer pag 289
+        )
 
         DCD_trim_list = []
         for CT in CT_list:

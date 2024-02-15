@@ -19,6 +19,10 @@ from math import sqrt, pi, tan
 import numpy as np
 from openmdao.core.explicitcomponent import ExplicitComponent
 
+"""
+Same as cs25 except for the k tuning coefficient, they are left at 1.0 in ref results.
+Would remove and replace by cs25 "compute_cl_alpha.py"
+"""
 
 class ComputeAerodynamicsLowSpeed(ExplicitComponent):
     """

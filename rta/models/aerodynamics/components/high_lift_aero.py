@@ -30,7 +30,10 @@ from fastoad_cs25.models.aerodynamics.components import resources
 
 LIFT_EFFECTIVENESS_FILENAME = "interpolation of lift effectiveness.txt"
 
-
+"""
+Same as cs25 except for variables names, no multi-slotted flaps (would be nice to have)
+One additional output: CLmax at take off, to check that it is available elsewhere in CS25
+"""
 class ComputeDeltaHighLift(ExplicitComponent):
 
     """Computes flap effect on Cl0 and Cl_alpha"""

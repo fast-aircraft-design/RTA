@@ -17,6 +17,9 @@
 import numpy as np
 from openmdao.core.explicitcomponent import ExplicitComponent
 
+"""
+Le code cs25 avec l'option cambrure = False, devrait pouvoir être utilisé sans modification des résultats.
+"""
 
 class Cd0Wing(ExplicitComponent):
     def initialize(self):
@@ -80,16 +83,17 @@ class Cd0Wing(ExplicitComponent):
         # cd0 wing
         # factor of relative thickness
         ke_cd0_wing = 4.688 * el_aero**2 + 3.146 * el_aero
-        k_phi_cd0_wing = 1 - 0.000178 * sweep_25**2 - 0.0065 * sweep_25
+        k_phi_cd0_wing = 1 - 0.000178 * sweep_25**2 - 0.0065 * sweep_25# sweep factor
 
         # kc_cd0_wing = (
         #     2.859 * (cl / np.cos(np.radians(sweep_25)) ** 2) ** 3
         #     - 1.849 * (cl / np.cos(np.radians(sweep_25)) ** 2) ** 2
         #     + 0.382 * (cl / np.cos(np.radians(sweep_25)) ** 2)
         #     + 0.06
-        # )  # sweep factor
+        # )  # airfoil camber factor
 
         kc_cd0_wing = 0
+
         cd0_wing = (
             ((ke_cd0_wing + kc_cd0_wing) * k_phi_cd0_wing + ki_arrow_cd0 + 1)
             * cf_wing
