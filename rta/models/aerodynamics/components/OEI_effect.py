@@ -51,7 +51,6 @@ class ComputeDeltaOEI(ExplicitComponent):
         )
 
         self.add_input("data:aerodynamics:aircraft:low_speed:CT", shape=CT_POINT_COUNT)
-        # self.add_input("data:aerodynamics:aircraft:low_speed:DCD_feather", val= 0.004)
         self.add_input("data:aerodynamics:aircraft:low_speed:DCD_ext", val=0.0)
 
         self.add_output("data:aerodynamics:aircraft:low_speed:DCD_feather", val=0.004)
@@ -73,7 +72,6 @@ class ComputeDeltaOEI(ExplicitComponent):
 
         n_blades = inputs["data:geometry:propulsion:propeller:B"]
         d_prop = inputs["data:geometry:propulsion:propeller:diameter"]
-
         dCd_ext = inputs["data:aerodynamics:aircraft:low_speed:DCD_ext"]
         CT_list = inputs["data:aerodynamics:aircraft:low_speed:CT"]
         y_nacelle = inputs["data:geometry:propulsion:nacelle:y"]

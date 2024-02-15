@@ -81,7 +81,6 @@ class ComputeDeltaHighLift(ExplicitComponent):
             self.add_output(
                 "data:aerodynamics:aircraft:takeoff:CL_alpha", units="1/rad"
             )
-            self.add_output("data:aerodynamics:aircraft:takeoff:CL_max")
             self.add_output(
                 "data:aerodynamics:aircraft:takeoff:DCD", shape=POLAR_POINT_COUNT
             )
@@ -149,7 +148,6 @@ class ComputeDeltaHighLift(ExplicitComponent):
             ) * self._get_delta_cd(
                 slat_angle, flap_angle, slat_span_ratio, flap_span_ratio
             )
-            outputs["data:aerodynamics:aircraft:takeoff:CL_max"] = CL_max_landing * 0.8
 
     def _get_delta_cl(
         self,

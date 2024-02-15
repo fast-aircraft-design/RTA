@@ -22,6 +22,9 @@ from openmdao.core.explicitcomponent import ExplicitComponent
 
 from rta.models.aerodynamics.constants import ALPHA_POINT_COUNT
 
+"""
+Undocumented
+"""
 
 class ComputeDeltaLg(ExplicitComponent):
 

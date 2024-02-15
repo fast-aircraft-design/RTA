@@ -22,7 +22,7 @@ from openmdao.core.explicitcomponent import ExplicitComponent
 """
 Pylon drag should be removed. Or its wet surface area be taken as 0.
 Facteur technologique de la trainée parasite à conserver.
-Submodule spécifique jusitifé
+Submodule spécifique justifié
 Does not use OEI effect or landing gear drag
 """
 
