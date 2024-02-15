@@ -50,7 +50,7 @@ from .geom_components.nacelle.compute_nacelle import (
     ComputeNacelleGeometry,
 )
 
-from .geom_components.wing.compute_wing_RHEA import ComputeWingGeometry_RHEA
+from .geom_components.wing.compute_wing_rta import ComputeWingGeometryRTA
 from fastoad_cs25.models.constants import CABIN_SIZING_OPTION
 
 
@@ -79,7 +79,7 @@ class Geometry_sizing(om.Group):
                 "compute_fuselage", ComputeFuselageGeometryBasic(), promotes=["*"]
             )
 
-        self.add_subsystem("compute_wing", ComputeWingGeometry_RHEA(), promotes=["*"])
+        self.add_subsystem("compute_wing", ComputeWingGeometryRTA(), promotes=["*"])
         self.add_subsystem(
             "compute_engine_nacelle", ComputeNacelleGeometry(), promotes=["*"]
         )

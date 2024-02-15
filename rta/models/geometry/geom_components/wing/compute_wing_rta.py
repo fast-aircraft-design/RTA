@@ -47,7 +47,7 @@ from fastoad_cs25.models.geometry.geom_components.wing.components.compute_y_wing
 from openmdao.api import Group
 
 
-class ComputeWingGeometry_RHEA(Group):
+class ComputeWingGeometryRTA(Group):
     # TODO: Document equations. Cite sources
     """Wing geometry estimation"""
 

@@ -17,6 +17,7 @@
 import numpy as np
 from openmdao.core.explicitcomponent import ExplicitComponent
 
+# TODO: this is inherited from old version of FAST. Only difference is the weight classification (following ATA instead of Air2001/D). Discuss this with team dev.
 
 class ComputeFlightControlCG(ExplicitComponent):
     # TODO: Document equations. Cite sources

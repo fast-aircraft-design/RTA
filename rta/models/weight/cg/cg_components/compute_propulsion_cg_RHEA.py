@@ -75,10 +75,10 @@ class ComputePropulsionCG_RHEA(ExplicitComponent):
         l_wing_nac = l3_wing + (l2_wing - l3_wing) * (y3_wing - y_nacelle) / (
             y3_wing - y2_wing
         )
-        delta_x_nacell = 0.05 * l_wing_nac
+        delta_x_nacelle = 0.05 * l_wing_nac
         x_nacelle_cg = (
             x3_wing * (y_nacelle - y2_wing) / (y3_wing - y2_wing)
-            - delta_x_nacell
+            - delta_x_nacelle
             - 0.2 * nac_length
         )
         x_nacelle_cg_absolute = fa_length - 0.25 * l0_wing - (x0_wing - x_nacelle_cg)

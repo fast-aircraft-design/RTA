@@ -27,7 +27,6 @@ from fastoad.io import VariableIO
 # from ..cg_components.compute_cg_control_surfaces import ComputeControlSurfacesCG
 # from ..cg_components.compute_cg_others import ComputeOthersCG
 # from ..cg_components.compute_cg_ratio_aft import ComputeCGRatioAft
-from ..cg_components.compute_cg_tanks_RHEA import ComputeTanksCG_RHEA
 # from ..cg_components.compute_cg_wing import ComputeWingCG
 # from ..cg_components.compute_global_cg import ComputeGlobalCG
 # from ..cg_components.compute_ht_cg import ComputeHTcg
@@ -39,39 +38,36 @@ from ..cg_components.compute_cg_tanks_RHEA import ComputeTanksCG_RHEA
 # from ..cg_components.load_cases.compute_cg_loadcase4 import ComputeCGLoadCase4
 # from ..cg_components.load_cases.compute_cg_loadcases import CGRatiosForLoadCases
 # from ..cg_components.update_mlg import UpdateMLG
+from ..cg_components import ComputeFlightControlCG
+from fastoad_cs25.models.weight.cg.cg_components.compute_cg_control_surfaces import ComputeControlSurfacesCG
 
-def test_compute_cg_tanks():
+
+def test_ComputeFlightControlCG():
     """Tests computation of tanks center of gravity"""
 
     input_vars = om.IndepVarComp()
-    input_vars.add_output("data:geometry:fuselage:maximum_width", 3.92, units="m")
-    input_vars.add_output("data:geometry:wing:MAC:length", 4.457, units="m")
-    input_vars.add_output("data:geometry:wing:MAC:at25percent:x", 16.457, units="m")
-    input_vars.add_output("data:geometry:wing:MAC:leading_edge:x:local", 2.361, units="m")
-    input_vars.add_output("data:geometry:wing:kink:chord", 3.985, units="m")
-    input_vars.add_output("data:geometry:wing:kink:y", 6.321, units="m")
-    input_vars.add_output("data:geometry:wing:kink:leading_edge:x:local", 2.275, units="m")
-    input_vars.add_output("data:geometry:wing:root:chord", 6.26, units="m")
-    input_vars.add_output("data:geometry:wing:root:y", 1.96, units="m")
-    input_vars.add_output("data:geometry:wing:tip:chord", 1.882, units="m")
-    input_vars.add_output("data:geometry:wing:tip:y", 15.801, units="m")
-    input_vars.add_output("data:geometry:wing:tip:leading_edge:x:local", 7.222, units="m")
-    input_vars.add_output("data:geometry:wing:spar_ratio:front:kink", 0.15, units=None)
-    input_vars.add_output("data:geometry:wing:spar_ratio:front:root", 0.11, units=None)
-    input_vars.add_output("data:geometry:wing:spar_ratio:front:tip", 0.27, units=None)
-    input_vars.add_output("data:geometry:wing:spar_ratio:rear:kink", 0.66, units=None)
-    input_vars.add_output("data:geometry:wing:spar_ratio:rear:root", 0.57, units=None)
-    input_vars.add_output("data:geometry:wing:spar_ratio:rear:tip", 0.56, units=None)
+    input_vars.add_output("data:geometry:wing:MAC:length", 2.277, units="m")
+    input_vars.add_output("data:geometry:wing:MAC:y", 6.197, units="m")
+    input_vars.add_output("data:geometry:wing:MAC:at25percent:x", 12.628, units="m")
+    input_vars.add_output("data:geometry:wing:MAC:leading_edge:x:local", 0.302, units="m")
+    input_vars.add_output("data:geometry:wing:kink:chord", 2.4, units="m")
+    input_vars.add_output("data:geometry:wing:kink:y", 5.189, units="m")
+    input_vars.add_output("data:geometry:wing:kink:leading_edge:x:local", 0.234, units="m")
+    input_vars.add_output("data:geometry:wing:root:chord", 2.633, units="m")
+    input_vars.add_output("data:geometry:wing:root:y", 1.396, units="m")
+    input_vars.add_output("data:geometry:wing:tip:chord", 1.685, units="m")
+    input_vars.add_output("data:geometry:wing:tip:leading_edge:x:local", 0.743, units="m")
+    input_vars.add_output("data:geometry:wing:tip:y", 13.421, units="m")
 
-    problem = run_system(ComputeTanksCG_RHEA(), input_vars)
+    problem = run_system(ComputeControlSurfacesCG(), input_vars)
 
-    x_cg_tank = problem["data:weight:fuel_tank:CG:x"]
-    assert x_cg_tank == pytest.approx(16.12, abs=1e-2)
+    x_cg_flight_control = problem["data:weight:airframe:flight_controls:CG:x"]
+    assert x_cg_flight_control == pytest.approx(14.39, abs=1e-2)
 
     # With no kink
     input_vars = om.IndepVarComp()
-    input_vars.add_output("data:geometry:fuselage:maximum_width", 3.92, units="m")
     input_vars.add_output("data:geometry:wing:MAC:length", 4.457, units="m")
+    input_vars.add_output("data:geometry:wing:MAC:y", 6.293, units="m")
     input_vars.add_output("data:geometry:wing:MAC:at25percent:x", 16.457, units="m")
     input_vars.add_output("data:geometry:wing:MAC:leading_edge:x:local", 2.361, units="m")
     input_vars.add_output("data:geometry:wing:kink:chord", 6.26, units="m")
@@ -79,17 +75,8 @@ def test_compute_cg_tanks():
     input_vars.add_output("data:geometry:wing:kink:leading_edge:x:local", 0.0, units="m")
     input_vars.add_output("data:geometry:wing:root:chord", 6.26, units="m")
     input_vars.add_output("data:geometry:wing:root:y", 1.96, units="m")
-    input_vars.add_output("data:geometry:wing:tip:chord", 1.882, units="m")
-    input_vars.add_output("data:geometry:wing:tip:y", 15.801, units="m")
-    input_vars.add_output("data:geometry:wing:tip:leading_edge:x:local", 7.222, units="m")
-    input_vars.add_output("data:geometry:wing:spar_ratio:front:kink", 0.15, units=None)
-    input_vars.add_output("data:geometry:wing:spar_ratio:front:root", 0.11, units=None)
-    input_vars.add_output("data:geometry:wing:spar_ratio:front:tip", 0.27, units=None)
-    input_vars.add_output("data:geometry:wing:spar_ratio:rear:kink", 0.66, units=None)
-    input_vars.add_output("data:geometry:wing:spar_ratio:rear:root", 0.57, units=None)
-    input_vars.add_output("data:geometry:wing:spar_ratio:rear:tip", 0.56, units=None)
 
-    problem = run_system(ComputeTanksCG_RHEA(), input_vars)
+    problem = run_system(ComputeControlSurfacesCG(), input_vars)
 
-    x_cg_tank = problem["data:weight:fuel_tank:CG:x"]
+    x_cg_tank = problem["data:weight:systems:flight_controls:CG:x"]
     assert x_cg_tank == pytest.approx(16.52, abs=1e-2)
