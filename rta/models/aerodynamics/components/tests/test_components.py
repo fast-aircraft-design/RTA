@@ -25,17 +25,23 @@ from openmdao.core.group import Group
 from openmdao.core.indepvarcomp import IndepVarComp
 from pytest import approx
 from stdatm import Atmosphere
+from scipy.interpolate import interp1d
 
 from ..cd0_fuselage import Cd0Fuselage
 from ..lg_effect import ComputeDeltaLg
 from ..OEI_effect import ComputeDeltaOEI
 from ..cd0_wing import Cd0Wing
 from ..cd0_total import Cd0Total
-from ..compute_polar import ComputePolar
+from ..compute_polar import ComputePolar, PolarType
+# from fastoad_cs25.models.aerodynamics.components.compute_polar import ComputePolar
+from fastoad_cs25.models.aerodynamics.components.compute_reynolds import ComputeReynolds
+# from fastoad_cs25.models.aerodynamics.components.high_lift_aero import ComputeDeltaHighLift
+# from fastoad_cs25.models.aerodynamics.constants import PolarType
+
 from ..cd0_nacelle_pylons_TP import Cd0NacelleAndPylonsTP
 from ..high_lift_aero import ComputeDeltaHighLift
-# from ..oswald import OswaldCoefficient
-from fastoad_cs25.models.aerodynamics.components.oswald import OswaldCoefficient
+from ..oswald import OswaldCoefficient
+# from fastoad_cs25.models.aerodynamics.components.oswald import OswaldCoefficient
 
 
 def get_indep_var_comp(var_names):
@@ -239,76 +245,53 @@ def test_polar_high_speed():
     cl = problem["data:aerodynamics:aircraft:cruise:CL"]
 
     assert cd[cl == 0.0] == approx(0.027555, abs=1e-5)
-    assert cd[cl == 0.2] == approx(0.02281, abs=1e-5)
-    assert cd[cl == 0.42] == approx(0.02977, abs=1e-5)
-    assert cd[cl == 0.85] == approx(0.24041, abs=1e-5)
+    assert cd[cl == 0.2] == approx(0.02835, abs=1e-5)
+    assert cd[cl == 0.42] == approx(0.03206, abs=1e-5)
+    assert cd[cl == 0.85] == approx(0.04786, abs=1e-5)
 
-    assert problem["data:aerodynamics:aircraft:cruise:optimal_CL"] == approx(0.51, abs=1e-3)
-    assert problem["data:aerodynamics:aircraft:cruise:optimal_CD"] == approx(0.03487, abs=1e-5)
+    assert problem["data:aerodynamics:aircraft:cruise:optimal_CL"] == approx(0.94, abs=1e-3)
+    assert problem["data:aerodynamics:aircraft:cruise:optimal_CD"] == approx(0.05262, abs=1e-5)
 
 
-def _test_polar_low_speed():
+def test_polar_low_speed():
     """Tests ComputePolar"""
 
     # Need to plug Cd modules, Reynolds and Oswald
 
     input_list = [
-        "data:aerodynamics:aircraft:takeoff:mach",
-        "data:geometry:wing:area",
-        "data:geometry:wing:span",
-        "data:geometry:fuselage:maximum_height",
-        "data:geometry:fuselage:maximum_width",
-        "data:geometry:wing:root:chord",
-        "data:geometry:wing:tip:chord",
-        "data:geometry:wing:sweep_25",
-        "data:geometry:wing:thickness_ratio",
-        "data:geometry:wing:wetted_area",
-        "data:geometry:wing:MAC:length",
-        "data:geometry:fuselage:length",
-        "data:geometry:fuselage:wetted_area",
-        "data:geometry:horizontal_tail:MAC:length",
-        "data:geometry:horizontal_tail:thickness_ratio",
-        "data:geometry:horizontal_tail:sweep_25",
-        "data:geometry:horizontal_tail:wetted_area",
-        "data:geometry:vertical_tail:MAC:length",
-        "data:geometry:vertical_tail:thickness_ratio",
-        "data:geometry:vertical_tail:sweep_25",
-        "data:geometry:vertical_tail:wetted_area",
-        "data:geometry:propulsion:pylon:length",
-        "data:geometry:propulsion:nacelle:length",
-        "data:geometry:propulsion:pylon:wetted_area",
-        "data:geometry:propulsion:nacelle:wetted_area",
-        "data:geometry:propulsion:engine:count",
-        "data:geometry:propulsion:fan:length",
-        "data:geometry:aircraft:wetted_area",
         "tuning:aerodynamics:aircraft:cruise:CD:k",
         "tuning:aerodynamics:aircraft:cruise:CD:offset",
         "tuning:aerodynamics:aircraft:cruise:CD:winglet_effect:k",
         "tuning:aerodynamics:aircraft:cruise:CD:winglet_effect:offset",
+        "data:aerodynamics:aircraft:cruise:CD0",
+        "data:aerodynamics:aircraft:cruise:CD:trim",
+        "data:aerodynamics:aircraft:cruise:CD:compressibility",
+        "data:aerodynamics:aircraft:cruise:induced_drag_coefficient",
+        'data:aerodynamics:aircraft:low_speed:CL0_clean',
+        'data:aerodynamics:aircraft:low_speed:CL_alpha',
+        "data:aerodynamics:aircraft:low_speed:CD0",
+        "data:aerodynamics:aircraft:low_speed:CD:trim",
+        "data:aerodynamics:aircraft:low_speed:induced_drag_coefficient",
+        "tuning:aerodynamics:aircraft:low_speed:CD:winglet_effect:k",
+        "tuning:aerodynamics:aircraft:low_speed:CD:winglet_effect:offset"
     ]
-    group = Group()
-    group.add_subsystem("reynolds", ComputeReynolds(low_speed_aero=True), promotes=["*"])
-    group.add_subsystem("oswald", OswaldCoefficient(low_speed_aero=True), promotes=["*"])
-    group.add_subsystem(
-        "induced_drag_coeff", InducedDragCoefficient(low_speed_aero=True), promotes=["*"]
-    )
-    group.add_subsystem("cd0", CD0(low_speed_aero=True), promotes=["*"])
-    group.add_subsystem("cd_trim", CdTrim(low_speed_aero=True), promotes=["*"])
-    group.add_subsystem("polar", ComputePolar(polar_type=PolarType.LOW_SPEED), promotes=["*"])
+
 
     ivc = get_indep_var_comp(input_list)
-    ivc.add_output("data:aerodynamics:aircraft:low_speed:CL", np.arange(0.0, 1.5, 0.01))
+    ivc.add_output("data:aerodynamics:aircraft:low_speed:CL", np.arange(0.0, 3.0, 0.02))
 
-    problem = run_system(group, ivc)
+    problem = run_system(ComputePolar(type=PolarType.LOW_SPEED), ivc)
 
     cd = problem["data:aerodynamics:aircraft:low_speed:CD"]
     cl = problem["data:aerodynamics:aircraft:low_speed:CL"]
 
-    assert cd[cl == 0.5] == approx(0.033441, abs=1e-5)
-    assert cd[cl == 1.0] == approx(0.077523, abs=1e-5)
+    assert cd[cl == 0.0] == approx(0.02877, abs=1e-5)
+    assert cd[cl == 0.2] == approx(0.02957, abs=1e-5)
+    assert cd[cl == 0.42] == approx(0.03327, abs=1e-5)
+    assert cd[cl == 0.86] == approx(0.04957, abs=1e-5)
 
 
-def _test_polar_high_lift():
+def test_polar_high_lift():
     """Tests ComputePolar"""
 
     # Need to plug Cd modules, Reynolds and Oswald
@@ -346,27 +329,42 @@ def _test_polar_high_lift():
         "tuning:aerodynamics:aircraft:cruise:CD:offset",
         "tuning:aerodynamics:aircraft:cruise:CD:winglet_effect:k",
         "tuning:aerodynamics:aircraft:cruise:CD:winglet_effect:offset",
-        "data:aerodynamics:high_lift_devices:takeoff:CL",
-        "data:aerodynamics:high_lift_devices:takeoff:CD",
+        'data:aerodynamics:aircraft:low_speed:CL0_clean',
+        'data:aerodynamics:aircraft:low_speed:CL_alpha',
+        "data:aerodynamics:aircraft:low_speed:CD0",
+        "data:aerodynamics:aircraft:low_speed:CD:trim",
+        "data:geometry:wing:sweep_0",
+        "data:geometry:wing:sweep_100_outer",
+        "data:geometry:flap:chord_ratio",
+        "data:geometry:flap:span_ratio",
+        "data:geometry:slat:chord_ratio",
+        "data:geometry:slat:span_ratio",
+        "data:mission:sizing:takeoff:slat_angle",
+        "data:mission:sizing:takeoff:flap_angle",
+        'tuning:aerodynamics:aircraft:low_speed:CD:winglet_effect:k',
+        'tuning:aerodynamics:aircraft:low_speed:CD:winglet_effect:offset'
     ]
+
     group = Group()
     group.add_subsystem("reynolds", ComputeReynolds(low_speed_aero=True), promotes=["*"])
     group.add_subsystem("oswald", OswaldCoefficient(low_speed_aero=True), promotes=["*"])
-    group.add_subsystem(
-        "induced_drag_coeff", InducedDragCoefficient(low_speed_aero=True), promotes=["*"]
-    )
-    group.add_subsystem("cd0", CD0(low_speed_aero=True), promotes=["*"])
-    group.add_subsystem("cd_trim", CdTrim(low_speed_aero=True), promotes=["*"])
-    group.add_subsystem("polar", ComputePolar(polar_type=PolarType.TAKEOFF), promotes=["*"])
+    # group.add_subsystem("cd0", CD0(low_speed_aero=True), promotes=["*"])
+    # group.add_subsystem("cd_trim", CdTrim(low_speed_aero=True), promotes=["*"])
+    group.add_subsystem("high_lift_delta", ComputeDeltaHighLift(landing_flag=False), promotes=['*'])
+    group.add_subsystem("polar", ComputePolar(type=PolarType.TAKEOFF), promotes=["*"])
 
     ivc = get_indep_var_comp(input_list)
-    ivc.add_output("data:aerodynamics:aircraft:low_speed:CL", np.arange(0.0, 1.5, 0.01))
+    ivc.add_output("data:aerodynamics:aircraft:low_speed:CL", np.arange(0.0, 3.0, 0.02))
+
 
     problem = run_system(group, ivc)
 
     cd = problem["data:aerodynamics:aircraft:takeoff:CD"]
     cl = problem["data:aerodynamics:aircraft:takeoff:CL"]
 
-    assert cd[cl == 1.0] == approx(0.091497, abs=1e-5)
-    assert cd[cl == 1.5] == approx(0.180787, abs=1e-5)
+    # Interpolate because delta_CD and CL are not rounded to 0.01
+    CD = interp1d(cl, cd)
+
+    assert CD(1.0) == approx(0.06222, abs=1e-5)
+    assert CD(1.5) == approx(0.09941, abs=1e-5)
 
