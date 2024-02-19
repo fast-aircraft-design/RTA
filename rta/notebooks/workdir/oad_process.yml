@@ -27,7 +27,7 @@ model:
     linear_solver: om.DirectSolver()
 
     geometry:
-      id: rta.geometry.sizing
+      id: fastoad.geometry.sizing
     propeller:
       id: rta.propulsion.propeller_sizing
     gasturbine:
@@ -43,9 +43,9 @@ model:
     wing_position:
       id: fastoad.loop.wing_position
     aerodynamics_highspeed:
-      id: rta.aerodynamics.highspeed
+      id: fastoad.aerodynamics.highspeed
     aerodynamics_lowspeed:
-      id: rta.aerodynamics.lowspeed
+      id: fastoad.aerodynamics.lowspeed
     aerodynamics_takeoff:
       id: rta.aerodynamics.takeoff
     wing_area:
@@ -58,3 +58,15 @@ model:
     out_file: flight_points.csv
     adjust_fuel: true
     is_sizing: true
+
+
+submodels:
+  service.aerodynamics.CD0.fuselage: rta.submodel.aerodynamics.CD0.fuselage
+  service.aerodynamics.CD0.wing: rta.submodel.aerodynamics.CD0.wing
+  service.aerodynamics.CD0.nacelles_pylons: rta.submodel.aerodynamics.CD0.nacelles
+  service.aerodynamics.CD0.sum: rta.submodel.aerodynamics.CD0.sum
+  service.geometry.fuselage.basic: rta.submodel.geometry.fuselage.basic
+  service.geometry.fuselage.with_cabin_sizing: rta.submodel.geometry.fuselage.with_cabin_sizing
+  service.geometry.wing: rta.submodel.geometry.wing
+  service.geometry.nacelle_and_pylon: rta.submodel.geometry.nacelles
+

@@ -17,6 +17,9 @@
 from math import sqrt
 
 import numpy as np
+from fastoad.module_management.service_registry import RegisterSubmodel
+from fastoad_cs25.models.geometry.constants import SERVICE_FUSELAGE_GEOMETRY_BASIC, \
+    SERVICE_FUSELAGE_GEOMETRY_WITH_CABIN_SIZING
 from openmdao.core.explicitcomponent import ExplicitComponent
 
 
@@ -29,6 +32,7 @@ operational:items:passenger_seats   /   operational:furnishing:passenger_seats
 
 """
 
+@RegisterSubmodel(SERVICE_FUSELAGE_GEOMETRY_BASIC, "rta.submodel.geometry.fuselage.basic")
 class ComputeFuselageGeometryBasic(ExplicitComponent):
     # TODO: Document equations. Cite sources
     """Geometry of fuselage part A - Cabin (Commercial) estimation"""
@@ -116,6 +120,7 @@ class ComputeFuselageGeometryBasic(ExplicitComponent):
         outputs["data:geometry:fuselage:wetted_area"] = wet_area_fus
 
 
+@RegisterSubmodel(SERVICE_FUSELAGE_GEOMETRY_WITH_CABIN_SIZING, "rta.submodel.geometry.fuselage.with_cabin_sizing")
 class ComputeFuselageGeometryCabinSizing(ExplicitComponent):
     # TODO: Document equations. Cite sources
     """Geometry of fuselage part A - Cabin (Commercial) estimation"""
