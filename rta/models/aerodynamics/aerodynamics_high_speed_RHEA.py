@@ -26,7 +26,12 @@ from fastoad_cs25.models.aerodynamics.components.cd_compressibility import (
 )
 from fastoad_cs25.models.aerodynamics.components.cd_trim import CdTrim
 from fastoad_cs25.models.aerodynamics.components.compute_reynolds import ComputeReynolds
-from fastoad_cs25.models.aerodynamics.constants import SERVICE_CL_ALPHA
+from fastoad_cs25.models.aerodynamics.constants import (
+    SERVICE_CL_ALPHA,
+    SERVICE_INDUCED_DRAG_COEFFICIENT,
+    SERVICE_OSWALD_COEFFICIENT, SERVICE_CD0, SERVICE_REYNOLDS_COEFFICIENT, SERVICE_POLAR, SERVICE_CD_COMPRESSIBILITY,
+    SERVICE_CD_TRIM, SERVICE_INITIALIZE_CL,
+)
 from openmdao.core.group import Group
 
 from .components.cd0_fuselage import Cd0Fuselage
@@ -48,22 +53,17 @@ class AerodynamicsHighSpeed_RHEA(Group):
     """
 
     def setup(self):
-        self.add_subsystem("compute_oswald_coeff", OswaldCoefficient(), promotes=["*"])
-        self.add_subsystem("comp_re", ComputeReynolds(), promotes=["*"])
-        self.add_subsystem("initialize_cl", InitializeClPolar(), promotes=["*"])
+        low_speed_option = {"low_speed_aero": False}
+        self.add_subsystem("compute_oswald_coeff", RegisterSubmodel.get_submodel(SERVICE_OSWALD_COEFFICIENT), promotes=["*"])
+        self.add_subsystem("compute_induced_drag_coefficient", RegisterSubmodel.get_submodel(SERVICE_INDUCED_DRAG_COEFFICIENT), promotes=["*"])
+        self.add_subsystem("compute_reynolds", RegisterSubmodel.get_submodel(SERVICE_REYNOLDS_COEFFICIENT), promotes=["*"])
+        self.add_subsystem("initialize_cl", RegisterSubmodel.get_submodel(SERVICE_INITIALIZE_CL, promotes=["*"]))
         self.add_subsystem(
             "compute_CL_alpha",
             RegisterSubmodel.get_submodel(SERVICE_CL_ALPHA),
             promotes=["*"],
         )
-        # From here to Cd0_total, can be replaced by cs-25
-        self.add_subsystem("cd0_wing", Cd0Wing(), promotes=["*"])
-        self.add_subsystem("cd0_fuselage", Cd0Fuselage(), promotes=["*"])
-        self.add_subsystem("cd0_ht", Cd0HorizontalTail(), promotes=["*"])
-        self.add_subsystem("cd0_vt", Cd0VerticalTail(), promotes=["*"])
-        self.add_subsystem("cd0_nac_pylons", Cd0NacelleAndPylonsTP(), promotes=["*"])
-        self.add_subsystem("cd0_total", Cd0Total(), promotes=["*"])
-        #
-        self.add_subsystem("cd_comp", CdCompressibility(), promotes=["*"])
-        self.add_subsystem("cd_trim", CdTrim(), promotes=["*"])
-        self.add_subsystem("get_polar", ComputePolar(), promotes=["*"])
+        self.add_subsystem("cd0", RegisterSubmodel.get_submodel(SERVICE_CD0, low_speed_option), promotes=["*"])
+        self.add_subsystem("cd_comp", RegisterSubmodel.get_submodel(SERVICE_CD_COMPRESSIBILITY), promotes=["*"])
+        self.add_subsystem("cd_trim", RegisterSubmodel.get_submodel(SERVICE_CD_TRIM), promotes=["*"])
+        self.add_subsystem("get_polar", RegisterSubmodel.get_submodel(SERVICE_POLAR), promotes=["*"])

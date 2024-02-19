@@ -52,7 +52,6 @@ class Cd0Total(ExplicitComponent):
             )
             self.add_input("data:aerodynamics:vertical_tail:low_speed:CD0", val=np.nan)
             self.add_input("data:aerodynamics:nacelles:low_speed:CD0", val=np.nan)
-            self.add_input("data:aerodynamics:pylons:low_speed:CD0", val=np.nan)
 
             self.add_output(
                 "data:aerodynamics:aircraft:low_speed:CD0",
