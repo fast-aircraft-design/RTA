@@ -59,19 +59,8 @@ class ComputeNacelleGeometry(om.ExplicitComponent):
         )
 
         self.declare_partials(
-            "data:geometry:landing_gear:height",
-            [
-                "data:propulsion:Design_Thermo_Power",
-                "data:propulsion:electric_systems:P_nom",
-            ],
-            method="fd",
-        )
-        self.declare_partials(
             "data:geometry:propulsion:nacelle:y",
             [
-                "data:propulsion:electric_systems:P_nom",
-                "data:propulsion:Design_Thermo_Power",
-                "data:geometry:fuselage:maximum_width",
                 "data:geometry:propulsion:engine:y_ratio",
                 "data:geometry:wing:span",
             ],
