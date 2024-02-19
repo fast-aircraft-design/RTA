@@ -23,6 +23,7 @@ from fastoad.io import VariableIO
 from openmdao.core.group import Group
 from pytest import approx
 from scipy.interpolate import interp1d
+from numpy.testing import assert_allclose
 
 from ..cd0_fuselage import Cd0Fuselage
 from ..cd0_wing import Cd0Wing
@@ -357,3 +358,37 @@ def test_polar_high_lift():
 
     assert CD(1.0) == approx(0.06267, abs=1e-5)
     assert CD(1.5) == approx(0.09899, abs=1e-5)
+
+
+def test_cd_OEI():
+
+    input_list=[
+        "data:geometry:propulsion:nacelle:y",
+        "data:geometry:propulsion:propeller:B",
+        "data:geometry:propulsion:propeller:diameter",
+        "data:geometry:vertical_tail:aspect_ratio",
+        "data:geometry:wing:area",
+        "data:geometry:vertical_tail:area",
+        "data:geometry:vertical_tail:MAC:at25percent:x:from_wingMAC25",
+        "data:aerodynamics:aircraft:low_speed:CT",
+        "data:aerodynamics:aircraft:low_speed:DCD_ext",
+    ]
+
+    ivc=get_indep_var_comp(input_list)
+
+    component=ComputeDeltaOEI()
+
+    problem = run_system(component, ivc)
+
+    cd_feather = problem["data:aerodynamics:aircraft:low_speed:DCD_feather"]
+    cd_landing = problem["data:aerodynamics:aircraft:landing:OEI_effect:DCD"]
+    ct = problem["data:aerodynamics:aircraft:low_speed:CT"]
+    ct_test = [-1.5,-0.75,0.75,1.5]
+
+    assert cd_feather == approx(0.004811, rel=1e-3)
+
+    assert_allclose(np.interp(ct_test, ct, cd_landing), [0.6445, 0.1637, 0.1679, 0.6527], rtol=1e-3)
+
+
+
+

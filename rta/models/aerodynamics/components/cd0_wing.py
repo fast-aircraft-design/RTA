@@ -15,12 +15,17 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import numpy as np
+from fastoad.module_management.service_registry import RegisterSubmodel
+from fastoad_cs25.models.aerodynamics.components.utils.cd0_lifting_surface import LiftingSurfaceGeometry, \
+    compute_cd0_lifting_surface
+from fastoad_cs25.models.aerodynamics.constants import SERVICE_CD0_WING
 from openmdao.core.explicitcomponent import ExplicitComponent
 
 """
 Le code cs25 avec l'option cambrure = False, devrait pouvoir être utilisé sans modification des résultats.
 """
 
+@RegisterSubmodel(SERVICE_CD0_WING, "rta.submodel.aerodynamics.cd0.wing")
 class Cd0Wing(ExplicitComponent):
     def initialize(self):
         self.options.declare("low_speed_aero", default=False, types=bool)
@@ -61,10 +66,6 @@ class Cd0Wing(ExplicitComponent):
 
     def compute(self, inputs, outputs):
         wing_area = inputs["data:geometry:wing:area"]
-        wet_area_wing = inputs["data:geometry:wing:wetted_area"]
-        el_aero = inputs["data:geometry:wing:thickness_ratio"]
-        sweep_25 = inputs["data:geometry:wing:sweep_25"]
-        l0_wing = inputs["data:geometry:wing:MAC:length"]
         if self.low_speed_aero:
             cl = inputs["data:aerodynamics:aircraft:low_speed:CL"]
             mach = inputs["data:aerodynamics:aircraft:takeoff:mach"]
@@ -74,32 +75,16 @@ class Cd0Wing(ExplicitComponent):
             mach = inputs["data:TLAR:cruise_mach"]
             reynolds = inputs["data:aerodynamics:wing:cruise:reynolds"]
 
-        ki_arrow_cd0 = 0.04
-        # Friction coefficients
-        cf_wing = 0.455 / (
-            (1 + 0.144 * mach**2) ** 0.65 * (np.log10(reynolds * l0_wing)) ** 2.58
+        wing_geometry = LiftingSurfaceGeometry(
+            thickness_ratio=inputs["data:geometry:wing:thickness_ratio"],
+            MAC_length=inputs["data:geometry:wing:MAC:length"],
+            sweep_angle_25=inputs["data:geometry:wing:sweep_25"],
+            wet_area=inputs["data:geometry:wing:wetted_area"],
+            cambered=False,
+            interaction_coeff=0.04,
         )
 
-        # cd0 wing
-        # factor of relative thickness
-        ke_cd0_wing = 4.688 * el_aero**2 + 3.146 * el_aero
-        k_phi_cd0_wing = 1 - 0.000178 * sweep_25**2 - 0.0065 * sweep_25# sweep factor
-
-        # kc_cd0_wing = (
-        #     2.859 * (cl / np.cos(np.radians(sweep_25)) ** 2) ** 3
-        #     - 1.849 * (cl / np.cos(np.radians(sweep_25)) ** 2) ** 2
-        #     + 0.382 * (cl / np.cos(np.radians(sweep_25)) ** 2)
-        #     + 0.06
-        # )  # airfoil camber factor
-
-        kc_cd0_wing = 0
-
-        cd0_wing = (
-            ((ke_cd0_wing + kc_cd0_wing) * k_phi_cd0_wing + ki_arrow_cd0 + 1)
-            * cf_wing
-            * wet_area_wing
-            / wing_area
-        )
+        cd0_wing = compute_cd0_lifting_surface(wing_geometry, mach, reynolds, wing_area, cl)
 
         if self.low_speed_aero:
             outputs["data:aerodynamics:wing:low_speed:CD0"] = cd0_wing
