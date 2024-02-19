@@ -13,40 +13,24 @@ Estimation of communication systems weight
 #  GNU General Public License for more details.
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+from openmdao.core.group import Group
 
-import numpy as np
-from openmdao.core.explicitcomponent import ExplicitComponent
+from fastoad_cs25.models.weight.mass_breakdown.c_systems.c4_transmissions_systems_weight import TransmissionSystemsWeight
 
 
-class CommunicationSystemWeight(ExplicitComponent):
-    """
-    Weight estimation for communication systems
 
-    This includes:
+class CommunicationSystemWeightLegacy(Group):
 
-    - Alarms
-    - Interphone
-    - Flight recorder
-    - Transceiver VHF/COMM
-
-    """
+    """ Weight estimation for communication systems, based on CS25 transmission model"""
 
     def setup(self):
+        self.add_subsystem("communication_system_from_cs25", TransmissionSystemsWeight())
 
-        self.add_input("tuning:weight:systems:communications:mass:k", val=1.0)
-        self.add_input(
-            "tuning:weight:systems:communications:mass:offset", val=0.0, units="kg"
-        )
-
-        self.add_output("data:weight:systems:communications:mass", units="kg")
-
-        self.declare_partials("*", "*", method="fd")
-
-    # pylint: disable=too-many-locals
-    def compute(self, inputs, outputs, discrete_inputs=None, discrete_outputs=None):
-        k = inputs["tuning:weight:systems:communications:mass:k"]
-        offset = inputs["tuning:weight:systems:communications:mass:offset"]
-
-        # Mass of communication system
-        mass_comm = 80
-        outputs["data:weight:systems:communications:mass"] = k * mass_comm + offset
+    def configure(self):
+        self.promotes("communication_system_from_cs25",
+            inputs=['*',
+            ("tuning:weight:systems:transmission:mass:k",
+             "tuning:weight:systems:communications:mass:k"),
+            ("tuning:weight:systems:transmission:mass:offset",
+             "tuning:weight:systems:communications:mass:offset"),
+        ], outputs=[("data:weight:systems:transmission:mass", "data:weight:systems:communications:mass")])

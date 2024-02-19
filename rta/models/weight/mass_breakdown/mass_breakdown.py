@@ -15,16 +15,15 @@
 import openmdao.api as om
 
 from fastoad_cs25.models.constants import PAYLOAD_FROM_NPAX
+from fastoad_cs25.models.weight.constants import SERVICE_MASS_BREAKDOWN
+from fastoad.module_management.service_registry import RegisterSubmodel
 
 from .a_airframe import WingWeight, NacellesWeight
 
 from fastoad_cs25.models.weight.mass_breakdown.a_airframe import (
     FuselageWeight,
     EmpennageWeight,
-    # FlightControlsWeight,
     LandingGearWeight,
-    # PylonsWeight,
-    # PaintWeight,
 )
 from .b_propulsion.fuel_lines_weight import (
     FuelLinesWeight,
@@ -32,7 +31,7 @@ from .b_propulsion.fuel_lines_weight import (
 from .c_systems import (
     ECSWeight,
     AutoFlightSystemWeight,
-    CommunicationSystemWeight,
+    CommunicationSystemWeightLegacy,
     ElectricalPowerSystemWeight,
     FlightFurnishingWeight,
     FireSystemWeight,
@@ -79,7 +78,7 @@ class MTOWComputation(om.AddSubtractComp):
             units="kg",
         )
 
-
+@RegisterSubmodel(SERVICE_MASS_BREAKDOWN, "rta.submodel.weight.mass.legacy")
 class MassBreakdown(om.Group):
     """
     Computes analytically the mass of each part of the aircraft, and the resulting sum,
@@ -139,7 +138,7 @@ class AirframeWeight(om.Group):
                 "data:weight:airframe:vertical_tail:mass",
                 "data:weight:airframe:landing_gear:main:mass",
                 "data:weight:airframe:landing_gear:front:mass",
-                "data:weight:airframe:nacelle_struts:mass",
+                "data:weight:airframe:nacelle:mass",
             ],
             units="kg",
             desc="Mass of airframe",
@@ -158,7 +157,7 @@ class PropulsionWeight(om.Group):
     """
 
     def setup(self):
-        # Engine have to be computed before pylons
+        # Engine RTOpower has to be computed before nacelles
         self.add_subsystem("ATA61_72_73", TurbopropWeight(), promotes=["*"])
         self.add_subsystem("ATA28", FuelLinesWeight(), promotes=["*"])
 
@@ -193,7 +192,7 @@ class SystemsWeight(om.Group):
         self.add_subsystem("ATA21", ECSWeight(), promotes=["*"])
 
         self.add_subsystem("ATA22", AutoFlightSystemWeight(), promotes=["*"])
-        self.add_subsystem("ATA23", CommunicationSystemWeight(), promotes=["*"])
+        self.add_subsystem("ATA23", CommunicationSystemWeightLegacy(), promotes=["*"])
 
         self.add_subsystem("ATA24", ElectricalPowerSystemWeight(), promotes=["*"])
         self.add_subsystem("ATA2510", FlightFurnishingWeight(), promotes=["*"])
@@ -312,7 +311,7 @@ class OperatingWeightEmpty(om.Group):
     """
 
     def setup(self):
-        # Propulsion should be done before airframe, because it drives pylon mass.
+        # Propulsion should be done before airframe, because it drives nacelle mass.
         self.add_subsystem("propulsion_weight", PropulsionWeight(), promotes=["*"])
         self.add_subsystem("airframe_weight", AirframeWeight(), promotes=["*"])
         self.add_subsystem("systems_weight", SystemsWeight(), promotes=["*"])
