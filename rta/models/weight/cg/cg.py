@@ -21,7 +21,6 @@ from fastoad_cs25.models.weight.constants import SERVICE_CENTERS_OF_GRAVITY
 
 from .cg_components import ComputeFlightControlCG
 from .cg_components import ComputeGlobalCG
-from .cg_components import ComputeTanksCG_RHEA
 from .cg_components import ComputePropulsionCG_RHEA
 from .cg_components import ComputeOthersCG
 
@@ -31,7 +30,6 @@ from fastoad_cs25.models.weight.cg.constants import (
     SERVICE_GLOBAL_CG,
     SERVICE_HORIZONTAL_TAIL_CG,
     SERVICE_MLG_CG,
-    SERVICE_OTHERS_CG,
     SERVICE_TANKS_CG,
     SERVICE_VERTICAL_TAIL_CG,
     SERVICE_WING_CG,
@@ -62,7 +60,7 @@ class CG(om.Group):
             promotes=["*"],
         )
         self.add_subsystem(
-            "compute_cg_flight_controls", ComputeFlightControlCG(), promotes=["*"]
+            "compute_cg_flight_controls", RegisterSubmodel.get_submodel(SERVICE_FLIGHT_CONTROLS_CG), promotes=["*"]
         )
         self.add_subsystem("compute_cg_tanks", RegisterSubmodel.get_submodel(SERVICE_TANKS_CG), promotes=["*"])
         self.add_subsystem(
