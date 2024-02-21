@@ -21,9 +21,7 @@ engine_params = {
     "k_gb_RTO": "settings:propulsion:ratings:RTO:k_gb",
     "k_gb_NTO": "settings:propulsion:ratings:NTO:k_gb",
     "k_gb_MCL": "settings:propulsion:ratings:MCL:k_gb",
-    "k_gb_MCT": "settings:propulsion:ratings:MCT:k_gb",
     "k_gb_MCR": "settings:propulsion:ratings:MCR:k_gb",
-    "k_gb_FID": "settings:propulsion:ratings:FID:k_gb",
     "k_psfc": "tuning:propulsion:k_psfc",
     "k_prop": "tuning:propulsion:k_prop",
 }

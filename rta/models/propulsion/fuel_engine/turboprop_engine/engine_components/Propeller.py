@@ -12,11 +12,11 @@ from scipy.optimize import fsolve
 
 
 class Propeller(object):
-    def select(self, function, fidelity, data, atmosphere, mach, phase, P_T):
+    def select(self, function, fidelity, data, atmosphere, mach, P_T):
 
         func = getattr(self, function + "_" + fidelity)
 
-        return func(data, atmosphere, mach, phase, P_T)
+        return func(data, atmosphere, mach, P_T)
 
     def power_to_thrust_ADT(
         self,
