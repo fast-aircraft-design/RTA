@@ -29,7 +29,6 @@ from ..cd0_fuselage import Cd0Fuselage
 from ..cd0_wing import Cd0Wing
 from ..cd0_total import Cd0Total
 from ..cd0_nacelle_pylons_TP import Cd0NacelleAndPylonsTP
-from ..lg_effect import ComputeDeltaLg
 from ..OEI_effect import ComputeDeltaOEI
 
 from fastoad_cs25.models.aerodynamics.components.oswald import OswaldCoefficient, InducedDragCoefficient
