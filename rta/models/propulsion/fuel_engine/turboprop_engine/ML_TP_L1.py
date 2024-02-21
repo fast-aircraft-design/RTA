@@ -154,7 +154,7 @@ class ML_TP_L1(AbstractFuelPropulsion):
         T_prop, eta = Propeller().select(
             "power_to_thrust", Prop_fid, self, atmosphere, mach, phase, max_shaft_power
         )
-        FR = self.compute_engine_point(atmosphere, mach, phase, T_prop=T_prop)
+        FR = self.compute_engine_point(mach, T_prop=T_prop)
 
         # FR=0.
         max_thrust = T_prop + FR
@@ -347,71 +347,38 @@ class ML_TP_L1(AbstractFuelPropulsion):
     ) -> np.ndarray:
 
         """
-        Computation of ratio :math:`\\frac{SFC(P)}{SFC(Pmax)}`, given altitude, mach
-        and power_rate :math:`\\frac{F}{Fmax}`.
-
-
-
         :param altitude:
         :param thrust_rate:
         :return: SFC ratio
         """
         altitude = atmosphere.get_altitude(altitude_in_feet=True)
-        filename = os.path.join(rhea_path, "resources/gasturbine/TP_L1/Metamodels")
 
-        if phase == 1:
-            filename = filename + "/TP_L1_NTO_PSFC.sav"
-            poly = PolynomialFeatures(degree=3)
-            x = poly.fit_transform(
-                np.array([altitude, mach], dtype=object).reshape(1, -1)
-            )
+        c0 = 0.9533
+        c1 = -1.4739e-5
+        c2 = -1.285e-1
+        c3=-2.257
+        c4=1.887e-10
+        c5=-4.882e-8
+        c6=2.685e-5
+        c7=-2.707e-1
+        c8=4.479e-1
+        c9=2.511
+        c10=-2.497e-15
+        c11=1.132e-10
+        c12=-9.598e-11
+        c13=-1.182e-6
+        c14=-3.861e-6
+        c15=-1.471e-5
+        c16=6.02e-2
+        c17=2.522e-1
+        c18=-3.248e-1
+        c19=-9.402e-1
 
-        elif phase == 2:
-            filename = filename + "/TP_L1_MCL_PSFC.sav"
-            poly = PolynomialFeatures(degree=3)
-            x = poly.fit_transform(
-                np.array([altitude, mach], dtype=object).reshape(1, -1)
-            )
-
-        elif phase == 3:
-            filename = filename + "/TP_L1_CRZ_PSFC.sav"
-            poly = PolynomialFeatures(degree=3)
-            x = poly.fit_transform(
-                np.array([altitude, mach, power_rate], dtype=object).reshape(1, -1)
-            )
-
-        elif phase == 5:
-            filename = filename + "/TP_L1_CRZ_PSFC.sav"
-            poly = PolynomialFeatures(degree=3)
-            x = poly.fit_transform(
-                np.array([altitude, mach, power_rate], dtype=object).reshape(1, -1)
-            )
-
-        elif phase == 8:
-            filename = filename + "/TP_L1_RTO_PSFC.sav"
-            poly = PolynomialFeatures(degree=3)
-            x = poly.fit_transform(
-                np.array([altitude, mach], dtype=object).reshape(1, -1)
-            )
-
-        elif phase == 9:
-            filename = filename + "/TP_L1_MCT_PSFC.sav"
-            poly = PolynomialFeatures(degree=3)
-            x = poly.fit_transform(
-                np.array([altitude, mach], dtype=object).reshape(1, -1)
-            )
-
-        else:
-            filename = filename + "/TP_L1_MCL_PSFC.sav"
-            poly = PolynomialFeatures(degree=3)
-            x = poly.fit_transform(
-                np.array([altitude, mach], dtype=object).reshape(1, -1)
-            )
-
-        loaded_model = joblib.load(open(filename, "rb"))
-        psfc = loaded_model.predict(x)[0]
+        psfc = c0 + c1*altitude + c2*mach + c3*power_rate + c4*altitude**2 +\
+               c5*altitude*mach + c6*altitude*power_rate + c7*mach**2 + c8*mach*power_rate + c9*power_rate**2 + c10*altitude**3 + c11*altitude**2*mach + c12*altitude**2*power_rate + c13*altitude*mach**2 + c14*altitude*mach*power_rate + c15*altitude*power_rate**2 +c16*mach**3 + c17*mach**2*power_rate + c18*mach*power_rate**3 + c19*power_rate**3
 
         return psfc
+
 
     def max_power(
         self,
@@ -422,59 +389,51 @@ class ML_TP_L1(AbstractFuelPropulsion):
         """
         Computation of maximum available power.
 
-        Uses model described in :cite:`roux:2005`, p.57-58
-
         :param atmosphere: Atmosphere instance at intended altitude (should be <=20km)
         :param mach: Mach number(s) (should be between 0.05 and 1.0)
         :param phase: flight phase which influences engine rating (max mechanical power)
         :return: maximum power (in W)
         """
         """    TAXI_IN = 0
-    TAKEOFF = 1
-    CLIMB = 2
-    CRUISE = 3
-    DESCENT = 5
-    LANDING = 6
-    TAXI_OUT = 7"""
+        TAKEOFF = 1 : k_gb_nto
+        CLIMB = 2   : k_gb_mcl
+        CRUISE = 3  : k_gb_mcr
+        DESCENT = 5 : k_gb_mcl
+        LANDING = 6
+        TAXI_OUT = 7"""
         altitude = atmosphere.get_altitude(altitude_in_feet=True)
         mach = np.asarray(mach)
-        filename = os.path.join(rhea_path, "resources/gasturbine/TP_L1/Metamodels")
 
         if phase == 2:  #'MCL'
             max_power_rating = self.k_gb_MCL * self.RTO_power / constants.hp  # *1.05
-            filename = filename + "/TP_L1_MCL_P_lapse.sav"
-        elif phase == 4:  #'FID'
-            max_power_rating = self.k_gb_FID * self.RTO_power / constants.hp
-            filename = filename + "/TP_L1_CRZ_P_lapse.sav"
 
         elif phase == 1:  #'TO'
             max_power_rating = self.k_gb_NTO * self.RTO_power / constants.hp
-            filename = filename + "/TP_L1_NTO_P_lapse.sav"
-
-        elif phase == 9:  # MCT
-            filename = filename + "/TP_L1_MCT_P_lapse.sav"
-            max_power_rating = self.k_gb_MCT * self.RTO_power / constants.hp
 
         elif phase == 3:  #'CRZ'
             max_power_rating = self.k_gb_MCR * self.RTO_power / constants.hp
-            filename = filename + "/TP_L1_CRZ_P_lapse.sav"
+
         elif phase == 8:  #'RTO'
             max_power_rating = (
                 self.k_gb_RTO * self.RTO_power / constants.hp
             )  # Watt =2400. hp
-            filename = filename + "/TP_L1_RTO_P_lapse.sav"
 
         else:
             max_power_rating = self.RTO_power / constants.hp
-            filename = filename + "/TP_L1_MCL_P_lapse.sav"
 
-        poly = PolynomialFeatures(degree=3)
-        x = poly.fit_transform(np.array([altitude, mach], dtype=object).reshape(1, -1))
-        loaded_model = joblib.load(open(filename, "rb"))
-        K_powerlapse = loaded_model.predict(x)[0]
+        c0=1.015
+        c1=-2.806e-6
+        c2=-8.498e-2
+        c3=-8.928e-10
+        c4=2.253e-5
+        c5=1.943e-1
+        c6=1.914e-14
+        c7=-8.816e-10
+        c8=1.919e-5
+        c9=-3.257e-1
 
-        # if altitude>=19000.:
-        #     K_powerlapse=K_powerlapse*1.02
+        K_powerlapse = c0 + c1*altitude + c2*mach + c3*altitude**2 + c4*altitude*mach + c5*mach**2 + c6*altitude**3 + c7*altitude**2*mach + c8*altitude*mach**2 + c9*mach**3
+
 
         max_thermo_power = max_power_rating * K_powerlapse
 
@@ -492,28 +451,14 @@ class ML_TP_L1(AbstractFuelPropulsion):
 
     def compute_engine_point(
         self,
-        atmosphere: Atmosphere,
         mach: Union[float, Sequence[float]],
-        phase: Union[FlightPhase, Sequence],
-        throttle=1,
         T_prop=1,
-        shaft_power=1,
     ) -> np.ndarray:
 
-        altitude = atmosphere.get_altitude(altitude_in_feet=True)
-        filename = os.path.join(
-            rhea_path, "resources/gasturbine/TP_L1/Metamodels/TP_L1_FR_Ratio.sav"
-        )
-        loaded_model = joblib.load(open(filename, "rb"))
+        """ Based on correlation provided by J. D. Anderson, Aircraft Performance and Design p183"""
 
-        poly = PolynomialFeatures(degree=3)
-        x = poly.fit_transform(
-            np.array([altitude * constants.foot, mach, throttle], dtype=object).reshape(
-                1, -1
-            )
-        )
+        # With: ratio = Tjet/(Tjet+Tprop)
+        ratio = np.interp(mach, [0,0.5], [0,0.05])
 
-        Ratio = loaded_model.predict(x)[0]
-
-        FR = Ratio * T_prop
-        return FR
+        Tjet = T_prop * ratio / (1-ratio)
+        return Tjet
