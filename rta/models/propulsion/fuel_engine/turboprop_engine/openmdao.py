@@ -67,6 +67,7 @@ class OMMLTPL1Wrapper(IOMPropulsionWrapper):
         component.add_input("settings:propulsion:ratings:NTO:k_gb", np.nan)
         component.add_input("settings:propulsion:ratings:MCL:k_gb", np.nan)
         component.add_input("settings:propulsion:ratings:MCT:k_gb", np.nan)
+        component.add_input("settings:propulsion:ratings:MCR:k_gb", np.nan)
 
     @staticmethod
     def get_model(inputs) -> IPropulsion:
