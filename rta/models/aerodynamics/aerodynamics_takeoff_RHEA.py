@@ -16,7 +16,7 @@ from fastoad.module_management.constants import ModelDomain
 from fastoad.module_management.service_registry import (
     RegisterOpenMDAOSystem, RegisterSubmodel,
 )
-from fastoad_cs25.models.aerodynamics.constants import SERVICE_HIGH_LIFT, SERVICE_POLAR
+from fastoad_cs25.models.aerodynamics.constants import SERVICE_HIGH_LIFT, SERVICE_POLAR, PolarType
 
 from .components.OEI_effect import ComputeDeltaOEI
 from .components.initialize_in import InitializeIN

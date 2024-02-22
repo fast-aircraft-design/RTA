@@ -22,7 +22,7 @@ from fastoad_cs25.models.aerodynamics.constants import SERVICE_CD0_FUSELAGE
 from openmdao.core.explicitcomponent import ExplicitComponent
 
 
-@RegisterSubmodel(SERVICE_CD0_FUSELAGE, "rta.submodel.aerodynamics.fuselage.cd0")
+@RegisterSubmodel(SERVICE_CD0_FUSELAGE, "rta.submodel.aerodynamics.CD0.fuselage")
 class Cd0Fuselage(ExplicitComponent):
     def initialize(self):
         self.options.declare("low_speed_aero", default=False, types=bool)

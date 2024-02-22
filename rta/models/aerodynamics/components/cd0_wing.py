@@ -25,7 +25,7 @@ from openmdao.core.explicitcomponent import ExplicitComponent
 Le code cs25 avec l'option cambrure = False, devrait pouvoir être utilisé sans modification des résultats.
 """
 
-@RegisterSubmodel(SERVICE_CD0_WING, "rta.submodel.aerodynamics.cd0.wing")
+@RegisterSubmodel(SERVICE_CD0_WING, "rta.submodel.aerodynamics.CD0.wing")
 class Cd0Wing(ExplicitComponent):
     def initialize(self):
         self.options.declare("low_speed_aero", default=False, types=bool)

@@ -43,9 +43,9 @@ model:
     wing_position:
       id: rta.loop.wing_position
     aerodynamics_highspeed:
-      id: fastoad.aerodynamics.highspeed
+      id: fastoad.aerodynamics.highspeed.legacy
     aerodynamics_lowspeed:
-      id: fastoad.aerodynamics.lowspeed
+      id: fastoad.aerodynamics.lowspeed.legacy
     aerodynamics_takeoff:
       id: rta.aerodynamics.takeoff
     wing_area:
@@ -65,3 +65,4 @@ submodels:
   service.aerodynamics.CD0.wing: rta.submodel.aerodynamics.CD0.wing
   service.aerodynamics.CD0.nacelles_pylons: rta.submodel.aerodynamics.CD0.nacelles
   service.aerodynamics.CD0.sum: rta.submodel.aerodynamics.CD0.sum
+  service.aerodynamics.induced_drag_coefficient: fastoad.submodel.aerodynamics.induced_drag_coefficient.legacy
