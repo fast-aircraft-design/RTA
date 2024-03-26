@@ -15,50 +15,24 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 import numpy as np
+from fastoad.module_management.service_registry import RegisterSubmodel
+from fastoad_cs25.models.weight.cg.constants import SERVICE_FLIGHT_CONTROLS_CG
 from openmdao.core.explicitcomponent import ExplicitComponent
+from openmdao.core.group import Group
+
+from fastoad_cs25.models.weight.cg.cg_components.compute_cg_control_surfaces import ComputeControlSurfacesCG
+
+'''
+Uses new CS25 models with improved behavior if no kink
+'''
 
 
-class ComputeFlightControlCG(ExplicitComponent):
-    # TODO: Document equations. Cite sources
-    """Control surfaces center of gravity estimation"""
+@RegisterSubmodel(SERVICE_FLIGHT_CONTROLS_CG, 'rta.submodel.cg.wing.control_surfaces.legacy')
+class ComputeFlightControlCG(Group):
 
     def setup(self):
-        self.add_input("data:geometry:wing:MAC:length", val=np.nan, units="m")
-        self.add_input(
-            "data:geometry:wing:MAC:leading_edge:x:local", val=np.nan, units="m"
-        )
-        self.add_input("data:geometry:wing:MAC:y", val=np.nan, units="m")
-        self.add_input("data:geometry:wing:root:chord", val=np.nan, units="m")
-        self.add_input("data:geometry:wing:kink:chord", val=np.nan, units="m")
-        self.add_input("data:geometry:wing:root:y", val=np.nan, units="m")
-        self.add_input(
-            "data:geometry:wing:kink:leading_edge:x:local", val=np.nan, units="m"
-        )
-        self.add_input("data:geometry:wing:kink:y", val=np.nan, units="m")
-        self.add_input("data:geometry:wing:MAC:at25percent:x", val=np.nan, units="m")
+        self.add_subsystem('compute_flight_control_cg', ComputeControlSurfacesCG())
 
-        self.add_output("data:weight:systems:flight_controls:CG:x", units="m")
-
-        self.declare_partials("*", "*", method="fd")
-
-    def compute(self, inputs, outputs):
-        l0_wing = inputs["data:geometry:wing:MAC:length"]
-        x0_wing = inputs["data:geometry:wing:MAC:leading_edge:x:local"]
-        y0_wing = inputs["data:geometry:wing:MAC:y"]
-        l2_wing = inputs["data:geometry:wing:root:chord"]
-        l3_wing = inputs["data:geometry:wing:kink:chord"]
-        y2_wing = inputs["data:geometry:wing:root:y"]
-        x3_wing = inputs["data:geometry:wing:kink:leading_edge:x:local"]
-        y3_wing = inputs["data:geometry:wing:kink:y"]
-        fa_length = inputs["data:geometry:wing:MAC:at25percent:x"]
-
-        # TODO: build generic functions to estimate the chord, leading edge,
-        # trailing edge with respect to span wise position
-        x_leading_edge = x3_wing * (y0_wing - y2_wing) / (y3_wing - y2_wing)
-        l_cg_control = l2_wing + (y0_wing - y2_wing) / (y3_wing - y2_wing) * (
-            l3_wing - l2_wing
-        )
-        x_cg_control = x_leading_edge + l_cg_control
-        x_cg_control_absolute = fa_length - 0.25 * l0_wing - x0_wing + x_cg_control
-
-        outputs["data:weight:systems:flight_controls:CG:x"] = x_cg_control_absolute
+    def configure(self):
+        self.promotes('compute_flight_control_cg', inputs=['*'], outputs=[("data:weight:airframe:flight_controls:CG:x",
+                                                                           "data:weight:systems:flight_controls:CG:x")])
