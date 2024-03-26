@@ -58,7 +58,10 @@ class ComputeEngineSize(om.ExplicitComponent):
         TOD = inputs["data:mission:sizing:takeoff:distance"]
         TOD_target = inputs["data:TLAR:TOD"]
 
-        try:
+        if os.path.exists("previous_RTO.csv"):
+            previous_RTO_power = pd.read_csv("previous_RTO.csv", index_col=0).values[0]
+        else:
+            previous_RTO_power = self.initial_RTO_power
             previous_RTO_power = pd.read_csv("previous_RTO.csv", index_col=0)
             previous_RTO_power = previous_RTO_power.values[0]
         except:
