@@ -56,7 +56,7 @@ class TurbopropWeight(ExplicitComponent):
 
         m_eng = (
             0.758 * (P_nom / constants.hp) ** 0.803
-        )  # mass of dry angine and gearbox
+        )  # mass of dry engine and gearbox
 
         m_prop = 0.5 * ((D_prop * P_nom_prop * (n_blades) ** 0.5) / 227.2) ** 0.52
         m_ec = 0.454 * (5 * n_eng + 2.63 * l_fus)

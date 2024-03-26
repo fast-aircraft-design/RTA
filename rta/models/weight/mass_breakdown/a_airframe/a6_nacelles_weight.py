@@ -40,7 +40,7 @@ class NacellesWeight(om.ExplicitComponent):
             "tuning:weight:airframe:nacelle:mass:offset", val=0.0, units="kg"
         )
 
-        self.add_output("data:weight:airframe:nacelle:mass", units="kg")
+        self.add_output("data:weight:airframe:nacelle:mass", units="kg", desc='The mass of all nacelles, with the number of nacelle being equal to the number of engine')
 
         self.declare_partials("*", "*", method="fd")
 
@@ -50,7 +50,6 @@ class NacellesWeight(om.ExplicitComponent):
         k_a6 = inputs["tuning:weight:airframe:nacelle:mass:k"]
         offset_a6 = inputs["tuning:weight:airframe:nacelle:mass:offset"]
 
-        # This mass refers to all nacelles mass
         temp_a6 = rto_power * n_engines * 0.14 * pound
 
         outputs["data:weight:airframe:nacelle:mass"] = k_a6 * temp_a6 + offset_a6
