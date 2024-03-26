@@ -222,7 +222,7 @@
   <tuning>
     <propulsion>
       <k_prop is_input="True">1.0</k_prop>
-      <k_psfc is_input="True">1.0</k_psfc>
+      <k_psfc is_input="True">0.94</k_psfc>
     </propulsion>
     <aerodynamics>
       <aircraft>
@@ -565,14 +565,11 @@
     </mission>
     <propulsion>
       <ratings>
-        <FID>
-          <k_gb is_input="True">1.0</k_gb>
-        </FID>
         <MCL>
-          <k_gb is_input="True">0.797</k_gb>
+          <k_gb is_input="True">0.825</k_gb>
         </MCL>
         <MCR>
-          <k_gb is_input="True">0.775</k_gb>
+          <k_gb is_input="True">0.782</k_gb>
         </MCR>
         <MCT>
           <k_gb is_input="True">0.909</k_gb>

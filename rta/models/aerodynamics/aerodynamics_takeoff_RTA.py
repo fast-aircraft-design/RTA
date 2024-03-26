@@ -24,7 +24,7 @@ from .components.lg_effect import ComputeDeltaLg
 
 
 @RegisterOpenMDAOSystem("rta.aerodynamics.takeoff", domain=ModelDomain.AERODYNAMICS)
-class AerodynamicsTakeoffRHEA(om.Group):
+class AerodynamicsTakeoffRTA(om.Group):
     """
     Computes aerodynamic characteristics at takeoff.
 
