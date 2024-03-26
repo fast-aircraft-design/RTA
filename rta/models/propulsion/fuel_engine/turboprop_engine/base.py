@@ -21,8 +21,10 @@ from fastoad.model_base.flight_point import FlightPoint
 from fastoad.model_base.propulsion import IPropulsion, IOMPropulsionWrapper
 
 
-FlightPoint.add_field("TPshaft_power")
-FlightPoint.add_field("psfc")
+FlightPoint.add_field("TPshaft_power", unit='W')
+FlightPoint.add_field("TP_power_rate")
+FlightPoint.add_field("psfc", unit='kg/W/s')
+FlightPoint.add_field("TP_residual_thrust", unit='N')
 
 
 class AbstractFuelPropulsion(IPropulsion, ABC):

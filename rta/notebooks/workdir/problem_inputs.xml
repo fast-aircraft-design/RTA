@@ -219,7 +219,7 @@
   <tuning>
     <propulsion>
       <k_prop is_input="True">1.0</k_prop>
-      <k_psfc is_input="True">1.0</k_psfc>
+      <k_psfc is_input="True">0.94</k_psfc>
     </propulsion>
     <aerodynamics>
       <aircraft>
@@ -235,7 +235,7 @@
               <k is_input="True">1.85</k>
             </parasite>
             <winglet_effect>
-              <k is_input="True">1.0<!--correction ratio to apply to computed induced drag coefficient in cruise conditions--></k>
+              <k is_input="True">0.9473<!--correction ratio to apply to computed induced drag coefficient in cruise conditions--></k>
               <offset is_input="True">0.0<!--correction ratio to apply to computed drag coefficient in cruise conditions--></offset>
             </winglet_effect>
           </CD>
@@ -427,7 +427,7 @@
         </auxiliary_power_unit>
         <communications>
           <mass>
-            <k is_input="True">1.0</k>
+            <k is_input="True">0.8</k>
             <offset units="kg" is_input="True">0.0</offset>
           </mass>
         </communications>
@@ -568,14 +568,11 @@
     </mission>
     <propulsion>
       <ratings>
-        <FID>
-          <k_gb is_input="True">1.0</k_gb>
-        </FID>
         <MCL>
-          <k_gb is_input="True">0.797</k_gb>
+          <k_gb is_input="True">0.825</k_gb>
         </MCL>
         <MCR>
-          <k_gb is_input="True">0.775</k_gb>
+          <k_gb is_input="True">0.782</k_gb>
         </MCR>
         <MCT>
           <k_gb is_input="True">0.909</k_gb>

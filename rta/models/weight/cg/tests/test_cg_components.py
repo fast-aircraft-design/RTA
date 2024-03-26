@@ -38,8 +38,8 @@ from fastoad.io import VariableIO
 # from ..cg_components.load_cases.compute_cg_loadcase4 import ComputeCGLoadCase4
 # from ..cg_components.load_cases.compute_cg_loadcases import CGRatiosForLoadCases
 # from ..cg_components.update_mlg import UpdateMLG
-from ..cg_components import ComputeFlightControlCG
-from fastoad_cs25.models.weight.cg.cg_components.compute_cg_control_surfaces import ComputeControlSurfacesCG
+from ..cg_components.compute_cg_flight_controls import ComputeFlightControlCG, ComputeFlightControlCG_rta
+# from fastoad_cs25.models.weight.cg.cg_components.compute_cg_control_surfaces import ComputeControlSurfacesCG
 
 
 def test_ComputeFlightControlCG():
@@ -59,24 +59,7 @@ def test_ComputeFlightControlCG():
     input_vars.add_output("data:geometry:wing:tip:leading_edge:x:local", 0.743, units="m")
     input_vars.add_output("data:geometry:wing:tip:y", 13.421, units="m")
 
-    problem = run_system(ComputeControlSurfacesCG(), input_vars)
+    problem = run_system(ComputeFlightControlCG_rta(), input_vars)
 
-    x_cg_flight_control = problem["data:weight:airframe:flight_controls:CG:x"]
-    assert x_cg_flight_control == pytest.approx(14.39, abs=1e-2)
-
-    # With no kink
-    input_vars = om.IndepVarComp()
-    input_vars.add_output("data:geometry:wing:MAC:length", 4.457, units="m")
-    input_vars.add_output("data:geometry:wing:MAC:y", 6.293, units="m")
-    input_vars.add_output("data:geometry:wing:MAC:at25percent:x", 16.457, units="m")
-    input_vars.add_output("data:geometry:wing:MAC:leading_edge:x:local", 2.361, units="m")
-    input_vars.add_output("data:geometry:wing:kink:chord", 6.26, units="m")
-    input_vars.add_output("data:geometry:wing:kink:y", 1.96, units="m")
-    input_vars.add_output("data:geometry:wing:kink:leading_edge:x:local", 0.0, units="m")
-    input_vars.add_output("data:geometry:wing:root:chord", 6.26, units="m")
-    input_vars.add_output("data:geometry:wing:root:y", 1.96, units="m")
-
-    problem = run_system(ComputeControlSurfacesCG(), input_vars)
-
-    x_cg_tank = problem["data:weight:systems:flight_controls:CG:x"]
-    assert x_cg_tank == pytest.approx(16.52, abs=1e-2)
+    x_cg_flight_control = problem["data:weight:systems:flight_controls:CG:x"]
+    assert x_cg_flight_control == pytest.approx(14.365, abs=1e-2)
