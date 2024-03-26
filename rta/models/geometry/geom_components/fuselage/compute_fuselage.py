@@ -24,7 +24,7 @@ from openmdao.core.explicitcomponent import ExplicitComponent
 
 
 """
-Same function except for the position of the flight_kit see lines 96 and 294
+Same function as CS25 except for the position of the flight_kit see lines 105 and 304
 
 Name changes for:
 flight_furnishing                   /   flight_kit
