@@ -15,13 +15,17 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import math
-
 import numpy as np
-from fastoad_cs25.models.aerodynamics.constants import POLAR_POINT_COUNT
+from fastoad.module_management.service_registry import RegisterSubmodel
+from fastoad_cs25.models.aerodynamics.constants import SERVICE_CD0_NACELLES_PYLONS
+from fastoad_cs25.models.aerodynamics.components.utils.friction_drag import get_flat_plate_friction_drag_coefficient
 from openmdao.core.explicitcomponent import ExplicitComponent
 
+"""
+In legacy RHEA code, the wet_area of the pylon was forced to 0. Can be removed from this file
+"""
 
+@RegisterSubmodel(SERVICE_CD0_NACELLES_PYLONS, 'rta.submodel.aerodynamics.CD0.nacelles')
 class Cd0NacelleAndPylonsTP(ExplicitComponent):
     def initialize(self):
         self.options.declare("low_speed_aero", default=False, types=bool)
@@ -29,19 +33,15 @@ class Cd0NacelleAndPylonsTP(ExplicitComponent):
     def setup(self):
         self.low_speed_aero = self.options["low_speed_aero"]
 
-        nans_array = np.full(POLAR_POINT_COUNT, np.nan)
         if self.low_speed_aero:
             self.add_input("data:aerodynamics:wing:low_speed:reynolds", val=np.nan)
             self.add_input("data:aerodynamics:aircraft:takeoff:mach", val=np.nan)
             self.add_output("data:aerodynamics:nacelles:low_speed:CD0")
-            self.add_output("data:aerodynamics:pylons:low_speed:CD0")
         else:
             self.add_input("data:aerodynamics:wing:cruise:reynolds", val=np.nan)
             self.add_input("data:TLAR:cruise_mach", val=np.nan)
             self.add_output("data:aerodynamics:nacelles:cruise:CD0")
-            self.add_output("data:aerodynamics:pylons:cruise:CD0")
 
-        self.add_input("data:geometry:propulsion:pylon:length", val=np.nan, units="m")
         self.add_input("data:geometry:propulsion:nacelle:length", val=np.nan, units="m")
         self.add_input(
             "data:geometry:propulsion:pylon:wetted_area", val=np.nan, units="m**2"
@@ -50,18 +50,14 @@ class Cd0NacelleAndPylonsTP(ExplicitComponent):
             "data:geometry:propulsion:nacelle:wetted_area", val=np.nan, units="m**2"
         )
         self.add_input("data:geometry:propulsion:engine:count", val=np.nan)
-        # self.add_input("data:geometry:propulsion:fan:length", val=np.nan, units="m")
         self.add_input("data:geometry:wing:area", val=np.nan, units="m**2")
 
         self.declare_partials("*", "*", method="fd")
 
     def compute(self, inputs, outputs):
-        pylon_length = inputs["data:geometry:propulsion:pylon:length"]
         nac_length = inputs["data:geometry:propulsion:nacelle:length"]
-        wet_area_pylon = inputs["data:geometry:propulsion:pylon:wetted_area"]
         wet_area_nac = inputs["data:geometry:propulsion:nacelle:wetted_area"]
         n_engines = inputs["data:geometry:propulsion:engine:count"]
-        # fan_length = inputs["data:geometry:propulsion:fan:length"]
         wing_area = inputs["data:geometry:wing:area"]
         if self.low_speed_aero:
             mach = inputs["data:aerodynamics:aircraft:takeoff:mach"]
@@ -70,33 +66,12 @@ class Cd0NacelleAndPylonsTP(ExplicitComponent):
             mach = inputs["data:TLAR:cruise_mach"]
             reynolds = inputs["data:aerodynamics:wing:cruise:reynolds"]
 
-        cf_pylon = 0.455 / (
-            (1 + 0.144 * mach**2) ** 0.65
-            * (math.log10(reynolds * pylon_length)) ** 2.58
-        )
-        cf_nac = 0.455 / (
-            (1 + 0.144 * mach**2) ** 0.65
-            * (math.log10(reynolds * nac_length)) ** 2.58
-        )
+        cf_nac = get_flat_plate_friction_drag_coefficient(nac_length, mach, reynolds)
 
-        # cd0 Pylon
-        el_pylon = 0.06
-        ke_cd0_pylon = 4.688 * el_pylon**2 + 3.146 * el_pylon
-        cd0_pylon = (
-            n_engines * (1 + ke_cd0_pylon) * cf_pylon * wet_area_pylon / wing_area
-        )
-
-        # cd0 Nacelles
-        # e_fan = 0.22
-        # kn_cd0_nac = 1 + 0.05 + 5.8 * e_fan / fan_length
-        cd0_int_nac = 0.0005  # 0.0002
-        # cd0_nac_hs = n_engines * (kn_cd0_nac * cf_nac_hs * wet_area_nac / wing_area + cd0_int_nac)
+        cd0_int_nac = 0.0005 # subject to discussion
         cd0_nac = n_engines * (cf_nac * wet_area_nac / wing_area + cd0_int_nac)
 
         if self.low_speed_aero:
-            outputs["data:aerodynamics:pylons:low_speed:CD0"] = cd0_pylon
             outputs["data:aerodynamics:nacelles:low_speed:CD0"] = cd0_nac
-
         else:
-            outputs["data:aerodynamics:pylons:cruise:CD0"] = cd0_pylon
             outputs["data:aerodynamics:nacelles:cruise:CD0"] = cd0_nac
