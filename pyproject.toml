@@ -1,9 +1,9 @@
 [tool.poetry]
 name = "RTA"
 version = "0.0.1"
-description = "Conceptual aircraft design platform for conventional and hybrid 80 seat aircraft"
+description = "Conceptual aircraft design platform for conventional 80 seat aircraft"
 authors = ["Vincenzo PALLADINO <VINCENZO.PALLADINO@atr-aircraft.com>",
-    "Eric Nguyen Van <eric.nguyen_van@onera.fr>"]
+    "Eric Nguyen Van <eric.nguyen_van@onera.fr"]
 packages = [
     { include = "rta" },
 ]

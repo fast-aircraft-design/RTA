@@ -21,9 +21,7 @@ engine_params = {
     "k_gb_RTO": "settings:propulsion:ratings:RTO:k_gb",
     "k_gb_NTO": "settings:propulsion:ratings:NTO:k_gb",
     "k_gb_MCL": "settings:propulsion:ratings:MCL:k_gb",
-    "k_gb_MCT": "settings:propulsion:ratings:MCT:k_gb",
     "k_gb_MCR": "settings:propulsion:ratings:MCR:k_gb",
-    "k_gb_FID": "settings:propulsion:ratings:FID:k_gb",
     "k_psfc": "tuning:propulsion:k_psfc",
     "k_prop": "tuning:propulsion:k_prop",
 }
@@ -52,15 +50,15 @@ def test_ML_TP_L1():
         thrust_is_regulated=1.0,
     )  # with engine_setting as int
     engine.compute_flight_points(flight_point)
-    np.testing.assert_allclose(flight_point.psfc, 8.384e-8, rtol=1e-3)
-    np.testing.assert_allclose(flight_point.thrust_rate, 0.874, rtol=1e-3)
+    np.testing.assert_allclose(flight_point.psfc, 8.43e-8, rtol=1e-3)
+    np.testing.assert_allclose(flight_point.thrust_rate, 0.832, rtol=1e-3)
 
     flight_point = FlightPoint(
         mach=0, altitude=0, engine_setting=EngineSetting.TAKEOFF, thrust_rate=0.8
     )  # with engine_setting as EngineSetting
     engine.compute_flight_points(flight_point)
-    np.testing.assert_allclose(flight_point.psfc, 1.02e-7, rtol=1e-3)
-    np.testing.assert_allclose(flight_point.thrust, 31712, rtol=1e-3)
+    np.testing.assert_allclose(flight_point.psfc, 9.253e-8, rtol=1e-3)
+    np.testing.assert_allclose(flight_point.thrust, 31605, rtol=1e-3)
 
     flight_point = FlightPoint(
         mach=0.3,
@@ -69,5 +67,5 @@ def test_ML_TP_L1():
         thrust_rate=1.0,
     )  # with engine_setting as int
     engine.compute_flight_points(flight_point)
-    np.testing.assert_allclose(flight_point.thrust, 14095, rtol=1e-3)
-    np.testing.assert_allclose(flight_point.psfc, 8.576e-8, rtol=1e-3)
+    np.testing.assert_allclose(flight_point.thrust, 14293, rtol=1e-3)
+    np.testing.assert_allclose(flight_point.psfc, 8.216e-8, rtol=1e-3)

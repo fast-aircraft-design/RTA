@@ -12,20 +12,19 @@ from scipy.optimize import fsolve
 
 
 class Propeller(object):
-    def select(self, function, fidelity, data, atmosphere, mach, phase, P_T):
+    def select(self, function, fidelity, data, atmosphere, mach, P_T):
 
         func = getattr(self, function + "_" + fidelity)
 
-        return func(data, atmosphere, mach, phase, P_T)
+        return func(data, atmosphere, mach, P_T)
 
     def power_to_thrust_ADT(
         self,
         data,
         atmosphere: Atmosphere,
         mach: Union[float, Sequence[float]],
-        phase: Union[FlightPhase, Sequence],
         shaft_power: Union[float, Sequence[float]],
-    ) -> np.ndarray:
+    ) -> tuple:
         """
         Computation of propeller thrust given propeller shaft power.
 
@@ -35,9 +34,7 @@ class Propeller(object):
         :return: thrust (in N)
         """
         shp_prop = shaft_power * data.gearbox_eta / constants.hp  # hp
-        altitude = atmosphere.get_altitude(altitude_in_feet=True)  # ft
         a = atmosphere.speed_of_sound
-        # print(altitude,V_TAS,shp_prop,mach,a)
 
         # inputs
         V_TAS = mach * a  # m/s
@@ -53,10 +50,10 @@ class Propeller(object):
             )
 
         if mach < 0.2:
-            # T_prop=40240.
+            # Formulation for low speed operation
+
+            # static thrust
             eta = 0.0
-            # shp=data.k_gb_NTO *data.RTO_power/constants.hp
-            # T_prop_0= 55000*shp/(1200*d/constants.foot)*constants.pound_force  #Skellett, A. M. National Advisory Committee for Aeronautics, Nineteenth Annual Report. Report n447
             T_prop_0 = (
                 55000 * shp_prop / (1200 * d / constants.foot) * constants.pound_force
             )  # Skellett, A. M. National Advisory Committee for Aeronautics, Nineteenth Annual Report. Report n447
@@ -65,28 +62,21 @@ class Propeller(object):
             T_prop_ref = fsolve(P_to_T, 1, args=(shp_prop, 0.2 * a, rho, d))[0]
             T_prop_ref = T_prop_ref * k_corr * data.k_prop
 
+            # Interpol while mach is between [0,0.2]
             x = [0, 0.2]
             y = [float(T_prop_0), float(T_prop_ref)]
 
             T_prop = np.array([np.interp(float(mach), x, y)])
-        else:
 
+        else:
             T_prop = fsolve(P_to_T, 1, args=(shp_prop, V_TAS, rho, d))[0]
-            # print( T_prop * k_corr)
             T_prop = T_prop * k_corr * data.k_prop
-            # print(T_prop)
             eta = T_prop * V_TAS / (shp_prop * constants.hp)  # N
 
         return T_prop, eta
 
-    def thrust_to_power_ADT(
-        self,
-        data,
-        atmosphere: Atmosphere,
-        mach: Union[float, Sequence[float]],
-        phase: Union[FlightPhase, Sequence],
-        thrust: Union[float, Sequence],
-    ) -> np.ndarray:
+    def thrust_to_power_ADT(self, data, atmosphere: Atmosphere, mach: Union[float, Sequence[float]],
+                            thrust: Union[float, Sequence]) -> tuple:
         """
         Computation of propeller shaft power given propeller thrust WITHOUT FR.
 
@@ -97,8 +87,6 @@ class Propeller(object):
         """
 
         a = atmosphere.speed_of_sound
-        altitude = atmosphere.get_altitude(altitude_in_feet=True)
-
         V_TAS = mach * a  # m/s
         rho = atmosphere.density
         d = data.d_prop
