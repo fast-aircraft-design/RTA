@@ -1,5 +1,5 @@
 """
-Weight computation (mass and CG)
+Propeller sizing model
 """
 #  This file is part of FAST : A framework for rapid Overall Aircraft Design
 #  Copyright (C) 2020  ONERA & ISAE-SUPAERO
@@ -46,13 +46,5 @@ class Prop_sizing(ExplicitComponent):
 
         # evaluate propeller diameter
         d = (4 * max_power / (constants.pi * disk_loading)) ** 0.5
-
-        # #evaluate max rotational speed
-        # altitude =0
-        # mach=0
-        # atmosphere = Atmosphere(altitude, altitude_in_feet=False)
-        # a = atmosphere.speed_of_sound
-        # omega= 2*a/d*((0.7**2-mach**2)**0.5) #rad/s
-        # rpm_max=60/(2*constants.pi)*omega
 
         outputs["data:geometry:propulsion:propeller:diameter"] = d

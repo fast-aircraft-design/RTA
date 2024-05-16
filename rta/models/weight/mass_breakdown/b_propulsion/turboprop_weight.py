@@ -14,7 +14,8 @@ from scipy import constants
 class TurbopropWeight(ExplicitComponent):
     """
     Weight estimation for turboprop propulsion systems
-    Ref. Teeuwen, Y., “Propeller Design for Conceptual Turboprop Aircraft,” Master’s thesis, Delft University of Technology, 2017.
+    Ref. Teeuwen, Y., “Propeller Design for Conceptual Turboprop Aircraft,”
+    Master’s thesis, Delft University of Technology, 2017.
 
 
     """

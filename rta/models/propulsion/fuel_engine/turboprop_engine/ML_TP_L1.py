@@ -25,12 +25,10 @@ from fastoad.model_base.atmosphere import Atmosphere
 import pandas as pd
 from fastoad.model_base.flight_point import FlightPoint
 from .base import AbstractFuelPropulsion
-
-
+from .engine_components.Propeller import Propeller
 
 # Logger for this module
 _LOGGER = logging.getLogger(__name__)
-from .engine_components.Propeller import Propeller
 
 script_path = os.path.abspath(__file__)  # i.e. /path/to/dir/foobar.py
 rhea_path = script_path.split("models")[0]
@@ -58,7 +56,8 @@ class ML_TP_L1(AbstractFuelPropulsion):
         It computes engine characteristics using analytical model from following
         sources:
 
-        Vincenzo Palladino, "Methode de conception pluridisciplinaire appliquee a un avion regional a faibles emissions", phd thesis, p72
+        Vincenzo Palladino, "Methode de conception pluridisciplinaire appliquee a
+        un avion regional a faibles emissions" phd thesis, p72
 
         The power ratings (k_gb_TRO/NTO/MCR/MCL) are based on:
         O. Majeed, ‘Parametric specific fuel consumtption analysis of the PW120A Turboprop engine’,
@@ -114,7 +113,6 @@ class ML_TP_L1(AbstractFuelPropulsion):
         )
         FR = self.compute_engine_point(mach, T_prop=T_prop)
 
-
         max_thrust = T_prop + FR
 
         if not thrust_is_regulated:
@@ -135,7 +133,6 @@ class ML_TP_L1(AbstractFuelPropulsion):
             shaft_power, eta = Propeller().select(
                 "thrust_to_power", Prop_fid, self, atmosphere, mach, thrust
             )
-
 
         thrust_rate = np.asarray(thrust_rate)
         thrust = np.asarray(thrust)
@@ -190,7 +187,6 @@ class ML_TP_L1(AbstractFuelPropulsion):
         ff = psfc / constants.hour * out_power / constants.hp  # Kg/s
         tsfc = ff / out_thrust
 
-
         flight_points.psfc = psfc / constants.hour / constants.hp
         flight_points.thrust_rate = out_thrust_rate
         flight_points.thrust = out_thrust
@@ -199,7 +195,6 @@ class ML_TP_L1(AbstractFuelPropulsion):
         flight_points.thermo_power = max_thermo_power
         flight_points.TP_residual_thrust = FR
         flight_points.sfc = tsfc
-
 
     @staticmethod
     def _check_thrust_inputs(
@@ -367,16 +362,16 @@ class ML_TP_L1(AbstractFuelPropulsion):
         altitude = atmosphere.get_altitude(altitude_in_feet=True)
         mach = np.asarray(mach)
 
-        if phase == 2:  #'MCL'
+        if phase == 2:  # 'MCL'
             max_power_rating = self.k_gb_MCL * self.RTO_power / constants.hp  # *1.05
 
-        elif phase == 1:  #'TO'
+        elif phase == 1:  # 'TO'
             max_power_rating = self.k_gb_NTO * self.RTO_power / constants.hp
 
-        elif phase == 3:  #'CRZ'
+        elif phase == 3:  # 'CRZ'
             max_power_rating = self.k_gb_MCR * self.RTO_power / constants.hp
 
-        elif phase == 8:  #'RTO'
+        elif phase == 8:  # 'RTO'
             max_power_rating = (
                 self.k_gb_RTO * self.RTO_power / constants.hp
             )  # Watt =2400. hp

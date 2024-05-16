@@ -17,15 +17,18 @@ Estimation of wing weight
 import numpy as np
 import openmdao.api as om
 from fastoad.module_management.service_registry import RegisterSubmodel
-from fastoad_cs25.models.weight.mass_breakdown.a_airframe.constants import SERVICE_WING_MASS
+from fastoad_cs25.models.weight.mass_breakdown.a_airframe.constants import (
+    SERVICE_WING_MASS,
+)
 
 
-@RegisterSubmodel(SERVICE_WING_MASS, 'rta.submodel.weight.mass.airframe.wing')
+@RegisterSubmodel(SERVICE_WING_MASS, "rta.submodel.weight.mass.airframe.wing")
 class WingWeight(om.ExplicitComponent):
     """
     Wing weight estimation
 
-    Based on :cite:`supaero:2014`, mass contribution A1, without contribution of reinforcement weight A14
+    Based on :cite:`supaero:2014`, mass contribution A1, without contribution of reinforcement
+    weight A14
     """
 
     def setup(self):

@@ -78,6 +78,7 @@ class MTOWComputation(om.AddSubtractComp):
             units="kg",
         )
 
+
 @RegisterSubmodel(SERVICE_MASS_BREAKDOWN, "rta.submodel.weight.mass.legacy")
 class MassBreakdown(om.Group):
     """
@@ -160,8 +161,6 @@ class PropulsionWeight(om.Group):
         # Engine RTOpower has to be computed before nacelles
         self.add_subsystem("ATA61_72_73", TurbopropWeight(), promotes=["*"])
         self.add_subsystem("ATA28", FuelLinesWeight(), promotes=["*"])
-
-        # self.add_subsystem("unconsumables_weight", UnconsumablesWeight(), promotes=["*"])
 
         weight_sum = om.AddSubtractComp()
         weight_sum.add_equation(

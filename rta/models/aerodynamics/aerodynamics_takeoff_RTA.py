@@ -14,9 +14,14 @@
 import openmdao.api as om
 from fastoad.module_management.constants import ModelDomain
 from fastoad.module_management.service_registry import (
-    RegisterOpenMDAOSystem, RegisterSubmodel,
+    RegisterOpenMDAOSystem,
+    RegisterSubmodel,
 )
-from fastoad_cs25.models.aerodynamics.constants import SERVICE_HIGH_LIFT, SERVICE_POLAR, PolarType
+from fastoad_cs25.models.aerodynamics.constants import (
+    SERVICE_HIGH_LIFT,
+    SERVICE_POLAR,
+    PolarType,
+)
 
 from .components.OEI_effect import ComputeDeltaOEI
 from .components.initialize_in import InitializeIN
@@ -35,7 +40,9 @@ class AerodynamicsTakeoffRTA(om.Group):
         landing_flag_option = {"landing_flag": False}
         polar_type_option = {"polar_type": PolarType.TAKEOFF}
         self.add_subsystem(
-            "delta_cl_cd", RegisterSubmodel.get_submodel(SERVICE_HIGH_LIFT, landing_flag_option), promotes=["*"]
+            "delta_cl_cd",
+            RegisterSubmodel.get_submodel(SERVICE_HIGH_LIFT, landing_flag_option),
+            promotes=["*"],
         )
 
         self.add_subsystem("inizialize_inputs", InitializeIN(), promotes=["*"])
@@ -48,5 +55,7 @@ class AerodynamicsTakeoffRTA(om.Group):
             "delta_OEI", ComputeDeltaOEI(landing_flag=False), promotes=["*"]
         )
         self.add_subsystem(
-            "polar", RegisterSubmodel.get_submodel(SERVICE_POLAR, polar_type_option), promotes=["*"]
+            "polar",
+            RegisterSubmodel.get_submodel(SERVICE_POLAR, polar_type_option),
+            promotes=["*"],
         )

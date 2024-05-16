@@ -1,6 +1,3 @@
-"""
-Estimation of wing geometry (components)
-"""
 #  This file is part of FAST : A framework for rapid Overall Aircraft Design
 #  Copyright (C) 2020  ONERA & ISAE-SUPAERO
 #  FAST is free software: you can redistribute it and/or modify
@@ -13,6 +10,3 @@ Estimation of wing geometry (components)
 #  GNU General Public License for more details.
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-from .compute_toc_wing_rta import ComputeToCWingRTA
-from .compute_wet_area_wing_rta import ComputeWetAreaWingRTA

@@ -14,8 +14,6 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from math import sqrt
-
 import numpy as np
 import openmdao.api as om
 import scipy.constants as constants
@@ -39,7 +37,6 @@ class ComputeNacelleGeometry(om.ExplicitComponent):
         self.add_output("data:geometry:propulsion:nacelle:diameter", units="m")
         self.add_output("data:geometry:propulsion:nacelle:y", units="m")
         self.add_output("data:geometry:propulsion:nacelle:wetted_area", units="m**2")
-
 
         self.declare_partials(
             "data:geometry:propulsion:nacelle:diameter",
@@ -76,7 +73,6 @@ class ComputeNacelleGeometry(om.ExplicitComponent):
             method="fd",
         )
 
-
     def compute(self, inputs, outputs):
 
         y_ratio_engine = inputs["data:geometry:propulsion:engine:y_ratio"]
@@ -106,6 +102,3 @@ class ComputeNacelleGeometry(om.ExplicitComponent):
         wet_area_nac = np.pi * nac_dia * nac_length
 
         outputs["data:geometry:propulsion:nacelle:wetted_area"] = wet_area_nac
-
-
-

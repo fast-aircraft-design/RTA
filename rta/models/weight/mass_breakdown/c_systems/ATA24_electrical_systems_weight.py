@@ -30,7 +30,8 @@ class ElectricalPowerSystemWeight(ExplicitComponent):
     - Control unit
     - Electrical wires for all systems
 
-    Based on formulas in :cite:`supaero:2014`, mass contribution C1 without flight controls contribution due to mechanical controls
+    Based on formulas in :cite:`supaero:2014`, mass contribution C1
+    without flight controls contribution due to mechanical controls
     """
 
     def setup(self):

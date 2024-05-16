@@ -16,29 +16,18 @@ import numpy as np
 from fastoad.model_base.propulsion import (
     IOMPropulsionWrapper,
     IPropulsion,
-    BaseOMPropulsionComponent,
     FuelEngineSet,
 )
-
 from fastoad.module_management.service_registry import RegisterPropulsion
-from fastoad.openmdao.validity_checker import ValidityDomainChecker
 from openmdao.core.component import Component
-from typing import Union, Sequence, Optional, Tuple
-from fastoad.constants import EngineSetting
-import pandas as pd
-from fastoad.model_base.flight_point import FlightPoint
-from fastoad.models.performances.mission.openmdao.mission_run import MissionComp
-
-
 from .ML_TP_L1 import ML_TP_L1
 
-# Note: For the decorator to work, this module must be started as an iPOPO bundle,
-# which is automatically done because OMRubberEngineComponent is currently registered
-# as an OpenMDAO component with OpenMDAOSystemRegistry.register_system() in fastoad.register
 
 ####################################################################################################
 # TURBOPROP model
 ####################################################################################################
+
+
 @RegisterPropulsion("rta.wrapper.propulsion.ML_TP_L1")
 class OMMLTPL1Wrapper(IOMPropulsionWrapper):
     """

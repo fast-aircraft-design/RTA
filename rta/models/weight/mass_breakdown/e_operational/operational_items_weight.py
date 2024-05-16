@@ -25,8 +25,6 @@ class OperationalItemsWeight(om.ExplicitComponent):
         - Tool kit and documents
         - Galley
         - Passenger seats
-
-
     """
 
     def setup(self):
@@ -62,7 +60,7 @@ class OperationalItemsWeight(om.ExplicitComponent):
         mass_per_seat = inputs["settings:weight:aircraft:design_mass_per_seat"]
 
         outputs["data:weight:operational:items:passenger_seats:mass"] = (
-            mass_per_seat * npax
+            mass_per_seat * npax * k + offset
         )
         outputs["data:weight:operational:items:unusable_fuel:mass"] = 30.0
         outputs["data:weight:operational:items:documents_toolkit:mass"] = 15.0

@@ -37,7 +37,8 @@ from fastoad.module_management.service_registry import RegisterOpenMDAOSystem
 )
 class TP_sizing(ExplicitComponent):
     """
-    Performs sizing of the turboprop based on input thermodynamic and mechanical power. Determines off-design parameters.
+    Performs sizing of the turboprop based on input thermodynamic and mechanical power.
+    Determines off-design parameters.
     """
 
     def setup(self):
@@ -114,16 +115,14 @@ class TP_sizing(ExplicitComponent):
         ) = self.compute_static_power_adim(inputs)
 
         air_flow = (Design_Thermo_Power) / (shaft_power_adim)
-        total_flow = air_flow * (1 + fuel_to_air_ratio)
-        fuel_flow = fuel_to_air_ratio * air_flow
+        # total_flow = air_flow * (1 + fuel_to_air_ratio)
+        # fuel_flow = fuel_to_air_ratio * air_flow
 
         # calculation of gas turbine dimensions
-        D_gt = 0.25 * (Design_Thermo_Power) ** 0.12
-        A_gt = np.pi * (D_gt / 2) ** 2
-        # L_gt = 0.12*(design_TO_Shaft_Power/1000 + 22400./1000)**0.373
+        # D_gt = 0.25 * (Design_Thermo_Power) ** 0.12
+        # A_gt = np.pi * (D_gt / 2) ** 2
 
         # calculation of off-design constants
-        # M_out_sizing= self.nozzle.M_out_sizing
         pi_t_sizing = pi_pt / (pi_hpt * pi_lpt)
         tau_t_sizing = tau_t
         k1 = (tau_hpc - 1) * (tau_lpc * tau_ram) / tau_b
@@ -141,13 +140,13 @@ class TP_sizing(ExplicitComponent):
             )
         )
 
-        #         # calculation of thermal efficiency
-        thermal_power = fuel_flow * specific_energy
-        ESHP = shaft_power_adim * air_flow + jet_power_adim * air_flow
-        jet_thrust = residual_thrust_nd * air_flow
-        thermal_efficiency = (
-            shaft_power_adim * air_flow + jet_power_adim * air_flow
-        ) / thermal_power
+        # calculation of thermal efficiency
+        # thermal_power = fuel_flow * specific_energy
+        # ESHP = shaft_power_adim * air_flow + jet_power_adim * air_flow
+        # jet_thrust = residual_thrust_nd * air_flow
+        # thermal_efficiency = (
+        #     shaft_power_adim * air_flow + jet_power_adim * air_flow
+        # ) / thermal_power
 
         outputs["data:propulsion:L1_engine:sizing:k0"] = k0
         outputs["data:propulsion:L1_engine:sizing:k1"] = k1
@@ -181,8 +180,6 @@ class TP_sizing(ExplicitComponent):
         fuel_type = inputs["data:propulsion:L1_engine:fuel"]
 
         T4 = inputs["data:propulsion:L1_engine:turbine_inlet_temperature"]
-        # HP_bleed= inputs["data:propulsion:L1_engine:HP_bleed"]
-        # LP_bleed= inputs["data:propulsion:L1_engine:LP_bleed"]
 
         inlet_eta_pol = inputs["data:propulsion:L1_engine:inlet:inlet_eta_pol"]
         inlet_pressure_ratio = inputs[
@@ -214,13 +211,12 @@ class TP_sizing(ExplicitComponent):
         ]
         nozzle_area_ratio = inputs["data:propulsion:L1_engine:nozzle:nozzle_area_ratio"]
 
-        altitude = 0.0  # atmosphere.get_altitude(altitude_in_feet=False)
-        mach = 0.01  # np.asarray(mach)
+        altitude = 0.0
+        mach = 0.01
         atmosphere = Atmosphere(altitude, altitude_in_feet=False)
 
         ram = Ram()
         ram.compute(atmosphere, mach)
-        #        print 'ram', ram.stagnation_temperature,ram.stagnation_pressure
 
         # link inlet nozzle to ram
         inlet = Compression_Nozzle()
@@ -229,7 +225,6 @@ class TP_sizing(ExplicitComponent):
 
         # Flow through the inlet nozzle
         inlet.compute(atmosphere, inlet_eta_pol, inlet_pressure_ratio)
-        #        print 'inlet',inlet.stagnation_temperature_out,inlet.stagnation_pressure_out,inlet.stagnation_enthalpy_out
 
         # link low pressure compressor to the inlet nozzle
         lpc = LPC()
@@ -237,7 +232,6 @@ class TP_sizing(ExplicitComponent):
         lpc.stagnation_pressure_in = inlet.stagnation_pressure_out
         # Flow through the low pressure compressor
         lpc.compute_design(lpc_pressure_ratio, lpc_eta_pol)
-        #        print 'lpc', lpc.stagnation_temperature_out,lpc.stagnation_pressure_out,lpc.stagnation_enthalpy_out
 
         # link the high pressure compressor to the low pressure compressor
         hpc = HPC()
@@ -245,7 +239,6 @@ class TP_sizing(ExplicitComponent):
         hpc.stagnation_pressure_in = lpc.stagnation_pressure_out
         # Flow through the high pressure compressor
         hpc.compute_design(hpc_pressure_ratio, hpc_eta_pol)
-        #        print 'hpc', hpc.stagnation_temperature_out,hpc.stagnation_pressure_out,hpc.stagnation_enthalpy_out
 
         # configure chosen fuel
         fuel = Fuel_data()
@@ -256,12 +249,11 @@ class TP_sizing(ExplicitComponent):
         combustor.stagnation_temperature_in = hpc.stagnation_temperature_out
         combustor.stagnation_pressure_in = hpc.stagnation_pressure_out
         combustor.htf = fuel.specific_energy
-        # combustor.TIT                                      = T4
+
         # flow through the high pressor comprresor
         combustor.compute_design(
             T4, combustor_pressure_ratio, combustor_eta, atmosphere.temperature
         )
-        #        print 'combustor', self.TP['T4'],combustor.stagnation_pressure_out,combustor.stagnation_enthalpy_out,combustor.fuel_to_air_ratio
 
         # link the high pressure turbine to the combustor
         hpt = HPT()
@@ -274,7 +266,6 @@ class TP_sizing(ExplicitComponent):
 
         # flow through the high pressure turbine
         hpt.compute(Power_Offtake, hpt_eta_mech, hpt_eta_pol)
-        #        print 'hpt',hpt.stagnation_pressure_in/hpt.stagnation_pressure_out #hpt.stagnation_temperature_out,hpt.stagnation_pressure_out,hpt.stagnation_enthalpy_out
 
         # link the low pressure turbine to the high pressure turbine
         lpt = LPT()
@@ -288,8 +279,6 @@ class TP_sizing(ExplicitComponent):
 
         # flow through the low pressure turbine
         lpt.compute(lpt_eta_pol, lpt_eta_mech)
-        #        print 'lpt', lpt.stagnation_pressure_in/lpt.stagnation_pressure_out,lpt.stagnation_temperature_out,lpt.stagnation_pressure_out,lpt.stagnation_enthalpy_out
-        # print('ITT', lpt.stagnation_temperature_out)
 
         # link low-pressure turbine output to thrust component
         thrust = Thrust()
@@ -323,7 +312,6 @@ class TP_sizing(ExplicitComponent):
 
         # flow through the power turbine
         pt.compute_design(pt_eta_mech, nozzle_area_ratio)
-        #        print 'pt',pt.stagnation_pressure_in/pt.stagnation_pressure_out ,pt.stagnation_temperature_out,pt.stagnation_pressure_out,pt.stagnation_enthalpy_out
 
         # link the expansion nozzle to the power turbine
         nozzle = Expansion_Nozzle()
@@ -337,7 +325,6 @@ class TP_sizing(ExplicitComponent):
         nozzle.residual_thrust_nd = thrust.residual_thrust_nd
         # flow through theexpansion nozzle
         nozzle.compute_design(atmosphere, nozzle_pressure_ratio)
-        #        print 'nozzle', nozzle.stagnation_temperature_out,nozzle.stagnation_pressure_out, nozzle.M_out
 
         shaft_power_adim = pt.shaft_takeoff  # dimensionless shaft horsepower
         fuel_to_air_ratio = combustor.fuel_to_air_ratio

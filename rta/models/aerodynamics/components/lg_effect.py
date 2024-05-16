@@ -26,6 +26,7 @@ from rta.models.aerodynamics.constants import ALPHA_POINT_COUNT
 Undocumented
 """
 
+
 class ComputeDeltaLg(ExplicitComponent):
 
     """Computes landing gear extension effect on Cl and Cd"""

@@ -16,14 +16,13 @@
 
 import numpy as np
 from fastoad.module_management.service_registry import RegisterSubmodel
-from fastoad_cs25.models.aerodynamics.components.utils.cd0_lifting_surface import LiftingSurfaceGeometry, \
-    compute_cd0_lifting_surface
+from fastoad_cs25.models.aerodynamics.components.utils.cd0_lifting_surface import (
+    LiftingSurfaceGeometry,
+    compute_cd0_lifting_surface,
+)
 from fastoad_cs25.models.aerodynamics.constants import SERVICE_CD0_WING
 from openmdao.core.explicitcomponent import ExplicitComponent
 
-"""
-Le code cs25 avec l'option cambrure = False, devrait pouvoir être utilisé sans modification des résultats.
-"""
 
 @RegisterSubmodel(SERVICE_CD0_WING, "rta.submodel.aerodynamics.CD0.wing")
 class Cd0Wing(ExplicitComponent):
@@ -84,7 +83,9 @@ class Cd0Wing(ExplicitComponent):
             interaction_coeff=0.04,
         )
 
-        cd0_wing = compute_cd0_lifting_surface(wing_geometry, mach, reynolds, wing_area, cl)
+        cd0_wing = compute_cd0_lifting_surface(
+            wing_geometry, mach, reynolds, wing_area, cl
+        )
 
         if self.low_speed_aero:
             outputs["data:aerodynamics:wing:low_speed:CD0"] = cd0_wing

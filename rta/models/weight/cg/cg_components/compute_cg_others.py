@@ -189,10 +189,14 @@ class ComputeOthersCG(ExplicitComponent):
             method="fd",
         )
         self.declare_partials(
-            "data:weight:propulsion:fuel_system:CG:x", "data:weight:fuel_tank:CG:x", method="fd"
+            "data:weight:propulsion:fuel_system:CG:x",
+            "data:weight:fuel_tank:CG:x",
+            method="fd",
         )
         self.declare_partials(
-            "data:weight:operational:items:unusable_fuel:CG:x", "data:weight:fuel_tank:CG:x", method="fd"
+            "data:weight:operational:items:unusable_fuel:CG:x",
+            "data:weight:fuel_tank:CG:x",
+            method="fd",
         )
 
     def compute(self, inputs, outputs):

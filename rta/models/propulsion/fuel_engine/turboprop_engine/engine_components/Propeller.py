@@ -70,8 +70,13 @@ class Propeller(object):
 
         return T_prop, eta
 
-    def thrust_to_power_ADT(self, data, atmosphere: Atmosphere, mach: Union[float, Sequence[float]],
-                            thrust: Union[float, Sequence]) -> tuple:
+    def thrust_to_power_ADT(
+        self,
+        data,
+        atmosphere: Atmosphere,
+        mach: Union[float, Sequence[float]],
+        thrust: Union[float, Sequence],
+    ) -> tuple:
         """
         Computation of propeller shaft power given propeller thrust WITHOUT FR.
 

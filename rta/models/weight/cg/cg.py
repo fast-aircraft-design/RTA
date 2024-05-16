@@ -14,26 +14,23 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import numpy as np
 import openmdao.api as om
 from fastoad.module_management.service_registry import RegisterSubmodel
 from fastoad_cs25.models.weight.constants import SERVICE_CENTERS_OF_GRAVITY
 
-from .cg_components import ComputeFlightControlCG
-from .cg_components import ComputeGlobalCG
-from .cg_components import ComputePropulsionCG_RHEA
-from .cg_components import ComputeOthersCG
+from .cg_components.compute_global_cg import ComputeGlobalCG
+from .cg_components.compute_cg_others import ComputeOthersCG
 
 from fastoad_cs25.models.weight.cg.constants import (
     SERVICE_AIRCRAFT_CG,
     SERVICE_FLIGHT_CONTROLS_CG,
-    SERVICE_GLOBAL_CG,
     SERVICE_HORIZONTAL_TAIL_CG,
     SERVICE_MLG_CG,
     SERVICE_TANKS_CG,
     SERVICE_VERTICAL_TAIL_CG,
     SERVICE_WING_CG,
 )
+from .constants import SERVICE_PROPULSION_CG
 
 
 @RegisterSubmodel(SERVICE_CENTERS_OF_GRAVITY, "rta.submodel.weight.cg.legacy")
@@ -60,11 +57,19 @@ class CG(om.Group):
             promotes=["*"],
         )
         self.add_subsystem(
-            "compute_cg_flight_controls", RegisterSubmodel.get_submodel(SERVICE_FLIGHT_CONTROLS_CG), promotes=["*"]
+            "compute_cg_flight_controls",
+            RegisterSubmodel.get_submodel(SERVICE_FLIGHT_CONTROLS_CG),
+            promotes=["*"],
         )
-        self.add_subsystem("compute_cg_tanks", RegisterSubmodel.get_submodel(SERVICE_TANKS_CG), promotes=["*"])
         self.add_subsystem(
-            "compute_cg_propulsion", ComputePropulsionCG_RHEA(), promotes=["*"]
+            "compute_cg_tanks",
+            RegisterSubmodel.get_submodel(SERVICE_TANKS_CG),
+            promotes=["*"],
+        )
+        self.add_subsystem(
+            "compute_cg_propulsion",
+            RegisterSubmodel.get_submodel(SERVICE_PROPULSION_CG),
+            promotes=["*"],
         )
         self.add_subsystem("compute_cg_others", ComputeOthersCG(), promotes=["*"])
         self.add_subsystem("compute_cg", ComputeGlobalCG(), promotes=["*"])
@@ -72,5 +77,8 @@ class CG(om.Group):
             "update_mlg", RegisterSubmodel.get_submodel(SERVICE_MLG_CG), promotes=["*"]
         )
 
-        self.add_subsystem("aircraft", RegisterSubmodel.get_submodel(SERVICE_AIRCRAFT_CG), promotes=["*"])
-
+        self.add_subsystem(
+            "aircraft",
+            RegisterSubmodel.get_submodel(SERVICE_AIRCRAFT_CG),
+            promotes=["*"],
+        )

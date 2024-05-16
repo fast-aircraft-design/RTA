@@ -1,6 +1,3 @@
-"""
-Estimation of centers of gravity
-"""
 #  This file is part of FAST : A framework for rapid Overall Aircraft Design
 #  Copyright (C) 2020  ONERA & ISAE-SUPAERO
 #  FAST is free software: you can redistribute it and/or modify
@@ -13,8 +10,3 @@ Estimation of centers of gravity
 #  GNU General Public License for more details.
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
-from .compute_propulsion_cg_RHEA import ComputePropulsionCG_RHEA
-from .compute_cg_ratio_aft import ComputeCGRatioAft
-from .compute_global_cg import ComputeGlobalCG
-from .compute_cg_others import ComputeOthersCG
-from .compute_cg_flight_controls import ComputeFlightControlCG

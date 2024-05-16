@@ -19,6 +19,7 @@ from openmdao.core.explicitcomponent import ExplicitComponent
 
 """ Can be replaced by CS25 model"""
 
+
 class NavigationSystemWeight(ExplicitComponent):
     """
     Weight estimation for navigation systems

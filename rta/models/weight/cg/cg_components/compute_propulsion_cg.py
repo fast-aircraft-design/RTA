@@ -15,18 +15,13 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import math
-from math import sqrt
-
 import numpy as np
-
-# from fastoad.models.geometry import resources
-# from importlib_resources import open_text
+from fastoad.module_management.service_registry import RegisterSubmodel
 from openmdao.core.explicitcomponent import ExplicitComponent
+from ..constants import SERVICE_PROPULSION_CG
 
-# from scipy import interpolate
 
-
+@RegisterSubmodel(SERVICE_PROPULSION_CG, "rta.submodel.weight.cg.propulsion")
 class ComputePropulsionCG_RHEA(ExplicitComponent):
     """Propulsion center of gravity estimation as a function of wing position"""
 
@@ -53,9 +48,7 @@ class ComputePropulsionCG_RHEA(ExplicitComponent):
 
         self.declare_partials("data:weight:propulsion:engine:CG:x", "*", method="fd")
         self.declare_partials("data:weight:propulsion:propeller:CG:x", "*", method="fd")
-        self.declare_partials(
-            "data:weight:airframe:nacelle:CG:x", "*", method="fd"
-        )
+        self.declare_partials("data:weight:airframe:nacelle:CG:x", "*", method="fd")
 
     def compute(self, inputs, outputs):
         y_ratio_engine = inputs["data:geometry:propulsion:engine:y_ratio"]
@@ -84,6 +77,4 @@ class ComputePropulsionCG_RHEA(ExplicitComponent):
         x_nacelle_cg_absolute = fa_length - 0.25 * l0_wing - (x0_wing - x_nacelle_cg)
         outputs["data:weight:propulsion:engine:CG:x"] = x_nacelle_cg_absolute
         outputs["data:weight:propulsion:propeller:CG:x"] = 0.85 * x_nacelle_cg_absolute
-        outputs["data:weight:airframe:nacelle:CG:x"] = (
-            1.025 * x_nacelle_cg_absolute
-        )
+        outputs["data:weight:airframe:nacelle:CG:x"] = 1.025 * x_nacelle_cg_absolute

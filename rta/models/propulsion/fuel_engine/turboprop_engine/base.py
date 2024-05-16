@@ -18,13 +18,13 @@ from typing import Union
 import pandas as pd
 
 from fastoad.model_base.flight_point import FlightPoint
-from fastoad.model_base.propulsion import IPropulsion, IOMPropulsionWrapper
+from fastoad.model_base.propulsion import IPropulsion
 
 
-FlightPoint.add_field("TPshaft_power", unit='W')
+FlightPoint.add_field("TPshaft_power", unit="W")
 FlightPoint.add_field("TP_power_rate")
-FlightPoint.add_field("psfc", unit='kg/W/s')
-FlightPoint.add_field("TP_residual_thrust", unit='N')
+FlightPoint.add_field("psfc", unit="kg/W/s")
+FlightPoint.add_field("TP_residual_thrust", unit="N")
 
 
 class AbstractFuelPropulsion(IPropulsion, ABC):
@@ -80,12 +80,9 @@ class TPEngineSet(AbstractFuelPropulsion):
             flight_points.TP_residual_thrust = (
                 flight_points_per_engine.TP_residual_thrust * self.engine_count
             )
-        flight_points.TP_air_flow = (
-            flight_points_per_engine.TP_air_flow
-        )  # * self.engine_count
+        flight_points.TP_air_flow = flight_points_per_engine.TP_air_flow
         flight_points.TP_total_pressure = flight_points_per_engine.TP_total_pressure
         flight_points.TP_total_temperature = (
             flight_points_per_engine.TP_total_temperature
         )
         flight_points.CT = flight_points_per_engine.CT
-

@@ -27,6 +27,8 @@ from rta.models.aerodynamics.constants import (
 """
 Unknown usage for CT, alpha list and H_list
 """
+
+
 class InitializeIN(ExplicitComponent):
     def setup(self):
 

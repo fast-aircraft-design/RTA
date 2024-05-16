@@ -18,14 +18,17 @@
 import numpy as np
 from fastoad.module_management.service_registry import RegisterSubmodel
 from fastoad_cs25.models.aerodynamics.constants import SERVICE_CD0_NACELLES_PYLONS
-from fastoad_cs25.models.aerodynamics.components.utils.friction_drag import get_flat_plate_friction_drag_coefficient
+from fastoad_cs25.models.aerodynamics.components.utils.friction_drag import (
+    get_flat_plate_friction_drag_coefficient,
+)
 from openmdao.core.explicitcomponent import ExplicitComponent
 
 """
 In legacy RHEA code, the wet_area of the pylon was forced to 0. Can be removed from this file
 """
 
-@RegisterSubmodel(SERVICE_CD0_NACELLES_PYLONS, 'rta.submodel.aerodynamics.CD0.nacelles')
+
+@RegisterSubmodel(SERVICE_CD0_NACELLES_PYLONS, "rta.submodel.aerodynamics.CD0.nacelles")
 class Cd0NacelleAndPylonsTP(ExplicitComponent):
     def initialize(self):
         self.options.declare("low_speed_aero", default=False, types=bool)
@@ -43,7 +46,9 @@ class Cd0NacelleAndPylonsTP(ExplicitComponent):
             self.add_output("data:aerodynamics:nacelles:cruise:CD0")
 
         self.add_input("data:geometry:propulsion:nacelle:length", val=np.nan, units="m")
-        self.add_input("data:geometry:propulsion:pylon:wetted_area", val=np.nan, units="m**2")
+        self.add_input(
+            "data:geometry:propulsion:pylon:wetted_area", val=np.nan, units="m**2"
+        )
         self.add_input(
             "data:geometry:propulsion:nacelle:wetted_area", val=np.nan, units="m**2"
         )
@@ -66,7 +71,7 @@ class Cd0NacelleAndPylonsTP(ExplicitComponent):
 
         cf_nac = get_flat_plate_friction_drag_coefficient(nac_length, mach, reynolds)
 
-        cd0_int_nac = 0.0005 # subject to discussion
+        cd0_int_nac = 0.0005  # subject to discussion
         cd0_nac = n_engines * (cf_nac * wet_area_nac / wing_area + cd0_int_nac)
 
         if self.low_speed_aero:

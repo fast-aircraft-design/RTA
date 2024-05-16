@@ -17,8 +17,6 @@ Estimation of interior fuselage support systems weight
 import numpy as np
 from openmdao.core.explicitcomponent import ExplicitComponent
 
-from fastoad.constants import RangeCategory
-
 
 class InteriorIntegrationWeight(ExplicitComponent):
     """

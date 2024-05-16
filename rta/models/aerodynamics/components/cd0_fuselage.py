@@ -75,7 +75,8 @@ class Cd0Fuselage(ExplicitComponent):
             mach = inputs["data:TLAR:cruise_mach"]
             reynolds = inputs["data:aerodynamics:wing:cruise:reynolds"]
 
-        # Refeence for deltas: Conceptual Aircraft Design: An Industrial Approach. Authors:Ajoy Kumar Kundu, Mark A. Price, David Riordan Pag 493
+        # Reference for deltas: Conceptual Aircraft Design: An Industrial Approach.
+        # Authors: Ajoy Kumar Kundu, Mark A. Price, David Riordan Pag 493
         delta_cf_karman = 0.1  # find formulas to estimate (cd0 should be around 7 dc)
         delta_cf_bellyfairing = (
             0.2  # find formulas to estimate (cd0 should be around 15 dc)

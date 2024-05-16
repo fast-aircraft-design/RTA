@@ -17,8 +17,6 @@ Estimation of environmental control system weight
 import numpy as np
 from openmdao.core.explicitcomponent import ExplicitComponent
 
-from fastoad.constants import RangeCategory
-
 
 class ECSWeight(ExplicitComponent):
     """
