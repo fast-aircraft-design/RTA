@@ -17,9 +17,22 @@
 from math import sqrt
 
 import numpy as np
+from fastoad.module_management.service_registry import RegisterSubmodel
+from fastoad_cs25.models.geometry.constants import SERVICE_FUSELAGE_GEOMETRY_BASIC, \
+    SERVICE_FUSELAGE_GEOMETRY_WITH_CABIN_SIZING
 from openmdao.core.explicitcomponent import ExplicitComponent
 
 
+"""
+Same function as CS25 except for the position of the flight_kit see lines 105 and 304
+
+Name changes for:
+flight_furnishing                   /   flight_kit
+operational:items:passenger_seats   /   operational:furnishing:passenger_seats
+
+"""
+
+@RegisterSubmodel(SERVICE_FUSELAGE_GEOMETRY_BASIC, "rta.submodel.geometry.fuselage.basic")
 class ComputeFuselageGeometryBasic(ExplicitComponent):
     # TODO: Document equations. Cite sources
     """Geometry of fuselage part A - Cabin (Commercial) estimation"""
@@ -107,6 +120,7 @@ class ComputeFuselageGeometryBasic(ExplicitComponent):
         outputs["data:geometry:fuselage:wetted_area"] = wet_area_fus
 
 
+@RegisterSubmodel(SERVICE_FUSELAGE_GEOMETRY_WITH_CABIN_SIZING, "rta.submodel.geometry.fuselage.with_cabin_sizing")
 class ComputeFuselageGeometryCabinSizing(ExplicitComponent):
     # TODO: Document equations. Cite sources
     """Geometry of fuselage part A - Cabin (Commercial) estimation"""
@@ -124,14 +138,6 @@ class ComputeFuselageGeometryCabinSizing(ExplicitComponent):
         self.add_input("data:geometry:cabin:exit_width", val=np.nan, units="m")
         self.add_input("data:TLAR:NPAX", val=np.nan)
         self.add_input("data:geometry:propulsion:engine:count", val=np.nan)
-
-        self.add_input(
-            "data:propulsion:electric_systems:H2_storage:length", val=0.0, units="m"
-        )
-        self.add_input(
-            "data:propulsion:electric_systems:H2_storage:diameter", val=0.0, units="m"
-        )
-
         self.add_output("data:geometry:cabin:NPAX1")
         self.add_output("data:weight:systems:flight_furnishing:CG:x", units="m")
         self.add_output("data:weight:operational:items:passenger_seats:CG:x", units="m")
@@ -259,9 +265,6 @@ class ComputeFuselageGeometryCabinSizing(ExplicitComponent):
         npax = inputs["data:TLAR:NPAX"]
         n_engines = inputs["data:geometry:propulsion:engine:count"]
 
-        H2_tank_length = inputs["data:propulsion:electric_systems:H2_storage:length"]
-        H2_tank_diam = inputs["data:propulsion:electric_systems:H2_storage:diameter"]
-
         # Cabin width = N * seat width + Aisle width + (N+2)*2"+2 * 1"
         wcabin = (
             front_seat_number_eco * ws_eco
@@ -281,7 +284,7 @@ class ComputeFuselageGeometryCabinSizing(ExplicitComponent):
         r_i = wcabin / 2
         radius = 1.06 * r_i
         # Cylindrical fuselage
-        b_f = max(2 * radius, H2_tank_diam)
+        b_f = 2 * radius
         # 0.14m is the distance between both lobe centers of the fuselage
         h_f = b_f + 0.14
         lav = 1.7 * h_f
@@ -294,10 +297,6 @@ class ComputeFuselageGeometryCabinSizing(ExplicitComponent):
         l_cyl = (
             lpax
             - (2 * front_seat_number_eco - 4) * ls_eco
-            + max(
-                H2_tank_length - (lar - ((2 * front_seat_number_eco - 4) * ls_eco)) / 5,
-                0,
-            )
         )
 
         fus_length = lav + lar + l_cyl

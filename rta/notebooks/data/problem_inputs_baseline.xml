@@ -435,7 +435,6 @@
         </CG>
       </aircraft>
       <aircraft_empty>
-        <contingency units="kg" is_input="True">72.0<!--OWE_inp_data:weight:aircraft_empty:contingency--></contingency>
         <mass units="kg" is_input="False">13850.805242711518<!--mass of empty aircraft (=OWE - mass of crew)--></mass>
         <CG>
           <x units="m" is_input="False">12.153661111574042<!--X-position center of gravity of empty aircraft--></x>

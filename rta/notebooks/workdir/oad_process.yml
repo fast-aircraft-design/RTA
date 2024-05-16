@@ -27,7 +27,7 @@ model:
     linear_solver: om.DirectSolver()
 
     geometry:
-      id: rta.geometry.sizing
+      id: fastoad.geometry.sizing
     propeller:
       id: rta.propulsion.propeller_sizing
     gasturbine:
@@ -41,7 +41,7 @@ model:
     hq_static_margin:
       id: fastoad.handling_qualities.static_margin
     wing_position:
-      id: rta.loop.wing_position
+      id: fastoad.loop.wing_position
     aerodynamics_highspeed:
       id: fastoad.aerodynamics.highspeed.legacy
     aerodynamics_lowspeed:
@@ -49,7 +49,7 @@ model:
     aerodynamics_takeoff:
       id: rta.aerodynamics.takeoff
     wing_area:
-      id: rta.loop.wing_area
+      id: fastoad.loop.wing_area
   performance:
     id: fastoad.performances.mission
     propulsion_id: rta.wrapper.propulsion.ML_TP_L1
@@ -66,3 +66,8 @@ submodels:
   service.aerodynamics.CD0.nacelles_pylons: rta.submodel.aerodynamics.CD0.nacelles
   service.aerodynamics.CD0.sum: rta.submodel.aerodynamics.CD0.sum
   service.aerodynamics.induced_drag_coefficient: fastoad.submodel.aerodynamics.induced_drag_coefficient.legacy
+  service.geometry.fuselage.basic: rta.submodel.geometry.fuselage.basic
+  service.geometry.fuselage.with_cabin_sizing: rta.submodel.geometry.fuselage.with_cabin_sizing
+  service.geometry.wing: rta.submodel.geometry.wing
+  service.geometry.nacelle_and_pylon: rta.submodel.geometry.nacelles
+

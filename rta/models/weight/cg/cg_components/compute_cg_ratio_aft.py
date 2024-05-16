@@ -35,16 +35,11 @@ class ComputeCG(om.ExplicitComponent):
                 "data:weight:airframe:vertical_tail:CG:x",
                 "data:weight:airframe:landing_gear:main:CG:x",
                 "data:weight:airframe:landing_gear:front:CG:x",
-                "data:weight:airframe:nacelle_struts:CG:x",
+                "data:weight:airframe:nacelle:CG:x",
                 "data:weight:propulsion:engine:CG:x",
                 "data:weight:propulsion:propeller:CG:x",
                 "data:weight:propulsion:engine_controls_instrumentation:CG:x",
                 "data:weight:propulsion:fuel_system:CG:x",
-                # "data:weight:propulsion:electric_systems:fuel_cell:CG:x",
-                # "data:weight:propulsion:electric_systems:battery:CG:x",
-                # "data:weight:propulsion:electric_systems:power_electronics:CG:x",
-                # "data:weight:propulsion:electric_systems:motor:CG:x",
-                # "data:weight:propulsion:electric_systems:H2_storage:CG:x",
                 "data:weight:systems:auxiliary_power_unit:CG:x",
                 "data:weight:systems:electric_systems:electric_generation:CG:x",
                 "data:weight:systems:electric_systems:electric_common_installation:CG:x",
@@ -69,7 +64,6 @@ class ComputeCG(om.ExplicitComponent):
                 "data:weight:operational:items:documents_toolkit:CG:x",
                 "data:weight:operational:items:galley_structure:CG:x",
                 "data:weight:operational:equipment:others:CG:x",
-                # "data:weight:operational:equipment:crew:CG:x",
             ],
         )
 
@@ -82,16 +76,11 @@ class ComputeCG(om.ExplicitComponent):
                 "data:weight:airframe:vertical_tail:mass",
                 "data:weight:airframe:landing_gear:main:mass",
                 "data:weight:airframe:landing_gear:front:mass",
-                "data:weight:airframe:nacelle_struts:mass",
+                "data:weight:airframe:nacelle:mass",
                 "data:weight:propulsion:engine:mass",
                 "data:weight:propulsion:propeller:mass",
                 "data:weight:propulsion:engine_controls_instrumentation:mass",
                 "data:weight:propulsion:fuel_system:mass",
-                # "data:weight:propulsion:electric_systems:fuel_cell:mass",
-                # "data:weight:propulsion:electric_systems:battery:mass",
-                # "data:weight:propulsion:electric_systems:power_electronics:mass",
-                # "data:weight:propulsion:electric_systems:motor:mass",
-                # "data:weight:propulsion:electric_systems:H2_storage:mass",
                 "data:weight:systems:auxiliary_power_unit:mass",
                 "data:weight:systems:electric_systems:electric_generation:mass",
                 "data:weight:systems:electric_systems:electric_common_installation:mass",
@@ -116,7 +105,6 @@ class ComputeCG(om.ExplicitComponent):
                 "data:weight:operational:items:documents_toolkit:mass",
                 "data:weight:operational:items:galley_structure:mass",
                 "data:weight:operational:equipment:others:mass",
-                # "data:weight:operational:equipment:crew:mass",
             ],
         )
 
@@ -126,7 +114,6 @@ class ComputeCG(om.ExplicitComponent):
         for mass_name in self.options["mass_names"]:
             self.add_input(mass_name, val=np.nan, units="kg")
 
-        self.add_input("data:weight:aircraft_empty:contingency", val=np.nan, units="kg")
         self.add_input(
             "data:weight:operational:equipment:crew:mass", val=np.nan, units="kg"
         )
@@ -153,18 +140,17 @@ class ComputeCG(om.ExplicitComponent):
         masses = [inputs[mass_name][0] for mass_name in self.options["mass_names"]]
         crew_mass = inputs["data:weight:operational:equipment:crew:mass"]
         crew_cg = inputs["data:weight:operational:equipment:crew:CG:x"]
-        contingency_mass = inputs["data:weight:aircraft_empty:contingency"]
 
         weight_moment = np.dot(cgs, masses)
 
         outputs["data:weight:aircraft:operating_empty:mass"] = (
-            np.sum(masses) + contingency_mass + crew_mass
+            np.sum(masses) + crew_mass
         )
         outputs["data:weight:aircraft:operating_empty:CG:x"] = (
             weight_moment + crew_mass * crew_cg
         ) / (np.sum(masses) + crew_mass)
 
-        outputs["data:weight:aircraft_empty:mass"] = np.sum(masses) + contingency_mass
+        outputs["data:weight:aircraft_empty:mass"] = np.sum(masses)
         outputs["data:weight:aircraft_empty:CG:x"] = weight_moment / np.sum(masses)
 
 

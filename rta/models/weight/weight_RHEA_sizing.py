@@ -26,7 +26,7 @@ from fastoad.module_management.constants import ModelDomain
 
 
 @RegisterOpenMDAOSystem("rta.weight.sizing", domain=ModelDomain.WEIGHT)
-class Weight_RHEA_sizing(om.Group):
+class Weight_RTA_sizing(om.Group):
     """
     Computes masses and Centers of Gravity for each part of the empty operating aircraft, among
     these 5 categories:
