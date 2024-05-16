@@ -27,7 +27,7 @@ model:
     linear_solver: om.DirectSolver()
 
     geometry:
-      id: fastoad.geometry.sizing
+      id: fastoad.geometry.legacy
     propeller:
       id: rta.propulsion.propeller_sizing
     gasturbine:

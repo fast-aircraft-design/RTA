@@ -17,7 +17,7 @@ Computation of turbopropeller output power
 import numpy as np
 import openmdao.api as om
 import pandas as pd
-from scipy.constants import minute
+import os
 from fastoad.module_management.constants import ModelDomain
 from fastoad.module_management.service_registry import RegisterOpenMDAOSystem
 
@@ -58,10 +58,7 @@ class ComputeEngineSize(om.ExplicitComponent):
         TOD = inputs["data:mission:sizing:takeoff:distance"]
         TOD_target = inputs["data:TLAR:TOD"]
 
-        if os.path.exists("previous_RTO.csv"):
-            previous_RTO_power = pd.read_csv("previous_RTO.csv", index_col=0).values[0]
-        else:
-            previous_RTO_power = self.initial_RTO_power
+        try:
             previous_RTO_power = pd.read_csv("previous_RTO.csv", index_col=0)
             previous_RTO_power = previous_RTO_power.values[0]
         except:

@@ -17,7 +17,7 @@ Estimation of weight of all-mission systems
 
 from .ATA21_environmental_control_systems_weight import ECSWeight
 from .ATA22_autoflight_systems_weight import AutoFlightSystemWeight
-from .ATA23_communicatoin_systems_weight import CommunicationSystemWeightLegacy
+from .ATA23_communication_systems_weight import CommunicationSystemWeightLegacy
 from .ATA24_electrical_systems_weight import ElectricalPowerSystemWeight
 from .ATA25_flight_furnishing_systems_weight import FlightFurnishingWeight
 from .ATA26_fire_systems_weight import FireSystemWeight

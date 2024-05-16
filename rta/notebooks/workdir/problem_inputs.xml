@@ -57,6 +57,7 @@
       </vertical_tail>
       <wing>
         <aspect_ratio is_input="True">11.995<!--wing aspect ratio--></aspect_ratio>
+        <sweep_100_ratio is_input="True">0.0<!--ratio inner/outer for sweep angles at trailing edge of wing--></sweep_100_ratio>
         <sweep_25 units="deg" is_input="True">2.3<!--sweep angle at 25% chord of wing--></sweep_25>
         <virtual_taper_ratio is_input="True">0.618<!--taper ratio of wing computed from virtual root chord--></virtual_taper_ratio>
         <kink>
@@ -77,10 +78,10 @@
       </wing>
     </geometry>
     <propulsion>
-      <Design_Thermo_Power units="W" is_input="True">2497648.194206328</Design_Thermo_Power>
+      <Design_Thermo_Power units="W" is_input="True">2497648.194206328<!--Power used to compute the gas turbine mass flow rate--></Design_Thermo_Power>
       <Power_Offtake units="W" is_input="True">7500.0</Power_Offtake>
-      <RTO_power units="W" is_input="True">2047252.6182019084</RTO_power>
-      <gearbox_eta is_input="True">0.99</gearbox_eta>
+      <RTO_power units="W" is_input="True">2047252.6182019084<!--Reserve take off power of the gas turbine--></RTO_power>
+      <gearbox_eta is_input="True">0.99<!--Efficiency of gearbox between turboshaft and propeller--></gearbox_eta>
       <L1_engine>
         <fuel is_input="True">0.0</fuel>
         <turbine_inlet_temperature units="degK" is_input="True">1526.0</turbine_inlet_temperature>
@@ -196,6 +197,12 @@
         </main_route>
       </sizing>
     </mission>
+    <weight>
+      <aircraft>
+        <max_payload units="kg" is_input="True">9411.84<!--max payload weight--></max_payload>
+        <payload units="kg" is_input="True">6840.0<!--_inp_data:weight:aircraft:payload--></payload>
+      </aircraft>
+    </weight>
     <aerodynamics>
       <aircraft>
         <cruise>
@@ -490,7 +497,6 @@
         <payload>
           <design_mass_per_passenger units="kg" is_input="True">95.0<!--Design value of mass per passenger--></design_mass_per_passenger>
           <fret_ratio is_input="True">0.6</fret_ratio>
-          <max_mass_per_passenger units="kg" is_input="True">130.72<!--Maximum value of mass per passenger--></max_mass_per_passenger>
         </payload>
       </aircraft>
       <airframe>

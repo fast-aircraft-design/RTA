@@ -1,12 +1,7 @@
-import warnings
-import joblib
 from scipy import constants
 import numpy as np
-from fastoad.constants import FlightPhase
-import os
-from sklearn.preprocessing import PolynomialFeatures
 from fastoad.model_base.atmosphere import Atmosphere
-from typing import Union, Sequence, Tuple, Optional
+from typing import Union, Sequence
 
 from scipy.optimize import fsolve
 

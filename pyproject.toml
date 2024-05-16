@@ -16,10 +16,10 @@ packages = [
 # doing again the commit including changes in docs/requirements.txt will succeed.
 python = "^3.8, <3.10"
 fast-oad = "^1.6.0"
-scikit-learn = "1.3.0"
 pytest = "^7.4.0"
 importlib-resources = "3.3.0"
 black = "22.3.0"
+fast-oad-cs25 = "^0.5.0"
 
 [tool.poetry.plugins."fastoad.plugins"]
 "rta" = "rta"

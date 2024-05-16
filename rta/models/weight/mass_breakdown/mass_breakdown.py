@@ -95,7 +95,7 @@ class MassBreakdown(om.Group):
     """
 
     def initialize(self):
-        self.options.declare(PAYLOAD_FROM_NPAX, types=bool, default=True)
+        self.options.declare(PAYLOAD_FROM_NPAX, types=bool, default=False)
 
     def setup(self):
         if self.options[PAYLOAD_FROM_NPAX]:
