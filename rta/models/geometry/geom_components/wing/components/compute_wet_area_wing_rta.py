@@ -18,7 +18,7 @@ import numpy as np
 from openmdao.core.explicitcomponent import ExplicitComponent
 
 
-class ComputeWetAreaWing(ExplicitComponent):
+class ComputeWetAreaWingRTA(ExplicitComponent):
     # TODO: Document equations. Cite sources
     """Wing wet area estimation
 
@@ -30,7 +30,6 @@ class ComputeWetAreaWing(ExplicitComponent):
         self.add_input("data:geometry:wing:root:chord", val=np.nan, units="m")
         self.add_input("data:geometry:wing:root:y", val=np.nan, units="m")
         self.add_input("data:geometry:wing:area", val=np.nan, units="m**2")
-        # self.add_input("data:geometry:fuselage:maximum_width", val=np.nan, units="m")
         self.add_input("data:geometry:wing:thickness_ratio", val=np.nan)
         self.add_output("data:geometry:wing:outer_area", units="m**2")
         self.add_output("data:geometry:wing:wetted_area", units="m**2")
@@ -50,7 +49,6 @@ class ComputeWetAreaWing(ExplicitComponent):
                 "data:geometry:wing:thickness_ratio",
                 "data:geometry:wing:area",
                 "data:geometry:wing:root:chord",
-                # "data:geometry:fuselage:maximum_width",
             ],
             method="fd",
         )
@@ -59,11 +57,9 @@ class ComputeWetAreaWing(ExplicitComponent):
         wing_area = inputs["data:geometry:wing:area"]
         l2_wing = inputs["data:geometry:wing:root:chord"]
         y2_wing = inputs["data:geometry:wing:root:y"]
-        # width_max = inputs["data:geometry:fuselage:maximum_width"]
         el_aero = inputs["data:geometry:wing:thickness_ratio"]
 
         s_pf = wing_area - 2 * l2_wing * y2_wing
-        # wet_area_wing = 2 * (wing_area - width_max * l2_wing)
         wet_area_wing = s_pf * (1.977 + 0.52 * el_aero)
         outputs["data:geometry:wing:outer_area"] = s_pf
         outputs["data:geometry:wing:wetted_area"] = wet_area_wing

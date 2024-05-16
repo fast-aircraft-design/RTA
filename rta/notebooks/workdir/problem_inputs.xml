@@ -196,11 +196,6 @@
         </main_route>
       </sizing>
     </mission>
-    <weight>
-      <aircraft_empty>
-        <contingency units="kg" is_input="True">72.0<!--OWE_inp_data:weight:aircraft_empty:contingency--></contingency>
-      </aircraft_empty>
-    </weight>
     <aerodynamics>
       <aircraft>
         <cruise>

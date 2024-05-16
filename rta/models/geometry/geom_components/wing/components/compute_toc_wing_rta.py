@@ -20,8 +20,7 @@ import numpy as np
 from openmdao.core.explicitcomponent import ExplicitComponent
 
 
-# TODO: computes relative thickness and generates profiles --> decompose
-class ComputeToCWing_RHEA(ExplicitComponent):
+class ComputeToCWingRTA(ExplicitComponent):
     # TODO: Document equations. Cite sources
     """Wing ToC estimation
 

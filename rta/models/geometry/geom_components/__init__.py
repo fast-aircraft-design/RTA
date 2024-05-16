@@ -15,4 +15,4 @@ Estimation of global geometry components
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 # from .geometry import Geometry
-from .compute_geom_RHEA import ComputeGeometry_RHEA
+

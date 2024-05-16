@@ -14,11 +14,11 @@
 #  GNU General Public License for more details.
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
+from fastoad.module_management.service_registry import RegisterSubmodel
+from fastoad_cs25.models.geometry.constants import SERVICE_WING_GEOMETRY
 from fastoad_cs25.models.geometry.geom_components.wing.components.compute_b_50 import (
     ComputeB50,
 )
-from fastoad_cs25.models.aerodynamics.components.compute_cl_alpha import ComputeCLAlpha
 from fastoad_cs25.models.geometry.geom_components.wing.components.compute_l1_l4 import (
     ComputeL1AndL4Wing,
 )
@@ -34,10 +34,6 @@ from fastoad_cs25.models.geometry.geom_components.wing.components.compute_mfw im
 from fastoad_cs25.models.geometry.geom_components.wing.components.compute_sweep_wing import (
     ComputeSweepWing,
 )
-from .components.compute_toc_wing_RHEA import ComputeToCWing_RHEA
-from .components.compute_wet_area_wing import (
-    ComputeWetAreaWing,
-)
 from fastoad_cs25.models.geometry.geom_components.wing.components.compute_x_wing import (
     ComputeXWing,
 )
@@ -45,10 +41,16 @@ from fastoad_cs25.models.geometry.geom_components.wing.components.compute_y_wing
     ComputeYWing,
 )
 
+from .components.compute_toc_wing_rta import ComputeToCWingRTA
+from .components.compute_wet_area_wing_rta import (
+    ComputeWetAreaWingRTA,
+)
+
 from openmdao.api import Group
 
 
-class ComputeWingGeometry_RHEA(Group):
+@RegisterSubmodel(SERVICE_WING_GEOMETRY, "rta.submodel.geometry.wing")
+class ComputeWingGeometryRTA(Group):
     # TODO: Document equations. Cite sources
     """Wing geometry estimation"""
 
@@ -60,7 +62,6 @@ class ComputeWingGeometry_RHEA(Group):
         self.add_subsystem("mac_wing", ComputeMACWing(), promotes=["*"])
         self.add_subsystem("b50_wing", ComputeB50(), promotes=["*"])
         self.add_subsystem("sweep_wing", ComputeSweepWing(), promotes=["*"])
-        self.add_subsystem("toc_wing", ComputeToCWing_RHEA(), promotes=["*"])
-        self.add_subsystem("wetarea_wing", ComputeWetAreaWing(), promotes=["*"])
-        # self.add_subsystem("clapha_wing", ComputeCLAlpha(), promotes=["*"])
+        self.add_subsystem("toc_wing", ComputeToCWingRTA(), promotes=["*"])
+        self.add_subsystem("wetarea_wing", ComputeWetAreaWingRTA(), promotes=["*"])
         self.add_subsystem("mfw", ComputeMFW(), promotes=["*"])

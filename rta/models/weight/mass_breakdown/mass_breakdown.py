@@ -328,7 +328,6 @@ class OperatingWeightEmpty(om.Group):
                 "data:weight:systems:mass",
                 "data:weight:furniture:mass",
                 "data:weight:operational:mass",
-                "data:weight:aircraft_empty:contingency",
             ],
             units="kg",
             desc="OWE",

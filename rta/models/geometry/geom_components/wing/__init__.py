@@ -13,5 +13,4 @@ Estimation of wing (global)
 #  GNU General Public License for more details.
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
-from .compute_wing_RHEA import ComputeWingGeometry_RHEA
-from .compute_wing_RHEA_IN import ComputeWingGeometry_RHEA_IN
+

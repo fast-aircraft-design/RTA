@@ -17,7 +17,6 @@
 import numpy as np
 from fastoad.module_management.service_registry import RegisterSubmodel
 from fastoad_cs25.models.weight.cg.constants import SERVICE_FLIGHT_CONTROLS_CG
-from openmdao.core.explicitcomponent import ExplicitComponent
 from openmdao.core.group import Group
 
 from fastoad_cs25.models.weight.cg.cg_components.compute_cg_control_surfaces import ComputeControlSurfacesCG
@@ -33,6 +32,7 @@ class ComputeFlightControlCG(Group):
     def setup(self):
         self.add_subsystem('compute_flight_control_cg', ComputeControlSurfacesCG())
 
+    #TODO: harmonize names in between RTA and CS25, cascade changes to cg_ratios and mass_breakdown
     def configure(self):
         self.promotes('compute_flight_control_cg', inputs=['*'], outputs=[("data:weight:airframe:flight_controls:CG:x",
                                                                            "data:weight:systems:flight_controls:CG:x")])
