@@ -40,7 +40,7 @@ class NacellesWeight(om.ExplicitComponent):
             "tuning:weight:airframe:nacelle:mass:offset", val=0.0, units="kg"
         )
 
-        self.add_output("data:weight:airframe:nacelle:mass", units="kg", desc='The mass of all nacelles, with the number of nacelle being equal to the number of engine')
+        self.add_output("data:weight:airframe:nacelle:mass", units="kg")
 
         self.declare_partials("*", "*", method="fd")
 
