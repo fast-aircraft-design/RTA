@@ -1,0 +1,1 @@
+SERVICE_NACELLE_MASS = "service.mass.airframe.nacelles"

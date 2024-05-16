@@ -30,9 +30,8 @@ class DeiceSystemWeight(ExplicitComponent):
 
     def setup(self):
         self.add_input("data:geometry:fuselage:maximum_width", val=np.nan, units="m")
-        self.add_input("data:geometry:wing:sweep_0", val=np.nan, units="rad")
+        self.add_input("data:geometry:wing:sweep_0", val=np.nan, units="deg")
         self.add_input("data:geometry:wing:span", val=np.nan, units="m")
-        # self.add_input("data:geometry:horizontal_tail:sweep_0", val=np.nan, units="rad")
         self.add_input("data:geometry:horizontal_tail:sweep_0", val=np.nan, units="deg")
         self.add_input("data:geometry:horizontal_tail:span", val=np.nan, units="m")
         self.add_input("tuning:weight:systems:de-icing:mass:k", val=1.0)
@@ -57,7 +56,7 @@ class DeiceSystemWeight(ExplicitComponent):
         # Mass of de-icing system
         mass_deice = (
             53
-            + 1.9 * (span - width_max) / np.cos(sweep_leading_edge)
+            + 1.9 * (span - width_max) / np.cos(sweep_leading_edge * degree)
             + 1.9 * (span_ht) / np.cos(sweep_leading_edge_ht * degree)
         )
         outputs["data:weight:systems:de-icing:mass"] = k * mass_deice + offset

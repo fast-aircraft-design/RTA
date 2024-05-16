@@ -16,21 +16,16 @@ Estimation of wing weight
 
 import numpy as np
 import openmdao.api as om
+from fastoad.module_management.service_registry import RegisterSubmodel
+from fastoad_cs25.models.weight.mass_breakdown.a_airframe.constants import SERVICE_WING_MASS
 
 
+@RegisterSubmodel(SERVICE_WING_MASS, 'rta.submodel.weight.mass.airframe.wing')
 class WingWeight(om.ExplicitComponent):
     """
     Wing weight estimation
 
-    This is done by summing following estimations:
-
-    - mass from sizing to flexion forces
-    - mass from sizing to shear forces
-    - mass of ribs
-    - mass of reinforcements
-    - mass of secondary parts
-
-    Based on :cite:`supaero:2014`, mass contribution A1
+    Based on :cite:`supaero:2014`, mass contribution A1, without contribution of reinforcement weight A14
     """
 
     def setup(self):
@@ -43,7 +38,6 @@ class WingWeight(om.ExplicitComponent):
         self.add_input("data:geometry:wing:sweep_25", val=np.nan, units="rad")
         self.add_input("data:geometry:wing:outer_area", val=np.nan, units="m**2")
         self.add_input("data:weight:aircraft:MTOW", val=np.nan, units="kg")
-        self.add_input("data:weight:aircraft:MLW", val=np.nan, units="kg")
         self.add_input("data:mission:sizing:cs25:sizing_load_1", val=np.nan, units="kg")
         self.add_input("data:mission:sizing:cs25:sizing_load_2", val=np.nan, units="kg")
         self.add_input("tuning:weight:airframe:wing:mass:k", val=1.0)
@@ -61,12 +55,6 @@ class WingWeight(om.ExplicitComponent):
         self.add_input("tuning:weight:airframe:wing:ribs:mass:k", val=1.0)
         self.add_input(
             "tuning:weight:airframe:wing:ribs:mass:offset", val=0.0, units="kg"
-        )
-        self.add_input("tuning:weight:airframe:wing:reinforcements:mass:k", val=1.0)
-        self.add_input(
-            "tuning:weight:airframe:wing:reinforcements:mass:offset",
-            val=0.0,
-            units="kg",
         )
         self.add_input("tuning:weight:airframe:wing:secondary_parts:mass:k", val=1.0)
         self.add_input(
@@ -91,7 +79,6 @@ class WingWeight(om.ExplicitComponent):
         sweep_25 = inputs["data:geometry:wing:sweep_25"]
         cantilevered_area = inputs["data:geometry:wing:outer_area"]
         mtow = inputs["data:weight:aircraft:MTOW"]
-        mlw = inputs["data:weight:aircraft:MLW"]
         max_nm = max(
             inputs["data:mission:sizing:cs25:sizing_load_1"],
             inputs["data:mission:sizing:cs25:sizing_load_2"],
@@ -106,8 +93,6 @@ class WingWeight(om.ExplicitComponent):
         offset_a12 = inputs["tuning:weight:airframe:wing:shear_sizing:mass:offset"]
         k_a13 = inputs["tuning:weight:airframe:wing:ribs:mass:k"]
         offset_a13 = inputs["tuning:weight:airframe:wing:ribs:mass:offset"]
-        k_a14 = inputs["tuning:weight:airframe:wing:reinforcements:mass:k"]
-        offset_a14 = inputs["tuning:weight:airframe:wing:reinforcements:mass:offset"]
         k_a15 = inputs["tuning:weight:airframe:wing:secondary_parts:mass:k"]
         offset_a15 = inputs["tuning:weight:airframe:wing:secondary_parts:mass:offset"]
         k_voil = inputs["settings:weight:airframe:wing:mass:k_voil"]
@@ -131,10 +116,6 @@ class WingWeight(om.ExplicitComponent):
         # A13=Mass of the wing due to the ribs
         temp_a13 = k_voil * (1.7009 * wing_area + 10 ** (-3) * max_nm)
         weight_a13 = k_a13 * temp_a13 + offset_a13
-
-        # A14=Mass of the wing due to reinforcements
-        # temp_a14 = 4.4e-3 * k_voil * mlw ** 1.0169
-        # weight_a14 = k_a14 * temp_a14 + offset_a14
 
         # A15=Mass of the wing due to secondary parts
         temp_a15 = 0.3285 * k_voil * mtow**0.35 * cantilevered_area * k_mvo

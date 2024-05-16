@@ -23,9 +23,7 @@ from .a_airframe import WingWeight, NacellesWeight
 from fastoad_cs25.models.weight.mass_breakdown.a_airframe import (
     FuselageWeight,
     EmpennageWeight,
-    # FlightControlsWeight,
     LandingGearWeight,
-    # PaintWeight,
 )
 from .b_propulsion.fuel_lines_weight import (
     FuelLinesWeight,
@@ -33,7 +31,7 @@ from .b_propulsion.fuel_lines_weight import (
 from .c_systems import (
     ECSWeight,
     AutoFlightSystemWeight,
-    CommunicationSystemWeight,
+    CommunicationSystemWeightLegacy,
     ElectricalPowerSystemWeight,
     FlightFurnishingWeight,
     FireSystemWeight,
@@ -194,7 +192,7 @@ class SystemsWeight(om.Group):
         self.add_subsystem("ATA21", ECSWeight(), promotes=["*"])
 
         self.add_subsystem("ATA22", AutoFlightSystemWeight(), promotes=["*"])
-        self.add_subsystem("ATA23", CommunicationSystemWeight(), promotes=["*"])
+        self.add_subsystem("ATA23", CommunicationSystemWeightLegacy(), promotes=["*"])
 
         self.add_subsystem("ATA24", ElectricalPowerSystemWeight(), promotes=["*"])
         self.add_subsystem("ATA2510", FlightFurnishingWeight(), promotes=["*"])

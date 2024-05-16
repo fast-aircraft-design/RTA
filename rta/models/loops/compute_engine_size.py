@@ -25,12 +25,7 @@ from fastoad.module_management.service_registry import RegisterOpenMDAOSystem
 @RegisterOpenMDAOSystem("rta.loop.engine_size", domain=ModelDomain.PROPULSION)
 class ComputeEngineSize(om.ExplicitComponent):
     """
-    Originally computes needed engine power for:
-      - takeoff distance TLAR
-      - One Engine Inoperative ceiling TLAR
-      - Max Mach in cruise TLAR
-    Now restricted to only takeoff distance, as other outputs were custom RHEA
-    mission performance outputs.
+    May be replaced by an implicit component coupled with a mission module computing only takeoff
     """
 
     initial_RTO_power = 2051000
@@ -38,9 +33,6 @@ class ComputeEngineSize(om.ExplicitComponent):
     def setup(self):
 
         self.add_input("data:mission:sizing:takeoff:distance", val=np.nan, units="m")
-        # self.add_input("data:mission:sizing:OEI:net_ceiling", val=np.nan, units="m")
-        # self.add_input("data:mission:sizing:main_route:climb:TTC", val=np.nan, units="s")
-        # self.add_input("data:mission:sizing:cruise:max_mach", val=np.nan)
         self.add_input("data:TLAR:TOD", val=np.nan, units="m")
         self.add_input("data:TLAR:TTC", val=np.nan, units="min")
         self.add_input("data:TLAR:OEI_ceiling", val=np.nan, units="m")
@@ -64,42 +56,27 @@ class ComputeEngineSize(om.ExplicitComponent):
     def compute(self, inputs, outputs, discrete_inputs=None, discrete_outputs=None):
 
         TOD = inputs["data:mission:sizing:takeoff:distance"]
-        # OEI_ceiling = inputs["data:mission:sizing:OEI:net_ceiling"]
-        # TTC = inputs["data:mission:sizing:main_route:climb:TTC"]
-        # Mach = inputs["data:mission:sizing:cruise:max_mach"]
-
         TOD_target = inputs["data:TLAR:TOD"]
-        # OEI_ceiling_target = inputs["data:TLAR:OEI_ceiling"]
-        # TTC_target = inputs["data:TLAR:TTC"] * minute
-        # Mach_target = inputs["data:TLAR:cruise_mach"]
 
-        try:
+        if os.path.exists("previous_RTO.csv"):
+            previous_RTO_power = pd.read_csv("previous_RTO.csv", index_col=0).values[0]
+        else:
+            previous_RTO_power = self.initial_RTO_power
             previous_RTO_power = pd.read_csv("previous_RTO.csv", index_col=0)
             previous_RTO_power = previous_RTO_power.values[0]
         except:
             previous_RTO_power = self.initial_RTO_power
 
         delta_TOD = 1500 * (TOD - TOD_target)  # 1500
-        # delta_OEI_ceiling = 200 * (OEI_ceiling_target - OEI_ceiling)  # 200
-        # delta_TTC = 400 * (TTC - TTC_target)  # 400
-        # delta_Mach = 1e6 * (Mach_target - Mach)
-        delta_OEI_ceiling = 0
-        delta_TTC = 0
-        delta_Mach = 0
         if abs(max(TOD - TOD_target)) < 10:  # 10m, 10s, 0.0
             RTO_power = previous_RTO_power
         else:
-            RTO_power = previous_RTO_power + max(
-                delta_TTC, delta_TOD, delta_OEI_ceiling, delta_Mach
-            )
+            RTO_power = previous_RTO_power + delta_TOD
 
         print("engine_loop")
         print("RTO_power " + str(previous_RTO_power))
         print("delta_TOD" + str(TOD - TOD_target))
         print("OEI_ceiling, Time To Climb and cruise Mach TLARs are deactivated.")
-        # print('delta_OEI_ceiling' + str(OEI_ceiling_target - OEI_ceiling))
-        # print('delta_TTC' + str(TTC - TTC_target))
-        # print('delta_Mach' + str(Mach_target - Mach))
         previous_RTO_power = pd.Series(data={"RTO": float(RTO_power)})
         previous_RTO_power.to_csv("previous_RTO.csv")
 

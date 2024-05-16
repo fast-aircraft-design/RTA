@@ -43,9 +43,7 @@ class Cd0NacelleAndPylonsTP(ExplicitComponent):
             self.add_output("data:aerodynamics:nacelles:cruise:CD0")
 
         self.add_input("data:geometry:propulsion:nacelle:length", val=np.nan, units="m")
-        self.add_input(
-            "data:geometry:propulsion:pylon:wetted_area", val=np.nan, units="m**2"
-        )
+        self.add_input("data:geometry:propulsion:pylon:wetted_area", val=np.nan, units="m**2")
         self.add_input(
             "data:geometry:propulsion:nacelle:wetted_area", val=np.nan, units="m**2"
         )

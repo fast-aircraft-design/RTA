@@ -16,10 +16,13 @@ Estimation of nacelles weight
 
 import numpy as np
 import openmdao.api as om
+from fastoad.module_management.service_registry import RegisterSubmodel
 from scipy.constants import pound
 
-# TODO: this should calculate the weight fo nacelles but it is based on nacelle weight calculation from CS25
+from .constants import SERVICE_NACELLE_MASS
 
+
+@RegisterSubmodel(SERVICE_NACELLE_MASS, 'rta.submodel.weight.mass.airframe.nacelle')
 class NacellesWeight(om.ExplicitComponent):
     """
     Weight estimation for nacelle struts
@@ -47,7 +50,6 @@ class NacellesWeight(om.ExplicitComponent):
         k_a6 = inputs["tuning:weight:airframe:nacelle:mass:k"]
         offset_a6 = inputs["tuning:weight:airframe:nacelle:mass:offset"]
 
-        # This mass refers to all nacelles mass
         temp_a6 = rto_power * n_engines * 0.14 * pound
 
         outputs["data:weight:airframe:nacelle:mass"] = k_a6 * temp_a6 + offset_a6
