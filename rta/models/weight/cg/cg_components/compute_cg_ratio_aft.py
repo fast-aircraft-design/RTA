@@ -114,7 +114,6 @@ class ComputeCG(om.ExplicitComponent):
         for mass_name in self.options["mass_names"]:
             self.add_input(mass_name, val=np.nan, units="kg")
 
-        self.add_input("data:weight:aircraft_empty:contingency", val=np.nan, units="kg")
         self.add_input(
             "data:weight:operational:equipment:crew:mass", val=np.nan, units="kg"
         )
@@ -141,18 +140,17 @@ class ComputeCG(om.ExplicitComponent):
         masses = [inputs[mass_name][0] for mass_name in self.options["mass_names"]]
         crew_mass = inputs["data:weight:operational:equipment:crew:mass"]
         crew_cg = inputs["data:weight:operational:equipment:crew:CG:x"]
-        contingency_mass = inputs["data:weight:aircraft_empty:contingency"]
 
         weight_moment = np.dot(cgs, masses)
 
         outputs["data:weight:aircraft:operating_empty:mass"] = (
-            np.sum(masses) + contingency_mass + crew_mass
+            np.sum(masses) + crew_mass
         )
         outputs["data:weight:aircraft:operating_empty:CG:x"] = (
             weight_moment + crew_mass * crew_cg
-        ) / (np.sum(masses) + crew_mass) #Why not include contingency mass?
+        ) / (np.sum(masses) + crew_mass)
 
-        outputs["data:weight:aircraft_empty:mass"] = np.sum(masses) + contingency_mass
+        outputs["data:weight:aircraft_empty:mass"] = np.sum(masses)
         outputs["data:weight:aircraft_empty:CG:x"] = weight_moment / np.sum(masses)
 
 

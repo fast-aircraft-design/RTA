@@ -32,6 +32,7 @@ class ComputeFlightControlCG(Group):
     def setup(self):
         self.add_subsystem('compute_flight_control_cg', ComputeControlSurfacesCG())
 
+    #TODO: harmonize names in between RTA and CS25, cascade changes to cg_ratios and mass_breakdown
     def configure(self):
         self.promotes('compute_flight_control_cg', inputs=['*'], outputs=[("data:weight:airframe:flight_controls:CG:x",
                                                                            "data:weight:systems:flight_controls:CG:x")])
