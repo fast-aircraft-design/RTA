@@ -92,8 +92,7 @@ def run_non_regression_test(
         + problem["data:weight:propulsion:mass"]
         + problem["data:weight:systems:mass"]
         + problem["data:weight:furniture:mass"]
-        + problem["data:weight:operational:mass"]
-        + problem["data:weight:aircraft_empty:contingency"],
+        + problem["data:weight:operational:mass"],
         atol=1,
     )
     assert_allclose(
