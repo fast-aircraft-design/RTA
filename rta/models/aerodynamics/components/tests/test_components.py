@@ -18,7 +18,7 @@ test module for modules in aerodynamics/components
 import os.path as pth
 
 import numpy as np
-from fastoad._utils.testing import run_system
+from fastoad.testing import run_system
 from fastoad.io import VariableIO
 from openmdao.core.group import Group
 from pytest import approx

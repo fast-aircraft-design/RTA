@@ -1,5 +1,5 @@
 from pytest import approx
-from fastoad._utils.testing import run_system
+from fastoad.testing import run_system
 from openmdao.core.indepvarcomp import IndepVarComp
 
 from ..nacelle.compute_nacelle import ComputeNacelleGeometry
