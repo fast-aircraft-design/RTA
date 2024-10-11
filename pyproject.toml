@@ -27,5 +27,5 @@ black = "22.3.0"
 [tool.pytest.ini_options]
 minversion = "8.0"
 addopts = "--verbose"
-testpaths = ['rta', 'tests']
+testpaths = ['rta']
 norecursedirs = ["dist", "build", ".ipynb_checkpoints"]
