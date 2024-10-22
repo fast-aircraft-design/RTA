@@ -30,10 +30,6 @@ from .engine_components.Propeller import Propeller
 # Logger for this module
 _LOGGER = logging.getLogger(__name__)
 
-script_path = os.path.abspath(__file__)  # i.e. /path/to/dir/foobar.py
-rhea_path = script_path.split("models")[0]
-RHEA_path = script_path.split("rta")[0]
-
 
 class ML_TP_L1(AbstractFuelPropulsion):
     def __init__(

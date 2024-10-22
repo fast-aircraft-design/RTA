@@ -22,7 +22,7 @@ from ..constants import SERVICE_PROPULSION_CG
 
 
 @RegisterSubmodel(SERVICE_PROPULSION_CG, "rta.submodel.weight.cg.propulsion")
-class ComputePropulsionCG_RHEA(ExplicitComponent):
+class ComputePropulsionCG_RTA(ExplicitComponent):
     """Propulsion center of gravity estimation as a function of wing position"""
 
     def setup(self):

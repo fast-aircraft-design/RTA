@@ -23,10 +23,6 @@ from fastoad_cs25.models.aerodynamics.components.utils.friction_drag import (
 )
 from openmdao.core.explicitcomponent import ExplicitComponent
 
-"""
-In legacy RHEA code, the wet_area of the pylon was forced to 0. Can be removed from this file
-"""
-
 
 @RegisterSubmodel(SERVICE_CD0_NACELLES_PYLONS, "rta.submodel.aerodynamics.CD0.nacelles")
 class Cd0NacelleAndPylonsTP(ExplicitComponent):
