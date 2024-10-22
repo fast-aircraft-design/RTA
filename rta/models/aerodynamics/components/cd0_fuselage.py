@@ -81,8 +81,7 @@ class Cd0Fuselage(ExplicitComponent):
         )
 
         cf_fus_opt = 0.455 / (
-            (1 + 0.144 * mach**2) ** 0.65
-            * (np.log10(reynolds * fus_length)) ** 2.58
+            (1 + 0.144 * mach**2) ** 0.65 * (np.log10(reynolds * fus_length)) ** 2.58
         )
 
         cf_fus = cf_fus_opt * (1 + delta_cf_karman + delta_cf_bellyfairing)

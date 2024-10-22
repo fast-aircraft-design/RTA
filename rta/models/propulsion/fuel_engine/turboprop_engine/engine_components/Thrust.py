@@ -38,7 +38,6 @@ class Thrust(object):
         # thrust_split                    = self.thrust_split
         eta_prop = 0.88  # assumption for thrsut split calculation
 
-
         # Initialize
         Pt_out = float()
         Tt_out = float()

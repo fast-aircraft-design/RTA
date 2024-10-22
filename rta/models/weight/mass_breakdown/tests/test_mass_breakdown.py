@@ -89,7 +89,9 @@ def test_communication_system_from_cs25():
 
     ivc.add_output("data:TLAR:range", val=750, units="NM")
     ivc.add_output("tuning:weight:systems:communications:mass:k", val=0.8)
-    ivc.add_output("tuning:weight:systems:communications:mass:offset", val=1.0, units="kg")
+    ivc.add_output(
+        "tuning:weight:systems:communications:mass:offset", val=1.0, units="kg"
+    )
 
     problem = run_system(CommunicationSystemWeightLegacy(), ivc)
 
