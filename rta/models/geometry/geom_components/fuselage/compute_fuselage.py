@@ -14,7 +14,6 @@
 #  GNU General Public License for more details.
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
-from math import sqrt
 
 import numpy as np
 from fastoad.module_management.service_registry import RegisterSubmodel
@@ -112,7 +111,7 @@ class ComputeFuselageGeometryBasic(ExplicitComponent):
         pnc = int((npax_1 + 17) / 35)
 
         # Equivalent diameter of the fuselage
-        fus_dia = sqrt(b_f * h_f)
+        fus_dia = np.sqrt(b_f * h_f)
         wet_area_nose = 2.45 * fus_dia * lav
         wet_area_cyl = 3.1416 * fus_dia * l_cyl
         wet_area_tail = 2.3 * fus_dia * lar
@@ -310,7 +309,7 @@ class ComputeFuselageGeometryCabinSizing(ExplicitComponent):
         x_cg_d2 = lav - (front_seat_number_eco - 4) * ls_eco + lpax / 2
 
         # Equivalent diameter of the fuselage
-        fus_dia = sqrt(b_f * h_f)
+        fus_dia = np.sqrt(b_f * h_f)
         wet_area_nose = 2.45 * fus_dia * lav
         wet_area_cyl = 3.1416 * fus_dia * l_cyl
         wet_area_tail = 2.3 * fus_dia * lar

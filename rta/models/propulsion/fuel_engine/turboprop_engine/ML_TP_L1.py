@@ -21,7 +21,7 @@ from fastoad.constants import FlightPhase
 from fastoad_cs25.models.propulsion.fuel_propulsion.rubber_engine.exceptions import (
     FastRubberEngineInconsistentInputParametersError,
 )
-from fastoad.model_base.atmosphere import Atmosphere
+from stdatm import AtmosphereSI
 import pandas as pd
 from fastoad.model_base.flight_point import FlightPoint
 from .base import AbstractFuelPropulsion
@@ -93,7 +93,7 @@ class ML_TP_L1(AbstractFuelPropulsion):
         thrust = np.asarray(flight_points.thrust)
         phase = flight_points.engine_setting
         thrust_is_regulated = flight_points.thrust_is_regulated
-        atmosphere = Atmosphere(altitude, altitude_in_feet=False)
+        atmosphere = AtmosphereSI(altitude)
 
         if thrust_is_regulated is not None:
             thrust_is_regulated = np.asarray(
@@ -275,7 +275,7 @@ class ML_TP_L1(AbstractFuelPropulsion):
 
     def psfc(
         self,
-        atmosphere: Atmosphere,
+        atmosphere: AtmosphereSI,
         mach: Union[float, Sequence[float]],
         power_rate: Union[float, Sequence[float]],
         phase: Union[FlightPhase, Sequence],
@@ -340,7 +340,7 @@ class ML_TP_L1(AbstractFuelPropulsion):
 
     def max_power(
         self,
-        atmosphere: Atmosphere,
+        atmosphere: AtmosphereSI,
         mach: Union[float, Sequence[float]],
         phase: Union[FlightPhase, Sequence],
     ) -> tuple:

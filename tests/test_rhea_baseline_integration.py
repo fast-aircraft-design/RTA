@@ -34,7 +34,7 @@ def test_non_regression_mission(cleanup):
         CONFIGURATION_FILE,
         SOURCE_FILE,
         RESULTS_FOLDER,
-        check_only_mtow=True,
+        check_only_mtow=False,
         tolerance=1.0e-2,
     )
 

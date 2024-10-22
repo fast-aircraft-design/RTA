@@ -14,12 +14,16 @@ packages = [
 # of poetry.lock file will modify docs/requirements.txt and make
 # the commit fail because "files were modified by this hook". In that case,
 # doing again the commit including changes in docs/requirements.txt will succeed.
-python = "^3.8, <3.10"
+python = ">=3.9, <3.12"
 fast-oad = "^1.8.0"
-fast-oad-cs25 = "^0.7.1"
+fast-oad-cs25 = "^0.7.2"
 openmdao = "^3.33.0"
 pytest = "^8.0"
 black = "22.3.0"
+jupyterlab = [
+    { version = "^3.4.7", python = "<3.12" },
+    { version = "^4.2", python = "^3.12" }
+]
 
 [tool.poetry.plugins."fastoad.plugins"]
 "rta" = "rta"

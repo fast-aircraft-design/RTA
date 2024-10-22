@@ -18,7 +18,6 @@ Computation of Oswald coefficient
 
 import numpy as np
 from openmdao.core.explicitcomponent import ExplicitComponent
-import math
 from scipy import constants
 
 from rta.models.aerodynamics.constants import CT_POINT_COUNT
@@ -85,8 +84,8 @@ class ComputeDeltaOEI(ExplicitComponent):
             * (
                 0.1
                 * n_blades
-                / (8 * math.pi)
-                * (math.pi * (d_prop / 2.0 / constants.foot) ** 2)
+                / (8 * np.pi)
+                * (np.pi * (d_prop / 2.0 / constants.foot) ** 2)
             )
         )
 
@@ -94,7 +93,7 @@ class ComputeDeltaOEI(ExplicitComponent):
         for CT in CT_list:
             dCd_trim = (
                 1.75
-                / (math.pi * lambda_vt)
+                / (np.pi * lambda_vt)
                 * y_nacelle**2
                 * wing_area
                 / (lp_vt**2 * vt_area)

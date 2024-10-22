@@ -26,7 +26,7 @@ from ..engine_components.Power_Turbine import Power_Turbine
 from ..engine_components.Expansion_Nozzle import Expansion_Nozzle
 from ..engine_components.Thrust import Thrust
 from ..engine_components.Fuel_Data import Fuel_data
-from fastoad.model_base.atmosphere import Atmosphere
+from stdatm import AtmosphereSI
 from openmdao.core.explicitcomponent import ExplicitComponent
 from fastoad.module_management.constants import ModelDomain
 from fastoad.module_management.service_registry import RegisterOpenMDAOSystem
@@ -91,7 +91,7 @@ class TP_sizing(ExplicitComponent):
         T4 = inputs["data:propulsion:L1_engine:turbine_inlet_temperature"]
         # temperature, density, pressure, visc, a = atmosphere(0., 0)
         altitude = 0.0
-        atmosphere = Atmosphere(altitude, altitude_in_feet=False)
+        atmosphere = AtmosphereSI(altitude)
 
         (
             shaft_power_adim,
@@ -213,7 +213,7 @@ class TP_sizing(ExplicitComponent):
 
         altitude = 0.0
         mach = 0.01
-        atmosphere = Atmosphere(altitude, altitude_in_feet=False)
+        atmosphere = AtmosphereSI(altitude)
 
         ram = Ram()
         ram.compute(atmosphere, mach)

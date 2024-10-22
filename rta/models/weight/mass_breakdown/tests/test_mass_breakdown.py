@@ -39,7 +39,7 @@ def test_compute_nacelle_weight():
     ivc.add_output("data:propulsion:RTO_power", val=2.05e6, units="W")
     ivc.add_output("data:geometry:propulsion:engine:count", val=2)
     ivc.add_output("tuning:weight:airframe:nacelle:mass:k", val=1.0)
-    ivc.add_output("tuning:weight:airframe:nacelle:mass:offset", val=0.0)
+    ivc.add_output("tuning:weight:airframe:nacelle:mass:offset", val=0.0, units="kg")
 
     problem = run_system(NacellesWeight(), ivc)
 
@@ -89,7 +89,7 @@ def test_communication_system_from_cs25():
 
     ivc.add_output("data:TLAR:range", val=750, units="NM")
     ivc.add_output("tuning:weight:systems:communications:mass:k", val=0.8)
-    ivc.add_output("tuning:weight:systems:communications:mass:offset", val=1.0)
+    ivc.add_output("tuning:weight:systems:communications:mass:offset", val=1.0, units="kg")
 
     problem = run_system(CommunicationSystemWeightLegacy(), ivc)
 

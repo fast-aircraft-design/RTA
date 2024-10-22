@@ -77,6 +77,20 @@
         </spar_ratio>
       </wing>
     </geometry>
+    <load_case>
+      <gust_intensity is_input="True">1.0<!--a factor for gust load alleviation, 1.0: full gust load is applied, 0.0: gust load is fully alleviated--></gust_intensity>
+      <manoeuvre_load_factor is_input="True">2.5<!--limit positive manoeuvring load factor--></manoeuvre_load_factor>
+      <lc1>
+        <U_gust units="m/s" is_input="True">15.25<!--gust vertical speed for sizing load case 1 (gust with minimum aircraft mass)--></U_gust>
+        <Vc_EAS units="knot" is_input="True">200.0<!--equivalent air speed for sizing load case 1 (gust with minimum aircraft mass)--></Vc_EAS>
+        <altitude units="ft" is_input="True">20000.0<!--altitude for sizing load case 1 (gust with minimum aircraft mass)--></altitude>
+      </lc1>
+      <lc2>
+        <U_gust units="m/s" is_input="True">15.25<!--gust vertical speed for sizing load case 2 (gust with maximum aircraft mass)--></U_gust>
+        <Vc_EAS units="knot" is_input="True">200.0<!--equivalent air speed for sizing load case 2 (gust with maximum aircraft mass)--></Vc_EAS>
+        <altitude units="ft" is_input="True">20000.0<!--altitude for sizing load case 2 (gust with maximum aircraft mass)--></altitude>
+      </lc2>
+    </load_case>
     <propulsion>
       <Design_Thermo_Power units="W" is_input="True">2497648.194206328<!--Power used to compute the gas turbine mass flow rate--></Design_Thermo_Power>
       <Power_Offtake units="W" is_input="True">7500.0</Power_Offtake>
@@ -132,18 +146,6 @@
         <target is_input="True">0.05</target>
       </static_margin>
     </handling_qualities>
-    <load_case>
-      <lc1>
-        <U_gust units="m/s" is_input="True">15.25<!--gust vertical speed for sizing load case 1 (gust with minimum aircraft mass)--></U_gust>
-        <Vc_EAS units="m/s" is_input="True">200.0<!--equivalent air speed for sizing load case 1 (gust with minimum aircraft mass)--></Vc_EAS>
-        <altitude units="ft" is_input="True">20000.0<!--altitude for sizing load case 1 (gust with minimum aircraft mass)--></altitude>
-      </lc1>
-      <lc2>
-        <U_gust units="m/s" is_input="True">15.25<!--gust vertical speed for sizing load case 2 (gust with maximum aircraft mass)--></U_gust>
-        <Vc_EAS units="knot" is_input="True">200.0<!--equivalent air speed for sizing load case 2 (gust with maximum aircraft mass)--></Vc_EAS>
-        <altitude units="ft" is_input="True">20000.0<!--altitude for sizing load case 2 (gust with maximum aircraft mass)--></altitude>
-      </lc2>
-    </load_case>
     <mission>
       <sizing>
         <ISA_offset units="degK" is_input="True">0.0<!--Input defined by the mission.--></ISA_offset>
@@ -199,7 +201,7 @@
     </mission>
     <weight>
       <aircraft>
-        <max_payload units="kg" is_input="True">9411.84<!--max payload weight--></max_payload>
+        <max_payload units="kg" is_input="True">7500.0<!--max payload weight--></max_payload>
         <payload units="kg" is_input="True">6840.0<!--_inp_data:weight:aircraft:payload--></payload>
       </aircraft>
     </weight>
@@ -209,7 +211,7 @@
           <CL0 is_input="True">0.1</CL0>
         </cruise>
         <landing>
-          <CL_max is_input="True">2.8<!--maximum lift coefficient in landing conditions--></CL_max>
+          <CL_max is_input="True">2.5<!--maximum lift coefficient in landing conditions--></CL_max>
         </landing>
         <low_speed>
           <CL0 is_input="True">0.2</CL0>
@@ -480,8 +482,12 @@
   <settings>
     <geometry>
       <horizontal_tail>
+        <position_ratio_on_VTP is_input="True">0.15<!--(applies only for T-tails) distance between HTP root leadingedge and VTP tip leading edge divided by VTP tip chord--></position_ratio_on_VTP>
         <position_ratio_on_fuselage is_input="True">0.91<!--(does not apply for T-tails) distance to aircraft nose of 25% MAC of horizontal tail divided by fuselage length--></position_ratio_on_fuselage>
       </horizontal_tail>
+      <vertical_tail>
+        <position_ratio_on_fuselage is_input="True">0.88<!--distance to aircraft nose of 25% MAC of vertical tail divided by fuselage length--></position_ratio_on_fuselage>
+      </vertical_tail>
     </geometry>
     <weight>
       <aircraft>

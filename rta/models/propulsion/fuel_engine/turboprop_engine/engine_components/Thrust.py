@@ -1,12 +1,5 @@
 import numpy as np
 
-# import scipy as sp
-#
-# from sympy import nsolve
-# import math
-#
-# from scipy.optimize import fsolve
-
 
 class Thrust(object):
     def compute_design(
@@ -45,28 +38,20 @@ class Thrust(object):
         # thrust_split                    = self.thrust_split
         eta_prop = 0.88  # assumption for thrsut split calculation
 
-        # current conditions
-        f = float(f)
-        p0 = float(p0)
-        u0 = float(u0)
 
         # Initialize
         Pt_out = float()
         Tt_out = float()
-        ht_out = float()
-        # rho_out = float()
-        # Mach_out = float()
         T_core_nozzle = float()
         T_prop = float()
-        Pt_in = float(Pt_in)
-        Tt_in = float(Tt_in)
+        Pt_in = Pt_in.item()
+        Tt_in = Tt_in.item()
 
         # defintion of enthalpy
         gamma_t = 1.321
         cp_t = gamma_t * 287.87 / (gamma_t - 1)
         #        cp_t=1120.
         ht_in = Cp * Tt_in
-        ht_in = float(ht_in)
 
         # initialize
         ht_out = ht_in

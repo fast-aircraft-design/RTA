@@ -1,6 +1,6 @@
 from scipy import constants
 import numpy as np
-from fastoad.model_base.atmosphere import Atmosphere
+from stdatm import AtmosphereSI
 from typing import Union, Sequence
 
 from scipy.optimize import fsolve
@@ -16,7 +16,7 @@ class Propeller(object):
     def power_to_thrust_ADT(
         self,
         data,
-        atmosphere: Atmosphere,
+        atmosphere: AtmosphereSI,
         mach: Union[float, Sequence[float]],
         shaft_power: Union[float, Sequence[float]],
     ) -> tuple:
@@ -61,7 +61,7 @@ class Propeller(object):
             x = [0, 0.2]
             y = [float(T_prop_0), float(T_prop_ref)]
 
-            T_prop = np.array([np.interp(float(mach), x, y)])
+            T_prop = np.interp(float(mach), x, y)
 
         else:
             T_prop = fsolve(P_to_T, 1, args=(shp_prop, V_TAS, rho, d))[0]
@@ -73,7 +73,7 @@ class Propeller(object):
     def thrust_to_power_ADT(
         self,
         data,
-        atmosphere: Atmosphere,
+        atmosphere: AtmosphereSI,
         mach: Union[float, Sequence[float]],
         thrust: Union[float, Sequence],
     ) -> tuple:

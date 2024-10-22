@@ -14,7 +14,6 @@
 #  GNU General Public License for more details.
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
-import math
 
 import numpy as np
 from openmdao.core.explicitcomponent import ExplicitComponent
@@ -57,7 +56,7 @@ class ComputeToCWingRTA(ExplicitComponent):
         el_aero = (
             0.127
             * cruise_mach ** (-0.204)
-            * math.cos(sweep_25 / 180.0 * math.pi) ** 0.573
+            * np.cos(sweep_25 / 180.0 * np.pi) ** 0.573
             * Cl_des**0.065
             * 0.921**0.556
         )

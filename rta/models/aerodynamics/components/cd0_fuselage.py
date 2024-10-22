@@ -14,8 +14,6 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import math
-
 import numpy as np
 from fastoad.module_management.service_registry import RegisterSubmodel
 from fastoad_cs25.models.aerodynamics.constants import SERVICE_CD0_FUSELAGE
@@ -84,13 +82,13 @@ class Cd0Fuselage(ExplicitComponent):
 
         cf_fus_opt = 0.455 / (
             (1 + 0.144 * mach**2) ** 0.65
-            * (math.log10(reynolds * fus_length)) ** 2.58
+            * (np.log10(reynolds * fus_length)) ** 2.58
         )
 
         cf_fus = cf_fus_opt * (1 + delta_cf_karman + delta_cf_bellyfairing)
 
         cd0_friction_fus = (
-            (0.98 + 0.745 * math.sqrt(height_max * width_max) / fus_length)
+            (0.98 + 0.745 * np.sqrt(height_max * width_max) / fus_length)
             * cf_fus
             * wet_area_fus
             / wing_area

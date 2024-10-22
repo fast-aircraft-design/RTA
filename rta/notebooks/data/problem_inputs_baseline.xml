@@ -258,7 +258,7 @@
     <load_case>
       <lc1>
         <U_gust units="m/s" is_input="True">15.25<!--gust vertical speed for sizing load case 1 (gust with minimum aircraft mass)--></U_gust>
-        <Vc_EAS units="m/s" is_input="True">200.0<!--equivalent air speed for sizing load case 1 (gust with minimum aircraft mass)--></Vc_EAS>
+        <Vc_EAS units="knot" is_input="True">200.0<!--equivalent air speed for sizing load case 1 (gust with minimum aircraft mass)--></Vc_EAS>
         <altitude units="ft" is_input="True">20000.0<!--altitude for sizing load case 1 (gust with minimum aircraft mass)--></altitude>
       </lc1>
       <lc2>
@@ -394,7 +394,7 @@
         <MZFW units="kg" is_input="False">23582.64524271152<!--maximum zero fuel weight--></MZFW>
         <OWE units="kg" is_input="False">14170.805242711518<!--OWE--></OWE>
         <additional_fuel_capacity units="kg" is_input="False">5258.538157516936<!--fuel mass capacity of wing that exceeds sizing mission requirement--></additional_fuel_capacity>
-        <max_payload units="kg" is_input="False">9411.84<!--max payload weight--></max_payload>
+        <max_payload units="kg" is_input="False">7500<!--max payload weight--></max_payload>
         <payload units="kg" is_input="False">6840.0<!--_inp_data:weight:aircraft:payload--></payload>
         <sizing_block_fuel units="kg" is_input="False">2645.635892560429<!--block fuel quantity (i.e. loaded before taxi-out) used for sizing process--></sizing_block_fuel>
         <sizing_onboard_fuel_at_input_weight units="kg" is_input="False">2615.2322415804592<!--_inp_data:weight:aircraft:sizing_onboard_fuel_at_input_weight--></sizing_onboard_fuel_at_input_weight>
