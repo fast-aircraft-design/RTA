@@ -22,7 +22,6 @@ from rta.models.weight.mass_breakdown.c_systems.constants import SERVICE_MASS_AT
 
 
 @RegisterSubmodel(SERVICE_MASS_ATA30, "rta.submodel.mass.system.ata30")
-
 class DeviceSystemWeight(ExplicitComponent):
     """
     Weight estimation for de-icing systems

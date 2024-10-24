@@ -1,11 +1,18 @@
 import openmdao.api as om
 from fastoad.module_management.service_registry import RegisterSubmodel
-from fastoad_cs25.models.weight.mass_breakdown.b_propulsion.constants import SERVICE_FUEL_LINES_MASS
+from fastoad_cs25.models.weight.mass_breakdown.b_propulsion.constants import (
+    SERVICE_FUEL_LINES_MASS,
+)
 from fastoad_cs25.models.weight.mass_breakdown.constants import SERVICE_PROPULSION_MASS
 
-from rta.models.weight.mass_breakdown.b_propulsion.constants import SERVICE_TURBOPROP_MASS
+from rta.models.weight.mass_breakdown.b_propulsion.constants import (
+    SERVICE_TURBOPROP_MASS,
+)
 
-RegisterSubmodel.active_models[SERVICE_PROPULSION_MASS] = ("rta.submodel.weight.mass.propulsion.legacy")
+RegisterSubmodel.active_models[
+    SERVICE_PROPULSION_MASS
+] = "rta.submodel.weight.mass.propulsion.legacy"
+
 
 @RegisterSubmodel(SERVICE_PROPULSION_MASS, "rta.submodel.weight.mass.propulsion.legacy")
 class PropulsionWeight(om.Group):
@@ -15,8 +22,16 @@ class PropulsionWeight(om.Group):
 
     def setup(self):
         # Engine RTOpower has to be computed before nacelles
-        self.add_subsystem("ATA61_72_73", RegisterSubmodel.get_submodel(SERVICE_TURBOPROP_MASS), promotes=["*"])
-        self.add_subsystem("ATA28", RegisterSubmodel.get_submodel(SERVICE_FUEL_LINES_MASS), promotes=["*"])
+        self.add_subsystem(
+            "ATA61_72_73",
+            RegisterSubmodel.get_submodel(SERVICE_TURBOPROP_MASS),
+            promotes=["*"],
+        )
+        self.add_subsystem(
+            "ATA28",
+            RegisterSubmodel.get_submodel(SERVICE_FUEL_LINES_MASS),
+            promotes=["*"],
+        )
 
         weight_sum = om.AddSubtractComp()
         weight_sum.add_equation(

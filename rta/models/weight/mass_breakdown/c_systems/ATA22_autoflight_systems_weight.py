@@ -20,7 +20,6 @@ from rta.models.weight.mass_breakdown.c_systems.constants import SERVICE_MASS_AT
 
 
 @RegisterSubmodel(SERVICE_MASS_ATA22, "rta.submodel.mass.system.ata22")
-
 class AutoFlightSystemWeight(ExplicitComponent):
     """
     Weight estimation for automatic flight systems

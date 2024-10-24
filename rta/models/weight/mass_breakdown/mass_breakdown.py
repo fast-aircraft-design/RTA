@@ -17,14 +17,21 @@ import openmdao.api as om
 from fastoad.module_management.service_registry import RegisterSubmodel
 
 from fastoad_cs25.models.weight.mass_breakdown.constants import (
-    SERVICE_SYSTEMS_MASS, SERVICE_FURNITURE_MASS, SERVICE_OWE, SERVICE_CREW_MASS, SERVICE_AIRFRAME_MASS, SERVICE_PROPULSION_MASS
+    SERVICE_SYSTEMS_MASS,
+    SERVICE_FURNITURE_MASS,
+    SERVICE_OWE,
+    SERVICE_CREW_MASS,
+    SERVICE_AIRFRAME_MASS,
+    SERVICE_PROPULSION_MASS,
 )
 from fastoad_cs25.models.weight.mass_breakdown.e_crew import CrewWeight
 
 from rta.models.weight.mass_breakdown.constants import SERVICE_OPERATIONAL_MASS
 
 RegisterSubmodel.active_models[SERVICE_OWE] = "rta.weight.owe.legacy"
-@RegisterSubmodel(SERVICE_OWE, 'rta.weight.owe.legacy')
+
+
+@RegisterSubmodel(SERVICE_OWE, "rta.weight.owe.legacy")
 class OperatingWeightEmpty(om.Group):
     """Operating Empty Weight (OEW) estimation.
 
@@ -33,11 +40,31 @@ class OperatingWeightEmpty(om.Group):
 
     def setup(self):
         # Propulsion should be done before airframe, because it drives nacelle mass.
-        self.add_subsystem("propulsion_weight", RegisterSubmodel.get_submodel(SERVICE_PROPULSION_MASS), promotes=["*"])
-        self.add_subsystem("airframe_weight", RegisterSubmodel.get_submodel(SERVICE_PROPULSION_MASS), promotes=["*"])
-        self.add_subsystem("systems_weight", RegisterSubmodel.get_submodel(SERVICE_SYSTEMS_MASS), promotes=["*"])
-        self.add_subsystem("furniture_weight", RegisterSubmodel.get_submodel(SERVICE_FURNITURE_MASS), promotes=["*"])
-        self.add_subsystem("operational_weight", RegisterSubmodel.get_submodel(SERVICE_OPERATIONAL_MASS), promotes=["*"])
+        self.add_subsystem(
+            "propulsion_weight",
+            RegisterSubmodel.get_submodel(SERVICE_PROPULSION_MASS),
+            promotes=["*"],
+        )
+        self.add_subsystem(
+            "airframe_weight",
+            RegisterSubmodel.get_submodel(SERVICE_PROPULSION_MASS),
+            promotes=["*"],
+        )
+        self.add_subsystem(
+            "systems_weight",
+            RegisterSubmodel.get_submodel(SERVICE_SYSTEMS_MASS),
+            promotes=["*"],
+        )
+        self.add_subsystem(
+            "furniture_weight",
+            RegisterSubmodel.get_submodel(SERVICE_FURNITURE_MASS),
+            promotes=["*"],
+        )
+        self.add_subsystem(
+            "operational_weight",
+            RegisterSubmodel.get_submodel(SERVICE_OPERATIONAL_MASS),
+            promotes=["*"],
+        )
 
         weight_sum = om.AddSubtractComp()
         weight_sum.add_equation(

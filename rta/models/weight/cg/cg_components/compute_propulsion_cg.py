@@ -21,7 +21,9 @@ from openmdao.core.explicitcomponent import ExplicitComponent
 from ..constants import SERVICE_PROPULSION_CG
 
 
-RegisterSubmodel.active_models[SERVICE_PROPULSION_CG] = ("rta.submodel.weight.cg.propulsion")
+RegisterSubmodel.active_models[
+    SERVICE_PROPULSION_CG
+] = "rta.submodel.weight.cg.propulsion"
 
 
 @RegisterSubmodel(SERVICE_PROPULSION_CG, "rta.submodel.weight.cg.propulsion")

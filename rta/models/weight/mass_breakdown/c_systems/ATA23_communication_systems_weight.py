@@ -23,7 +23,6 @@ from rta.models.weight.mass_breakdown.c_systems.constants import SERVICE_MASS_AT
 
 
 @RegisterSubmodel(SERVICE_MASS_ATA23, "rta.submodel.mass.system.ata23")
-
 class CommunicationSystemWeightLegacy(Group):
 
     """Weight estimation for communication systems, based on CS25 transmission model"""

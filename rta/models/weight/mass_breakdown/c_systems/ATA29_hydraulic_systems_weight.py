@@ -21,7 +21,6 @@ from rta.models.weight.mass_breakdown.c_systems.constants import SERVICE_MASS_AT
 
 
 @RegisterSubmodel(SERVICE_MASS_ATA29, "rta.submodel.mass.system.ata29")
-
 class HydraulicPowerSystemWeight(ExplicitComponent):
     """
     Weight estimation for hydraulic power systems (generation and distribution)

@@ -21,7 +21,9 @@ from fastoad_cs25.models.weight.mass_breakdown.a_airframe.constants import (
     SERVICE_WING_MASS,
 )
 
-RegisterSubmodel.active_models[SERVICE_WING_MASS] = ("rta.submodel.weight.mass.airframe.wing")
+RegisterSubmodel.active_models[
+    SERVICE_WING_MASS
+] = "rta.submodel.weight.mass.airframe.wing"
 
 
 @RegisterSubmodel(SERVICE_WING_MASS, "rta.submodel.weight.mass.airframe.wing")

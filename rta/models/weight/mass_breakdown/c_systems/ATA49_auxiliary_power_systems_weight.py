@@ -21,7 +21,6 @@ from rta.models.weight.mass_breakdown.c_systems.constants import SERVICE_MASS_AT
 
 
 @RegisterSubmodel(SERVICE_MASS_ATA49, "rta.submodel.mass.system.ata49")
-
 class APUWeight(ExplicitComponent):
     """
     Weight estimation for Auxiliary Power Unit (APU)

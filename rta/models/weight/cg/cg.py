@@ -33,7 +33,9 @@ from fastoad_cs25.models.weight.cg.constants import (
 from .constants import SERVICE_PROPULSION_CG
 
 
-RegisterSubmodel.active_models[SERVICE_CENTERS_OF_GRAVITY] = ("rta.submodel.weight.cg.legacy")
+RegisterSubmodel.active_models[
+    SERVICE_CENTERS_OF_GRAVITY
+] = "rta.submodel.weight.cg.legacy"
 
 
 @RegisterSubmodel(SERVICE_CENTERS_OF_GRAVITY, "rta.submodel.weight.cg.legacy")

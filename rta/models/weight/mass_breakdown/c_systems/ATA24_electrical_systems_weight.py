@@ -21,7 +21,6 @@ from rta.models.weight.mass_breakdown.c_systems.constants import SERVICE_MASS_AT
 
 
 @RegisterSubmodel(SERVICE_MASS_ATA24, "rta.submodel.mass.system.ata24")
-
 class ElectricalPowerSystemWeight(ExplicitComponent):
     """
     Weight estimation for electrical power systems (generation and distribution)

@@ -21,7 +21,6 @@ from rta.models.weight.mass_breakdown.c_systems.constants import SERVICE_MASS_AT
 
 
 @RegisterSubmodel(SERVICE_MASS_ATA27, "rta.submodel.mass.system.ata27")
-
 class FlightControlsSystemWeight(ExplicitComponent):
     """
     Weight estimation for mechanical flight control systems

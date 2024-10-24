@@ -20,7 +20,6 @@ from rta.models.weight.mass_breakdown.c_systems.constants import SERVICE_MASS_AT
 
 
 @RegisterSubmodel(SERVICE_MASS_ATA26, "rta.submodel.mass.system.ata26")
-
 class FireSystemWeight(ExplicitComponent):
     """
     Weight estimation for fire protection systems
