@@ -1,0 +1,7 @@
+SERVICE_MASS_ATA25_FURNISHING = "service.mass.furnishing.ata25"
+SERVICE_MASS_ATA33 = "service.mass.furnishing.ata33"
+SERVICE_MASS_ATA35 = "service.mass.furnishing.ata35"
+SERVICE_MASS_ATA38 = "service.mass.furnishing.ata38"
+SERVICE_MASS_ATA2510 = "service.mass.furnishing.ata2510"
+SERVICE_MASS_ATA2580 = "service.mass.furnishing.ata2580"
+SERVICE_MASS_ATA5345 = "service.mass.furnishing.ata5345"

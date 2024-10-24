@@ -33,7 +33,7 @@ model:
     gasturbine:
       id: rta.propulsion.turboprop_sizing
     weight:
-      id: rta.weight.sizing
+      id: fastoad.weight.legacy
     mtow:
       id: fastoad.mass_performances.compute_MTOW
     hq_tail_sizing:
@@ -70,6 +70,5 @@ submodels:
   service.geometry.fuselage.with_cabin_sizing: rta.submodel.geometry.fuselage.with_cabin_sizing
   service.geometry.wing: rta.submodel.geometry.wing
   service.geometry.nacelle_and_pylon: rta.submodel.geometry.nacelles
-
   service.cg.wing.control_surfaces: rta.submodel.cg.wing.control_surfaces.legacy
 

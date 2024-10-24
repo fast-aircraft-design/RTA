@@ -18,7 +18,11 @@ from openmdao.core.group import Group
 from fastoad_cs25.models.weight.mass_breakdown.c_systems.c4_transmissions_systems_weight import (
     TransmissionSystemsWeight,
 )
+from fastoad.module_management.service_registry import RegisterSubmodel
+from rta.models.weight.mass_breakdown.c_systems.constants import SERVICE_MASS_ATA23
 
+
+@RegisterSubmodel(SERVICE_MASS_ATA23, "rta.submodel.mass.system.ata23")
 
 class CommunicationSystemWeightLegacy(Group):
 

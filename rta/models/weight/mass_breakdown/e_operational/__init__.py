@@ -13,5 +13,4 @@ Estimation of crew weight
 #  GNU General Public License for more details.
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
-from .operational_items_weight import OperationalItemsWeight
-from .operational_equipment_weight import OperationalEquipmentsWeight
+

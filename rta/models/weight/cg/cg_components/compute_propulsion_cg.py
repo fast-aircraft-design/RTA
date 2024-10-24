@@ -21,6 +21,9 @@ from openmdao.core.explicitcomponent import ExplicitComponent
 from ..constants import SERVICE_PROPULSION_CG
 
 
+RegisterSubmodel.active_models[SERVICE_PROPULSION_CG] = ("rta.submodel.weight.cg.propulsion")
+
+
 @RegisterSubmodel(SERVICE_PROPULSION_CG, "rta.submodel.weight.cg.propulsion")
 class ComputePropulsionCG_RTA(ExplicitComponent):
     """Propulsion center of gravity estimation as a function of wing position"""

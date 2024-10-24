@@ -23,16 +23,8 @@ from fastoad_cs25.models.geometry.constants import (
 )
 from openmdao.core.explicitcomponent import ExplicitComponent
 
-
-"""
-Same function as CS25 except for the position of the flight_kit see lines 105 and 304
-
-Name changes for:
-flight_furnishing                   /   flight_kit
-operational:items:passenger_seats   /   operational:furnishing:passenger_seats
-
-"""
-
+RegisterSubmodel.active_models[SERVICE_FUSELAGE_GEOMETRY_BASIC] = ("rta.submodel.geometry.fuselage.basic")
+RegisterSubmodel.active_models[SERVICE_FUSELAGE_GEOMETRY_WITH_CABIN_SIZING] = ("rta.submodel.geometry.fuselage.with_cabin_sizing")
 
 @RegisterSubmodel(
     SERVICE_FUSELAGE_GEOMETRY_BASIC, "rta.submodel.geometry.fuselage.basic"

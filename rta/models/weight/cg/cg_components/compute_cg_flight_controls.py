@@ -26,6 +26,7 @@ from fastoad_cs25.models.weight.cg.cg_components.compute_cg_control_surfaces imp
 Uses new CS25 models with improved behavior if no kink
 """
 
+RegisterSubmodel.active_models[SERVICE_FLIGHT_CONTROLS_CG] = ("rta.submodel.cg.wing.control_surfaces.legacy")
 
 @RegisterSubmodel(
     SERVICE_FLIGHT_CONTROLS_CG, "rta.submodel.cg.wing.control_surfaces.legacy"

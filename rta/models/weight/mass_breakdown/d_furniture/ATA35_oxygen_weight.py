@@ -16,8 +16,11 @@ Estimation of oxygen systems weight
 
 import numpy as np
 from openmdao.core.explicitcomponent import ExplicitComponent
+from fastoad.module_management.service_registry import RegisterSubmodel
+from rta.models.weight.mass_breakdown.d_furniture.constants import SERVICE_MASS_ATA35
 
 
+@RegisterSubmodel(SERVICE_MASS_ATA35, "rta.submodel.mass.furniture.ata35")
 class OxygenWeight(ExplicitComponent):
     """
     Weight estimation for oxygen systems

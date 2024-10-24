@@ -24,6 +24,6 @@ from .ATA26_fire_systems_weight import FireSystemWeight
 
 from .ATA27_flight_control_systems_weight import FlightControlsSystemWeight
 from .ATA29_hydraulic_systems_weight import HydraulicPowerSystemWeight
-from .ATA30_deice_systems_weight import DeiceSystemWeight
+from .ATA30_deice_systems_weight import DeviceSystemWeight
 from .ATA34_navigation_systems_weight import NavigationSystemWeight
 from .ATA49_auxiliary_power_systems_weight import APUWeight

@@ -21,6 +21,8 @@ from scipy.constants import pound
 
 from .constants import SERVICE_NACELLE_MASS
 
+RegisterSubmodel.active_models[SERVICE_NACELLE_MASS] = ("rta.submodel.weight.mass.airframe.nacelle")
+
 
 @RegisterSubmodel(SERVICE_NACELLE_MASS, "rta.submodel.weight.mass.airframe.nacelle")
 class NacellesWeight(om.ExplicitComponent):

@@ -16,8 +16,11 @@ Estimation of  thermo-acoustic insulation systems weight
 
 import numpy as np
 from openmdao.core.explicitcomponent import ExplicitComponent
+from fastoad.module_management.service_registry import RegisterSubmodel
+from rta.models.weight.mass_breakdown.d_furniture.constants import SERVICE_MASS_ATA2580
 
 
+@RegisterSubmodel(SERVICE_MASS_ATA2580, "rta.submodel.mass.furniture.ata2580")
 class InsulationWeight(ExplicitComponent):
     """
     Weight estimation for thermo-acoustic insulation systems

@@ -51,7 +51,7 @@ class ComputeOthersCG(ExplicitComponent):
         self.add_output(
             "data:weight:propulsion:engine_controls_instrumentation:CG:x", units="m"
         )
-        self.add_output("data:weight:propulsion:fuel_system:CG:x", units="m")
+        self.add_output("data:weight:propulsion:fuel_lines:CG:x", units="m")
 
         self.add_output("data:weight:systems:auxiliary_power_unit:CG:x", units="m")
         self.add_output(
@@ -189,7 +189,7 @@ class ComputeOthersCG(ExplicitComponent):
             method="fd",
         )
         self.declare_partials(
-            "data:weight:propulsion:fuel_system:CG:x",
+            "data:weight:propulsion:fuel_lines:CG:x",
             "data:weight:fuel_tank:CG:x",
             method="fd",
         )
@@ -269,7 +269,7 @@ class ComputeOthersCG(ExplicitComponent):
         outputs["data:weight:airframe:landing_gear:front:CG:x"] = x_cg_a52
 
         outputs["data:weight:propulsion:engine_controls_instrumentation:CG:x"] = x_cg_b4
-        outputs["data:weight:propulsion:fuel_system:CG:x"] = 0.977 * x_cg_tank
+        outputs["data:weight:propulsion:fuel_lines:CG:x"] = 0.977 * x_cg_tank
 
         outputs["data:weight:systems:auxiliary_power_unit:CG:x"] = x_cg_c11
         outputs[

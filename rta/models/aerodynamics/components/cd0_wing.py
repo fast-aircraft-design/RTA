@@ -23,6 +23,7 @@ from fastoad_cs25.models.aerodynamics.components.utils.cd0_lifting_surface impor
 from fastoad_cs25.models.aerodynamics.constants import SERVICE_CD0_WING
 from openmdao.core.explicitcomponent import ExplicitComponent
 
+RegisterSubmodel.active_models[SERVICE_CD0_WING]=("rta.submodel.aerodynamics.CD0.wing")
 
 @RegisterSubmodel(SERVICE_CD0_WING, "rta.submodel.aerodynamics.CD0.wing")
 class Cd0Wing(ExplicitComponent):
