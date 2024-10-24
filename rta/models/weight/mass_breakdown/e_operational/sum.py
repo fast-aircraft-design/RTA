@@ -1,8 +1,8 @@
 import openmdao.api as om
 from fastoad.module_management.service_registry import RegisterSubmodel
-from operational_equipment_weight import OperationalEquipmentsWeight
-from operational_items_weight import OperationalItemsWeight
-from ..constants import SERVICE_OPERATIONAL_MASS
+from .operational_equipment_weight import OperationalEquipmentsWeight
+from .operational_items_weight import OperationalItemsWeight
+from rta.models.weight.mass_breakdown.constants import SERVICE_OPERATIONAL_MASS
 
 
 @RegisterSubmodel(

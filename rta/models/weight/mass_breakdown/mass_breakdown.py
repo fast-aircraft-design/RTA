@@ -20,11 +20,9 @@ from fastoad_cs25.models.weight.mass_breakdown.constants import (
     SERVICE_SYSTEMS_MASS,
     SERVICE_FURNITURE_MASS,
     SERVICE_OWE,
-    SERVICE_CREW_MASS,
     SERVICE_AIRFRAME_MASS,
     SERVICE_PROPULSION_MASS,
 )
-from fastoad_cs25.models.weight.mass_breakdown.e_crew import CrewWeight
 
 from rta.models.weight.mass_breakdown.constants import SERVICE_OPERATIONAL_MASS
 
@@ -47,7 +45,7 @@ class OperatingWeightEmpty(om.Group):
         )
         self.add_subsystem(
             "airframe_weight",
-            RegisterSubmodel.get_submodel(SERVICE_PROPULSION_MASS),
+            RegisterSubmodel.get_submodel(SERVICE_AIRFRAME_MASS),
             promotes=["*"],
         )
         self.add_subsystem(

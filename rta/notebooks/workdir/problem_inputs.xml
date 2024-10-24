@@ -63,6 +63,9 @@
         <kink>
           <span_ratio is_input="True">0.3866<!--ratio (Y-position of kink)/(semi-span)--></span_ratio>
         </kink>
+        <root>
+          <dihedral units="deg" is_input="True">5.0</dihedral>
+        </root>
         <spar_ratio>
           <front>
             <kink is_input="True">0.15<!--ratio (front spar position)/(chord length) at wing kink--></kink>
@@ -211,7 +214,7 @@
           <CL0 is_input="True">0.1</CL0>
         </cruise>
         <landing>
-          <CL_max is_input="True">2.5<!--maximum lift coefficient in landing conditions--></CL_max>
+          <CL_max is_input="True">2.8<!--maximum lift coefficient in landing conditions--></CL_max>
         </landing>
         <low_speed>
           <CL0 is_input="True">0.2</CL0>

@@ -1,7 +1,3 @@
-"""
-Estimation of weight of all-mission systems
-"""
-
 #  This file is part of FAST : A framework for rapid Overall Aircraft Design
 #  Copyright (C) 2020  ONERA & ISAE-SUPAERO
 #  FAST is free software: you can redistribute it and/or modify
@@ -14,16 +10,3 @@ Estimation of weight of all-mission systems
 #  GNU General Public License for more details.
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
-
-from .ATA21_environmental_control_systems_weight import ECSWeight
-from .ATA22_autoflight_systems_weight import AutoFlightSystemWeight
-from .ATA23_communication_systems_weight import CommunicationSystemWeightLegacy
-from .ATA24_electrical_systems_weight import ElectricalPowerSystemWeight
-from .ATA25_flight_furnishing_systems_weight import FlightFurnishingWeight
-from .ATA26_fire_systems_weight import FireSystemWeight
-
-from .ATA27_flight_control_systems_weight import FlightControlsSystemWeight
-from .ATA29_hydraulic_systems_weight import HydraulicPowerSystemWeight
-from .ATA30_deice_systems_weight import DeviceSystemWeight
-from .ATA34_navigation_systems_weight import NavigationSystemWeight
-from .ATA49_auxiliary_power_systems_weight import APUWeight

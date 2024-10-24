@@ -35,7 +35,8 @@ model:
     gasturbine:
       id: rta.propulsion.turboprop_sizing
     weight:
-      id: rta.weight.sizing
+      id: fastoad.weight.legacy
+      payload_from_npax: false
     mtow:
       id: fastoad.mass_performances.compute_MTOW
     hq_tail_sizing:
@@ -63,17 +64,17 @@ model:
 #  engine_size:
 #    id: rta.loop.engine_size
 
-submodels:
-  service.aerodynamics.CD0.fuselage: rta.submodel.aerodynamics.CD0.fuselage
-  service.aerodynamics.CD0.wing: rta.submodel.aerodynamics.CD0.wing
-  service.aerodynamics.CD0.nacelles_pylons: rta.submodel.aerodynamics.CD0.nacelles
-  service.aerodynamics.CD0.sum: rta.submodel.aerodynamics.CD0.sum
-  service.aerodynamics.induced_drag_coefficient: fastoad.submodel.aerodynamics.induced_drag_coefficient.legacy
-  service.geometry.fuselage.basic: rta.submodel.geometry.fuselage.basic
-  service.geometry.fuselage.with_cabin_sizing: rta.submodel.geometry.fuselage.with_cabin_sizing
-  service.geometry.wing: rta.submodel.geometry.wing
-  service.geometry.nacelle_and_pylon: rta.submodel.geometry.nacelles
-  service.cg.wing.control_surfaces: rta.submodel.cg.wing.control_surfaces.legacy
+#submodels:
+#  service.aerodynamics.CD0.fuselage: rta.submodel.aerodynamics.CD0.fuselage
+#  service.aerodynamics.CD0.wing: rta.submodel.aerodynamics.CD0.wing
+#  service.aerodynamics.CD0.nacelles_pylons: rta.submodel.aerodynamics.CD0.nacelles
+#  service.aerodynamics.CD0.sum: rta.submodel.aerodynamics.CD0.sum
+#  service.aerodynamics.induced_drag_coefficient: fastoad.submodel.aerodynamics.induced_drag_coefficient.legacy
+#  service.geometry.fuselage.basic: rta.submodel.geometry.fuselage.basic
+#  service.geometry.fuselage.with_cabin_sizing: rta.submodel.geometry.fuselage.with_cabin_sizing
+#  service.geometry.wing: rta.submodel.geometry.wing
+#  service.geometry.nacelle_and_pylon: rta.submodel.geometry.nacelles
+#  service.cg.wing.control_surfaces: rta.submodel.cg.wing.control_surfaces.legacy
 
 #optimization: # This section is needed only if optimization process is run
  # design_variables:
