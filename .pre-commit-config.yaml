@@ -1,8 +1,23 @@
 repos:
   - repo: local
     hooks:
-      - id: black
-        name: black
-        language: system
-        entry: black
-        types: [ python ]
+      # Ruff hooks are copied from https://github.com/astral-sh/ruff-pre-commit, but specifying
+      # a local repo ensures using locked version of Ruff in Poetry.
+      - id: ruff
+        name: ruff
+        description: "Run 'ruff' for extremely fast Python linting"
+        entry: ruff check --force-exclude
+        language: python
+        types_or: [ python, pyi, jupyter ]
+        args: [ ]
+        require_serial: true
+        additional_dependencies: [ ]
+      - id: ruff-format
+        name: ruff-format
+        description: "Run 'ruff format' for extremely fast Python formatting"
+        entry: ruff format --force-exclude
+        language: python
+        types_or: [ python, pyi, jupyter ]
+        args: [ ]
+        require_serial: true
+        additional_dependencies: [ ]
