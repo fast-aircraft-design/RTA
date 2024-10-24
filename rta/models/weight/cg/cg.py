@@ -18,9 +18,6 @@ import openmdao.api as om
 from fastoad.module_management.service_registry import RegisterSubmodel
 from fastoad_cs25.models.weight.constants import SERVICE_CENTERS_OF_GRAVITY
 
-from .cg_components.compute_global_cg import ComputeGlobalCG
-from .cg_components.compute_cg_others import ComputeOthersCG
-
 from fastoad_cs25.models.weight.cg.constants import (
     SERVICE_AIRCRAFT_CG,
     SERVICE_FLIGHT_CONTROLS_CG,
@@ -29,6 +26,8 @@ from fastoad_cs25.models.weight.cg.constants import (
     SERVICE_TANKS_CG,
     SERVICE_VERTICAL_TAIL_CG,
     SERVICE_WING_CG,
+    SERVICE_OTHERS_CG,
+    SERVICE_GLOBAL_CG
 )
 from .constants import SERVICE_PROPULSION_CG
 
@@ -76,8 +75,8 @@ class CG(om.Group):
             RegisterSubmodel.get_submodel(SERVICE_PROPULSION_CG),
             promotes=["*"],
         )
-        self.add_subsystem("compute_cg_others", ComputeOthersCG(), promotes=["*"])
-        self.add_subsystem("compute_cg", ComputeGlobalCG(), promotes=["*"])
+        self.add_subsystem("compute_cg_others", RegisterSubmodel.get_submodel(SERVICE_OTHERS_CG), promotes=["*"])
+        self.add_subsystem("compute_cg", RegisterSubmodel.get_submodel(SERVICE_GLOBAL_CG), promotes=["*"])
         self.add_subsystem(
             "update_mlg", RegisterSubmodel.get_submodel(SERVICE_MLG_CG), promotes=["*"]
         )
