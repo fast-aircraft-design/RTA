@@ -25,7 +25,11 @@ from fastoad.module_management.service_registry import RegisterSubmodel
 from fastoad_cs25.models.weight.cg.constants import SERVICE_GLOBAL_CG
 
 
-RegisterSubmodel.active_models[SERVICE_GLOBAL_CG] = ("rta.submodel.weight.cg.global.legacy")
+RegisterSubmodel.active_models[
+    SERVICE_GLOBAL_CG
+] = "rta.submodel.weight.cg.global.legacy"
+
+
 @RegisterSubmodel(SERVICE_GLOBAL_CG, "rta.submodel.weight.cg.global.legacy")
 class ComputeGlobalCG(Group):
     # TODO: Document equations. Cite sources

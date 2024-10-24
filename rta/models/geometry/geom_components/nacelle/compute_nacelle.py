@@ -20,7 +20,9 @@ import scipy.constants as constants
 from fastoad.module_management.service_registry import RegisterSubmodel
 from fastoad_cs25.models.geometry.constants import SERVICE_NACELLE_PYLON_GEOMETRY
 
-RegisterSubmodel.active_models[SERVICE_NACELLE_PYLON_GEOMETRY] = ("rta.submodel.geometry.nacelles")
+RegisterSubmodel.active_models[
+    SERVICE_NACELLE_PYLON_GEOMETRY
+] = "rta.submodel.geometry.nacelles"
 
 
 @RegisterSubmodel(SERVICE_NACELLE_PYLON_GEOMETRY, "rta.submodel.geometry.nacelles")

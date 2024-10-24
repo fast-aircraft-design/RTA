@@ -26,7 +26,8 @@ Submodule spécifique justifié
 Does not use OEI effect or landing gear drag
 """
 
-RegisterSubmodel.active_models[SERVICE_CD0_SUM] = ("rta.submodel.aerodynamics.CD0.sum")
+RegisterSubmodel.active_models[SERVICE_CD0_SUM] = "rta.submodel.aerodynamics.CD0.sum"
+
 
 @RegisterSubmodel(SERVICE_CD0_SUM, "rta.submodel.aerodynamics.CD0.sum")
 class Cd0Total(ExplicitComponent):

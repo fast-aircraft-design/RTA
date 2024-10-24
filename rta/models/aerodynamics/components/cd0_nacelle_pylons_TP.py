@@ -23,7 +23,10 @@ from fastoad_cs25.models.aerodynamics.components.utils.friction_drag import (
 )
 from openmdao.core.explicitcomponent import ExplicitComponent
 
-RegisterSubmodel.active_models[SERVICE_CD0_NACELLES_PYLONS] = ("rta.submodel.aerodynamics.CD0.nacelles")
+RegisterSubmodel.active_models[
+    SERVICE_CD0_NACELLES_PYLONS
+] = "rta.submodel.aerodynamics.CD0.nacelles"
+
 
 @RegisterSubmodel(SERVICE_CD0_NACELLES_PYLONS, "rta.submodel.aerodynamics.CD0.nacelles")
 class Cd0NacelleAndPylonsTP(ExplicitComponent):

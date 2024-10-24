@@ -23,8 +23,13 @@ from fastoad_cs25.models.geometry.constants import (
 )
 from openmdao.core.explicitcomponent import ExplicitComponent
 
-RegisterSubmodel.active_models[SERVICE_FUSELAGE_GEOMETRY_BASIC] = ("rta.submodel.geometry.fuselage.basic")
-RegisterSubmodel.active_models[SERVICE_FUSELAGE_GEOMETRY_WITH_CABIN_SIZING] = ("rta.submodel.geometry.fuselage.with_cabin_sizing")
+RegisterSubmodel.active_models[
+    SERVICE_FUSELAGE_GEOMETRY_BASIC
+] = "rta.submodel.geometry.fuselage.basic"
+RegisterSubmodel.active_models[
+    SERVICE_FUSELAGE_GEOMETRY_WITH_CABIN_SIZING
+] = "rta.submodel.geometry.fuselage.with_cabin_sizing"
+
 
 @RegisterSubmodel(
     SERVICE_FUSELAGE_GEOMETRY_BASIC, "rta.submodel.geometry.fuselage.basic"

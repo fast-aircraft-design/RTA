@@ -23,7 +23,9 @@ from fastoad.io import VariableIO
 
 from ..a_airframe import NacellesWeight, WingWeight
 from ..b_propulsion.turboprop_weight import TurbopropWeight
-from ..c_systems.ATA23_communication_systems_weight import CommunicationSystemWeightLegacy
+from ..c_systems.ATA23_communication_systems_weight import (
+    CommunicationSystemWeightLegacy,
+)
 
 
 def get_indep_var_comp(var_names):

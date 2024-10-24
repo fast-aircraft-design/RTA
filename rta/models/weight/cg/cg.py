@@ -27,7 +27,7 @@ from fastoad_cs25.models.weight.cg.constants import (
     SERVICE_VERTICAL_TAIL_CG,
     SERVICE_WING_CG,
     SERVICE_OTHERS_CG,
-    SERVICE_GLOBAL_CG
+    SERVICE_GLOBAL_CG,
 )
 from .constants import SERVICE_PROPULSION_CG
 
@@ -75,8 +75,16 @@ class CG(om.Group):
             RegisterSubmodel.get_submodel(SERVICE_PROPULSION_CG),
             promotes=["*"],
         )
-        self.add_subsystem("compute_cg_others", RegisterSubmodel.get_submodel(SERVICE_OTHERS_CG), promotes=["*"])
-        self.add_subsystem("compute_cg", RegisterSubmodel.get_submodel(SERVICE_GLOBAL_CG), promotes=["*"])
+        self.add_subsystem(
+            "compute_cg_others",
+            RegisterSubmodel.get_submodel(SERVICE_OTHERS_CG),
+            promotes=["*"],
+        )
+        self.add_subsystem(
+            "compute_cg",
+            RegisterSubmodel.get_submodel(SERVICE_GLOBAL_CG),
+            promotes=["*"],
+        )
         self.add_subsystem(
             "update_mlg", RegisterSubmodel.get_submodel(SERVICE_MLG_CG), promotes=["*"]
         )

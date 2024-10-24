@@ -20,7 +20,11 @@ from fastoad.module_management.service_registry import RegisterSubmodel
 from fastoad_cs25.models.weight.cg.constants import SERVICE_OTHERS_CG
 
 
-RegisterSubmodel.active_models[SERVICE_OTHERS_CG] = ("rta.submodel.weight.cg.others.legacy")
+RegisterSubmodel.active_models[
+    SERVICE_OTHERS_CG
+] = "rta.submodel.weight.cg.others.legacy"
+
+
 @RegisterSubmodel(SERVICE_OTHERS_CG, "rta.submodel.weight.cg.others.legacy")
 class ComputeOthersCG(ExplicitComponent):
     # TODO: Document equations. Cite sources

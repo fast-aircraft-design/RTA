@@ -49,7 +49,7 @@ from .components.compute_wet_area_wing_rta import (
 from openmdao.api import Group
 
 
-RegisterSubmodel.active_models[SERVICE_WING_GEOMETRY] = ("rta.submodel.geometry.wing")
+RegisterSubmodel.active_models[SERVICE_WING_GEOMETRY] = "rta.submodel.geometry.wing"
 
 
 @RegisterSubmodel(SERVICE_WING_GEOMETRY, "rta.submodel.geometry.wing")

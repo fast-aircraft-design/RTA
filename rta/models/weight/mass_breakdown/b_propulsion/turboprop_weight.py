@@ -15,7 +15,9 @@ from rta.models.weight.mass_breakdown.b_propulsion.constants import (
 )
 
 
-@RegisterSubmodel(SERVICE_TURBOPROP_MASS, "rta.submodel.weight.mass.propulsion.turboprop.legacy")
+@RegisterSubmodel(
+    SERVICE_TURBOPROP_MASS, "rta.submodel.weight.mass.propulsion.turboprop.legacy"
+)
 class TurbopropWeight(ExplicitComponent):
     """
     Weight estimation for turboprop propulsion systems
