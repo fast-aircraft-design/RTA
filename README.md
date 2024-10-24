@@ -5,6 +5,8 @@
 This repository furnishes a FAST-OAD plugin for the design and analysis of Regional Transport Aircraft.
 The models present in this repository rely on FAST-OAD for execution, see [FAST-OAD documentation](https://fast-oad.readthedocs.io/en/stable/documentation/custom_modules/index.html).
 
+The models are based on the [PhD thesis](https://theses.fr/2023ESAE0020) of Vincenzo Palladino. Documentation can be found in his PhD thesis.
+
 This README file explains how to install this repository.
 
 It is assumed that you know how to use [Git](https://git-scm.com), 
