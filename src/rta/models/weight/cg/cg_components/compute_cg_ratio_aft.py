@@ -1,5 +1,5 @@
 """
-    Estimation of center of gravity ratio with aft
+Estimation of center of gravity ratio with aft
 """
 #  This file is part of FAST : A framework for rapid Overall Aircraft Design
 #  Copyright (C) 2020  ONERA & ISAE-SUPAERO
@@ -114,12 +114,8 @@ class ComputeCG(om.ExplicitComponent):
         for mass_name in self.options["mass_names"]:
             self.add_input(mass_name, val=np.nan, units="kg")
 
-        self.add_input(
-            "data:weight:operational:equipment:crew:mass", val=np.nan, units="kg"
-        )
-        self.add_input(
-            "data:weight:operational:equipment:crew:CG:x", val=np.nan, units="m"
-        )
+        self.add_input("data:weight:operational:equipment:crew:mass", val=np.nan, units="kg")
+        self.add_input("data:weight:operational:equipment:crew:CG:x", val=np.nan, units="m")
 
         self.add_output("data:weight:aircraft_empty:mass", units="kg")
         self.add_output("data:weight:aircraft_empty:CG:x", units="m")
@@ -128,12 +124,8 @@ class ComputeCG(om.ExplicitComponent):
 
         self.declare_partials("data:weight:aircraft_empty:mass", "*", method="fd")
         self.declare_partials("data:weight:aircraft_empty:CG:x", "*", method="fd")
-        self.declare_partials(
-            "data:weight:aircraft:operating_empty:CG:x", "*", method="fd"
-        )
-        self.declare_partials(
-            "data:weight:aircraft:operating_empty:mass", "*", method="fd"
-        )
+        self.declare_partials("data:weight:aircraft:operating_empty:CG:x", "*", method="fd")
+        self.declare_partials("data:weight:aircraft:operating_empty:mass", "*", method="fd")
 
     def compute(self, inputs, outputs, discrete_inputs=None, discrete_outputs=None):
         cgs = [inputs[cg_name][0] for cg_name in self.options["cg_names"]]
@@ -143,9 +135,7 @@ class ComputeCG(om.ExplicitComponent):
 
         weight_moment = np.dot(cgs, masses)
 
-        outputs["data:weight:aircraft:operating_empty:mass"] = (
-            np.sum(masses) + crew_mass
-        )
+        outputs["data:weight:aircraft:operating_empty:mass"] = np.sum(masses) + crew_mass
         outputs["data:weight:aircraft:operating_empty:CG:x"] = (
             weight_moment + crew_mass * crew_cg
         ) / (np.sum(masses) + crew_mass)
@@ -156,9 +146,7 @@ class ComputeCG(om.ExplicitComponent):
 
 class CGRatio(om.ExplicitComponent):
     def setup(self):
-        self.add_input(
-            "data:weight:aircraft:operating_empty:CG:x", val=np.nan, units="m"
-        )
+        self.add_input("data:weight:aircraft:operating_empty:CG:x", val=np.nan, units="m")
         self.add_input("data:geometry:wing:MAC:length", val=np.nan, units="m")
         self.add_input("data:geometry:wing:MAC:at25percent:x", val=np.nan, units="m")
         self.add_input("data:weight:aircraft:operating_empty:mass", units="kg")

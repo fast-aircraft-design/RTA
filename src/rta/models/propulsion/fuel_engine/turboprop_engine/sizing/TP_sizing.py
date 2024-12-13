@@ -32,9 +32,7 @@ from fastoad.module_management.constants import ModelDomain
 from fastoad.module_management.service_registry import RegisterOpenMDAOSystem
 
 
-@RegisterOpenMDAOSystem(
-    "rta.propulsion.turboprop_sizing", domain=ModelDomain.PROPULSION
-)
+@RegisterOpenMDAOSystem("rta.propulsion.turboprop_sizing", domain=ModelDomain.PROPULSION)
 class TP_sizing(ExplicitComponent):
     """
     Performs sizing of the turboprop based on input thermodynamic and mechanical power.
@@ -47,9 +45,7 @@ class TP_sizing(ExplicitComponent):
         self.add_input("data:propulsion:Power_Offtake", np.nan, units="W")
         self.add_input("data:propulsion:gearbox_eta", np.nan)
         self.add_input("data:propulsion:L1_engine:fuel", np.nan)
-        self.add_input(
-            "data:propulsion:L1_engine:turbine_inlet_temperature", np.nan, units="K"
-        )
+        self.add_input("data:propulsion:L1_engine:turbine_inlet_temperature", np.nan, units="K")
 
         self.add_input("data:propulsion:L1_engine:inlet:inlet_eta_pol", np.nan)
         self.add_input("data:propulsion:L1_engine:inlet:inlet_pressure_ratio", np.nan)
@@ -58,9 +54,7 @@ class TP_sizing(ExplicitComponent):
         self.add_input("data:propulsion:L1_engine:hpc:hpc_eta_pol", np.nan)
         self.add_input("data:propulsion:L1_engine:hpc:hpc_pressure_ratio", np.nan)
         self.add_input("data:propulsion:L1_engine:combustor:combustor_eta", np.nan)
-        self.add_input(
-            "data:propulsion:L1_engine:combustor:combustor_pressure_ratio", np.nan
-        )
+        self.add_input("data:propulsion:L1_engine:combustor:combustor_pressure_ratio", np.nan)
         self.add_input("data:propulsion:L1_engine:hpt:hpt_eta_pol", np.nan)
         self.add_input("data:propulsion:L1_engine:hpt:hpt_eta_mech", np.nan)
         self.add_input("data:propulsion:L1_engine:lpt:lpt_eta_pol", np.nan)
@@ -82,9 +76,7 @@ class TP_sizing(ExplicitComponent):
 
     def compute(self, inputs, outputs, discrete_inputs=None, discrete_outputs=None):
         Design_Thermo_Power = inputs["data:propulsion:Design_Thermo_Power"]
-        inlet_pressure_ratio = inputs[
-            "data:propulsion:L1_engine:inlet:inlet_pressure_ratio"
-        ]
+        inlet_pressure_ratio = inputs["data:propulsion:L1_engine:inlet:inlet_pressure_ratio"]
         combustor_pressure_ratio = inputs[
             "data:propulsion:L1_engine:combustor:combustor_pressure_ratio"
         ]
@@ -182,9 +174,7 @@ class TP_sizing(ExplicitComponent):
         T4 = inputs["data:propulsion:L1_engine:turbine_inlet_temperature"]
 
         inlet_eta_pol = inputs["data:propulsion:L1_engine:inlet:inlet_eta_pol"]
-        inlet_pressure_ratio = inputs[
-            "data:propulsion:L1_engine:inlet:inlet_pressure_ratio"
-        ]
+        inlet_pressure_ratio = inputs["data:propulsion:L1_engine:inlet:inlet_pressure_ratio"]
         lpc_eta_pol = inputs["data:propulsion:L1_engine:lpc:lpc_eta_pol"]
         lpc_pressure_ratio = inputs["data:propulsion:L1_engine:lpc:lpc_pressure_ratio"]
 
@@ -206,9 +196,7 @@ class TP_sizing(ExplicitComponent):
         pt_eta_mech = inputs["data:propulsion:L1_engine:pt:pt_eta_mech"]
 
         nozzle_eta_pol = inputs["data:propulsion:L1_engine:nozzle:nozzle_eta_pol"]
-        nozzle_pressure_ratio = inputs[
-            "data:propulsion:L1_engine:nozzle:nozzle_pressure_ratio"
-        ]
+        nozzle_pressure_ratio = inputs["data:propulsion:L1_engine:nozzle:nozzle_pressure_ratio"]
         nozzle_area_ratio = inputs["data:propulsion:L1_engine:nozzle:nozzle_area_ratio"]
 
         altitude = 0.0

@@ -36,9 +36,7 @@ class InsulationWeight(ExplicitComponent):
         self.add_input("data:geometry:cabin:length", val=np.nan, units="m")
 
         self.add_input("tuning:weight:furniture:insulation:mass:k", val=1.0)
-        self.add_input(
-            "tuning:weight:furniture:insulation:mass:offset", val=0.0, units="kg"
-        )
+        self.add_input("tuning:weight:furniture:insulation:mass:offset", val=0.0, units="kg")
 
         self.add_output("data:weight:furniture:insulation:mass", units="kg")
 
@@ -46,7 +44,6 @@ class InsulationWeight(ExplicitComponent):
 
     # pylint: disable=too-many-locals
     def compute(self, inputs, outputs, discrete_inputs=None, discrete_outputs=None):
-
         width_max = inputs["data:geometry:fuselage:maximum_width"]
         height_max = inputs["data:geometry:fuselage:maximum_height"]
         cabin_length = inputs["data:geometry:cabin:length"]

@@ -1,6 +1,5 @@
 class Fuel_data(object):
     def configure(self, fuel_type):
-
         if fuel_type == 0:
             self.Jet_A()
         elif fuel_type == 1:

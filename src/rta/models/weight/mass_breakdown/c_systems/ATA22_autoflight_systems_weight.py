@@ -30,7 +30,6 @@ class AutoFlightSystemWeight(ExplicitComponent):
     """
 
     def setup(self):
-
         self.add_input("tuning:weight:systems:automatic_flight_system:mass:k", val=1.0)
         self.add_input(
             "tuning:weight:systems:automatic_flight_system:mass:offset",
@@ -49,6 +48,4 @@ class AutoFlightSystemWeight(ExplicitComponent):
 
         # Mass of autopilot system
         mass_autopilot = 30
-        outputs["data:weight:systems:automatic_flight_system:mass"] = (
-            k * mass_autopilot + offset
-        )
+        outputs["data:weight:systems:automatic_flight_system:mass"] = k * mass_autopilot + offset

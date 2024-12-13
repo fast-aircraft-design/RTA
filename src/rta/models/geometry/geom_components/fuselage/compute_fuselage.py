@@ -1,5 +1,5 @@
 """
-    Estimation of geometry of fuselase part A - Cabin (Commercial)
+Estimation of geometry of fuselase part A - Cabin (Commercial)
 """
 
 #  This file is part of FAST : A framework for rapid Overall Aircraft Design
@@ -23,17 +23,15 @@ from fastoad_cs25.models.geometry.constants import (
 )
 from openmdao.core.explicitcomponent import ExplicitComponent
 
-RegisterSubmodel.active_models[
-    SERVICE_FUSELAGE_GEOMETRY_BASIC
-] = "rta.submodel.geometry.fuselage.basic"
-RegisterSubmodel.active_models[
-    SERVICE_FUSELAGE_GEOMETRY_WITH_CABIN_SIZING
-] = "rta.submodel.geometry.fuselage.with_cabin_sizing"
-
-
-@RegisterSubmodel(
-    SERVICE_FUSELAGE_GEOMETRY_BASIC, "rta.submodel.geometry.fuselage.basic"
+RegisterSubmodel.active_models[SERVICE_FUSELAGE_GEOMETRY_BASIC] = (
+    "rta.submodel.geometry.fuselage.basic"
 )
+RegisterSubmodel.active_models[SERVICE_FUSELAGE_GEOMETRY_WITH_CABIN_SIZING] = (
+    "rta.submodel.geometry.fuselage.with_cabin_sizing"
+)
+
+
+@RegisterSubmodel(SERVICE_FUSELAGE_GEOMETRY_BASIC, "rta.submodel.geometry.fuselage.basic")
 class ComputeFuselageGeometryBasic(ExplicitComponent):
     # TODO: Document equations. Cite sources
     """Geometry of fuselage part A - Cabin (Commercial) estimation"""
@@ -130,13 +128,8 @@ class ComputeFuselageGeometryCabinSizing(ExplicitComponent):
     """Geometry of fuselage part A - Cabin (Commercial) estimation"""
 
     def setup(self):
-
-        self.add_input(
-            "data:geometry:cabin:seats:economical:width", val=np.nan, units="m"
-        )
-        self.add_input(
-            "data:geometry:cabin:seats:economical:length", val=np.nan, units="m"
-        )
+        self.add_input("data:geometry:cabin:seats:economical:width", val=np.nan, units="m")
+        self.add_input("data:geometry:cabin:seats:economical:length", val=np.nan, units="m")
         self.add_input("data:geometry:cabin:seats:economical:count_by_row", val=np.nan)
         self.add_input("data:geometry:cabin:aisle_width", val=np.nan, units="m")
         self.add_input("data:geometry:cabin:exit_width", val=np.nan, units="m")
@@ -155,9 +148,7 @@ class ComputeFuselageGeometryCabinSizing(ExplicitComponent):
         self.add_output("data:geometry:fuselage:wetted_area", units="m**2")
         self.add_output("data:geometry:cabin:crew_count:commercial")
 
-        self.declare_partials(
-            "data:geometry:cabin:NPAX1", ["data:TLAR:NPAX"], method="fd"
-        )
+        self.declare_partials("data:geometry:cabin:NPAX1", ["data:TLAR:NPAX"], method="fd")
         self.declare_partials(
             "data:geometry:fuselage:maximum_width",
             [
@@ -259,9 +250,7 @@ class ComputeFuselageGeometryCabinSizing(ExplicitComponent):
         )
 
     def compute(self, inputs, outputs):
-        front_seat_number_eco = inputs[
-            "data:geometry:cabin:seats:economical:count_by_row"
-        ]
+        front_seat_number_eco = inputs["data:geometry:cabin:seats:economical:count_by_row"]
         ws_eco = inputs["data:geometry:cabin:seats:economical:width"]
         ls_eco = inputs["data:geometry:cabin:seats:economical:length"]
         w_aisle = inputs["data:geometry:cabin:aisle_width"]
@@ -271,10 +260,7 @@ class ComputeFuselageGeometryCabinSizing(ExplicitComponent):
 
         # Cabin width = N * seat width + Aisle width + (N+2)*2"+2 * 1"
         wcabin = (
-            front_seat_number_eco * ws_eco
-            + w_aisle
-            + (front_seat_number_eco + 2) * 0.051
-            + 0.05
+            front_seat_number_eco * ws_eco + w_aisle + (front_seat_number_eco + 2) * 0.051 + 0.05
         )
 
         # Number of rows = Npax / N

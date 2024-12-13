@@ -54,7 +54,6 @@ def get_indep_var_comp(var_names):
 
 
 def test_fuselage_cd0():
-
     input_list_lowspeed = [
         "data:aerodynamics:wing:low_speed:reynolds",
         "data:aerodynamics:aircraft:low_speed:CL",
@@ -81,31 +80,20 @@ def test_fuselage_cd0():
 
     prob = run_system(Cd0Fuselage(low_speed_aero=True), inputs)
 
-    assert prob["data:aerodynamics:fuselage:low_speed:CD0"][0] == approx(
-        0.01117, abs=1e-4
-    )
-    assert prob["data:aerodynamics:fuselage:low_speed:CD0"][35] == approx(
-        0.01011, abs=1e-4
-    )
-    assert prob["data:aerodynamics:fuselage:low_speed:CD0"][120] == approx(
-        0.01145, abs=1e-4
-    )
+    assert prob["data:aerodynamics:fuselage:low_speed:CD0"][0] == approx(0.01117, abs=1e-4)
+    assert prob["data:aerodynamics:fuselage:low_speed:CD0"][35] == approx(0.01011, abs=1e-4)
+    assert prob["data:aerodynamics:fuselage:low_speed:CD0"][120] == approx(0.01145, abs=1e-4)
 
     inputs = get_indep_var_comp(input_list_cruise)
 
     prob = run_system(Cd0Fuselage(low_speed_aero=False), inputs)
 
     assert prob["data:aerodynamics:fuselage:cruise:CD0"][0] == approx(0.01073, abs=1e-4)
-    assert prob["data:aerodynamics:fuselage:cruise:CD0"][35] == approx(
-        0.01009, abs=1e-4
-    )
-    assert prob["data:aerodynamics:fuselage:cruise:CD0"][120] == approx(
-        0.0095, abs=1e-4
-    )
+    assert prob["data:aerodynamics:fuselage:cruise:CD0"][35] == approx(0.01009, abs=1e-4)
+    assert prob["data:aerodynamics:fuselage:cruise:CD0"][120] == approx(0.0095, abs=1e-4)
 
 
 def test_nacelle_cd0():
-
     input_list_low_speed = [
         "data:aerodynamics:wing:low_speed:reynolds",
         "data:aerodynamics:aircraft:takeoff:mach",
@@ -216,9 +204,7 @@ def test_polar_high_speed():
     group.add_subsystem("cd0_fuselage", Cd0Fuselage(), promotes=["*"])
     group.add_subsystem("cd0_nac_pylons", Cd0NacelleAndPylonsTP(), promotes=["*"])
     group.add_subsystem("cd0_total", Cd0Total(), promotes=["*"])
-    group.add_subsystem(
-        "polar", ComputePolar(polar_type=PolarType.HIGH_SPEED), promotes=["*"]
-    )
+    group.add_subsystem("polar", ComputePolar(polar_type=PolarType.HIGH_SPEED), promotes=["*"])
     problem = run_system(group, ivc)
 
     cd = problem["data:aerodynamics:aircraft:cruise:CD"]
@@ -229,12 +215,8 @@ def test_polar_high_speed():
     assert cd[cl == 0.42] == approx(0.03206, abs=1e-5)
     assert cd[cl == 0.85] == approx(0.04786, abs=1e-5)
 
-    assert problem["data:aerodynamics:aircraft:cruise:optimal_CL"] == approx(
-        0.94, abs=1e-3
-    )
-    assert problem["data:aerodynamics:aircraft:cruise:optimal_CD"] == approx(
-        0.05262, abs=1e-5
-    )
+    assert problem["data:aerodynamics:aircraft:cruise:optimal_CL"] == approx(0.94, abs=1e-3)
+    assert problem["data:aerodynamics:aircraft:cruise:optimal_CD"] == approx(0.05262, abs=1e-5)
 
 
 def test_polar_low_speed():
@@ -280,30 +262,18 @@ def test_polar_low_speed():
     ivc.add_output("tuning:aerodynamics:aircraft:cruise:CD:winglet_effect:k", 0.9474)
 
     group = Group()
-    group.add_subsystem(
-        "reynolds", ComputeReynolds(low_speed_aero=True), promotes=["*"]
-    )
-    group.add_subsystem(
-        "oswald", OswaldCoefficient(low_speed_aero=True), promotes=["*"]
-    )
-    group.add_subsystem(
-        "induce_drag", InducedDragCoefficient(low_speed_aero=True), promotes=["*"]
-    )
-    group.add_subsystem(
-        "initialize_cl", InitializeClPolar(low_speed_aero=True), promotes=["*"]
-    )
+    group.add_subsystem("reynolds", ComputeReynolds(low_speed_aero=True), promotes=["*"])
+    group.add_subsystem("oswald", OswaldCoefficient(low_speed_aero=True), promotes=["*"])
+    group.add_subsystem("induce_drag", InducedDragCoefficient(low_speed_aero=True), promotes=["*"])
+    group.add_subsystem("initialize_cl", InitializeClPolar(low_speed_aero=True), promotes=["*"])
     group.add_subsystem("cd0_wing", Cd0Wing(low_speed_aero=True), promotes=["*"])
-    group.add_subsystem(
-        "cd0_fuselage", Cd0Fuselage(low_speed_aero=True), promotes=["*"]
-    )
+    group.add_subsystem("cd0_fuselage", Cd0Fuselage(low_speed_aero=True), promotes=["*"])
     group.add_subsystem(
         "cd0_nac_pylons", Cd0NacelleAndPylonsTP(low_speed_aero=True), promotes=["*"]
     )
     group.add_subsystem("cd0_total", Cd0Total(low_speed_aero=True), promotes=["*"])
     group.add_subsystem("cd_trim", CdTrim(low_speed_aero=True), promotes=["*"])
-    group.add_subsystem(
-        "polar", ComputePolar(polar_type=PolarType.LOW_SPEED), promotes=["*"]
-    )
+    group.add_subsystem("polar", ComputePolar(polar_type=PolarType.LOW_SPEED), promotes=["*"])
     problem = run_system(group, ivc)
 
     cd = problem["data:aerodynamics:aircraft:low_speed:CD"]
@@ -368,21 +338,11 @@ def test_polar_high_lift():
     ]
 
     group = Group()
-    group.add_subsystem(
-        "reynolds", ComputeReynolds(low_speed_aero=True), promotes=["*"]
-    )
-    group.add_subsystem(
-        "oswald", OswaldCoefficient(low_speed_aero=True), promotes=["*"]
-    )
-    group.add_subsystem(
-        "induce_drag", InducedDragCoefficient(low_speed_aero=True), promotes=["*"]
-    )
-    group.add_subsystem(
-        "high_lift_delta", ComputeDeltaHighLift(landing_flag=False), promotes=["*"]
-    )
-    group.add_subsystem(
-        "polar", ComputePolar(polar_type=PolarType.TAKEOFF), promotes=["*"]
-    )
+    group.add_subsystem("reynolds", ComputeReynolds(low_speed_aero=True), promotes=["*"])
+    group.add_subsystem("oswald", OswaldCoefficient(low_speed_aero=True), promotes=["*"])
+    group.add_subsystem("induce_drag", InducedDragCoefficient(low_speed_aero=True), promotes=["*"])
+    group.add_subsystem("high_lift_delta", ComputeDeltaHighLift(landing_flag=False), promotes=["*"])
+    group.add_subsystem("polar", ComputePolar(polar_type=PolarType.TAKEOFF), promotes=["*"])
 
     ivc = get_indep_var_comp(input_list)
     ivc.add_output("data:aerodynamics:aircraft:low_speed:CL", np.arange(0.0, 3.0, 0.02))
@@ -401,7 +361,6 @@ def test_polar_high_lift():
 
 
 def test_cd_OEI():
-
     input_list = [
         "data:geometry:propulsion:nacelle:y",
         "data:geometry:propulsion:propeller:B",
@@ -427,6 +386,4 @@ def test_cd_OEI():
 
     assert cd_feather == approx(0.004811, rel=1e-3)
 
-    assert_allclose(
-        np.interp(ct_test, ct, cd_landing), [0.6445, 0.1637, 0.1679, 0.6527], rtol=1e-3
-    )
+    assert_allclose(np.interp(ct_test, ct, cd_landing), [0.6445, 0.1637, 0.1679, 0.6527], rtol=1e-3)

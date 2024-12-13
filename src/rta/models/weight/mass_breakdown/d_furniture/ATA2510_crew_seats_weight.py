@@ -29,28 +29,22 @@ class SeatsCrewWeight(ExplicitComponent):
     """
 
     def setup(self):
-
         self.add_input("data:geometry:cabin:crew_count:technical", val=np.nan)
         self.add_input("data:geometry:cabin:crew_count:commercial", val=np.nan)
 
-        self.add_input(
-            "tuning:weight:furniture:seats_crew_accommodation:mass:k", val=1.0
-        )
+        self.add_input("tuning:weight:furniture:seats_crew_accommodation:mass:k", val=1.0)
         self.add_input(
             "tuning:weight:furniture:seats_crew_accommodation:mass:offset",
             val=0.0,
             units="kg",
         )
 
-        self.add_output(
-            "data:weight:furniture:seats_crew_accommodation:mass", units="kg"
-        )
+        self.add_output("data:weight:furniture:seats_crew_accommodation:mass", units="kg")
 
         self.declare_partials("*", "*", method="fd")
 
     # pylint: disable=too-many-locals
     def compute(self, inputs, outputs, discrete_inputs=None, discrete_outputs=None):
-
         cabin_crew = inputs["data:geometry:cabin:crew_count:commercial"]
         cockpit_crew = inputs["data:geometry:cabin:crew_count:technical"]
 

@@ -1,5 +1,5 @@
 """
-    Estimation of center of gravity for load case 1
+Estimation of center of gravity for load case 1
 """
 
 #  This file is part of FAST : A framework for rapid Overall Aircraft Design
@@ -27,12 +27,8 @@ class ComputeCGLoadCase1(ExplicitComponent):
         self.add_input("data:geometry:wing:MAC:at25percent:x", val=np.nan, units="m")
         self.add_input("data:mission:sizing:fuel", val=np.nan, units="kg")
         self.add_input("data:weight:fuel_tank:CG:x", val=np.nan, units="m")
-        self.add_input(
-            "data:weight:aircraft:operating_empty:CG:x", val=np.nan, units="m"
-        )
-        self.add_input(
-            "data:weight:aircraft:operating_empty:mass", val=np.nan, units="kg"
-        )
+        self.add_input("data:weight:aircraft:operating_empty:CG:x", val=np.nan, units="m")
+        self.add_input("data:weight:aircraft:operating_empty:mass", val=np.nan, units="kg")
 
         self.add_output("data:weight:aircraft:load_case_1:CG:MAC_position")
         self.add_output("data:weight:aircraft:load_case_1:CG:index")

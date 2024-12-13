@@ -15,7 +15,6 @@ Computation of Oswald coefficient
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-
 import numpy as np
 from openmdao.core.explicitcomponent import ExplicitComponent
 from scipy import constants
@@ -24,7 +23,6 @@ from src.rta.models.aerodynamics.constants import CT_POINT_COUNT
 
 
 class ComputeDeltaOEI(ExplicitComponent):
-
     """
     Computes One engine inoperative effect on Cd. Based on Raymer page 290 eq 12.40
     Trim effects calculation is not referenced
@@ -34,12 +32,9 @@ class ComputeDeltaOEI(ExplicitComponent):
         self.options.declare("landing_flag", default=False, types=bool)
 
     def setup(self):
-
         self.add_input("data:geometry:propulsion:nacelle:y", val=np.nan, units="m")
         self.add_input("data:geometry:propulsion:propeller:B", val=np.nan)
-        self.add_input(
-            "data:geometry:propulsion:propeller:diameter", val=np.nan, units="m"
-        )
+        self.add_input("data:geometry:propulsion:propeller:diameter", val=np.nan, units="m")
         self.add_input("data:geometry:vertical_tail:aspect_ratio", val=np.nan)
         self.add_input("data:geometry:wing:area", val=np.nan, units="m**2")
         self.add_input("data:geometry:vertical_tail:area", val=np.nan, units="m**2")
@@ -68,7 +63,6 @@ class ComputeDeltaOEI(ExplicitComponent):
         self.declare_partials("*", "*", method="fd")
 
     def compute(self, inputs, outputs):
-
         n_blades = inputs["data:geometry:propulsion:propeller:B"]
         d_prop = inputs["data:geometry:propulsion:propeller:diameter"]
         dCd_ext = inputs["data:aerodynamics:aircraft:low_speed:DCD_ext"]
@@ -81,12 +75,7 @@ class ComputeDeltaOEI(ExplicitComponent):
         dCd_feather = (
             1.0
             / (wing_area / constants.foot**2)
-            * (
-                0.1
-                * n_blades
-                / (8 * np.pi)
-                * (np.pi * (d_prop / 2.0 / constants.foot) ** 2)
-            )
+            * (0.1 * n_blades / (8 * np.pi) * (np.pi * (d_prop / 2.0 / constants.foot) ** 2))
         )
 
         DCD_trim_list = []

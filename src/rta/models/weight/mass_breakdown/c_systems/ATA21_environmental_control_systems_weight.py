@@ -37,7 +37,6 @@ class ECSWeight(ExplicitComponent):
     """
 
     def setup(self):
-
         self.add_input("data:geometry:cabin:NPAX1", val=np.nan)
         self.add_input("tuning:weight:systems:ECS:mass:k", val=1.0)
         self.add_input("tuning:weight:systems:ECS:mass:offset", val=0.0, units="kg")
@@ -48,7 +47,6 @@ class ECSWeight(ExplicitComponent):
 
     # pylint: disable=too-many-locals
     def compute(self, inputs, outputs, discrete_inputs=None, discrete_outputs=None):
-
         npax1 = inputs["data:geometry:cabin:NPAX1"]
 
         k = inputs["tuning:weight:systems:ECS:mass:k"]

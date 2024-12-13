@@ -1,5 +1,5 @@
 """
-    Estimation of nacelle and pylon geometry
+Estimation of nacelle and pylon geometry
 """
 #  This file is part of FAST : A framework for rapid Overall Aircraft Design
 #  Copyright (C) 2020  ONERA & ISAE-SUPAERO
@@ -20,9 +20,7 @@ import scipy.constants as constants
 from fastoad.module_management.service_registry import RegisterSubmodel
 from fastoad_cs25.models.geometry.constants import SERVICE_NACELLE_PYLON_GEOMETRY
 
-RegisterSubmodel.active_models[
-    SERVICE_NACELLE_PYLON_GEOMETRY
-] = "rta.submodel.geometry.nacelles"
+RegisterSubmodel.active_models[SERVICE_NACELLE_PYLON_GEOMETRY] = "rta.submodel.geometry.nacelles"
 
 
 @RegisterSubmodel(SERVICE_NACELLE_PYLON_GEOMETRY, "rta.submodel.geometry.nacelles")
@@ -31,7 +29,6 @@ class ComputeNacelleGeometry(om.ExplicitComponent):
     """Nacelle geometry estimation"""
 
     def setup(self):
-
         self.add_input("data:geometry:propulsion:engine:y_ratio", val=np.nan)
         self.add_input("data:geometry:wing:span", val=np.nan, units="m")
         self.add_input("data:propulsion:Design_Thermo_Power", np.nan, units="W")
@@ -78,7 +75,6 @@ class ComputeNacelleGeometry(om.ExplicitComponent):
         )
 
     def compute(self, inputs, outputs):
-
         y_ratio_engine = inputs["data:geometry:propulsion:engine:y_ratio"]
         span = inputs["data:geometry:wing:span"]
         Design_Thermo_Power = inputs["data:propulsion:Design_Thermo_Power"]

@@ -1,5 +1,5 @@
 """
-    FAST - Copyright (c) 2016 ONERA ISAE
+FAST - Copyright (c) 2016 ONERA ISAE
 """
 
 #  This file is part of FAST : A framework for rapid Overall Aircraft Design
@@ -23,9 +23,9 @@ from fastoad_cs25.models.aerodynamics.components.utils.friction_drag import (
 )
 from openmdao.core.explicitcomponent import ExplicitComponent
 
-RegisterSubmodel.active_models[
-    SERVICE_CD0_NACELLES_PYLONS
-] = "rta.submodel.aerodynamics.CD0.nacelles"
+RegisterSubmodel.active_models[SERVICE_CD0_NACELLES_PYLONS] = (
+    "rta.submodel.aerodynamics.CD0.nacelles"
+)
 
 
 @RegisterSubmodel(SERVICE_CD0_NACELLES_PYLONS, "rta.submodel.aerodynamics.CD0.nacelles")
@@ -46,12 +46,8 @@ class Cd0NacelleAndPylonsTP(ExplicitComponent):
             self.add_output("data:aerodynamics:nacelles:cruise:CD0")
 
         self.add_input("data:geometry:propulsion:nacelle:length", val=np.nan, units="m")
-        self.add_input(
-            "data:geometry:propulsion:pylon:wetted_area", val=np.nan, units="m**2"
-        )
-        self.add_input(
-            "data:geometry:propulsion:nacelle:wetted_area", val=np.nan, units="m**2"
-        )
+        self.add_input("data:geometry:propulsion:pylon:wetted_area", val=np.nan, units="m**2")
+        self.add_input("data:geometry:propulsion:nacelle:wetted_area", val=np.nan, units="m**2")
         self.add_input("data:geometry:propulsion:engine:count", val=np.nan)
         self.add_input("data:geometry:wing:area", val=np.nan, units="m**2")
 

@@ -1,5 +1,5 @@
 """
-    FAST - Copyright (c) 2016 ONERA ISAE
+FAST - Copyright (c) 2016 ONERA ISAE
 """
 #  This file is part of FAST : A framework for rapid Overall Aircraft Design
 #  Copyright (C) 2020  ONERA & ISAE-SUPAERO
@@ -32,9 +32,7 @@ from fastoad_cs25.models.weight.cg.constants import (
 from .constants import SERVICE_PROPULSION_CG
 
 
-RegisterSubmodel.active_models[
-    SERVICE_CENTERS_OF_GRAVITY
-] = "rta.submodel.weight.cg.legacy"
+RegisterSubmodel.active_models[SERVICE_CENTERS_OF_GRAVITY] = "rta.submodel.weight.cg.legacy"
 
 
 @RegisterSubmodel(SERVICE_CENTERS_OF_GRAVITY, "rta.submodel.weight.cg.legacy")

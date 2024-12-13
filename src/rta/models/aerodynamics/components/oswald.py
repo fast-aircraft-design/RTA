@@ -21,9 +21,9 @@ from fastoad_cs25.models.aerodynamics.constants import SERVICE_INDUCED_DRAG_COEF
 from openmdao.core.explicitcomponent import ExplicitComponent
 
 
-RegisterSubmodel.active_models[
-    SERVICE_INDUCED_DRAG_COEFFICIENT
-] = "rta.submodel.aerodynamics.induced_drag_coefficient.legacy"
+RegisterSubmodel.active_models[SERVICE_INDUCED_DRAG_COEFFICIENT] = (
+    "rta.submodel.aerodynamics.induced_drag_coefficient.legacy"
+)
 
 
 @RegisterSubmodel(
@@ -45,19 +45,11 @@ class InducedDragCoefficient(ExplicitComponent):
         self.add_input("data:geometry:wing:root:dihedral", val=np.nan, units="rad")
 
         if self.options["low_speed_aero"]:
-            self.add_input(
-                "data:aerodynamics:aircraft:low_speed:oswald_coefficient", val=np.nan
-            )
-            self.add_output(
-                "data:aerodynamics:aircraft:low_speed:induced_drag_coefficient"
-            )
+            self.add_input("data:aerodynamics:aircraft:low_speed:oswald_coefficient", val=np.nan)
+            self.add_output("data:aerodynamics:aircraft:low_speed:induced_drag_coefficient")
         else:
-            self.add_input(
-                "data:aerodynamics:aircraft:cruise:oswald_coefficient", val=np.nan
-            )
-            self.add_output(
-                "data:aerodynamics:aircraft:cruise:induced_drag_coefficient"
-            )
+            self.add_input("data:aerodynamics:aircraft:cruise:oswald_coefficient", val=np.nan)
+            self.add_output("data:aerodynamics:aircraft:cruise:induced_drag_coefficient")
 
     def setup_partials(self):
         self.declare_partials("*", "*", method="fd")
@@ -76,10 +68,6 @@ class InducedDragCoefficient(ExplicitComponent):
         coef_k = 1.0 / (np.pi * aspect_ratio * coef_e)
 
         if self.options["low_speed_aero"]:
-            outputs[
-                "data:aerodynamics:aircraft:low_speed:induced_drag_coefficient"
-            ] = coef_k
+            outputs["data:aerodynamics:aircraft:low_speed:induced_drag_coefficient"] = coef_k
         else:
-            outputs[
-                "data:aerodynamics:aircraft:cruise:induced_drag_coefficient"
-            ] = coef_k
+            outputs["data:aerodynamics:aircraft:cruise:induced_drag_coefficient"] = coef_k

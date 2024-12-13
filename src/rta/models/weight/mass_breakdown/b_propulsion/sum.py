@@ -9,9 +9,9 @@ from src.rta.models.weight.mass_breakdown.b_propulsion.constants import (
     SERVICE_TURBOPROP_MASS,
 )
 
-RegisterSubmodel.active_models[
-    SERVICE_PROPULSION_MASS
-] = "rta.submodel.weight.mass.propulsion.legacy"
+RegisterSubmodel.active_models[SERVICE_PROPULSION_MASS] = (
+    "rta.submodel.weight.mass.propulsion.legacy"
+)
 
 
 @RegisterSubmodel(SERVICE_PROPULSION_MASS, "rta.submodel.weight.mass.propulsion.legacy")

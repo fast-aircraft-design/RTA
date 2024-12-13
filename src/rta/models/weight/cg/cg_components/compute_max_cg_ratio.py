@@ -1,5 +1,5 @@
 """
-    Estimation of maximum center of gravity ratio
+Estimation of maximum center of gravity ratio
 """
 
 #  This file is part of FAST : A framework for rapid Overall Aircraft Design
@@ -23,9 +23,7 @@ class ComputeMaxCGratio(ExplicitComponent):
     """Maximum center of gravity ratio estimation"""
 
     def setup(self):
-        self.add_input(
-            "data:weight:aircraft:operating_empty:CG:MAC_position", val=np.nan
-        )
+        self.add_input("data:weight:aircraft:operating_empty:CG:MAC_position", val=np.nan)
         self.add_input("data:weight:aircraft:load_case_1:CG:MAC_position", val=np.nan)
         self.add_input("data:weight:aircraft:load_case_2:CG:MAC_position", val=np.nan)
         self.add_input("data:weight:aircraft:load_case_3:CG:MAC_position", val=np.nan)

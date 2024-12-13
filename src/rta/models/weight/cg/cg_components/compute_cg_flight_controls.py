@@ -1,5 +1,5 @@
 """
-    Estimation of control surfaces center of gravity
+Estimation of control surfaces center of gravity
 """
 
 #  This file is part of FAST : A framework for rapid Overall Aircraft Design
@@ -26,14 +26,12 @@ from fastoad_cs25.models.weight.cg.cg_components.compute_cg_control_surfaces imp
 Uses new CS25 models with improved behavior if no kink
 """
 
-RegisterSubmodel.active_models[
-    SERVICE_FLIGHT_CONTROLS_CG
-] = "rta.submodel.cg.wing.control_surfaces.legacy"
-
-
-@RegisterSubmodel(
-    SERVICE_FLIGHT_CONTROLS_CG, "rta.submodel.cg.wing.control_surfaces.legacy"
+RegisterSubmodel.active_models[SERVICE_FLIGHT_CONTROLS_CG] = (
+    "rta.submodel.cg.wing.control_surfaces.legacy"
 )
+
+
+@RegisterSubmodel(SERVICE_FLIGHT_CONTROLS_CG, "rta.submodel.cg.wing.control_surfaces.legacy")
 class ComputeFlightControlCG(Group):
     def setup(self):
         self.add_subsystem("compute_flight_control_cg", ComputeControlSurfacesCG())

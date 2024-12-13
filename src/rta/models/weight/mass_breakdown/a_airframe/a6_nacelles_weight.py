@@ -21,9 +21,7 @@ from scipy.constants import pound
 
 from .constants import SERVICE_NACELLE_MASS
 
-RegisterSubmodel.active_models[
-    SERVICE_NACELLE_MASS
-] = "rta.submodel.weight.mass.airframe.nacelle"
+RegisterSubmodel.active_models[SERVICE_NACELLE_MASS] = "rta.submodel.weight.mass.airframe.nacelle"
 
 
 @RegisterSubmodel(SERVICE_NACELLE_MASS, "rta.submodel.weight.mass.airframe.nacelle")
@@ -38,9 +36,7 @@ class NacellesWeight(om.ExplicitComponent):
         self.add_input("data:propulsion:RTO_power", val=np.nan, units="hp")
         self.add_input("data:geometry:propulsion:engine:count", val=np.nan)
         self.add_input("tuning:weight:airframe:nacelle:mass:k", val=1.0)
-        self.add_input(
-            "tuning:weight:airframe:nacelle:mass:offset", val=0.0, units="kg"
-        )
+        self.add_input("tuning:weight:airframe:nacelle:mass:offset", val=0.0, units="kg")
 
         self.add_output("data:weight:airframe:nacelle:mass", units="kg")
 

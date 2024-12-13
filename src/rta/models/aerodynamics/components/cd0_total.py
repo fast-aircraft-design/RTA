@@ -1,5 +1,5 @@
 """
-    FAST - Copyright (c) 2016 ONERA ISAE
+FAST - Copyright (c) 2016 ONERA ISAE
 """
 #  This file is part of FAST : A framework for rapid Overall Aircraft Design
 #  Copyright (C) 2020  ONERA & ISAE-SUPAERO
@@ -41,17 +41,13 @@ class Cd0Total(ExplicitComponent):
         self.add_input("tuning:aerodynamics:aircraft:cruise:CD:parasite:k", val=np.nan)
 
         if self.low_speed_aero:
-            self.add_input(
-                "data:aerodynamics:wing:low_speed:CD0", shape_by_conn=True, val=np.nan
-            )
+            self.add_input("data:aerodynamics:wing:low_speed:CD0", shape_by_conn=True, val=np.nan)
             self.add_input(
                 "data:aerodynamics:fuselage:low_speed:CD0",
                 shape_by_conn=True,
                 val=np.nan,
             )
-            self.add_input(
-                "data:aerodynamics:horizontal_tail:low_speed:CD0", val=np.nan
-            )
+            self.add_input("data:aerodynamics:horizontal_tail:low_speed:CD0", val=np.nan)
             self.add_input("data:aerodynamics:vertical_tail:low_speed:CD0", val=np.nan)
             self.add_input("data:aerodynamics:nacelles:low_speed:CD0", val=np.nan)
 
@@ -60,12 +56,8 @@ class Cd0Total(ExplicitComponent):
                 copy_shape="data:aerodynamics:wing:low_speed:CD0",
             )
         else:
-            self.add_input(
-                "data:aerodynamics:wing:cruise:CD0", shape_by_conn=True, val=np.nan
-            )
-            self.add_input(
-                "data:aerodynamics:fuselage:cruise:CD0", shape_by_conn=True, val=np.nan
-            )
+            self.add_input("data:aerodynamics:wing:cruise:CD0", shape_by_conn=True, val=np.nan)
+            self.add_input("data:aerodynamics:fuselage:cruise:CD0", shape_by_conn=True, val=np.nan)
             self.add_input("data:aerodynamics:horizontal_tail:cruise:CD0", val=np.nan)
             self.add_input("data:aerodynamics:vertical_tail:cruise:CD0", val=np.nan)
             self.add_input("data:aerodynamics:nacelles:cruise:CD0", val=np.nan)

@@ -1,5 +1,5 @@
 """
-    Estimation of center of gravity for load case 3
+Estimation of center of gravity for load case 3
 """
 
 #  This file is part of FAST : A framework for rapid Overall Aircraft Design
@@ -31,12 +31,8 @@ class ComputeCGLoadCase3(ExplicitComponent):
         self.add_input("data:mission:sizing:fuel", val=np.nan, units="kg")
         self.add_input("data:weight:fuel_tank:CG:x", val=np.nan, units="m")
         self.add_input("data:TLAR:NPAX", val=np.nan)
-        self.add_input(
-            "data:weight:aircraft:operating_empty:CG:x", val=np.nan, units="m"
-        )
-        self.add_input(
-            "data:weight:aircraft:operating_empty:mass", val=np.nan, units="kg"
-        )
+        self.add_input("data:weight:aircraft:operating_empty:CG:x", val=np.nan, units="m")
+        self.add_input("data:weight:aircraft:operating_empty:mass", val=np.nan, units="kg")
 
         self.add_input(
             "settings:weight:aircraft:payload:design_mass_per_passenger",
@@ -86,6 +82,4 @@ class ComputeCGLoadCase3(ExplicitComponent):
         outputs["data:weight:aircraft:load_case_3:CG:index"] = (
             (x_cg_plane_pl_3 - fa_length) * (x_cg_plane_down + weight_pl + fw) / 150.0
         )
-        outputs["data:weight:aircraft:load_case_3:mass"] = (
-            x_cg_plane_down + weight_pl + fw
-        )
+        outputs["data:weight:aircraft:load_case_3:mass"] = x_cg_plane_down + weight_pl + fw

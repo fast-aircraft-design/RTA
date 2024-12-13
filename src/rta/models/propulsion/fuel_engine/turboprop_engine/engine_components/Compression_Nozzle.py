@@ -4,7 +4,6 @@ from warnings import warn
 
 class Compression_Nozzle(object):
     def compute(self, atmosphere, etapold, pid):
-
         # unpack from conditions
         Po = atmosphere.pressure
 
@@ -31,9 +30,7 @@ class Compression_Nozzle(object):
             Pt_out[Pt_out < Po] = Po[Pt_out < Po]
 
         # compute the output Mach number, static quantities and the output velocity
-        Mach = np.sqrt(
-            (((Pt_out / Po) ** ((gamma - 1.0) / gamma)) - 1.0) * 2.0 / (gamma - 1.0)
-        )
+        Mach = np.sqrt((((Pt_out / Po) ** ((gamma - 1.0) / gamma)) - 1.0) * 2.0 / (gamma - 1.0))
         T_out = Tt_out / (1 + (gamma - 1) / 2 * Mach * Mach)
         h_out = Cp * T_out
         u_out = np.sqrt(2 * (ht_out - h_out))

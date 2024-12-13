@@ -1,5 +1,5 @@
 """
-    Estimation of other components center of gravities
+Estimation of other components center of gravities
 """
 
 #  This file is part of FAST : A framework for rapid Overall Aircraft Design
@@ -20,9 +20,7 @@ from fastoad.module_management.service_registry import RegisterSubmodel
 from fastoad_cs25.models.weight.cg.constants import SERVICE_OTHERS_CG
 
 
-RegisterSubmodel.active_models[
-    SERVICE_OTHERS_CG
-] = "rta.submodel.weight.cg.others.legacy"
+RegisterSubmodel.active_models[SERVICE_OTHERS_CG] = "rta.submodel.weight.cg.others.legacy"
 
 
 @RegisterSubmodel(SERVICE_OTHERS_CG, "rta.submodel.weight.cg.others.legacy")
@@ -31,9 +29,7 @@ class ComputeOthersCG(ExplicitComponent):
     """Other components center of gravities estimation"""
 
     def setup(self):
-        self.add_input(
-            "data:geometry:wing:MAC:leading_edge:x:local", val=np.nan, units="m"
-        )
+        self.add_input("data:geometry:wing:MAC:leading_edge:x:local", val=np.nan, units="m")
         self.add_input("data:geometry:wing:MAC:length", val=np.nan, units="m")
         self.add_input("data:geometry:wing:root:chord", val=np.nan, units="m")
         self.add_input("data:geometry:fuselage:length", val=np.nan, units="m")
@@ -43,28 +39,20 @@ class ComputeOthersCG(ExplicitComponent):
         self.add_input("data:weight:propulsion:engine:CG:x", val=np.nan, units="m")
         self.add_input("data:weight:fuel_tank:CG:x", val=np.nan, units="m")
 
-        self.add_input(
-            "data:weight:operational:items:passenger_seats:CG:x", val=np.nan, units="m"
-        )
+        self.add_input("data:weight:operational:items:passenger_seats:CG:x", val=np.nan, units="m")
         self.add_input("data:weight:propulsion:engine:mass", val=np.nan, units="kg")
         self.add_input("data:geometry:cabin:NPAX1", val=np.nan)
         self.add_input("data:geometry:cabin:seats:economical:count_by_row", val=np.nan)
-        self.add_input(
-            "data:geometry:cabin:seats:economical:length", val=np.nan, units="m"
-        )
+        self.add_input("data:geometry:cabin:seats:economical:length", val=np.nan, units="m")
 
         # TODO: add description of these CGs
         self.add_output("data:weight:airframe:fuselage:CG:x", units="m")
         self.add_output("data:weight:airframe:landing_gear:front:CG:x", units="m")
-        self.add_output(
-            "data:weight:propulsion:engine_controls_instrumentation:CG:x", units="m"
-        )
+        self.add_output("data:weight:propulsion:engine_controls_instrumentation:CG:x", units="m")
         self.add_output("data:weight:propulsion:fuel_lines:CG:x", units="m")
 
         self.add_output("data:weight:systems:auxiliary_power_unit:CG:x", units="m")
-        self.add_output(
-            "data:weight:systems:electric_systems:electric_generation:CG:x", units="m"
-        )
+        self.add_output("data:weight:systems:electric_systems:electric_generation:CG:x", units="m")
         self.add_output(
             "data:weight:systems:electric_systems:electric_common_installation:CG:x",
             units="m",
@@ -83,17 +71,11 @@ class ComputeOthersCG(ExplicitComponent):
         self.add_output("data:weight:furniture:interior_integration:CG:x", units="m")
         self.add_output("data:weight:furniture:insulation:CG:x", units="m")
         self.add_output("data:weight:furniture:cabin_lighting:CG:x", units="m")
-        self.add_output(
-            "data:weight:furniture:seats_crew_accommodation:CG:x", units="m"
-        )
+        self.add_output("data:weight:furniture:seats_crew_accommodation:CG:x", units="m")
         self.add_output("data:weight:furniture:oxygen:CG:x", units="m")
 
-        self.add_output(
-            "data:weight:operational:items:documents_toolkit:CG:x", units="m"
-        )
-        self.add_output(
-            "data:weight:operational:items:galley_structure:CG:x", units="m"
-        )
+        self.add_output("data:weight:operational:items:documents_toolkit:CG:x", units="m")
+        self.add_output("data:weight:operational:items:galley_structure:CG:x", units="m")
         self.add_output("data:weight:operational:equipment:others:CG:x", units="m")
         self.add_output("data:weight:operational:equipment:crew:CG:x", units="m")
         self.add_output("data:weight:operational:items:unusable_fuel:CG:x", units="m")
@@ -219,9 +201,7 @@ class ComputeOthersCG(ExplicitComponent):
         x_cg_d2 = inputs["data:weight:operational:items:passenger_seats:CG:x"]
         weight_engines = inputs["data:weight:propulsion:engine:mass"]
         npax1 = inputs["data:geometry:cabin:NPAX1"]
-        front_seat_number_eco = inputs[
-            "data:geometry:cabin:seats:economical:count_by_row"
-        ]
+        front_seat_number_eco = inputs["data:geometry:cabin:seats:economical:count_by_row"]
         ls_eco = inputs["data:geometry:cabin:seats:economical:length"]
         x_cg_tank = inputs["data:weight:fuel_tank:CG:x"]
 
@@ -259,9 +239,7 @@ class ComputeOthersCG(ExplicitComponent):
             - (lav + length_front_fret + 0.8 * l2_wing)
         )
 
-        x_cg_rear_fret = (
-            lav + length_front_fret + 0.8 * l2_wing + length_rear_fret * 0.5
-        )
+        x_cg_rear_fret = lav + length_front_fret + 0.8 * l2_wing + length_rear_fret * 0.5
 
         x_cg_pl = x_cg_d2
 
@@ -280,12 +258,8 @@ class ComputeOthersCG(ExplicitComponent):
         outputs["data:weight:propulsion:fuel_lines:CG:x"] = 0.977 * x_cg_tank
 
         outputs["data:weight:systems:auxiliary_power_unit:CG:x"] = x_cg_c11
-        outputs[
-            "data:weight:systems:electric_systems:electric_generation:CG:x"
-        ] = x_cg_c12
-        outputs[
-            "data:weight:systems:electric_systems:electric_common_installation:CG:x"
-        ] = x_cg_c12
+        outputs["data:weight:systems:electric_systems:electric_generation:CG:x"] = x_cg_c12
+        outputs["data:weight:systems:electric_systems:electric_common_installation:CG:x"] = x_cg_c12
         outputs["data:weight:systems:hydraulic_systems:CG:x"] = x_cg_c13
 
         outputs["data:weight:furniture:insulation:CG:x"] = x_cg_c21

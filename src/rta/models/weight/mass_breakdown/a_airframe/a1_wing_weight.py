@@ -21,9 +21,7 @@ from fastoad_cs25.models.weight.mass_breakdown.a_airframe.constants import (
     SERVICE_WING_MASS,
 )
 
-RegisterSubmodel.active_models[
-    SERVICE_WING_MASS
-] = "rta.submodel.weight.mass.airframe.wing"
+RegisterSubmodel.active_models[SERVICE_WING_MASS] = "rta.submodel.weight.mass.airframe.wing"
 
 
 @RegisterSubmodel(SERVICE_WING_MASS, "rta.submodel.weight.mass.airframe.wing")
@@ -56,13 +54,9 @@ class WingWeight(om.ExplicitComponent):
             units="kg",
         )
         self.add_input("tuning:weight:airframe:wing:shear_sizing:mass:k", val=1.0)
-        self.add_input(
-            "tuning:weight:airframe:wing:shear_sizing:mass:offset", val=0.0, units="kg"
-        )
+        self.add_input("tuning:weight:airframe:wing:shear_sizing:mass:offset", val=0.0, units="kg")
         self.add_input("tuning:weight:airframe:wing:ribs:mass:k", val=1.0)
-        self.add_input(
-            "tuning:weight:airframe:wing:ribs:mass:offset", val=0.0, units="kg"
-        )
+        self.add_input("tuning:weight:airframe:wing:ribs:mass:offset", val=0.0, units="kg")
         self.add_input("tuning:weight:airframe:wing:secondary_parts:mass:k", val=1.0)
         self.add_input(
             "tuning:weight:airframe:wing:secondary_parts:mass:offset",
@@ -111,8 +105,7 @@ class WingWeight(om.ExplicitComponent):
         temp_a11 = (
             5.922e-5
             * k_voil
-            * ((max_nm / (l2_wing * toc_mean)) * (span / np.cos(sweep_25)) ** 2.0)
-            ** 0.9
+            * ((max_nm / (l2_wing * toc_mean)) * (span / np.cos(sweep_25)) ** 2.0) ** 0.9
         )
         weight_a11 = k_a11 * temp_a11 + offset_a11
 

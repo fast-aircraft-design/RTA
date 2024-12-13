@@ -1,5 +1,5 @@
 """
-    FAST - Copyright (c) 2016 ONERA ISAE
+FAST - Copyright (c) 2016 ONERA ISAE
 """
 #  This file is part of FAST : A framework for rapid Overall Aircraft Design
 #  Copyright (C) 2020  ONERA & ISAE-SUPAERO
@@ -48,9 +48,7 @@ class Cd0Wing(ExplicitComponent):
             )
         else:
             self.add_input("data:aerodynamics:wing:cruise:reynolds", val=np.nan)
-            self.add_input(
-                "data:aerodynamics:aircraft:cruise:CL", shape_by_conn=True, val=np.nan
-            )
+            self.add_input("data:aerodynamics:aircraft:cruise:CL", shape_by_conn=True, val=np.nan)
             self.add_input("data:TLAR:cruise_mach", val=np.nan)
             self.add_output(
                 "data:aerodynamics:wing:cruise:CD0",
@@ -85,9 +83,7 @@ class Cd0Wing(ExplicitComponent):
             interaction_coeff=0.04,
         )
 
-        cd0_wing = compute_cd0_lifting_surface(
-            wing_geometry, mach, reynolds, wing_area, cl
-        )
+        cd0_wing = compute_cd0_lifting_surface(wing_geometry, mach, reynolds, wing_area, cl)
 
         if self.low_speed_aero:
             outputs["data:aerodynamics:wing:low_speed:CD0"] = cd0_wing

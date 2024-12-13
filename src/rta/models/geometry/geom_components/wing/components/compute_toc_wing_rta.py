@@ -1,5 +1,5 @@
 """
-    Estimation of wing ToC
+Estimation of wing ToC
 """
 
 #  This file is part of FAST : A framework for rapid Overall Aircraft Design
@@ -38,15 +38,9 @@ class ComputeToCWingRTA(ExplicitComponent):
         self.add_output("data:geometry:wing:tip:thickness_ratio")
 
         self.declare_partials("data:geometry:wing:thickness_ratio", "*", method="fd")
-        self.declare_partials(
-            "data:geometry:wing:root:thickness_ratio", "*", method="fd"
-        )
-        self.declare_partials(
-            "data:geometry:wing:kink:thickness_ratio", "*", method="fd"
-        )
-        self.declare_partials(
-            "data:geometry:wing:tip:thickness_ratio", "*", method="fd"
-        )
+        self.declare_partials("data:geometry:wing:root:thickness_ratio", "*", method="fd")
+        self.declare_partials("data:geometry:wing:kink:thickness_ratio", "*", method="fd")
+        self.declare_partials("data:geometry:wing:tip:thickness_ratio", "*", method="fd")
 
     def compute(self, inputs, outputs):
         cruise_mach = inputs["data:TLAR:cruise_mach"]

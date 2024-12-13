@@ -35,9 +35,7 @@ class LightsWeight(ExplicitComponent):
         self.add_input("data:geometry:cabin:length", val=np.nan, units="m")
 
         self.add_input("tuning:weight:furniture:cabin_lighting:mass:k", val=1.0)
-        self.add_input(
-            "tuning:weight:furniture:cabin_lighting:mass:offset", val=0.0, units="kg"
-        )
+        self.add_input("tuning:weight:furniture:cabin_lighting:mass:offset", val=0.0, units="kg")
 
         self.add_output("data:weight:furniture:cabin_lighting:mass", units="kg")
 
@@ -56,6 +54,4 @@ class LightsWeight(ExplicitComponent):
 
         # Mass of internal lighting system
         temp_c24 = 1.4 * cabin_length * fuselage_diameter
-        outputs["data:weight:furniture:cabin_lighting:mass"] = (
-            k_c24 * temp_c24 + offset_c24
-        )
+        outputs["data:weight:furniture:cabin_lighting:mass"] = k_c24 * temp_c24 + offset_c24

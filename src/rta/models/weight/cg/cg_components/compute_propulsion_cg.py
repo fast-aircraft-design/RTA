@@ -1,5 +1,5 @@
 """
-    Estimation of propulsion center of gravity
+Estimation of propulsion center of gravity
 """
 
 #  This file is part of FAST : A framework for rapid Overall Aircraft Design
@@ -21,9 +21,7 @@ from openmdao.core.explicitcomponent import ExplicitComponent
 from ..constants import SERVICE_PROPULSION_CG
 
 
-RegisterSubmodel.active_models[
-    SERVICE_PROPULSION_CG
-] = "rta.submodel.weight.cg.propulsion"
+RegisterSubmodel.active_models[SERVICE_PROPULSION_CG] = "rta.submodel.weight.cg.propulsion"
 
 
 @RegisterSubmodel(SERVICE_PROPULSION_CG, "rta.submodel.weight.cg.propulsion")
@@ -34,16 +32,12 @@ class ComputePropulsionCG_RTA(ExplicitComponent):
         self.add_input("data:geometry:propulsion:engine:y_ratio", val=np.nan)
         self.add_input("data:geometry:wing:span", val=np.nan, units="m")
         self.add_input("data:geometry:wing:MAC:length", val=np.nan, units="m")
-        self.add_input(
-            "data:geometry:wing:MAC:leading_edge:x:local", val=np.nan, units="m"
-        )
+        self.add_input("data:geometry:wing:MAC:leading_edge:x:local", val=np.nan, units="m")
         self.add_input("data:geometry:wing:root:chord", val=np.nan, units="m")
         self.add_input("data:geometry:wing:root:y", val=np.nan, units="m")
         self.add_input("data:geometry:wing:kink:chord", val=np.nan, units="m")
         self.add_input("data:geometry:wing:kink:y", val=np.nan, units="m")
-        self.add_input(
-            "data:geometry:wing:kink:leading_edge:x:local", val=np.nan, units="m"
-        )
+        self.add_input("data:geometry:wing:kink:leading_edge:x:local", val=np.nan, units="m")
         self.add_input("data:geometry:wing:MAC:at25percent:x", val=np.nan, units="m")
         self.add_input("data:geometry:propulsion:nacelle:length", val=np.nan, units="m")
 
@@ -70,9 +64,7 @@ class ComputePropulsionCG_RTA(ExplicitComponent):
 
         y_nacelle = y_ratio_engine * span / 2
 
-        l_wing_nac = l3_wing + (l2_wing - l3_wing) * (y3_wing - y_nacelle) / (
-            y3_wing - y2_wing
-        )
+        l_wing_nac = l3_wing + (l2_wing - l3_wing) * (y3_wing - y_nacelle) / (y3_wing - y2_wing)
         delta_x_nacelle = 0.05 * l_wing_nac
         x_nacelle_cg = (
             x3_wing * (y_nacelle - y2_wing) / (y3_wing - y2_wing)

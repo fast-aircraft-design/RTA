@@ -29,29 +29,18 @@ class OperationalItemsWeight(om.ExplicitComponent):
 
     def setup(self):
         self.add_input("data:TLAR:NPAX", val=np.nan)
-        self.add_input(
-            "settings:weight:aircraft:design_mass_per_seat", val=np.nan, units="kg"
-        )
+        self.add_input("settings:weight:aircraft:design_mass_per_seat", val=np.nan, units="kg")
         self.add_input("tuning:weight:furniture:passenger_seats:mass:k", val=1.0)
-        self.add_input(
-            "tuning:weight:furniture:passenger_seats:mass:offset", val=0.0, units="kg"
-        )
+        self.add_input("tuning:weight:furniture:passenger_seats:mass:offset", val=0.0, units="kg")
 
-        self.add_output(
-            "data:weight:operational:items:passenger_seats:mass", units="kg"
-        )
+        self.add_output("data:weight:operational:items:passenger_seats:mass", units="kg")
         self.add_output("data:weight:operational:items:unusable_fuel:mass", units="kg")
-        self.add_output(
-            "data:weight:operational:items:documents_toolkit:mass", units="kg"
-        )
-        self.add_output(
-            "data:weight:operational:items:galley_structure:mass", units="kg"
-        )
+        self.add_output("data:weight:operational:items:documents_toolkit:mass", units="kg")
+        self.add_output("data:weight:operational:items:galley_structure:mass", units="kg")
 
         self.declare_partials("*", "*", method="fd")
 
     def compute(self, inputs, outputs, discrete_inputs=None, discrete_outputs=None):
-
         npax = inputs["data:TLAR:NPAX"]
 
         k = inputs["tuning:weight:furniture:passenger_seats:mass:k"]

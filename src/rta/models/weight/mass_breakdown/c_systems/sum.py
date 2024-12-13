@@ -17,9 +17,7 @@ from src.rta.models.weight.mass_breakdown.c_systems.constants import (
     SERVICE_MASS_ATA49,
 )
 
-RegisterSubmodel.active_models[
-    SERVICE_SYSTEMS_MASS
-] = "rta.submodel.weight.mass.system.legacy"
+RegisterSubmodel.active_models[SERVICE_SYSTEMS_MASS] = "rta.submodel.weight.mass.system.legacy"
 
 
 @RegisterSubmodel(SERVICE_SYSTEMS_MASS, "rta.submodel.weight.mass.system.legacy")

@@ -8,7 +8,6 @@ from ..wing.components.compute_wet_area_wing_rta import ComputeWetAreaWingRTA
 
 
 def test_nacelle():
-
     ivc = IndepVarComp()
 
     ivc.add_output("data:geometry:propulsion:engine:y_ratio", val=0.3)
@@ -19,17 +18,12 @@ def test_nacelle():
     problem = run_system(ComputeNacelleGeometry(), ivc)
 
     assert problem["data:geometry:propulsion:nacelle:length"] == approx(2.17, rel=1e-3)
-    assert problem["data:geometry:propulsion:nacelle:diameter"] == approx(
-        0.638, rel=1e-3
-    )
+    assert problem["data:geometry:propulsion:nacelle:diameter"] == approx(0.638, rel=1e-3)
     assert problem["data:geometry:propulsion:nacelle:y"] == approx(4.026, rel=1e-3)
-    assert problem["data:geometry:propulsion:nacelle:wetted_area"] == approx(
-        4.349, rel=1e-3
-    )
+    assert problem["data:geometry:propulsion:nacelle:wetted_area"] == approx(4.349, rel=1e-3)
 
 
 def test_wing_ToC():
-
     ivc = IndepVarComp()
 
     ivc.add_output("data:TLAR:cruise_mach", val=0.45)
@@ -38,17 +32,12 @@ def test_wing_ToC():
     problem = run_system(ComputeToCWingRTA(), ivc)
 
     assert problem["data:geometry:wing:thickness_ratio"] == approx(0.1407, rel=1e-3)
-    assert problem["data:geometry:wing:root:thickness_ratio"] == approx(
-        0.1875, rel=1e-3
-    )
-    assert problem["data:geometry:wing:kink:thickness_ratio"] == approx(
-        0.1407, rel=1e-3
-    )
+    assert problem["data:geometry:wing:root:thickness_ratio"] == approx(0.1875, rel=1e-3)
+    assert problem["data:geometry:wing:kink:thickness_ratio"] == approx(0.1407, rel=1e-3)
     assert problem["data:geometry:wing:tip:thickness_ratio"] == approx(0.125, rel=1e-3)
 
 
 def test_wing_wet_area():
-
     ivc = IndepVarComp()
 
     ivc.add_output("data:geometry:wing:root:chord", val=2.634, units="m")

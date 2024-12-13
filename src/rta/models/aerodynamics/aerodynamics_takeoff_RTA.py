@@ -47,13 +47,9 @@ class AerodynamicsTakeoffRTA(om.Group):
 
         self.add_subsystem("inizialize_inputs", InitializeIN(), promotes=["*"])
 
-        self.add_subsystem(
-            "delta_lg", ComputeDeltaLg(landing_flag=False), promotes=["*"]
-        )
+        self.add_subsystem("delta_lg", ComputeDeltaLg(landing_flag=False), promotes=["*"])
 
-        self.add_subsystem(
-            "delta_OEI", ComputeDeltaOEI(landing_flag=False), promotes=["*"]
-        )
+        self.add_subsystem("delta_OEI", ComputeDeltaOEI(landing_flag=False), promotes=["*"])
         self.add_subsystem(
             "polar",
             RegisterSubmodel.get_submodel(SERVICE_POLAR, polar_type_option),

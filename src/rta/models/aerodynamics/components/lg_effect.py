@@ -15,7 +15,6 @@ Computation of Oswald coefficient
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-
 import numpy as np
 from openmdao.core.explicitcomponent import ExplicitComponent
 
@@ -28,14 +27,12 @@ Undocumented
 
 
 class ComputeDeltaLg(ExplicitComponent):
-
     """Computes landing gear extension effect on Cl and Cd"""
 
     def initialize(self):
         self.options.declare("landing_flag", default=False, types=bool)
 
     def setup(self):
-
         if self.options["landing_flag"]:
             self.add_output(
                 "data:aerodynamics:aircraft:landing:lg_effect:DCL",
@@ -56,7 +53,6 @@ class ComputeDeltaLg(ExplicitComponent):
             )
 
     def compute(self, inputs, outputs):
-
         if self.options["landing_flag"]:
             outputs["data:aerodynamics:aircraft:landing:lg_effect:DCL"] = (
                 np.ones(ALPHA_POINT_COUNT) * 0.02

@@ -50,9 +50,7 @@ def run_non_regression_test(
     configuration_file_path = pth.join(results_folder_path, conf_file)
 
     # Copy of configuration file and generation of problem instance ------------------
-    api.generate_configuration_file(
-        configuration_file_path
-    )  # just ensure folders are created...
+    api.generate_configuration_file(configuration_file_path)  # just ensure folders are created...
     shutil.copy(pth.join(DATA_FOLDER_PATH, conf_file), configuration_file_path)
     shutil.copy(
         pth.join(DATA_FOLDER_PATH, MISSION_FILE),
@@ -97,8 +95,7 @@ def run_non_regression_test(
     )
     assert_allclose(
         problem["data:weight:aircraft:MZFW"],
-        problem["data:weight:aircraft:OWE"]
-        + problem["data:weight:aircraft:max_payload"],
+        problem["data:weight:aircraft:OWE"] + problem["data:weight:aircraft:max_payload"],
         atol=1,
     )
 
@@ -133,8 +130,6 @@ def run_non_regression_test(
     print(df.sort_values(by=["abs_rel_delta"]))
 
     if check_only_mtow:
-        assert np.all(
-            df.abs_rel_delta.loc[df.name == "data:weight:aircraft:MTOW"] < tolerance
-        )
+        assert np.all(df.abs_rel_delta.loc[df.name == "data:weight:aircraft:MTOW"] < tolerance)
     else:
         assert np.all(df.abs_rel_delta < tolerance)

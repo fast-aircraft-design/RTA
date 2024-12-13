@@ -12,9 +12,7 @@ from src.rta.models.weight.mass_breakdown.d_furniture.constants import (
     SERVICE_MASS_ATA2510,
 )
 
-RegisterSubmodel.active_models[
-    SERVICE_FURNITURE_MASS
-] = "rta.submodel.weight.mass.furniture.legacy"
+RegisterSubmodel.active_models[SERVICE_FURNITURE_MASS] = "rta.submodel.weight.mass.furniture.legacy"
 
 
 @RegisterSubmodel(SERVICE_FURNITURE_MASS, "rta.submodel.weight.mass.furniture.legacy")

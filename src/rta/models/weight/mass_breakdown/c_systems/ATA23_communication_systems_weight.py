@@ -1,6 +1,7 @@
 """
 Estimation of communication systems weight
 """
+
 #  This file is part of FAST : A framework for rapid Overall Aircraft Design
 #  Copyright (C) 2020  ONERA & ISAE-SUPAERO
 #  FAST is free software: you can redistribute it and/or modify
@@ -24,13 +25,10 @@ from src.rta.models.weight.mass_breakdown.c_systems.constants import SERVICE_MAS
 
 @RegisterSubmodel(SERVICE_MASS_ATA23, "rta.submodel.mass.system.ata23")
 class CommunicationSystemWeightLegacy(Group):
-
     """Weight estimation for communication systems, based on CS25 transmission model"""
 
     def setup(self):
-        self.add_subsystem(
-            "communication_system_from_cs25", TransmissionSystemsWeight()
-        )
+        self.add_subsystem("communication_system_from_cs25", TransmissionSystemsWeight())
 
     def configure(self):
         self.promotes(

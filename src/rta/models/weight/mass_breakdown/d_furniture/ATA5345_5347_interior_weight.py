@@ -56,6 +56,4 @@ class InteriorIntegrationWeight(ExplicitComponent):
 
         mass_furn = 0.005 * mtow
 
-        outputs["data:weight:furniture:interior_integration:mass"] = (
-            k * mass_furn + offset
-        )
+        outputs["data:weight:furniture:interior_integration:mass"] = k * mass_furn + offset

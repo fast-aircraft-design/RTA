@@ -1,5 +1,5 @@
 """
-    FAST - Copyright (c) 2016 ONERA ISAE
+FAST - Copyright (c) 2016 ONERA ISAE
 """
 #  This file is part of FAST : A framework for rapid Overall Aircraft Design
 #  Copyright (C) 2020  ONERA & ISAE-SUPAERO
@@ -19,9 +19,7 @@ from fastoad.module_management.service_registry import RegisterSubmodel
 from fastoad_cs25.models.aerodynamics.constants import SERVICE_CD0_FUSELAGE
 from openmdao.core.explicitcomponent import ExplicitComponent
 
-RegisterSubmodel.active_models[
-    SERVICE_CD0_FUSELAGE
-] = "rta.submodel.aerodynamics.CD0.fuselage"
+RegisterSubmodel.active_models[SERVICE_CD0_FUSELAGE] = "rta.submodel.aerodynamics.CD0.fuselage"
 
 
 @RegisterSubmodel(SERVICE_CD0_FUSELAGE, "rta.submodel.aerodynamics.CD0.fuselage")
@@ -45,9 +43,7 @@ class Cd0Fuselage(ExplicitComponent):
             )
         else:
             self.add_input("data:aerodynamics:wing:cruise:reynolds", val=np.nan)
-            self.add_input(
-                "data:aerodynamics:aircraft:cruise:CL", shape_by_conn=True, val=np.nan
-            )
+            self.add_input("data:aerodynamics:aircraft:cruise:CL", shape_by_conn=True, val=np.nan)
             self.add_input("data:TLAR:cruise_mach", val=np.nan)
             self.add_output(
                 "data:aerodynamics:fuselage:cruise:CD0",
@@ -80,9 +76,7 @@ class Cd0Fuselage(ExplicitComponent):
         # Reference for deltas: Conceptual Aircraft Design: An Industrial Approach.
         # Authors: Ajoy Kumar Kundu, Mark A. Price, David Riordan Pag 493
         delta_cf_karman = 0.1  # find formulas to estimate (cd0 should be around 7 dc)
-        delta_cf_bellyfairing = (
-            0.2  # find formulas to estimate (cd0 should be around 15 dc)
-        )
+        delta_cf_bellyfairing = 0.2  # find formulas to estimate (cd0 should be around 15 dc)
 
         cf_fus_opt = 0.455 / (
             (1 + 0.144 * mach**2) ** 0.65 * (np.log10(reynolds * fus_length)) ** 2.58

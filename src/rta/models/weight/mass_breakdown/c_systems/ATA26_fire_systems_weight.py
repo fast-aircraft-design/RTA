@@ -33,11 +33,8 @@ class FireSystemWeight(ExplicitComponent):
     """
 
     def setup(self):
-
         self.add_input("tuning:weight:systems:fire_protection:mass:k", val=1.0)
-        self.add_input(
-            "tuning:weight:systems:fire_protection:mass:offset", val=0.0, units="kg"
-        )
+        self.add_input("tuning:weight:systems:fire_protection:mass:offset", val=0.0, units="kg")
 
         self.add_output("data:weight:systems:fire_protection:mass", units="kg")
 

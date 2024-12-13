@@ -1,5 +1,5 @@
 """
-    Estimation of global center of gravity
+Estimation of global center of gravity
 """
 
 #  This file is part of FAST : A framework for rapid Overall Aircraft Design
@@ -25,9 +25,7 @@ from fastoad.module_management.service_registry import RegisterSubmodel
 from fastoad_cs25.models.weight.cg.constants import SERVICE_GLOBAL_CG
 
 
-RegisterSubmodel.active_models[
-    SERVICE_GLOBAL_CG
-] = "rta.submodel.weight.cg.global.legacy"
+RegisterSubmodel.active_models[SERVICE_GLOBAL_CG] = "rta.submodel.weight.cg.global.legacy"
 
 
 @RegisterSubmodel(SERVICE_GLOBAL_CG, "rta.submodel.weight.cg.global.legacy")

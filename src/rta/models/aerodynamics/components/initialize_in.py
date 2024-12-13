@@ -1,5 +1,5 @@
 """
-    FAST - Copyright (c) 2016 ONERA ISAE
+FAST - Copyright (c) 2016 ONERA ISAE
 """
 #  This file is part of FAST : A framework for rapid Overall Aircraft Design
 #  Copyright (C) 2020  ONERA & ISAE-SUPAERO
@@ -31,16 +31,13 @@ Unknown usage for CT, alpha list and H_list
 
 class InitializeIN(ExplicitComponent):
     def setup(self):
-
         self.add_output("data:aerodynamics:aircraft:low_speed:CT", shape=CT_POINT_COUNT)
         self.add_output(
             "data:aerodynamics:aircraft:low_speed:alpha",
             units="deg",
             shape=ALPHA_POINT_COUNT,
         )
-        self.add_output(
-            "data:aerodynamics:aircraft:low_speed:H", shape=H_POINT_COUNT, units="m"
-        )
+        self.add_output("data:aerodynamics:aircraft:low_speed:H", shape=H_POINT_COUNT, units="m")
 
     def compute(self, inputs, outputs):
         CT_list = np.linspace(-2, 2.0, CT_POINT_COUNT)

@@ -30,16 +30,13 @@ class ComputeEngineSize(om.ExplicitComponent):
     initial_RTO_power = 2051000
 
     def setup(self):
-
         self.add_input("data:mission:sizing:takeoff:distance", val=np.nan, units="m")
         self.add_input("data:TLAR:TOD", val=np.nan, units="m")
         self.add_input("data:TLAR:TTC", val=np.nan, units="min")
         self.add_input("data:TLAR:OEI_ceiling", val=np.nan, units="m")
         self.add_input("data:TLAR:cruise_mach", val=np.nan)
 
-        self.add_output(
-            "data:propulsion:RTO_power", val=self.initial_RTO_power, units="W"
-        )
+        self.add_output("data:propulsion:RTO_power", val=self.initial_RTO_power, units="W")
         self.add_output(
             "data:propulsion:Design_Thermo_Power",
             val=self.initial_RTO_power * 1.22,
@@ -53,7 +50,6 @@ class ComputeEngineSize(om.ExplicitComponent):
         self.declare_partials("data:propulsion:RTO_power", "*", method="fd")
 
     def compute(self, inputs, outputs, discrete_inputs=None, discrete_outputs=None):
-
         TOD = inputs["data:mission:sizing:takeoff:distance"]
         TOD_target = inputs["data:TLAR:TOD"]
 

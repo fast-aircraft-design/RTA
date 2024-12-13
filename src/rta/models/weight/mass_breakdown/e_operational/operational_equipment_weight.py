@@ -42,7 +42,5 @@ class OperationalEquipmentsWeight(ExplicitComponent):
         cockpit_crew = inputs["data:geometry:cabin:crew_count:technical"]
         cabin_crew = inputs["data:geometry:cabin:crew_count:commercial"]
 
-        outputs["data:weight:operational:equipment:crew:mass"] = (
-            85 * cockpit_crew + 75 * cabin_crew
-        )
+        outputs["data:weight:operational:equipment:crew:mass"] = 85 * cockpit_crew + 75 * cabin_crew
         outputs["data:weight:operational:equipment:others:mass"] = 100.0

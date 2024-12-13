@@ -14,7 +14,6 @@ Propeller sizing model
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-
 import numpy as np
 from openmdao.core.explicitcomponent import ExplicitComponent
 from scipy import constants
@@ -22,18 +21,14 @@ from fastoad.module_management.constants import ModelDomain
 from fastoad.module_management.service_registry import RegisterOpenMDAOSystem
 
 
-@RegisterOpenMDAOSystem(
-    "rta.propulsion.propeller_sizing", domain=ModelDomain.PROPULSION
-)
+@RegisterOpenMDAOSystem("rta.propulsion.propeller_sizing", domain=ModelDomain.PROPULSION)
 class Prop_sizing(ExplicitComponent):
     """
     Performs sizing of the propeller based on input max power and disk loading.
     """
 
     def setup(self):
-        self.add_input(
-            "data:propulsion:propeller:disk_loading", np.nan, units="kW/m**2"
-        )
+        self.add_input("data:propulsion:propeller:disk_loading", np.nan, units="kW/m**2")
         self.add_input("data:propulsion:propeller:max_power", np.nan, units="kW")
 
         self.add_output("data:geometry:propulsion:propeller:diameter", units="m")
