@@ -1,0 +1,45 @@
+"""
+Estimation of water system weight
+"""
+#  This file is part of FAST : A framework for rapid Overall Aircraft Design
+#  Copyright (C) 2020  ONERA & ISAE-SUPAERO
+#  FAST is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#  You should have received a copy of the GNU General Public License
+#  along with this program.  If not, see <https://www.gnu.org/licenses/>.
+
+import openmdao.api as om
+from fastoad.module_management.service_registry import RegisterSubmodel
+from src.rta.models.weight.mass_breakdown.d_furniture.constants import SERVICE_MASS_ATA38
+
+
+@RegisterSubmodel(SERVICE_MASS_ATA38, "rta.submodel.mass.furniture.ata38")
+class WaterWeight(om.ExplicitComponent):
+    """
+    Weight estimation for water system
+
+    Includes reservoir, tubing and miscellaneous components
+
+    Rough estimation based on needed components mass
+    """
+
+    def setup(self):
+        self.add_input("tuning:weight:furniture:water:mass:k", val=1.0)
+        self.add_input("tuning:weight:furniture:water:mass:offset", val=0.0, units="kg")
+
+        self.add_output("data:weight:furniture:water:mass", units="kg")
+
+        self.declare_partials("*", "*", method="fd")
+
+    def compute(self, inputs, outputs, discrete_inputs=None, discrete_outputs=None):
+        k = inputs["tuning:weight:furniture:water:mass:k"]
+        offset = inputs["tuning:weight:furniture:water:mass:offset"]
+
+        mass_wat = 10
+        outputs["data:weight:furniture:water:mass"] = k * mass_wat + offset

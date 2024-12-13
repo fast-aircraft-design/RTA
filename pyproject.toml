@@ -3,18 +3,19 @@
 name = "RTA"
 version = "0.0.1"
 description = "Conceptual aircraft design platform for conventional 80 seat aircraft"
-authors = ["Vincenzo PALLADINO <VINCENZO.PALLADINO@atr-aircraft.com>",
+authors = ["Vincenzo PALLADINO",
     "Eric Nguyen Van <eric.nguyen_van@onera.fr"]
 packages = [
-    { include = "rta" },
+    { include = "rta", from = "src" },
 ]
 exclude = ["**/tests/**"]
 
-homepage = "https://github.com/fast-aircraft-design/FAST-OAD"
+homepage = "https://github.com/fast-aircraft-design/RTA"
 keywords = [
     "aircraft",
     "design",
-    "multi-disciplinary"
+    "multi-disciplinary",
+    "Regional Turboprop Aircraft"
 ]
 license = "GPL-3.0-only"
 classifiers = [
