@@ -13,11 +13,9 @@ It is assumed that you know how to use [Git](https://git-scm.com),
 [Python](https://www.python.org) and [FAST-OAD](https://github.com/fast-aircraft-design/FAST-OAD), especially the use of [submodels](https://fast-oad.readthedocs.io/en/v1.8.2/documentation/custom_modules/add_submodels.html#submodels-in-fast-oad).
 
 
-_**Note**: In this document, any leading slash (`/`) in a path refers to project root._
-
 ## User installation
 
-**Important notice**: The installation of RTA plugin will activate by default the RTA submodels. Refer to [sdf](Available submodels) for the complete list of activated submodel 
+**Important notice**: The installation of the RTA plugin will activate by default the RTA submodels. Refer to [RTA models and submodels](#rta-models-and--submodels) for the complete list of activated submodel.
 
 For a FAST-OAD user installation (when FAST-OAD has been installed with pip), the RTA plug-in can be installed in you python environnment using:
 ```bash
@@ -25,7 +23,7 @@ pip install git+https://github.com/fast-aircraft-design/RTA.git@master
 ```
 This will install the lastest RTA version based on github master branch.
 
-If you are using poetry to manage your python environmment the following command will tell poetry to add RTA to your environment:
+If you are using poetry to manage your python environmment the following command will tell poetry to add RTA to your dependencies:
 ```bash
 poetry add git+https://github.com/fast-aircraft-design/RTA.git#master
 ```
@@ -36,7 +34,7 @@ fastoad list_modules
 ```
 
 ## Tutorials
-Tutorials are available in `src/rta/notebooks`. For a user installation they can be generated through command line with:
+Tutorials are available in `src/rta/notebooks`. For a user installation, they can be generated through command line with:
 ```bash
 fastoad notebooks rta
 ```
@@ -44,6 +42,47 @@ fastoad notebooks rta
 For a developper installation, they can be simply accessed using jupyter lab:
 ```bash
 jupyter lab
+```
+
+## RTA models and  submodels
+
+The RTA plug-in provides four new models and a new propulsion wrapper for turbopropeller:
+```yml
+rta.aerodynamics.takeoff
+rta.loop.engine_size
+rta.propulsion.propeller_sizing
+rta.propulsion.turboprop_sizing
+rta.wrapper.propulsion.ML_TP_L1
+```
+The model ```rta.loop.engine_size``` requires the simulation of a take-off segment during the mission, which is not activated by default.
+
+When installing this plug-in, the new RTA submodels are activated by default. 
+This means that if you attempt to run a different aircraft configuration (say a single aisle SMR), you need to modify the active submodels accordingly in the configuration file.
+
+The list of active submodels with this plugin is given below:
+
+```yml
+'service.aerodynamics.CD0.fuselage': 'rta.submodel.aerodynamics.CD0.fuselage',
+'service.aerodynamics.CD0.nacelles_pylons': 'rta.submodel.aerodynamics.CD0.nacelles',
+'service.aerodynamics.CD0.sum': 'rta.submodel.aerodynamics.CD0.sum',
+'service.aerodynamics.CD0.wing': 'rta.submodel.aerodynamics.CD0.wing',
+'service.aerodynamics.induced_drag_coefficient': 'rta.submodel.aerodynamics.induced_drag_coefficient.legacy',
+'service.geometry.fuselage.basic': 'rta.submodel.geometry.fuselage.basic',
+'service.geometry.fuselage.with_cabin_sizing': 'rta.submodel.geometry.fuselage.with_cabin_sizing',
+'service.geometry.nacelle_and_pylon': 'rta.submodel.geometry.nacelles',
+'service.geometry.wing': 'rta.submodel.geometry.wing',
+'service.weight.cg': 'rta.submodel.weight.cg.legacy',
+'service.cg.wing.control_surfaces': 'rta.submodel.cg.wing.control_surfaces.legacy',
+'service.cg.others': 'rta.submodel.weight.cg.others.legacy',
+'service.cg.global': 'rta.submodel.weight.cg.global.legacy',
+'service.cg.propulsion': 'rta.submodel.weight.cg.propulsion',
+'service.mass.airframe.wing': 'rta.submodel.weight.mass.airframe.wing',
+'service.mass.airframe.nacelles': 'rta.submodel.weight.mass.airframe.nacelle',
+'service.mass.airframe': 'rta.submodel.weight.mass.airframe.legacy',
+'service.mass.propulsion': 'rta.submodel.weight.mass.propulsion.legacy',
+'service.mass.systems': 'rta.submodel.weight.mass.system.legacy',
+'service.mass.furniture': 'rta.submodel.weight.mass.furniture.legacy',
+'service.mass.owe': 'rta.weight.owe.legacy'
 ```
 
 ## Developer installation
@@ -100,29 +139,3 @@ Coupled with pre-commit and/or integrated with your IDE, it
 automates all the code formatting, and it is sooo good.
 
 _**Note to PyCharm users**: there is a [ruff plugin](https://plugins.jetbrains.com/plugin/20574-ruff)._
-
-## Available submodels
-
-When installing this plug-in the new RTA submodels are activated by default. 
-This means that if you attempt to run a different aircraft configuration (say a single aisle SMR) you need to modify the active submodels accordingly in the configuration file.
-
-The list of active submodels with this plgin is given below:
-
-```yml
-'service.aerodynamics.CD0.fuselage': 'rta.submodel.aerodynamics.CD0.fuselage',
-'service.aerodynamics.CD0.nacelles_pylons': 'rta.submodel.aerodynamics.CD0.nacelles',
-'service.aerodynamics.CD0.sum': 'rta.submodel.aerodynamics.CD0.sum',
-'service.aerodynamics.CD0.wing': 'rta.submodel.aerodynamics.CD0.wing',
-'service.aerodynamics.induced_drag_coefficient': 'rta.submodel.aerodynamics.induced_drag_coefficient.legacy',
-'service.geometry.fuselage.basic': 'rta.submodel.geometry.fuselage.basic',
-'service.geometry.fuselage.with_cabin_sizing': 'rta.submodel.geometry.fuselage.with_cabin_sizing',
-'service.geometry.nacelle_and_pylon': 'rta.submodel.geometry.nacelles',
-'service.geometry.wing': 'rta.submodel.geometry.wing',
-'service.weight.cg': 'rta.submodel.weight.cg.legacy',
-'service.cg.wing.control_surfaces': 'rta.submodel.cg.wing.control_surfaces.legacy',
-'service.cg.others': 'rta.submodel.weight.cg.others.legacy',
-'service.cg.global': 'rta.submodel.weight.cg.global.legacy',
-'service.cg.propulsion': 'rta.submodel.weight.cg.propulsion',
-'service.mass.airframe.wing': 'rta.submodel.weight.mass.airframe.wing',
-'service.mass.airframe.nacelles': 'rta.submodel.weight.mass.airframe.nacelle'
-```
