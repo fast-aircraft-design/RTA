@@ -16,7 +16,7 @@ Estimation of water system weight
 
 import openmdao.api as om
 from fastoad.module_management.service_registry import RegisterSubmodel
-from src.rta.models.weight.mass_breakdown.d_furniture.constants import SERVICE_MASS_ATA38
+from rta.models.weight.mass_breakdown.d_furniture.constants import SERVICE_MASS_ATA38
 
 
 @RegisterSubmodel(SERVICE_MASS_ATA38, "rta.submodel.mass.furniture.ata38")

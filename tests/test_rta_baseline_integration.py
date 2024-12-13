@@ -50,7 +50,9 @@ def run_non_regression_test(
     configuration_file_path = pth.join(results_folder_path, conf_file)
 
     # Copy of configuration file and generation of problem instance ------------------
-    api.generate_configuration_file(configuration_file_path)  # just ensure folders are created...
+    api.generate_configuration_file(
+        configuration_file_path, distribution_name="rta"
+    )  # just ensure folders are created...
     shutil.copy(pth.join(DATA_FOLDER_PATH, conf_file), configuration_file_path)
     shutil.copy(
         pth.join(DATA_FOLDER_PATH, MISSION_FILE),
@@ -120,7 +122,7 @@ def run_non_regression_test(
 
     df = pd.DataFrame(row_list)
     df["rel_delta"] = (df.value - df.ref_value) / df.ref_value
-    df["rel_delta"][(df.ref_value == 0) & (abs(df.value) <= 1e-10)] = 0.0
+    df.loc[(df.ref_value == 0) & (abs(df.value) <= 1e-10), "rel_delta"] = 0.0
     df["abs_rel_delta"] = np.abs(df.rel_delta)
 
     pd.set_option("display.max_rows", None)

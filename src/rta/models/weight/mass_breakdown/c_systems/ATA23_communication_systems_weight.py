@@ -20,7 +20,7 @@ from fastoad_cs25.models.weight.mass_breakdown.c_systems.c4_transmissions_system
     TransmissionSystemsWeight,
 )
 from fastoad.module_management.service_registry import RegisterSubmodel
-from src.rta.models.weight.mass_breakdown.c_systems.constants import SERVICE_MASS_ATA23
+from rta.models.weight.mass_breakdown.c_systems.constants import SERVICE_MASS_ATA23
 
 
 @RegisterSubmodel(SERVICE_MASS_ATA23, "rta.submodel.mass.system.ata23")

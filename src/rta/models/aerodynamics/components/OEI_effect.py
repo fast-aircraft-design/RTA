@@ -19,7 +19,7 @@ import numpy as np
 from openmdao.core.explicitcomponent import ExplicitComponent
 from scipy import constants
 
-from src.rta.models.aerodynamics.constants import CT_POINT_COUNT
+from rta.models.aerodynamics.constants import CT_POINT_COUNT
 
 
 class ComputeDeltaOEI(ExplicitComponent):

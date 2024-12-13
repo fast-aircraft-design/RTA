@@ -17,7 +17,7 @@ FAST - Copyright (c) 2016 ONERA ISAE
 import numpy as np
 from openmdao.core.explicitcomponent import ExplicitComponent
 
-from src.rta.models.aerodynamics.constants import (
+from rta.models.aerodynamics.constants import (
     CT_POINT_COUNT,
     ALPHA_POINT_COUNT,
     H_POINT_COUNT,

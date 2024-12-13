@@ -5,7 +5,7 @@ from fastoad_cs25.models.weight.mass_breakdown.b_propulsion.constants import (
 )
 from fastoad_cs25.models.weight.mass_breakdown.constants import SERVICE_PROPULSION_MASS
 
-from src.rta.models.weight.mass_breakdown.b_propulsion.constants import (
+from rta.models.weight.mass_breakdown.b_propulsion.constants import (
     SERVICE_TURBOPROP_MASS,
 )
 

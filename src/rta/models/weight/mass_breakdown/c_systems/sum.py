@@ -4,7 +4,7 @@ from fastoad_cs25.models.weight.mass_breakdown.c_systems.constants import (
     SERVICE_NAVIGATION_SYSTEMS_MASS,
 )
 from fastoad_cs25.models.weight.mass_breakdown.constants import SERVICE_SYSTEMS_MASS
-from src.rta.models.weight.mass_breakdown.c_systems.constants import (
+from rta.models.weight.mass_breakdown.c_systems.constants import (
     SERVICE_MASS_ATA21,
     SERVICE_MASS_ATA22,
     SERVICE_MASS_ATA23,

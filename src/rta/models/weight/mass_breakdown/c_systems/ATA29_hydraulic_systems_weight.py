@@ -17,7 +17,7 @@ Estimation of hydraulic power systems weight
 import numpy as np
 from openmdao.core.explicitcomponent import ExplicitComponent
 from fastoad.module_management.service_registry import RegisterSubmodel
-from src.rta.models.weight.mass_breakdown.c_systems.constants import SERVICE_MASS_ATA29
+from rta.models.weight.mass_breakdown.c_systems.constants import SERVICE_MASS_ATA29
 
 
 @RegisterSubmodel(SERVICE_MASS_ATA29, "rta.submodel.mass.system.ata29")

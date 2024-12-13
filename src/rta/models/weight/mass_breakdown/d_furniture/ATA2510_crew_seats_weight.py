@@ -17,7 +17,7 @@ Estimation of life crew accomodation weight
 import numpy as np
 from openmdao.core.explicitcomponent import ExplicitComponent
 from fastoad.module_management.service_registry import RegisterSubmodel
-from src.rta.models.weight.mass_breakdown.d_furniture.constants import SERVICE_MASS_ATA2510
+from rta.models.weight.mass_breakdown.d_furniture.constants import SERVICE_MASS_ATA2510
 
 
 @RegisterSubmodel(SERVICE_MASS_ATA2510, "rta.submodel.mass.furniture.ata2510")

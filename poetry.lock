@@ -2292,6 +2292,20 @@ docs = ["myst-parser", "pydata-sphinx-theme", "sphinx", "sphinxcontrib-github-al
 test = ["pep440", "pre-commit", "pytest", "testpath"]
 
 [[package]]
+name = "nbstripout"
+version = "0.6.2"
+description = "Strips outputs from Jupyter and IPython notebooks"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "nbstripout-0.6.2-py2.py3-none-any.whl", hash = "sha256:2eddf4033db5bbe9e96bbb85d09746a050cb662f31601c786a4cf78552ae5303"},
+    {file = "nbstripout-0.6.2.tar.gz", hash = "sha256:ada2c70a9b72dc96e2433c40d7bd8b27ad8b54217d5d7a89c4e352877743a37d"},
+]
+
+[package.dependencies]
+nbformat = "*"
+
+[[package]]
 name = "nbval"
 version = "0.11.0"
 description = "A py.test plugin to validate Jupyter notebooks"
@@ -4205,4 +4219,4 @@ type = ["pytest-mypy"]
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.9, <3.13"
-content-hash = "3d853af44025106cf7c84bd41978aa2e4fff8f2a6e2fb8e96c944a8f4d2e5661"
+content-hash = "32fe69055eac80c9f075ba496090bcc65098019c89f2386f70650ea89756dd3c"

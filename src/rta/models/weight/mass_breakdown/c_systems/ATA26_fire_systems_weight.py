@@ -16,7 +16,7 @@ Estimation of fire protection weight
 
 from openmdao.core.explicitcomponent import ExplicitComponent
 from fastoad.module_management.service_registry import RegisterSubmodel
-from src.rta.models.weight.mass_breakdown.c_systems.constants import SERVICE_MASS_ATA26
+from rta.models.weight.mass_breakdown.c_systems.constants import SERVICE_MASS_ATA26
 
 
 @RegisterSubmodel(SERVICE_MASS_ATA26, "rta.submodel.mass.system.ata26")

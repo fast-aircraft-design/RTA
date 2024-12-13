@@ -19,7 +19,7 @@ import numpy as np
 from openmdao.core.explicitcomponent import ExplicitComponent
 
 
-from src.rta.models.aerodynamics.constants import ALPHA_POINT_COUNT
+from rta.models.aerodynamics.constants import ALPHA_POINT_COUNT
 
 """
 Undocumented

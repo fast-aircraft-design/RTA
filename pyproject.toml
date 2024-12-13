@@ -57,6 +57,7 @@ nbval = ">=0.11, <1.0"
 [tool.poetry.group.lint.dependencies]
 # Dependencies for "quality control"
 pre-commit = "^3"
+nbstripout = "^0.6.0"
 ruff = "0.6.4"
 
 #------------------------------------------------------------------------------

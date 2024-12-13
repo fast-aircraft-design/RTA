@@ -18,7 +18,7 @@ import numpy as np
 from openmdao.core.explicitcomponent import ExplicitComponent
 from scipy.constants import degree
 from fastoad.module_management.service_registry import RegisterSubmodel
-from src.rta.models.weight.mass_breakdown.c_systems.constants import SERVICE_MASS_ATA30
+from rta.models.weight.mass_breakdown.c_systems.constants import SERVICE_MASS_ATA30
 
 
 @RegisterSubmodel(SERVICE_MASS_ATA30, "rta.submodel.mass.system.ata30")

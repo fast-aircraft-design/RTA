@@ -9,7 +9,7 @@ import numpy as np
 from openmdao.core.explicitcomponent import ExplicitComponent
 from scipy import constants
 from fastoad.module_management.service_registry import RegisterSubmodel
-from src.rta.models.weight.mass_breakdown.b_propulsion.constants import (
+from rta.models.weight.mass_breakdown.b_propulsion.constants import (
     SERVICE_TURBOPROP_MASS,
 )
 

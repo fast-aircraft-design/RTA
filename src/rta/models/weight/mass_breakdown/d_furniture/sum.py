@@ -2,7 +2,7 @@ import openmdao.api as om
 from fastoad.module_management.service_registry import RegisterSubmodel
 from fastoad_cs25.models.weight.mass_breakdown.constants import SERVICE_FURNITURE_MASS
 
-from src.rta.models.weight.mass_breakdown.d_furniture.constants import (
+from rta.models.weight.mass_breakdown.d_furniture.constants import (
     SERVICE_MASS_ATA25_FURNISHING,
     SERVICE_MASS_ATA33,
     SERVICE_MASS_ATA35,

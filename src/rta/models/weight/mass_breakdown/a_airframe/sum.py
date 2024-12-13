@@ -11,7 +11,7 @@ from fastoad_cs25.models.weight.mass_breakdown.a_airframe.constants import (
     SERVICE_LANDING_GEARS_MASS,
 )
 
-from src.rta.models.weight.mass_breakdown.a_airframe.constants import SERVICE_NACELLE_MASS
+from rta.models.weight.mass_breakdown.a_airframe.constants import SERVICE_NACELLE_MASS
 
 RegisterSubmodel.active_models[SERVICE_AIRFRAME_MASS] = "rta.submodel.weight.mass.airframe.legacy"
 

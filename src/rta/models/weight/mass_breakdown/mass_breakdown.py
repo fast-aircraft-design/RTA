@@ -24,7 +24,7 @@ from fastoad_cs25.models.weight.mass_breakdown.constants import (
     SERVICE_PROPULSION_MASS,
 )
 
-from src.rta.models.weight.mass_breakdown.constants import SERVICE_OPERATIONAL_MASS
+from rta.models.weight.mass_breakdown.constants import SERVICE_OPERATIONAL_MASS
 
 RegisterSubmodel.active_models[SERVICE_OWE] = "rta.weight.owe.legacy"
 
