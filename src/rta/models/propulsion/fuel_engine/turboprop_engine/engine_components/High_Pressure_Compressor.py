@@ -1,10 +1,5 @@
-import numpy as np
-from warnings import warn
-
-
 class HPC(object):
     def compute_design(self, pid, etapold):
-
         # computing the working fluid properties
         gamma = 1.4
         Cp = gamma * 287.87 / (gamma - 1)
@@ -39,7 +34,6 @@ class HPC(object):
         self.work_done = work_done
 
     def compute_offdesign(self, etapold):
-
         # computing the working fluid properties
         gamma = 1.4
         Cp = gamma * 287.87 / (gamma - 1)

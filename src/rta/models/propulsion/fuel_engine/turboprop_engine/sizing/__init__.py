@@ -11,5 +11,3 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-from .TP_sizing import TP_sizing
-from .Prop_sizing import Prop_sizing

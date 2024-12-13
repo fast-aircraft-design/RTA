@@ -13,5 +13,3 @@ Estimation of airframe weight
 #  GNU General Public License for more details.
 #  You should have received a copy of the GNU General Public License
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
-from .a1_wing_weight import WingWeight  # A1
-from .a6_nacelles_weight import NacellesWeight  # A6

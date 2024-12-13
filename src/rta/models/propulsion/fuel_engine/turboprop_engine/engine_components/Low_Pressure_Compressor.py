@@ -1,10 +1,5 @@
-import numpy as np
-from warnings import warn
-
-
 class LPC(object):
     def compute_design(self, pid, etapold):
-
         # computing the working fluid properties
         gamma = 1.4
         Cp = 1.4 * 287.87 / (1.4 - 1)
@@ -39,7 +34,6 @@ class LPC(object):
         self.work_done = work_done
 
     def compute_offdesign(self, etapold):
-
         # computing the working fluid properties
         gamma = 1.4
         Cp = 1.4 * 287.87 / (1.4 - 1)

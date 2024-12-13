@@ -18,7 +18,7 @@ class Thrust(object):
         u0 = M * a0
 
         # computing the working fluid properties
-        gamma = 1.4
+        # gamma = 1.4
         Cp = 1.4 * 287.87 / (1.4 - 1)
         R = 287.87
 
@@ -57,10 +57,7 @@ class Thrust(object):
         dT = 10000.0
 
         while abs(dT) > 20:
-
-            Pt_out = Pt_in * (ht_out / (cp_t * Tt_in)) ** (
-                gamma_t / ((gamma_t - 1) * etapolt_turb)
-            )
+            Pt_out = Pt_in * (ht_out / (cp_t * Tt_in)) ** (gamma_t / ((gamma_t - 1) * etapolt_turb))
 
             if Pt_out / p0 * pid_nozzle < 1.893:
                 M_out_nozzle = np.sqrt(
@@ -69,27 +66,17 @@ class Thrust(object):
                     * ((Pt_out / p0 * pid_nozzle) ** ((gamma_t - 1) / gamma_t) - 1)
                 )
                 Tt_out = ht_out / cp_t
-                Tt_out_nozzle = Tt_out * pid_nozzle ** (
-                    (gamma_t - 1) / (gamma_t * etapolt_nozz)
-                )
-                T_out_nozzle = Tt_out_nozzle / (
-                    1 + ((gamma_t - 1) / 2 * M_out_nozzle**2)
-                )
+                Tt_out_nozzle = Tt_out * pid_nozzle ** ((gamma_t - 1) / (gamma_t * etapolt_nozz))
+                T_out_nozzle = Tt_out_nozzle / (1 + ((gamma_t - 1) / 2 * M_out_nozzle**2))
                 u_out_nozzle = np.sqrt(gamma_t * R * T_out_nozzle) * M_out_nozzle
             else:
                 M_out_nozzle = 1
                 Tt_out = ht_out / cp_t
-                Tt_out_nozzle = Tt_out * pid_nozzle ** (
-                    (gamma_t - 1) / (gamma_t * etapolt_nozz)
-                )
-                T_out_nozzle = Tt_out_nozzle / (
-                    1 + ((gamma_t - 1) / 2 * M_out_nozzle**2)
-                )
+                Tt_out_nozzle = Tt_out * pid_nozzle ** ((gamma_t - 1) / (gamma_t * etapolt_nozz))
+                T_out_nozzle = Tt_out_nozzle / (1 + ((gamma_t - 1) / 2 * M_out_nozzle**2))
                 u_out_nozzle = np.sqrt(gamma_t * R * T_out_nozzle) * M_out_nozzle
 
-            T_prop = (
-                eta_prop / u0 * ((ht_in - ht_out) * (1 + f) * eta_mech) * bleed_offtake
-            )
+            T_prop = eta_prop / u0 * ((ht_in - ht_out) * (1 + f) * eta_mech) * bleed_offtake
             T_core_nozzle = (1 + f) * (u_out_nozzle) - u0
             shaft_pow = -(ht_out - ht_in) * eta_mech * (1 + f) * bleed_offtake
 
@@ -111,7 +98,6 @@ class Thrust(object):
     # __call__ = compute
 
     def compute_offdesign(self, atmosphere, mach, HP_bleed, LP_bleed, eta_mech):
-
         # unpack from conditions
         a0 = atmosphere.speed_of_sound
         M = mach

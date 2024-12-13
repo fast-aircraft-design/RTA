@@ -1,8 +1,6 @@
 class Combustor(object):
     def compute_design(self, Tt4, pib, eta_b, To):
-
         # computing the working fluid properties
-        gamma = 1.4
         Cp = 1.4 * 287.87 / (1.4 - 1)
         # To                     = conditions[0]
 
@@ -37,9 +35,7 @@ class Combustor(object):
 
     # __call__ = compute
     def compute_offdesign(self, eta_b, pib):
-
         # computing the working fluid properties
-        gamma = 1.4
         Cp = 1.4 * 287.87 / (1.4 - 1)
 
         # unpacking the values form inputs

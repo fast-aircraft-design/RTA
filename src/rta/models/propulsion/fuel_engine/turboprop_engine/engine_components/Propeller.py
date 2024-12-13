@@ -8,7 +8,6 @@ from scipy.optimize import fsolve
 
 class Propeller(object):
     def select(self, function, fidelity, data, atmosphere, mach, P_T):
-
         func = getattr(self, function + "_" + fidelity)
 
         return func(data, atmosphere, mach, P_T)
@@ -36,12 +35,11 @@ class Propeller(object):
         rho = atmosphere.density
         d = data.d_prop
         k_corr = 0.895
+
         # evaluate thrust from given power
         def P_to_T(T_prop, shp_prop, V_TAS, rho, d):
             return (T_prop * V_TAS / (shp_prop * constants.hp)) - 2 / (
-                1
-                + (1 + (T_prop / (0.5 * rho * constants.pi / 4 * d**2 * V_TAS**2)))
-                ** 0.5
+                1 + (1 + (T_prop / (0.5 * rho * constants.pi / 4 * d**2 * V_TAS**2))) ** 0.5
             )
 
         if mach < 0.2:
@@ -87,18 +85,14 @@ class Propeller(object):
         """
 
         a = atmosphere.speed_of_sound
-        V_TAS = mach * a  # m/s
+        V_TAS = max(0.1, mach * a)  # m/s
         rho = atmosphere.density
         d = data.d_prop
         k_corr = 0.895
 
         # evaluate required power from given thrust
 
-        eta = 2 / (
-            1
-            + (1 + (thrust / (0.5 * rho * constants.pi / 4 * d**2 * V_TAS**2)))
-            ** 0.5
-        )
+        eta = 2 / (1 + (1 + (thrust / (0.5 * rho * constants.pi / 4 * d**2 * V_TAS**2))) ** 0.5)
         eta = k_corr * data.k_prop * eta
 
         shp_prop = thrust * V_TAS / eta / constants.hp

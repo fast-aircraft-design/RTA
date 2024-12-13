@@ -1,10 +1,5 @@
-import numpy as np
-import scipy as sp
-
-
 class LPT(object):
     def compute(self, etapolt, eta_mech):
-
         gamma = 1.321
         cp_t = gamma * 287.87 / (gamma - 1)
 
@@ -30,11 +25,7 @@ class LPT(object):
 
         # Using the work done by the compressors/fan and the fuel to air ratio to compute the energy drop across the turbine
         deltah_ht = (
-            -1
-            / ((1 + f) * bleed_offtake)
-            * 1
-            / eta_mech
-            * (compressor_work + shaft_takeoff)
+            -1 / ((1 + f) * bleed_offtake) * 1 / eta_mech * (compressor_work + shaft_takeoff)
         )
 
         # Compute the output stagnation quantities from the inputs and the energy drop computed above

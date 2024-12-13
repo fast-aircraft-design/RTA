@@ -21,7 +21,8 @@ from fastoad.testing import run_system
 # from fastoad.io import VariableIO
 from fastoad.io import VariableIO
 
-from ..a_airframe import NacellesWeight, WingWeight
+from ..a_airframe.a6_nacelles_weight import NacellesWeight
+from ..a_airframe.a1_wing_weight import WingWeight
 from ..b_propulsion.turboprop_weight import TurbopropWeight
 from ..c_systems.ATA23_communication_systems_weight import (
     CommunicationSystemWeightLegacy,
@@ -45,13 +46,10 @@ def test_compute_nacelle_weight():
 
     problem = run_system(NacellesWeight(), ivc)
 
-    assert problem["data:weight:airframe:nacelle:mass"] == pytest.approx(
-        349.15, abs=0.1
-    )
+    assert problem["data:weight:airframe:nacelle:mass"] == pytest.approx(349.15, abs=0.1)
 
 
 def test_wing_weight():
-
     input_list = [
         "data:geometry:wing:root:thickness_ratio",
         "data:geometry:wing:kink:thickness_ratio",
@@ -86,24 +84,18 @@ def test_wing_weight():
 
 
 def test_communication_system_from_cs25():
-
     ivc = om.IndepVarComp()
 
     ivc.add_output("data:TLAR:range", val=750, units="NM")
     ivc.add_output("tuning:weight:systems:communications:mass:k", val=0.8)
-    ivc.add_output(
-        "tuning:weight:systems:communications:mass:offset", val=1.0, units="kg"
-    )
+    ivc.add_output("tuning:weight:systems:communications:mass:offset", val=1.0, units="kg")
 
     problem = run_system(CommunicationSystemWeightLegacy(), ivc)
 
-    assert problem["data:weight:systems:communications:mass"] == pytest.approx(
-        80, abs=1
-    )
+    assert problem["data:weight:systems:communications:mass"] == pytest.approx(80, abs=1)
 
 
 def test_turboprop_weight():
-
     ivc = om.IndepVarComp()
     ivc.add_output("data:propulsion:RTO_power", val=2047252, units="W")
     ivc.add_output("data:geometry:propulsion:engine:count", val=2)
@@ -111,21 +103,15 @@ def test_turboprop_weight():
     ivc.add_output("data:geometry:propulsion:propeller:diameter", val=3.926, units="m")
     ivc.add_output("data:geometry:propulsion:propeller:B", val=6)
     ivc.add_output("tuning:weight:propulsion:engine:mass:k", val=1.0)
-    ivc.add_output(
-        "tuning:weight:propulsion:engine_controls_instrumentation:mass:k", val=1.0
-    )
+    ivc.add_output("tuning:weight:propulsion:engine_controls_instrumentation:mass:k", val=1.0)
     ivc.add_output("tuning:weight:propulsion:propeller:mass:k", val=1.0)
 
     ivc.add_output("data:propulsion:propeller:max_power", val=2239.7, units="kW")
 
     problem = run_system(TurbopropWeight(), ivc)
 
-    assert problem["data:weight:propulsion:engine:mass"] == pytest.approx(
-        967.84, rel=1e-3
+    assert problem["data:weight:propulsion:engine:mass"] == pytest.approx(967.84, rel=1e-3)
+    assert problem["data:weight:propulsion:engine_controls_instrumentation:mass"] == pytest.approx(
+        36.73, rel=1e-3
     )
-    assert problem[
-        "data:weight:propulsion:engine_controls_instrumentation:mass"
-    ] == pytest.approx(36.73, rel=1e-3)
-    assert problem["data:weight:propulsion:propeller:mass"] == pytest.approx(
-        387.21, rel=1e-3
-    )
+    assert problem["data:weight:propulsion:propeller:mass"] == pytest.approx(387.21, rel=1e-3)

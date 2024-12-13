@@ -73,6 +73,5 @@ Ruff seems the way to go, since it does the same job as these two, only much fas
 Coupled with pre-commit (see below) and/or integrated with your IDE, it
 automates all the code formatting, and it is sooo good.
 
-_**Note to PyCharm users**: there is a [ruff plugin](https://plugins.jetbrains.
-com/plugin/20574-ruff)._
+_**Note to PyCharm users**: there is a [ruff plugin](https://plugins.jetbrains.com/plugin/20574-ruff)._
 

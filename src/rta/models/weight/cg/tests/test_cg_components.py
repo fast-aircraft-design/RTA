@@ -16,12 +16,9 @@ Test module for geometry functions of cg components
 
 # pylint: disable=redefined-outer-name  # needed for pytest fixtures
 
-import os.path as pth
-
 import openmdao.api as om
 import pytest
 from fastoad.testing import run_system
-from fastoad.io import VariableIO
 
 # from ..cg import ComputeAircraftCG
 # from ..cg_components.compute_cg_control_surfaces import ComputeControlSurfacesCG
@@ -47,20 +44,14 @@ def test_ComputeFlightControlCG():
     input_vars.add_output("data:geometry:wing:MAC:length", 2.277, units="m")
     input_vars.add_output("data:geometry:wing:MAC:y", 6.197, units="m")
     input_vars.add_output("data:geometry:wing:MAC:at25percent:x", 12.628, units="m")
-    input_vars.add_output(
-        "data:geometry:wing:MAC:leading_edge:x:local", 0.302, units="m"
-    )
+    input_vars.add_output("data:geometry:wing:MAC:leading_edge:x:local", 0.302, units="m")
     input_vars.add_output("data:geometry:wing:kink:chord", 2.4, units="m")
     input_vars.add_output("data:geometry:wing:kink:y", 5.189, units="m")
-    input_vars.add_output(
-        "data:geometry:wing:kink:leading_edge:x:local", 0.234, units="m"
-    )
+    input_vars.add_output("data:geometry:wing:kink:leading_edge:x:local", 0.234, units="m")
     input_vars.add_output("data:geometry:wing:root:chord", 2.633, units="m")
     input_vars.add_output("data:geometry:wing:root:y", 1.396, units="m")
     input_vars.add_output("data:geometry:wing:tip:chord", 1.685, units="m")
-    input_vars.add_output(
-        "data:geometry:wing:tip:leading_edge:x:local", 0.743, units="m"
-    )
+    input_vars.add_output("data:geometry:wing:tip:leading_edge:x:local", 0.743, units="m")
     input_vars.add_output("data:geometry:wing:tip:y", 13.421, units="m")
 
     problem = run_system(ComputeFlightControlCG(), input_vars)

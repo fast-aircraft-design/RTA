@@ -1,9 +1,5 @@
-import numpy as np
-
-
 class Expansion_Nozzle(object):
     def compute_design(self, atmosphere, pid):
-
         gamma = 1.321
         Cp = gamma * 287.87 / (gamma - 1)
         #        Cp                     = 1.4*287.87/(1.4-1)
@@ -14,9 +10,7 @@ class Expansion_Nozzle(object):
         # unpack from inputs
 
         Tt_out = self.stagnation_temperature_out
-        T_out = self.static_temperature_out
         Pt_in = self.stagnation_pressure_in
-        u_out = self.u_out
         M_out = self.M_out
         jet_thrust = self.residual_thrust_nd
 
@@ -52,7 +46,6 @@ class Expansion_Nozzle(object):
         self.M_out_sizing = M_out
 
     def compute_offdesign(self, etapold, pid):
-
         # unpack from inputs
         Tt_in = self.stagnation_temperature_in
         Pt_in = self.stagnation_pressure_in

@@ -1,11 +1,8 @@
-import numpy as np
-import scipy as sp
 from scipy.optimize import fsolve
 
 
 class Power_Turbine(object):
     def compute_design(self, eta_mech, area_ratio):
-
         # unpack from inputs
         Tt_in = self.stagnation_temperature_in
         Tt_out = self.stagnation_temperature_out
@@ -49,7 +46,6 @@ class Power_Turbine(object):
     # __call__ = compute
 
     def compute_offdesign(self, etapolt_turb, eta_mech):
-
         # unpack from conditions
         gamma = 1.321
         cp_t = (
@@ -93,25 +89,21 @@ class Power_Turbine(object):
         # Compute the output stagnation quantities from the inputs and the energy drop computed above
         #        cp_t = 1120.
         ht_in = cp_t * Tt_in
-        M_out_nozzle = (
-            3 * M9_siz
-        )  # if initial M_out_nozzle too low, then convergence problem
+        M_out_nozzle = 3 * M9_siz  # if initial M_out_nozzle too low, then convergence problem
         M = float()
         delta_M = 100
         cont = 0
         while delta_M > 0.001:
-            pi_pt = (1 + (gamma - 1) / 2 * M_out_nozzle**2) ** (
-                gamma / (gamma - 1)
-            ) / (pi_r * pi_d * pi_c * pi_b * pi_n * pi_hlt)
+            pi_pt = (1 + (gamma - 1) / 2 * M_out_nozzle**2) ** (gamma / (gamma - 1)) / (
+                pi_r * pi_d * pi_c * pi_b * pi_n * pi_hlt
+            )
             tau_pt = pi_pt ** ((gamma - 1) * etapolt_turb / gamma)  # tau_pt
 
             def equation(param):
                 M = param
-                return M - M9_siz * (
-                    (tau_hlt * tau_pt) / tau_hlpt_siz
-                ) ** 0.5 * pi_hlpt_siz / (pi_pt * pi_hlt) * (
-                    (1 + (gamma - 1) / 2 * M**2) / (1 + (gamma - 1) / 2 * M9_siz**2)
-                ) ** (
+                return M - M9_siz * ((tau_hlt * tau_pt) / tau_hlpt_siz) ** 0.5 * pi_hlpt_siz / (
+                    pi_pt * pi_hlt
+                ) * ((1 + (gamma - 1) / 2 * M**2) / (1 + (gamma - 1) / 2 * M9_siz**2)) ** (
                     (gamma + 1) / (2 * (gamma - 1))
                 )
 

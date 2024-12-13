@@ -15,7 +15,6 @@
 from scipy import constants
 import logging
 from typing import Union, Sequence, Tuple, Optional
-import os
 import numpy as np
 from fastoad.constants import FlightPhase
 from fastoad_cs25.models.propulsion.fuel_propulsion.rubber_engine.exceptions import (
@@ -77,7 +76,6 @@ class ML_TP_L1(AbstractFuelPropulsion):
         self.k_prop = k_prop
 
     def compute_flight_points(self, flight_points: Union[FlightPoint, pd.DataFrame]):
-
         """
         Same as :meth:`compute_flight_points`
         """
@@ -92,9 +90,7 @@ class ML_TP_L1(AbstractFuelPropulsion):
         atmosphere = AtmosphereSI(altitude)
 
         if thrust_is_regulated is not None:
-            thrust_is_regulated = np.asarray(
-                np.round(thrust_is_regulated, 0), dtype=bool
-            )
+            thrust_is_regulated = np.asarray(np.round(thrust_is_regulated, 0), dtype=bool)
 
         thrust_is_regulated, thrust_rate, thrust = self._check_thrust_inputs(
             thrust_is_regulated, thrust_rate, thrust
@@ -117,7 +113,6 @@ class ML_TP_L1(AbstractFuelPropulsion):
                 shaft_power = max_shaft_power
                 thrust = thrust_rate * max_thrust
             else:
-
                 thrust = thrust_rate * max_thrust
                 shaft_power, eta = Propeller().select(
                     "thrust_to_power", Prop_fid, self, atmosphere, mach, thrust
@@ -157,9 +152,7 @@ class ML_TP_L1(AbstractFuelPropulsion):
                 else power_rate
             )
             out_thrust = (
-                np.full(np.shape(max_thrust), thrust.item())
-                if np.size(thrust) == 1
-                else thrust
+                np.full(np.shape(max_thrust), thrust.item()) if np.size(thrust) == 1 else thrust
             )
             out_power = (
                 np.full(np.shape(max_shaft_power), shaft_power.item())
@@ -177,9 +170,7 @@ class ML_TP_L1(AbstractFuelPropulsion):
         out_power_rate = out_power / max_shaft_power
 
         # Now SFC can be computed
-        psfc = (
-            self.psfc(atmosphere, mach, out_power_rate, phase) * self.k_psfc
-        )  # kg/hp/hr
+        psfc = self.psfc(atmosphere, mach, out_power_rate, phase) * self.k_psfc  # kg/hp/hr
         ff = psfc / constants.hour * out_power / constants.hp  # Kg/s
         tsfc = ff / out_thrust
 
@@ -213,9 +204,7 @@ class ML_TP_L1(AbstractFuelPropulsion):
             # As OpenMDAO may provide floats that could be slightly different
             # from 0. or 1., a rounding operation is needed before converting
             # to booleans
-            thrust_is_regulated = np.asarray(
-                np.round(thrust_is_regulated, 0), dtype=bool
-            )
+            thrust_is_regulated = np.asarray(np.round(thrust_is_regulated, 0), dtype=bool)
         if thrust_rate is not None:
             thrust_rate = np.asarray(thrust_rate)
         if thrust is not None:
@@ -276,7 +265,6 @@ class ML_TP_L1(AbstractFuelPropulsion):
         power_rate: Union[float, Sequence[float]],
         phase: Union[FlightPhase, Sequence],
     ) -> np.ndarray:
-
         """
         :param atmosphere: Atmosphere instance at intended altitude (should be <=20km)
         :param mach: Mach number(s) (should be between 0.05 and 1.0)
@@ -368,9 +356,7 @@ class ML_TP_L1(AbstractFuelPropulsion):
             max_power_rating = self.k_gb_MCR * self.RTO_power / constants.hp
 
         elif phase == 8:  # 'RTO'
-            max_power_rating = (
-                self.k_gb_RTO * self.RTO_power / constants.hp
-            )  # Watt =2400. hp
+            max_power_rating = self.k_gb_RTO * self.RTO_power / constants.hp  # Watt =2400. hp
 
         else:
             max_power_rating = self.RTO_power / constants.hp
@@ -417,7 +403,6 @@ class ML_TP_L1(AbstractFuelPropulsion):
         mach: Union[float, Sequence[float]],
         T_prop=1,
     ) -> np.ndarray:
-
         """Based on correlation provided by J. D. Anderson, Aircraft Performance and Design p183"""
 
         # With: ratio = Tjet/(Tjet+Tprop)
