@@ -19,6 +19,24 @@ want to use Poetry.
 
 _**Note**: In this document, any leading slash (`/`) in a path refers to project root._
 
+## User installation
+
+For a FAST-OAD user installation (with FAST-OAD installed with pip), the RTA plug-in can be installed in you python environnment using:
+```bash
+pip install git+https://github.com/fast-aircraft-design/RTA.git@master
+```
+This will install the lastest RTA version based on github master branch.
+
+If you are using poetry to handle your environmment the following command will tell poetry to add RTA to your environment:
+```bash
+poetry add git+https://github.com/fast-aircraft-design/RTA.git#master
+```
+
+Once installed the RTA models should become visible to FAST-OAD, simply run the following command to chack that new RTA models are avaialble:
+```bash
+fastoad list_modules
+```
+
 ## Setting up your project
 
 After copying the content of this repository and initiating your own Git 
