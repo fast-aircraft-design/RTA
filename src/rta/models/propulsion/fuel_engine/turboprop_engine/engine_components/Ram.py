@@ -7,7 +7,7 @@ class Ram(object):
 
         # computing the working fluid properties
         gamma = 1.4
-        Cp = 1.4 * 287.87 / (1.4 - 1)
+        Cp = gamma * 287.87 / (gamma - 1)
 
         # Compute the stagnation quantities from the input static quantities
         stagnation_temperature = To * (1 + ((gamma - 1) / 2 * M * M))

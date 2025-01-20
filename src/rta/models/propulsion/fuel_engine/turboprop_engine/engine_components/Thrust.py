@@ -18,8 +18,8 @@ class Thrust(object):
         u0 = M * a0
 
         # computing the working fluid properties
-        # gamma = 1.4
-        Cp = 1.4 * 287.87 / (1.4 - 1)
+        gamma = 1.4
+        Cp = gamma * 287.87 / (gamma - 1)
         R = 287.87
 
         # unpacking from inputs

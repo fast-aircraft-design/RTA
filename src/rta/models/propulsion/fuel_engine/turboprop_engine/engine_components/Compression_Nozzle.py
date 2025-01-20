@@ -9,7 +9,7 @@ class Compression_Nozzle(object):
 
         # computing the working fluid properties
         gamma = 1.4
-        Cp = 1.4 * 287.87 / (1.4 - 1)
+        Cp = gamma * 287.87 / (gamma - 1)
 
         # unpack from inputs
         Tt_in = self.stagnation_temperature_in
