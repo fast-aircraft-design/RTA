@@ -30,7 +30,7 @@ poetry add git+https://github.com/fast-aircraft-design/RTA.git#master
 
 Once installed the RTA models should become visible to FAST-OAD, simply run the following command to check that new RTA models are available:
 ```bash
-fastoad list_modules
+fastoad plugin_info
 ```
 
 ## Tutorials
@@ -39,7 +39,7 @@ Tutorials are available in `src/rta/notebooks`. For a user installation, they ca
 fastoad notebooks rta
 ```
 
-For a developper installation, they can be simply accessed using jupyter lab:
+For a developer installation, they can be simply accessed using jupyter lab:
 ```bash
 jupyter lab
 ```
