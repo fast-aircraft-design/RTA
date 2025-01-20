@@ -46,14 +46,18 @@ jupyter lab
 
 ## RTA models and  submodels
 
-The RTA plug-in provides four new models and a new propulsion wrapper for turbopropeller:
+The RTA plug-in provides four new models:
 ```yml
 rta.aerodynamics.takeoff
 rta.loop.engine_size
 rta.propulsion.propeller_sizing
 rta.propulsion.turboprop_sizing
+```
+And a new propulsion wrapper for turbopropeller:
+```yml
 rta.wrapper.propulsion.ML_TP_L1
 ```
+
 The model ```rta.loop.engine_size``` requires the simulation of a take-off segment during the mission, which is not activated by default.
 
 When installing this plug-in, the new RTA submodels are activated by default. 

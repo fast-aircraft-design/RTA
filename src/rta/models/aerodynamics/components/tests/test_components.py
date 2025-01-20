@@ -30,6 +30,9 @@ from ..cd0_wing import Cd0Wing
 from ..cd0_total import Cd0Total
 from ..cd0_nacelle_pylons_TP import Cd0NacelleAndPylonsTP
 from ..OEI_effect import ComputeDeltaOEI
+from ..initialize_in import InitializeIN
+from ..lg_effect import ComputeDeltaLg
+from rta.models.aerodynamics.constants import ALPHA_POINT_COUNT, POLAR_POINT_COUNT
 
 from fastoad_cs25.models.aerodynamics.components.oswald import (
     OswaldCoefficient,
@@ -387,3 +390,93 @@ def test_cd_OEI():
     assert cd_feather == approx(0.004811, rel=1e-3)
 
     assert_allclose(np.interp(ct_test, ct, cd_landing), [0.6445, 0.1637, 0.1679, 0.6527], rtol=1e-3)
+
+
+def test_cd0_wing():
+    input_list = [
+        "data:aerodynamics:wing:low_speed:reynolds",
+        "data:aerodynamics:aircraft:low_speed:CL",
+        "data:aerodynamics:aircraft:takeoff:mach",
+        "data:aerodynamics:wing:cruise:reynolds",
+        "data:aerodynamics:aircraft:cruise:CL",
+        "data:TLAR:cruise_mach",
+        "data:geometry:wing:area",
+        "data:geometry:wing:thickness_ratio",
+        "data:geometry:wing:wetted_area",
+        "data:geometry:wing:MAC:length",
+        "data:geometry:wing:sweep_25",
+    ]
+
+    ivc = get_indep_var_comp(input_list)
+
+    component = Cd0Wing(low_speed_aero=True)
+
+    problem_low_speed = run_system(component, ivc)
+
+    cd = problem_low_speed["data:aerodynamics:wing:low_speed:CD0"]
+
+    test_val = [0.008356] * POLAR_POINT_COUNT
+
+    assert_allclose(cd, test_val, rtol=1e-3)
+
+    component = Cd0Wing(low_speed_aero=False)
+
+    problem_high_speed = run_system(component, ivc)
+
+    cd = problem_high_speed["data:aerodynamics:wing:cruise:CD0"]
+
+    test_val = [0.00794] * POLAR_POINT_COUNT
+
+    assert_allclose(cd, test_val, rtol=1e-3)
+
+
+def test_cd_landing_gear():
+    ivc = get_indep_var_comp(["data:geometry:wing:area"])
+
+    component = ComputeDeltaLg(landing_flag=True)
+
+    problem_landing = run_system(component, ivc)
+
+    test_val = [0.02] * ALPHA_POINT_COUNT
+
+    assert_allclose(
+        problem_landing["data:aerodynamics:aircraft:landing:lg_effect:DCL"], test_val, atol=1e-6
+    )
+    assert_allclose(
+        problem_landing["data:aerodynamics:aircraft:landing:lg_effect:DCD"], test_val, atol=1e-6
+    )
+
+    component = ComputeDeltaLg(landing_flag=False)
+
+    problem_takeoff = run_system(component, ivc)
+
+    assert_allclose(
+        problem_takeoff["data:aerodynamics:aircraft:takeoff:lg_effect:DCL"], test_val, atol=1e-6
+    )
+    assert_allclose(
+        problem_takeoff["data:aerodynamics:aircraft:takeoff:lg_effect:DCD"], test_val, atol=1e-6
+    )
+
+
+def test_initialize_in():
+    ivc = get_indep_var_comp(["data:geometry:wing:area"])
+
+    component = InitializeIN()
+
+    problem = run_system(component, ivc)
+
+    CT_list = problem["data:aerodynamics:aircraft:low_speed:CT"]
+    alpha_list = problem["data:aerodynamics:aircraft:low_speed:alpha"]
+    H_list = problem["data:aerodynamics:aircraft:low_speed:H"]
+
+    assert CT_list[0] == approx(-2, rel=1e-4)
+    assert CT_list[50] == approx(-0.6577, rel=1e-4)
+    assert CT_list[125] == approx(1.3557, rel=1e-4)
+
+    assert alpha_list[0] == approx(-1, rel=1e-4)
+    assert alpha_list[5] == approx(2.25, rel=1e-4)
+    assert alpha_list[15] == approx(8.75, rel=1e-4)
+
+    assert H_list[0] == approx(0, abs=1e-5)
+    assert H_list[5] == approx(7.5, abs=1e-5)
+    assert H_list[15] == approx(22.5, abs=1e-5)

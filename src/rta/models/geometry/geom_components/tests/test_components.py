@@ -2,6 +2,10 @@ from pytest import approx
 from fastoad.testing import run_system
 from openmdao.core.indepvarcomp import IndepVarComp
 
+from ..fuselage.compute_fuselage import (
+    ComputeFuselageGeometryBasic,
+    ComputeFuselageGeometryCabinSizing,
+)
 from ..nacelle.compute_nacelle import ComputeNacelleGeometry
 from ..wing.components.compute_toc_wing_rta import ComputeToCWingRTA
 from ..wing.components.compute_wet_area_wing_rta import ComputeWetAreaWingRTA
@@ -49,3 +53,50 @@ def test_wing_wet_area():
 
     assert problem["data:geometry:wing:outer_area"] == approx(52.715, rel=1e-3)
     assert problem["data:geometry:wing:wetted_area"] == approx(108.075, rel=1e-3)
+
+
+def test_fuselage_basic():
+    ivc = IndepVarComp()
+
+    ivc.add_output("data:geometry:cabin:NPAX1", val=75)
+    ivc.add_output("data:geometry:fuselage:length", val=26.96, units="m")
+    ivc.add_output("data:geometry:fuselage:maximum_width", val=2.79, units="m")
+    ivc.add_output("data:geometry:fuselage:maximum_height", val=2.93, units="m")
+    ivc.add_output("data:geometry:fuselage:front_length", val=4.99, units="m")
+    ivc.add_output("data:geometry:fuselage:rear_length", val=10.56, units="m")
+    ivc.add_output("data:geometry:fuselage:PAX_length", val=14.47, units="m")
+
+    problem = run_system(ComputeFuselageGeometryBasic(), ivc)
+
+    assert problem["data:weight:systems:flight_furnishing:CG:x"] == approx(2.495, rel=1e-3)
+    assert problem["data:weight:operational:items:passenger_seats:CG:x"] == approx(10.055, rel=1e-3)
+    assert problem["data:geometry:cabin:length"] == approx(21.838, rel=1e-3)
+    assert problem["data:geometry:fuselage:wetted_area"] == approx(206.885, rel=1e-3)
+    assert problem["data:geometry:cabin:crew_count:commercial"] == approx(2.0, rel=1e-3)
+
+
+def test_fuselage_with_cabin_sizing():
+    ivc = IndepVarComp()
+
+    ivc.add_output("data:geometry:cabin:seats:economical:width", val=0.4572, units="m")
+    ivc.add_output("data:geometry:cabin:seats:economical:length", val=0.762, units="m")
+    ivc.add_output("data:geometry:cabin:seats:economical:count_by_row", val=4.0)
+    ivc.add_output("data:geometry:cabin:aisle_width", val=0.45, units="m")
+    ivc.add_output("data:geometry:cabin:exit_width", val=0.75, units="m")
+    ivc.add_output("data:TLAR:NPAX", val=72)
+    ivc.add_output("data:geometry:propulsion:engine:count", val=2)
+
+    problem = run_system(ComputeFuselageGeometryCabinSizing(), ivc)
+
+    assert problem["data:geometry:cabin:NPAX1"] == approx(75, rel=1e-3)
+    assert problem["data:weight:systems:flight_furnishing:CG:x"] == approx(2.493, rel=1e-3)
+    assert problem["data:weight:operational:items:passenger_seats:CG:x"] == approx(12.219, rel=1e-3)
+    assert problem["data:geometry:fuselage:length"] == approx(26.96, rel=1e-3)
+    assert problem["data:geometry:fuselage:maximum_width"] == approx(2.793, rel=1e-3)
+    assert problem["data:geometry:fuselage:maximum_height"] == approx(2.933, rel=1e-3)
+    assert problem["data:geometry:fuselage:front_length"] == approx(4.985, rel=1e-3)
+    assert problem["data:geometry:fuselage:rear_length"] == approx(10.558, rel=1e-3)
+    assert problem["data:geometry:fuselage:PAX_length"] == approx(14.466, rel=1e-3)
+    assert problem["data:geometry:cabin:length"] == approx(21.839, rel=1e-3)
+    assert problem["data:geometry:fuselage:wetted_area"] == approx(207.13, rel=1e-3)
+    assert problem["data:geometry:cabin:crew_count:commercial"] == approx(2.0, rel=1e-3)

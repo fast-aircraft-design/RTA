@@ -1,0 +1,17 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: FAST-OAD plugin for Regional Transport Aircraft (RTA)
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - given-names: Vincenzo
+    family-names: Palladino
+  - given-names: Eric
+    family-names: Nguyen Van
+    email: eric.nguyen_van@onera.fr
+    affiliation: ONERA
+repository-code: 'https://github.com/fast-aircraft-design/RTA'
