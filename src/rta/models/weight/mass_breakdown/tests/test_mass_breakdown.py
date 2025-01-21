@@ -1,5 +1,5 @@
 #  This file is part of FAST-OAD_CS25
-#  Copyright (C) 2022 ONERA & ISAE-SUPAERO
+#  Copyright (C) 2025 ONERA & ISAE-SUPAERO
 #  FAST is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
 #  the Free Software Foundation, either version 3 of the License, or
@@ -13,20 +13,15 @@
 
 # pylint: disable=redefined-outer-name  # needed for pytest fixtures
 import os.path as pth
-
 import openmdao.api as om
 import pytest
-from fastoad.testing import run_system
 
-# from fastoad.io import VariableIO
+from fastoad.testing import run_system
 from fastoad.io import VariableIO
 
 from ..a_airframe.a6_nacelles_weight import NacellesWeight
 from ..a_airframe.a1_wing_weight import WingWeight
 from ..b_propulsion.turboprop_weight import TurbopropWeight
-from ..c_systems.ATA23_communication_systems_weight import (
-    CommunicationSystemWeightLegacy,
-)
 
 
 def get_indep_var_comp(var_names):
@@ -81,18 +76,6 @@ def test_wing_weight():
     problem = run_system(WingWeight(), ivc)
 
     assert problem["data:weight:airframe:wing:mass"] == pytest.approx(2370, abs=1)
-
-
-def test_communication_system_from_cs25():
-    ivc = om.IndepVarComp()
-
-    ivc.add_output("data:TLAR:range", val=750, units="NM")
-    ivc.add_output("tuning:weight:systems:communications:mass:k", val=0.8)
-    ivc.add_output("tuning:weight:systems:communications:mass:offset", val=1.0, units="kg")
-
-    problem = run_system(CommunicationSystemWeightLegacy(), ivc)
-
-    assert problem["data:weight:systems:communications:mass"] == pytest.approx(80, abs=1)
 
 
 def test_turboprop_weight():

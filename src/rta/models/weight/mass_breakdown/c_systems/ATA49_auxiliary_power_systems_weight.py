@@ -31,7 +31,7 @@ class APUWeight(ExplicitComponent):
 
     def setup(self):
         self.add_input("data:geometry:cabin:NPAX1", val=np.nan)
-        self.add_input("tuning:weight:systems:auxiliary_power_unit:mass:k", val=0.0)
+        self.add_input("tuning:weight:systems:auxiliary_power_unit:mass:k", val=1.0)
         self.add_input(
             "tuning:weight:systems:auxiliary_power_unit:mass:offset",
             val=0.0,

@@ -2,7 +2,7 @@
 Test module for geometry functions of cg components
 """
 #  This file is part of RTA
-#  Copyright (C) 2022 ONERA & ISAE-SUPAERO
+#  Copyright (C) 2025 ONERA & ISAE-SUPAERO
 #  FAST is free software: you can redistribute it and/or modify
 #  it under the terms of the GNU General Public License as published by
 #  the Free Software Foundation, either version 3 of the License, or
@@ -194,7 +194,7 @@ def test_compute_cg_others():
     ]
     ivc = get_indep_var_comp(input_list)
     problem = run_system(ComputeOthersCG(), ivc)
-    # TODO: add description of these CGs
+
     assert problem["data:weight:airframe:fuselage:CG:x"] == approx(12.13, rel=1e-3)
     assert problem["data:weight:airframe:landing_gear:front:CG:x"] == approx(3.74, rel=1e-3)
     assert problem["data:weight:propulsion:engine_controls_instrumentation:CG:x"] == approx(
