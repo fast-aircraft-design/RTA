@@ -13,9 +13,6 @@
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 from abc import ABC
-from typing import Union
-
-import pandas as pd
 
 from fastoad.model_base.flight_point import FlightPoint
 from fastoad.model_base.propulsion import IPropulsion
@@ -37,43 +34,3 @@ class AbstractFuelPropulsion(IPropulsion, ABC):
 
     def get_consumed_mass(self, flight_point: FlightPoint, time_step: float) -> float:
         return time_step * flight_point.psfc * flight_point.TPshaft_power
-
-
-class TPEngineSet(AbstractFuelPropulsion):
-    def __init__(self, engine: IPropulsion, engine_count):
-        """
-        Class for modelling an assembly of identical fuel engines.
-
-        Thrust is supposed equally distributed among them.
-
-        :param engine: the engine model
-        :param engine_count:
-        """
-        self.engine = engine
-        self.engine_count = engine_count
-
-    def compute_flight_points(self, flight_points: Union[FlightPoint, pd.DataFrame]):
-        if isinstance(flight_points, FlightPoint):
-            flight_points_per_engine = FlightPoint(flight_points)
-        else:
-            flight_points_per_engine = flight_points.copy()
-
-        if flight_points.thrust is not None:
-            flight_points_per_engine.thrust = flight_points.thrust / self.engine_count
-
-        self.engine.compute_flight_points(flight_points_per_engine)
-        flight_points.psfc = flight_points_per_engine.psfc
-        flight_points.thrust = flight_points_per_engine.thrust * self.engine_count
-        flight_points.thrust_rate = flight_points_per_engine.thrust_rate
-        flight_points.TPshaft_power = flight_points_per_engine.TPshaft_power * self.engine_count
-        flight_points.TP_power_rate = flight_points_per_engine.TP_power_rate
-        flight_points.thermo_power = flight_points_per_engine.thermo_power * self.engine_count
-        flight_points.TP_thermal_efficiency = flight_points_per_engine.TP_thermal_efficiency
-        if flight_points_per_engine.TP_residual_thrust:
-            flight_points.TP_residual_thrust = (
-                flight_points_per_engine.TP_residual_thrust * self.engine_count
-            )
-        flight_points.TP_air_flow = flight_points_per_engine.TP_air_flow
-        flight_points.TP_total_pressure = flight_points_per_engine.TP_total_pressure
-        flight_points.TP_total_temperature = flight_points_per_engine.TP_total_temperature
-        flight_points.CT = flight_points_per_engine.CT
