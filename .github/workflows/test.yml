@@ -70,7 +70,7 @@ jobs:
           name: codecov-FAST-OAD-RTA  # optional
           fail_ci_if_error: false  # optional (default = false)
         env:
-          CODECOV_TOKEN: c545cfe9-2c11-41d3-bb70-266f9e7b716f
+          CODECOV_TOKEN: ${{ secrets.CODECOV }}
 
       - name: Integration tests
         run: poetry run pytest --no-cov tests
