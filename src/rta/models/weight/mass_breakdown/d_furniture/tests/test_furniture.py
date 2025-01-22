@@ -19,13 +19,13 @@ from openmdao.api import IndepVarComp
 from fastoad.io import VariableIO
 from pytest import approx
 
-from ..ATA38_water_weight import WaterWeight
-from ..ATA25_furnishing_weight import FurnishingWeight
-from ..ATA35_oxygen_weight import OxygenWeight
-from ..ATA33_lighting_weight import LightsWeight
-from ..ATA2580_insulation_weight import InsulationWeight
-from ..ATA2510_crew_seats_weight import SeatsCrewWeight
-from ..ATA5345_5347_interior_weight import InteriorIntegrationWeight
+from ..ata38_water_weight import WaterWeight
+from ..ata25_furnishing_weight import FurnishingWeight
+from ..ata35_oxygen_weight import OxygenWeight
+from ..ata33_lighting_weight import LightsWeight
+from ..ata2580_insulation_weight import InsulationWeight
+from ..ata2510_crew_seats_weight import SeatsCrewWeight
+from ..ata5345_5347_interior_weight import InteriorIntegrationWeight
 
 
 def get_indep_var_comp(var_names):

@@ -4,8 +4,8 @@ from pytest import approx
 from fastoad.testing import run_system
 from openmdao.core.indepvarcomp import IndepVarComp
 
-from ..sizing.Prop_sizing import Prop_sizing
-from ..sizing.TP_sizing import TP_sizing
+from ..sizing.prop_sizing import Prop_sizing
+from ..sizing.tp_sizing import TP_sizing
 
 
 def test_propeller_sizing():

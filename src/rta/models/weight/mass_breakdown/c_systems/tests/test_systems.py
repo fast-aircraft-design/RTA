@@ -19,17 +19,17 @@ from openmdao.api import IndepVarComp
 from fastoad.io import VariableIO
 from pytest import approx
 
-from ..ATA21_environmental_control_systems_weight import ECSWeight
-from ..ATA22_autoflight_systems_weight import AutoFlightSystemWeight
-from ..ATA23_communication_systems_weight import CommunicationSystemWeightLegacy
-from ..ATA24_electrical_systems_weight import ElectricalPowerSystemWeight
-from ..ATA25_flight_furnishing_systems_weight import FlightFurnishingWeight
-from ..ATA26_fire_systems_weight import FireSystemWeight
-from ..ATA27_flight_control_systems_weight import FlightControlsSystemWeight
-from ..ATA29_hydraulic_systems_weight import HydraulicPowerSystemWeight
-from ..ATA30_de_ice_systems_weight import DeIceSystemWeight
-from ..ATA34_navigation_systems_weight import NavigationSystemWeight
-from ..ATA49_auxiliary_power_systems_weight import APUWeight
+from ..ata21_environmental_control_systems_weight import ECSWeight
+from ..ata22_autoflight_systems_weight import AutoFlightSystemWeight
+from ..ata23_communication_systems_weight import CommunicationSystemWeightLegacy
+from ..ata24_electrical_systems_weight import ElectricalPowerSystemWeight
+from ..ata25_flight_furnishing_systems_weight import FlightFurnishingWeight
+from ..ata26_fire_systems_weight import FireSystemWeight
+from ..ata27_flight_control_systems_weight import FlightControlsSystemWeight
+from ..ata29_hydraulic_systems_weight import HydraulicPowerSystemWeight
+from ..ata30_de_ice_systems_weight import DeIceSystemWeight
+from ..ata34_navigation_systems_weight import NavigationSystemWeight
+from ..ata49_auxiliary_power_systems_weight import APUWeight
 
 
 def get_indep_var_comp(var_names):

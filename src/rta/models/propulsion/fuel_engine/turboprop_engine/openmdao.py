@@ -20,7 +20,7 @@ from fastoad.model_base.propulsion import (
 )
 from fastoad.module_management.service_registry import RegisterPropulsion
 from openmdao.core.component import Component
-from .ML_TP_L1 import ML_TP_L1
+from .ml_tp_l1 import ML_TP_L1
 
 
 ####################################################################################################

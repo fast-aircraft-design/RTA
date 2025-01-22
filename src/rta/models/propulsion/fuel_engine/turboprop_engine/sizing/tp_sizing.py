@@ -15,17 +15,17 @@ Thermodynamic sizing of turboshaft
 #  along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import numpy as np
-from ..engine_components.Ram import Ram
-from ..engine_components.Compression_Nozzle import Compression_Nozzle
-from ..engine_components.Low_Pressure_Compressor import LPC
-from ..engine_components.High_Pressure_Compressor import HPC
-from ..engine_components.Combustor import Combustor
-from ..engine_components.Low_Pressure_Turbine import LPT
-from ..engine_components.High_Pressure_Turbine import HPT
-from ..engine_components.Power_Turbine import Power_Turbine
-from ..engine_components.Expansion_Nozzle import Expansion_Nozzle
-from ..engine_components.Thrust import Thrust
-from ..engine_components.Fuel_Data import Fuel_data
+from ..engine_components.ram import Ram
+from ..engine_components.compression_nozzle import Compression_Nozzle
+from ..engine_components.low_pressure_compressor import LPC
+from ..engine_components.high_pressure_compressor import HPC
+from ..engine_components.combustor import Combustor
+from ..engine_components.low_pressure_turbine import LPT
+from ..engine_components.high_pressure_turbine import HPT
+from ..engine_components.power_turbine import Power_Turbine
+from ..engine_components.expansion_nozzle import Expansion_Nozzle
+from ..engine_components.thrust import Thrust
+from ..engine_components.fuel_data import Fuel_data
 from stdatm import AtmosphereSI
 from openmdao.core.explicitcomponent import ExplicitComponent
 from fastoad.module_management.constants import ModelDomain

@@ -28,8 +28,8 @@ from numpy.testing import assert_allclose
 from ..cd0_fuselage import Cd0Fuselage
 from ..cd0_wing import Cd0Wing
 from ..cd0_total import Cd0Total
-from ..cd0_nacelle_pylons_TP import Cd0NacelleAndPylonsTP
-from ..OEI_effect import ComputeDeltaOEI
+from ..cd0_nacelle_pylons_tp import Cd0NacelleAndPylonsTP
+from ..oei_effect import ComputeDeltaOEI
 from ..initialize_in import InitializeIN
 from ..lg_effect import ComputeDeltaLg
 from rta.models.aerodynamics.constants import ALPHA_POINT_COUNT, POLAR_POINT_COUNT

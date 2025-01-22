@@ -24,7 +24,7 @@ from stdatm import AtmosphereSI
 import pandas as pd
 from fastoad.model_base.flight_point import FlightPoint
 from .base import AbstractFuelPropulsion
-from .engine_components.Propeller import Propeller
+from .engine_components.propeller import Propeller
 
 # Logger for this module
 _LOGGER = logging.getLogger(__name__)

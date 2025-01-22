@@ -2,7 +2,7 @@ import os.path as pth
 
 import numpy as np
 from fastoad.io import VariableIO
-from ..ML_TP_L1 import ML_TP_L1
+from ..ml_tp_l1 import ML_TP_L1
 from fastoad.model_base import FlightPoint
 from fastoad.constants import EngineSetting
 
