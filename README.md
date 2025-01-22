@@ -1,5 +1,5 @@
 # FAST-OAD plugin for Regional Transport Aircraft (RTA)
-![tests](https://github.com/fast-aircraft-design/RTA/workflows/test.yml/badge.svg)
+![tests](https://github.com/fast-aircraft-design/RTA/actions/workflows/test.yml/badge.svg)
 [![codecov](https://codecov.io/gh/fast-aircraft-design/RTA/graph/badge.svg?token=I9Z8KXN112)](https://codecov.io/gh/fast-aircraft-design/RTA)
 
 
