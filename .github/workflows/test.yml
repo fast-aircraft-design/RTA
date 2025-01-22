@@ -62,23 +62,15 @@ jobs:
           poetry run coverage xml  # for sending coverage report
         shell: bash
 
-      - name: Run codacy coverage reporter
-        if: ${{ runner.os == 'Linux' && matrix.python-version == '3.10' }} # This step runs only on Linux
-        env:
-          CODACY_PROJECT_TOKEN: ${{ secrets.codacy }}
-        run: |
-          bash <(curl -Ls https://coverage.codacy.com/get.sh) report -r coverage.xml
-        shell: bash
-
       - name: Publish code coverage on Codecov
-        uses: codecov/codecov-action@v4
+        uses: codecov/codecov-action@v5
         if: ${{ runner.os == 'Linux' && matrix.python-version == '3.10' }}
         with:
           #          flags: unittests  # optional
           name: codecov-FAST-OAD-RTA  # optional
           fail_ci_if_error: false  # optional (default = false)
         env:
-          CODECOV_TOKEN: 32bddc38-24e3-4d92-8b87-f76bd02f3451
+          CODECOV_TOKEN: c545cfe9-2c11-41d3-bb70-266f9e7b716f
 
       - name: Integration tests
         run: poetry run pytest --no-cov tests
