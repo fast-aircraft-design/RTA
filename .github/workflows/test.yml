@@ -49,7 +49,9 @@ jobs:
         shell: bash
 
       - name: Unit tests
-        run: poetry run pytest src
+        if: ! ${{ runner.os == 'Linux' && matrix.python-version == '3.10' }}
+        run: |
+          poetry run pytest src
         shell: bash
 
       - name: Unit tests with coverage
