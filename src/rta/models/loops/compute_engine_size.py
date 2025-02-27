@@ -16,6 +16,7 @@ Computation of turbopropeller output power
 
 import numpy as np
 import openmdao.api as om
+import warnings
 from fastoad.module_management.constants import ModelDomain
 from fastoad.module_management.service_registry import RegisterOpenMDAOSystem
 
@@ -47,7 +48,12 @@ class ComputeEngineSize(om.ExplicitComponent):
             val=self.initial_RTO_power * 1.094,
             units="W",
         )
+
         self.declare_partials("data:propulsion:RTO_power", "*", method="fd")
+
+        warnings.warn(
+            "Engine sizing cases OEI_ceiling, Time To Climb and cruise Mach number are deactivated."
+        )
 
     def compute(self, inputs, outputs, discrete_inputs=None, discrete_outputs=None):
         TOD = inputs["data:mission:sizing:takeoff:distance"]
@@ -64,10 +70,6 @@ class ComputeEngineSize(om.ExplicitComponent):
         else:
             RTO_power = previous_RTO_power + delta_TOD
 
-        print("engine_loop")
-        print("RTO_power " + str(previous_RTO_power))
-        print("delta_TOD" + str(TOD - TOD_target))
-        print("OEI_ceiling, Time To Climb and cruise Mach TLARs are deactivated.")
         self.previous_RTO_power = RTO_power
 
         outputs["data:propulsion:RTO_power"] = RTO_power

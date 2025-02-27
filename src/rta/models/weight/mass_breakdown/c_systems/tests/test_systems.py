@@ -15,9 +15,9 @@
 import os.path as pth
 
 from fastoad.testing import run_system
-from openmdao.api import IndepVarComp
 from fastoad.io import VariableIO
 from pytest import approx
+from openmdao.api import IndepVarComp
 
 from ..ata21_environmental_control_systems_weight import ECSWeight
 from ..ata22_autoflight_systems_weight import AutoFlightSystemWeight

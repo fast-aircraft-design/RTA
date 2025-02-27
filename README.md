@@ -26,12 +26,12 @@ pip install git+https://github.com/fast-aircraft-design/RTA.git@master
 ```
 This will install the lastest RTA version based on github master branch.
 
-If you are using poetry to manage your python environmment the following command will tell poetry to add RTA to your dependencies:
+If you are using poetry to manage your python environment, the following command will tell poetry to add RTA to your dependencies:
 ```bash
 poetry add git+https://github.com/fast-aircraft-design/RTA.git#master
 ```
 
-Once installed the RTA models should become visible to FAST-OAD, simply run the following command to check that new RTA models are available:
+Once installed, the RTA models should become visible to FAST-OAD. Simply run the following command to check that new RTA models are available:
 ```bash
 fastoad plugin_info
 ```

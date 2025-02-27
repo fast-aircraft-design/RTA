@@ -64,7 +64,7 @@ model:
 # Per default, when installing RTA all the submodels listed below are activated.
 # If needed, the RTA submodels may be replaced or used elsewhere,
 # simply uncomment the following lines and replace with the desired submodel.
-submodels:
+#submodels:
 #  service.aerodynamics.CD0.fuselage: rta.submodel.aerodynamics.CD0.fuselage
 #  service.aerodynamics.CD0.wing: rta.submodel.aerodynamics.CD0.wing
 #  service.aerodynamics.CD0.nacelles_pylons: rta.submodel.aerodynamics.CD0.nacelles

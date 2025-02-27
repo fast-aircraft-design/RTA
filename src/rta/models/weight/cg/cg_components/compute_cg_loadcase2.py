@@ -1,5 +1,5 @@
 """
-Estimation of center of gravity for load case 2
+Estimation of center of gravity for load case 2.
 """
 
 #  This file is part of FAST : A framework for rapid Overall Aircraft Design
