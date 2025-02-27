@@ -48,7 +48,7 @@ def test_ecs_weight():
 
     problem = run_system(ECSWeight(), ivc)
 
-    assert problem["data:weight:systems:ECS:mass"] == approx(360, abs=1)
+    assert problem.get_val("data:weight:systems:ECS:mass", "kg") == approx(360, abs=1)
 
 
 def test_autoflight_weight():
@@ -62,7 +62,9 @@ def test_autoflight_weight():
 
     problem = run_system(AutoFlightSystemWeight(), ivc)
 
-    assert problem["data:weight:systems:automatic_flight_system:mass"] == approx(30, abs=0.1)
+    assert problem.get_val("data:weight:systems:automatic_flight_system:mass", "kg") == approx(
+        30, abs=0.1
+    )
 
 
 def test_communication_system_from_cs25():
@@ -74,7 +76,7 @@ def test_communication_system_from_cs25():
 
     problem = run_system(CommunicationSystemWeightLegacy(), ivc)
 
-    assert problem["data:weight:systems:communications:mass"] == approx(81, abs=0.1)
+    assert problem.get_val("data:weight:systems:communications:mass", "kg") == approx(81, abs=0.1)
 
 
 def test_electric_system_weight():
@@ -91,12 +93,12 @@ def test_electric_system_weight():
 
     problem = run_system(ElectricalPowerSystemWeight(), ivc)
 
-    assert problem["data:weight:systems:electric_systems:electric_generation:mass"] == approx(
-        315.8, abs=0.1
-    )
-    assert problem[
-        "data:weight:systems:electric_systems:electric_common_installation:mass"
-    ] == approx(210.5, abs=0.1)
+    assert problem.get_val(
+        "data:weight:systems:electric_systems:electric_generation:mass", "kg"
+    ) == approx(315.8, abs=0.1)
+    assert problem.get_val(
+        "data:weight:systems:electric_systems:electric_common_installation:mass", "kg"
+    ) == approx(210.5, abs=0.1)
 
 
 def test_flight_furnishing_weight():
@@ -106,7 +108,9 @@ def test_flight_furnishing_weight():
 
     problem = run_system(FlightFurnishingWeight(), ivc)
 
-    assert problem["data:weight:systems:flight_furnishing:mass"] == approx(100, abs=0.1)
+    assert problem.get_val("data:weight:systems:flight_furnishing:mass", "kg") == approx(
+        100, abs=0.1
+    )
 
 
 def test_fire_system_weight():
@@ -116,7 +120,7 @@ def test_fire_system_weight():
 
     problem = run_system(FireSystemWeight(), ivc)
 
-    assert problem["data:weight:systems:fire_protection:mass"] == approx(25, abs=0.1)
+    assert problem.get_val("data:weight:systems:fire_protection:mass", "kg") == approx(25, abs=0.1)
 
 
 def test_flight_control_weight():
@@ -127,7 +131,7 @@ def test_flight_control_weight():
 
     problem = run_system(FlightControlsSystemWeight(), ivc)
 
-    assert problem["data:weight:systems:flight_controls:mass"] == approx(230, abs=0.5)
+    assert problem.get_val("data:weight:systems:flight_controls:mass", "kg") == approx(230, abs=0.5)
 
 
 def test_hydraulic_weight():
@@ -138,7 +142,9 @@ def test_hydraulic_weight():
 
     problem = run_system(HydraulicPowerSystemWeight(), ivc)
 
-    assert problem["data:weight:systems:hydraulic_systems:mass"] == approx(184, abs=0.1)
+    assert problem.get_val("data:weight:systems:hydraulic_systems:mass", "kg") == approx(
+        184, abs=0.1
+    )
 
 
 def test_de_ice_weight():
@@ -153,7 +159,7 @@ def test_de_ice_weight():
 
     problem = run_system(DeIceSystemWeight(), ivc)
 
-    assert problem["data:weight:systems:de-icing:mass"] == approx(110.5, abs=0.1)
+    assert problem.get_val("data:weight:systems:de-icing:mass", "kg") == approx(110.5, abs=0.1)
 
 
 def test_navigation_system_weight():
@@ -165,7 +171,7 @@ def test_navigation_system_weight():
 
     problem = run_system(NavigationSystemWeight(), ivc)
 
-    assert problem["data:weight:systems:navigation:mass"] == approx(173.9, abs=0.1)
+    assert problem.get_val("data:weight:systems:navigation:mass", "kg") == approx(173.9, abs=0.1)
 
 
 def test_APU_weight():
@@ -180,4 +186,6 @@ def test_APU_weight():
 
     problem = run_system(APUWeight(), ivc)
 
-    assert problem["data:weight:systems:auxiliary_power_unit:mass"] == approx(179.1, abs=0.1)
+    assert problem.get_val("data:weight:systems:auxiliary_power_unit:mass", "kg") == approx(
+        179.1, abs=0.1
+    )

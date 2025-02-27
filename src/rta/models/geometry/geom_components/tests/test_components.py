@@ -21,10 +21,14 @@ def test_nacelle():
 
     problem = run_system(ComputeNacelleGeometry(), ivc)
 
-    assert problem["data:geometry:propulsion:nacelle:length"] == approx(2.17, rel=1e-3)
-    assert problem["data:geometry:propulsion:nacelle:diameter"] == approx(0.638, rel=1e-3)
-    assert problem["data:geometry:propulsion:nacelle:y"] == approx(4.026, rel=1e-3)
-    assert problem["data:geometry:propulsion:nacelle:wetted_area"] == approx(4.349, rel=1e-3)
+    assert problem.get_val("data:geometry:propulsion:nacelle:length", "m") == approx(2.17, rel=1e-3)
+    assert problem.get_val("data:geometry:propulsion:nacelle:diameter", "m") == approx(
+        0.638, rel=1e-3
+    )
+    assert problem.get_val("data:geometry:propulsion:nacelle:y", "m") == approx(4.026, rel=1e-3)
+    assert problem.get_val("data:geometry:propulsion:nacelle:wetted_area", "m**2") == approx(
+        4.349, rel=1e-3
+    )
 
 
 def test_wing_ToC():
@@ -35,10 +39,18 @@ def test_wing_ToC():
 
     problem = run_system(ComputeToCWingRTA(), ivc)
 
-    assert problem["data:geometry:wing:thickness_ratio"] == approx(0.1407, rel=1e-3)
-    assert problem["data:geometry:wing:root:thickness_ratio"] == approx(0.1875, rel=1e-3)
-    assert problem["data:geometry:wing:kink:thickness_ratio"] == approx(0.1407, rel=1e-3)
-    assert problem["data:geometry:wing:tip:thickness_ratio"] == approx(0.125, rel=1e-3)
+    assert problem.get_val(
+        "data:geometry:wing:thickness_ratio",
+    ) == approx(0.1407, rel=1e-3)
+    assert problem.get_val(
+        "data:geometry:wing:root:thickness_ratio",
+    ) == approx(0.1875, rel=1e-3)
+    assert problem.get_val(
+        "data:geometry:wing:kink:thickness_ratio",
+    ) == approx(0.1407, rel=1e-3)
+    assert problem.get_val(
+        "data:geometry:wing:tip:thickness_ratio",
+    ) == approx(0.125, rel=1e-3)
 
 
 def test_wing_wet_area():
@@ -51,8 +63,8 @@ def test_wing_wet_area():
 
     problem = run_system(ComputeWetAreaWingRTA(), ivc)
 
-    assert problem["data:geometry:wing:outer_area"] == approx(52.715, rel=1e-3)
-    assert problem["data:geometry:wing:wetted_area"] == approx(108.075, rel=1e-3)
+    assert problem.get_val("data:geometry:wing:outer_area", "m**2") == approx(52.715, rel=1e-3)
+    assert problem.get_val("data:geometry:wing:wetted_area", "m**2") == approx(108.075, rel=1e-3)
 
 
 def test_fuselage_basic():
@@ -68,11 +80,19 @@ def test_fuselage_basic():
 
     problem = run_system(ComputeFuselageGeometryBasic(), ivc)
 
-    assert problem["data:weight:systems:flight_furnishing:CG:x"] == approx(2.495, rel=1e-3)
-    assert problem["data:weight:operational:items:passenger_seats:CG:x"] == approx(10.055, rel=1e-3)
-    assert problem["data:geometry:cabin:length"] == approx(21.838, rel=1e-3)
-    assert problem["data:geometry:fuselage:wetted_area"] == approx(206.885, rel=1e-3)
-    assert problem["data:geometry:cabin:crew_count:commercial"] == approx(2.0, rel=1e-3)
+    assert problem.get_val("data:weight:systems:flight_furnishing:CG:x", "m") == approx(
+        2.495, rel=1e-3
+    )
+    assert problem.get_val("data:weight:operational:items:passenger_seats:CG:x", "m") == approx(
+        10.055, rel=1e-3
+    )
+    assert problem.get_val("data:geometry:cabin:length", "m") == approx(21.838, rel=1e-3)
+    assert problem.get_val("data:geometry:fuselage:wetted_area", "m**2") == approx(
+        206.885, rel=1e-3
+    )
+    assert problem.get_val(
+        "data:geometry:cabin:crew_count:commercial",
+    ) == approx(2.0, rel=1e-3)
 
 
 def test_fuselage_with_cabin_sizing():
@@ -88,15 +108,23 @@ def test_fuselage_with_cabin_sizing():
 
     problem = run_system(ComputeFuselageGeometryCabinSizing(), ivc)
 
-    assert problem["data:geometry:cabin:NPAX1"] == approx(75, rel=1e-3)
-    assert problem["data:weight:systems:flight_furnishing:CG:x"] == approx(2.493, rel=1e-3)
-    assert problem["data:weight:operational:items:passenger_seats:CG:x"] == approx(12.219, rel=1e-3)
-    assert problem["data:geometry:fuselage:length"] == approx(26.96, rel=1e-3)
-    assert problem["data:geometry:fuselage:maximum_width"] == approx(2.793, rel=1e-3)
-    assert problem["data:geometry:fuselage:maximum_height"] == approx(2.933, rel=1e-3)
-    assert problem["data:geometry:fuselage:front_length"] == approx(4.985, rel=1e-3)
-    assert problem["data:geometry:fuselage:rear_length"] == approx(10.558, rel=1e-3)
-    assert problem["data:geometry:fuselage:PAX_length"] == approx(14.466, rel=1e-3)
-    assert problem["data:geometry:cabin:length"] == approx(21.839, rel=1e-3)
-    assert problem["data:geometry:fuselage:wetted_area"] == approx(207.13, rel=1e-3)
-    assert problem["data:geometry:cabin:crew_count:commercial"] == approx(2.0, rel=1e-3)
+    assert problem.get_val(
+        "data:geometry:cabin:NPAX1",
+    ) == approx(75, rel=1e-3)
+    assert problem.get_val("data:weight:systems:flight_furnishing:CG:x", "m") == approx(
+        2.493, rel=1e-3
+    )
+    assert problem.get_val("data:weight:operational:items:passenger_seats:CG:x", "m") == approx(
+        12.219, rel=1e-3
+    )
+    assert problem.get_val("data:geometry:fuselage:length", "m") == approx(26.96, rel=1e-3)
+    assert problem.get_val("data:geometry:fuselage:maximum_width", "m") == approx(2.793, rel=1e-3)
+    assert problem.get_val("data:geometry:fuselage:maximum_height", "m") == approx(2.933, rel=1e-3)
+    assert problem.get_val("data:geometry:fuselage:front_length", "m") == approx(4.985, rel=1e-3)
+    assert problem.get_val("data:geometry:fuselage:rear_length", "m") == approx(10.558, rel=1e-3)
+    assert problem.get_val("data:geometry:fuselage:PAX_length", "m") == approx(14.466, rel=1e-3)
+    assert problem.get_val("data:geometry:cabin:length", "m") == approx(21.839, rel=1e-3)
+    assert problem.get_val("data:geometry:fuselage:wetted_area", "m**2") == approx(207.13, rel=1e-3)
+    assert problem.get_val(
+        "data:geometry:cabin:crew_count:commercial",
+    ) == approx(2.0, rel=1e-3)

@@ -43,7 +43,7 @@ def test_water_weight():
 
     problem = run_system(WaterWeight(), ivc)
 
-    assert problem["data:weight:furniture:water:mass"] == approx(10, abs=0.1)
+    assert problem.get_val("data:weight:furniture:water:mass", "kg") == approx(10, abs=0.1)
 
 
 def test_furnishing_weight():
@@ -55,7 +55,7 @@ def test_furnishing_weight():
 
     problem = run_system(FurnishingWeight(), ivc)
 
-    assert problem["data:weight:furniture:furnishing:mass"] == approx(920, abs=1)
+    assert problem.get_val("data:weight:furniture:furnishing:mass", "kg") == approx(920, abs=1)
 
 
 def test_oxygen_weight():
@@ -66,7 +66,7 @@ def test_oxygen_weight():
 
     problem = run_system(OxygenWeight(), ivc)
 
-    assert problem["data:weight:furniture:oxygen:mass"] == approx(177.5, abs=0.5)
+    assert problem.get_val("data:weight:furniture:oxygen:mass", "kg") == approx(177.5, abs=0.5)
 
 
 def test_light_weight():
@@ -79,7 +79,9 @@ def test_light_weight():
 
     problem = run_system(LightsWeight(), ivc)
 
-    assert problem["data:weight:furniture:cabin_lighting:mass"] == approx(87.46, abs=0.1)
+    assert problem.get_val("data:weight:furniture:cabin_lighting:mass", "kg") == approx(
+        87.46, abs=0.1
+    )
 
 
 def test_insulation_weight():
@@ -92,7 +94,7 @@ def test_insulation_weight():
 
     problem = run_system(InsulationWeight(), ivc)
 
-    assert problem["data:weight:furniture:insulation:mass"] == approx(581, abs=1)
+    assert problem.get_val("data:weight:furniture:insulation:mass", "kg") == approx(581, abs=1)
 
 
 def test_crew_seat_weight():
@@ -109,7 +111,9 @@ def test_crew_seat_weight():
 
     problem = run_system(SeatsCrewWeight(), ivc)
 
-    assert problem["data:weight:furniture:seats_crew_accommodation:mass"] == approx(60, abs=0.1)
+    assert problem.get_val("data:weight:furniture:seats_crew_accommodation:mass", "kg") == approx(
+        60, abs=0.1
+    )
 
 
 def test_interior_weight():
@@ -124,4 +128,6 @@ def test_interior_weight():
 
     problem = run_system(InteriorIntegrationWeight(), ivc)
 
-    assert problem["data:weight:furniture:interior_integration:mass"] == approx(115, abs=0.1)
+    assert problem.get_val("data:weight:furniture:interior_integration:mass", "kg") == approx(
+        115, abs=0.1
+    )

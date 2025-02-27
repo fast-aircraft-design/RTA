@@ -28,10 +28,18 @@ def test_items_weight():
 
     problem = run_system(OperationalItemsWeight(), ivc)
 
-    assert problem["data:weight:operational:items:passenger_seats:mass"] == approx(720, abs=0.1)
-    assert problem["data:weight:operational:items:unusable_fuel:mass"] == approx(30, abs=0.1)
-    assert problem["data:weight:operational:items:documents_toolkit:mass"] == approx(15, abs=0.1)
-    assert problem["data:weight:operational:items:galley_structure:mass"] == approx(100, abs=0.1)
+    assert problem.get_val("data:weight:operational:items:passenger_seats:mass", "kg") == approx(
+        720, abs=0.1
+    )
+    assert problem.get_val("data:weight:operational:items:unusable_fuel:mass", "kg") == approx(
+        30, abs=0.1
+    )
+    assert problem.get_val("data:weight:operational:items:documents_toolkit:mass", "kg") == approx(
+        15, abs=0.1
+    )
+    assert problem.get_val("data:weight:operational:items:galley_structure:mass", "kg") == approx(
+        100, abs=0.1
+    )
 
 
 def test_equipment_weight():
@@ -41,5 +49,9 @@ def test_equipment_weight():
 
     problem = run_system(OperationalEquipmentsWeight(), ivc)
 
-    assert problem["data:weight:operational:equipment:crew:mass"] == approx(320, abs=0.1)
-    assert problem["data:weight:operational:equipment:others:mass"] == approx(100, abs=0.1)
+    assert problem.get_val("data:weight:operational:equipment:crew:mass", "kg") == approx(
+        320, abs=0.1
+    )
+    assert problem.get_val("data:weight:operational:equipment:others:mass", "kg") == approx(
+        100, abs=0.1
+    )

@@ -41,7 +41,9 @@ def test_compute_nacelle_weight():
 
     problem = run_system(NacellesWeight(), ivc)
 
-    assert problem["data:weight:airframe:nacelle:mass"] == pytest.approx(349.15, abs=0.1)
+    assert problem.get_val("data:weight:airframe:nacelle:mass", "kg") == pytest.approx(
+        349.15, abs=0.1
+    )
 
 
 def test_wing_weight():
@@ -75,7 +77,7 @@ def test_wing_weight():
 
     problem = run_system(WingWeight(), ivc)
 
-    assert problem["data:weight:airframe:wing:mass"] == pytest.approx(2370, abs=1)
+    assert problem.get_val("data:weight:airframe:wing:mass", "kg") == pytest.approx(2370, abs=1)
 
 
 def test_turboprop_weight():
@@ -93,8 +95,12 @@ def test_turboprop_weight():
 
     problem = run_system(TurbopropWeight(), ivc)
 
-    assert problem["data:weight:propulsion:engine:mass"] == pytest.approx(967.84, rel=1e-3)
-    assert problem["data:weight:propulsion:engine_controls_instrumentation:mass"] == pytest.approx(
-        36.73, rel=1e-3
+    assert problem.get_val("data:weight:propulsion:engine:mass", "kg") == pytest.approx(
+        967.84, rel=1e-3
     )
-    assert problem["data:weight:propulsion:propeller:mass"] == pytest.approx(387.21, rel=1e-3)
+    assert problem.get_val(
+        "data:weight:propulsion:engine_controls_instrumentation:mass", "kg"
+    ) == pytest.approx(36.73, rel=1e-3)
+    assert problem.get_val("data:weight:propulsion:propeller:mass", "kg") == pytest.approx(
+        387.21, rel=1e-3
+    )

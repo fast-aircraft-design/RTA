@@ -64,7 +64,7 @@ def test_compute_flight_control_cg():
 
     problem = run_system(ComputeFlightControlCG(), input_vars)
 
-    x_cg_flight_control = problem["data:weight:systems:flight_controls:CG:x"]
+    x_cg_flight_control = problem.get_val("data:weight:systems:flight_controls:CG:x", "m")
     assert x_cg_flight_control == pytest.approx(14.365, abs=1e-2)
 
 
@@ -87,9 +87,9 @@ def test_compute_propulsion_cg():
 
     problem = run_system(ComputePropulsionCG_RTA(), ivc)
 
-    assert problem["data:weight:propulsion:engine:CG:x"] == approx(11.36, rel=1e-3)
-    assert problem["data:weight:propulsion:propeller:CG:x"] == approx(9.657, rel=1e-3)
-    assert problem["data:weight:airframe:nacelle:CG:x"] == approx(11.645, rel=1e-3)
+    assert problem.get_val("data:weight:propulsion:engine:CG:x", "m") == approx(11.36, rel=1e-3)
+    assert problem.get_val("data:weight:propulsion:propeller:CG:x", "m") == approx(9.657, rel=1e-3)
+    assert problem.get_val("data:weight:airframe:nacelle:CG:x", "m") == approx(11.645, rel=1e-3)
 
 
 def test_compute_loadcase1():
@@ -105,9 +105,13 @@ def test_compute_loadcase1():
 
     problem = run_system(ComputeCGLoadCase1(), ivc)
 
-    assert problem["data:weight:aircraft:load_case_1:CG:MAC_position"] == approx(0.057, rel=1e-3)
-    assert problem["data:weight:aircraft:load_case_1:CG:index"] == approx(-49.09, rel=1e-3)
-    assert problem["data:weight:aircraft:load_case_1:mass"] == approx(16757, abs=1)
+    assert problem.get_val(
+        "data:weight:aircraft:load_case_1:CG:MAC_position",
+    ) == approx(0.057, rel=1e-3)
+    assert problem.get_val(
+        "data:weight:aircraft:load_case_1:CG:index",
+    ) == approx(-49.09, rel=1e-3)
+    assert problem.get_val("data:weight:aircraft:load_case_1:mass", "kg") == approx(16757, abs=1)
 
 
 def test_compute_loadcase2():
@@ -128,9 +132,13 @@ def test_compute_loadcase2():
 
     problem = run_system(ComputeCGLoadCase2(), ivc)
 
-    assert problem["data:weight:aircraft:load_case_2:CG:MAC_position"] == approx(0.025, rel=1e-3)
-    assert problem["data:weight:aircraft:load_case_2:CG:index"] == approx(-60.75, rel=1e-3)
-    assert problem["data:weight:aircraft:load_case_2:mass"] == approx(17783, abs=1)
+    assert problem.get_val(
+        "data:weight:aircraft:load_case_2:CG:MAC_position",
+    ) == approx(0.025, rel=1e-3)
+    assert problem.get_val(
+        "data:weight:aircraft:load_case_2:CG:index",
+    ) == approx(-60.75, rel=1e-3)
+    assert problem.get_val("data:weight:aircraft:load_case_2:mass", "kg") == approx(17783, abs=1)
 
 
 def test_compute_loadcase3():
@@ -152,9 +160,13 @@ def test_compute_loadcase3():
 
     problem = run_system(ComputeCGLoadCase3(), ivc)
 
-    assert problem["data:weight:aircraft:load_case_3:CG:MAC_position"] == approx(0.0362, rel=1e-3)
-    assert problem["data:weight:aircraft:load_case_3:CG:index"] == approx(-76.6, rel=1e-3)
-    assert problem["data:weight:aircraft:load_case_3:mass"] == approx(23597, abs=1)
+    assert problem.get_val(
+        "data:weight:aircraft:load_case_3:CG:MAC_position",
+    ) == approx(0.0362, rel=1e-3)
+    assert problem.get_val(
+        "data:weight:aircraft:load_case_3:CG:index",
+    ) == approx(-76.6, rel=1e-3)
+    assert problem.get_val("data:weight:aircraft:load_case_3:mass", "kg") == approx(23597, abs=1)
 
 
 def test_compute_loadcase4():
@@ -172,7 +184,9 @@ def test_compute_loadcase4():
 
     problem = run_system(ComputeCGLoadCase4(), ivc)
 
-    assert problem["data:weight:aircraft:load_case_4:CG:MAC_position"] == approx(0.1045, rel=1e-3)
+    assert problem.get_val(
+        "data:weight:aircraft:load_case_4:CG:MAC_position",
+    ) == approx(0.1045, rel=1e-3)
 
 
 def test_compute_cg_others():
@@ -195,48 +209,74 @@ def test_compute_cg_others():
     ivc = get_indep_var_comp(input_list)
     problem = run_system(ComputeOthersCG(), ivc)
 
-    assert problem["data:weight:airframe:fuselage:CG:x"] == approx(12.13, rel=1e-3)
-    assert problem["data:weight:airframe:landing_gear:front:CG:x"] == approx(3.74, rel=1e-3)
-    assert problem["data:weight:propulsion:engine_controls_instrumentation:CG:x"] == approx(
-        2.493, rel=1e-3
+    assert problem.get_val("data:weight:airframe:fuselage:CG:x", "m") == approx(12.13, rel=1e-3)
+    assert problem.get_val("data:weight:airframe:landing_gear:front:CG:x", "m") == approx(
+        3.74, rel=1e-3
     )
-    assert problem["data:weight:propulsion:fuel_lines:CG:x"] == approx(12.587, rel=1e-3)
-
-    assert problem["data:weight:systems:auxiliary_power_unit:CG:x"] == approx(25.6, rel=1e-3)
-    assert problem["data:weight:systems:electric_systems:electric_generation:CG:x"] == approx(
-        6.74, rel=1e-3
+    assert problem.get_val(
+        "data:weight:propulsion:engine_controls_instrumentation:CG:x", "m"
+    ) == approx(2.493, rel=1e-3)
+    assert problem.get_val("data:weight:propulsion:fuel_lines:CG:x", "m") == approx(
+        12.587, rel=1e-3
     )
-    assert problem[
-        "data:weight:systems:electric_systems:electric_common_installation:CG:x"
-    ] == approx(6.74, rel=1e-3)
-    assert problem["data:weight:systems:hydraulic_systems:CG:x"] == approx(13.48, rel=1e-3)
 
-    assert problem["data:weight:systems:fire_protection:CG:x"] == approx(12.13, rel=1e-3)
-    assert problem["data:weight:systems:automatic_flight_system:CG:x"] == approx(12.13, rel=1e-3)
-    assert problem["data:weight:systems:communications:CG:x"] == approx(6.74, rel=1e-3)
-    assert problem["data:weight:systems:ECS:CG:x"] == approx(12.22, rel=1e-3)
-    assert problem["data:weight:systems:de-icing:CG:x"] == approx(12.286, rel=1e-3)
-    assert problem["data:weight:systems:navigation:CG:x"] == approx(3.9887, rel=1e-3)
+    assert problem.get_val("data:weight:systems:auxiliary_power_unit:CG:x", "m") == approx(
+        25.6, rel=1e-3
+    )
+    assert problem.get_val(
+        "data:weight:systems:electric_systems:electric_generation:CG:x", "m"
+    ) == approx(6.74, rel=1e-3)
+    assert problem.get_val(
+        "data:weight:systems:electric_systems:electric_common_installation:CG:x", "m"
+    ) == approx(6.74, rel=1e-3)
+    assert problem.get_val("data:weight:systems:hydraulic_systems:CG:x", "m") == approx(
+        13.48, rel=1e-3
+    )
 
-    assert problem["data:weight:furniture:furnishing:CG:x"] == approx(12.22, rel=1e-3)
-    assert problem["data:weight:furniture:water:CG:x"] == approx(21.57, rel=1e-3)
-    assert problem["data:weight:furniture:interior_integration:CG:x"] == approx(11, rel=1e-3)
-    assert problem["data:weight:furniture:insulation:CG:x"] == approx(12.13, rel=1e-3)
-    assert problem["data:weight:furniture:cabin_lighting:CG:x"] == approx(12.13, rel=1e-3)
-    assert problem["data:weight:furniture:seats_crew_accommodation:CG:x"] == approx(12.22, rel=1e-3)
-    assert problem["data:weight:furniture:oxygen:CG:x"] == approx(12.22, rel=1e-3)
+    assert problem.get_val("data:weight:systems:fire_protection:CG:x", "m") == approx(
+        12.13, rel=1e-3
+    )
+    assert problem.get_val("data:weight:systems:automatic_flight_system:CG:x", "m") == approx(
+        12.13, rel=1e-3
+    )
+    assert problem.get_val("data:weight:systems:communications:CG:x", "m") == approx(6.74, rel=1e-3)
+    assert problem.get_val("data:weight:systems:ECS:CG:x", "m") == approx(12.22, rel=1e-3)
+    assert problem.get_val("data:weight:systems:de-icing:CG:x", "m") == approx(12.286, rel=1e-3)
+    assert problem.get_val("data:weight:systems:navigation:CG:x", "m") == approx(3.9887, rel=1e-3)
 
-    assert problem["data:weight:operational:items:documents_toolkit:CG:x"] == approx(
+    assert problem.get_val("data:weight:furniture:furnishing:CG:x", "m") == approx(12.22, rel=1e-3)
+    assert problem.get_val("data:weight:furniture:water:CG:x", "m") == approx(21.57, rel=1e-3)
+    assert problem.get_val("data:weight:furniture:interior_integration:CG:x", "m") == approx(
+        11, rel=1e-3
+    )
+    assert problem.get_val("data:weight:furniture:insulation:CG:x", "m") == approx(12.13, rel=1e-3)
+    assert problem.get_val("data:weight:furniture:cabin_lighting:CG:x", "m") == approx(
+        12.13, rel=1e-3
+    )
+    assert problem.get_val("data:weight:furniture:seats_crew_accommodation:CG:x", "m") == approx(
         12.22, rel=1e-3
     )
-    assert problem["data:weight:operational:items:galley_structure:CG:x"] == approx(18.87, rel=1e-3)
-    assert problem["data:weight:operational:equipment:others:CG:x"] == approx(12.17, rel=1e-3)
-    assert problem["data:weight:operational:equipment:crew:CG:x"] == approx(8.089, rel=1e-3)
-    assert problem["data:weight:operational:items:unusable_fuel:CG:x"] == approx(12.88, rel=1e-3)
+    assert problem.get_val("data:weight:furniture:oxygen:CG:x", "m") == approx(12.22, rel=1e-3)
 
-    assert problem["data:weight:payload:PAX:CG:x"] == approx(12.22, rel=1e-3)
-    assert problem["data:weight:payload:rear_fret:CG:x"] == approx(14.75, rel=1e-3)
-    assert problem["data:weight:payload:front_fret:CG:x"] == approx(8.37, rel=1e-3)
+    assert problem.get_val("data:weight:operational:items:documents_toolkit:CG:x", "m") == approx(
+        12.22, rel=1e-3
+    )
+    assert problem.get_val("data:weight:operational:items:galley_structure:CG:x", "m") == approx(
+        18.87, rel=1e-3
+    )
+    assert problem.get_val("data:weight:operational:equipment:others:CG:x", "m") == approx(
+        12.17, rel=1e-3
+    )
+    assert problem.get_val("data:weight:operational:equipment:crew:CG:x", "m") == approx(
+        8.089, rel=1e-3
+    )
+    assert problem.get_val("data:weight:operational:items:unusable_fuel:CG:x", "m") == approx(
+        12.88, rel=1e-3
+    )
+
+    assert problem.get_val("data:weight:payload:PAX:CG:x", "m") == approx(12.22, rel=1e-3)
+    assert problem.get_val("data:weight:payload:rear_fret:CG:x", "m") == approx(14.75, rel=1e-3)
+    assert problem.get_val("data:weight:payload:front_fret:CG:x", "m") == approx(8.37, rel=1e-3)
 
 
 def test_max_cg_ratio():
@@ -252,7 +292,9 @@ def test_max_cg_ratio():
 
     problem = run_system(ComputeMaxCGratio(), ivc)
 
-    assert problem["data:weight:aircraft:CG:aft:MAC_position"] == approx(0.107, rel=1e-3)
+    assert problem.get_val(
+        "data:weight:aircraft:CG:aft:MAC_position",
+    ) == approx(0.107, rel=1e-3)
 
 
 def test_compute_cg_ratio_aft():
@@ -337,7 +379,11 @@ def test_compute_cg_ratio_aft():
 
     problem = run_system(ComputeCGRatioAft(), ivc)
 
-    assert problem["data:weight:aircraft_empty:mass"] == approx(13765, abs=1)
-    assert problem["data:weight:aircraft_empty:CG:x"] == approx(12.15, rel=1e-3)
-    assert problem["data:weight:aircraft:operating_empty:CG:x"] == approx(12.06, rel=1e-3)
-    assert problem["data:weight:aircraft:operating_empty:mass"] == approx(14085, abs=1)
+    assert problem.get_val("data:weight:aircraft_empty:mass", "kg") == approx(13765, abs=1)
+    assert problem.get_val("data:weight:aircraft_empty:CG:x", "m") == approx(12.15, rel=1e-3)
+    assert problem.get_val("data:weight:aircraft:operating_empty:CG:x", "m") == approx(
+        12.06, rel=1e-3
+    )
+    assert problem.get_val("data:weight:aircraft:operating_empty:mass", "kg") == approx(
+        14085, abs=1
+    )

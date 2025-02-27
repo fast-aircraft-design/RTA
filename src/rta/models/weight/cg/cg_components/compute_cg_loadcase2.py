@@ -42,7 +42,7 @@ class ComputeCGLoadCase2(ExplicitComponent):
 
         self.add_output("data:weight:aircraft:load_case_2:CG:MAC_position")
         self.add_output("data:weight:aircraft:load_case_2:CG:index")
-        self.add_output("data:weight:aircraft:load_case_2:mass")
+        self.add_output("data:weight:aircraft:load_case_2:mass", units="kg")
         self.declare_partials("*", "*", method="fd")
 
     def compute(self, inputs, outputs, discrete_inputs=None, discrete_outputs=None):
