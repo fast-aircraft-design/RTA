@@ -45,7 +45,7 @@ def get_indep_var_comp(var_names):
     return ivc
 
 
-def test_ComputeFlightControlCG():
+def test_compute_flight_control_cg():
     """Tests computation of tanks center of gravity"""
 
     input_vars = om.IndepVarComp()

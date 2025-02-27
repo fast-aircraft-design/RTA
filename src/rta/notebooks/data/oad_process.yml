@@ -29,6 +29,8 @@ model:
     geometry:
       id: fastoad.geometry.legacy
     propeller:
+      # This model may be placed before the main iterative loop as
+      # it does not share coupled variables with the other models.
       id: rta.propulsion.propeller_sizing
     weight:
       id: fastoad.weight.legacy
@@ -59,7 +61,10 @@ model:
     is_sizing: true
 
 
-#submodels:
+# Per default, when installing RTA all the submodels listed below are activated.
+# If needed, the RTA submodels may be replaced or used elsewhere,
+# simply uncomment the following lines and replace with the desired submodel.
+submodels:
 #  service.aerodynamics.CD0.fuselage: rta.submodel.aerodynamics.CD0.fuselage
 #  service.aerodynamics.CD0.wing: rta.submodel.aerodynamics.CD0.wing
 #  service.aerodynamics.CD0.nacelles_pylons: rta.submodel.aerodynamics.CD0.nacelles

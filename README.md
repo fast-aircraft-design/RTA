@@ -94,7 +94,7 @@ The list of active submodels with this plugin is given below:
 
 ## Developer installation
 
-This repository is designed to use [Poetry](https://python-poetry.org) (version 1.4.2 or above)
+This repository is designed to use [Poetry](https://python-poetry.org) (version 1.8.3 or above)
 for managing the development environment.
 Instructions below assume you have it already installed. You may adapt them if you don't 
 want to use Poetry.
@@ -143,6 +143,6 @@ Ruff seems the way to go, since it does the same job as these two, only much fas
 **Ruff is configured in `/pyproject.toml` file.**
 
 Coupled with pre-commit and/or integrated with your IDE, it
-automates all the code formatting, and it is sooo good.
+automates all the code formatting.
 
 _**Note to PyCharm users**: there is a [ruff plugin](https://plugins.jetbrains.com/plugin/20574-ruff)._
