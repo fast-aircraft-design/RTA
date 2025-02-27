@@ -34,7 +34,6 @@ class ML_TP_L1(AbstractFuelPropulsion):
     def __init__(
         self,
         RTO_power: float,
-        Design_Thermo_Power: float,
         Power_Offtake: float,
         gearbox_eta: float,
         d_prop: float,
@@ -62,7 +61,6 @@ class ML_TP_L1(AbstractFuelPropulsion):
         """
 
         self.RTO_power = RTO_power
-        self.Design_Thermo_Power = Design_Thermo_Power
         self.Power_Offtake = Power_Offtake
         self.gearbox_eta = gearbox_eta
         self.d_prop = d_prop

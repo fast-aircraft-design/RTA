@@ -57,11 +57,11 @@
       </vertical_tail>
       <wing>
         <aspect_ratio is_input="True">11.995<!--wing aspect ratio--></aspect_ratio>
-        <sweep_100_ratio is_input="True">0.0<!--ratio inner/outer for sweep angles at trailing edge of wing--></sweep_100_ratio>
+        <sweep_100_ratio is_input="True">1.0<!--ratio inner/outer for sweep angles at trailing edge of wing--></sweep_100_ratio>
         <sweep_25 units="deg" is_input="True">2.3<!--sweep angle at 25% chord of wing--></sweep_25>
         <virtual_taper_ratio is_input="True">0.618<!--taper ratio of wing computed from virtual root chord--></virtual_taper_ratio>
         <kink>
-          <span_ratio is_input="True">0.3866<!--ratio (Y-position of kink)/(semi-span)--></span_ratio>
+          <span_ratio is_input="True">0.38<!--ratio (Y-position of kink)/(semi-span)--></span_ratio>
         </kink>
         <root>
           <dihedral units="deg" is_input="True">5.0</dihedral>

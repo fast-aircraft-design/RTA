@@ -4,8 +4,8 @@ title: Regional Aircraft OAD Process
 module_folders:
 
 # Input and output files
-input_file: ./problem_inputs.xml
-output_file: ./problem_outputs.xml
+input_file: ../workdir/problem_inputs.xml
+output_file: ../workdir/problem_outputs.xml
 
 # Definition of problem driver assuming the OpenMDAO convention "import openmdao.api as om"
 #driver: om.ScipyOptimizeDriver(tol=1e-2, optimizer='COBYLA')
@@ -30,8 +30,6 @@ model:
       id: fastoad.geometry.legacy
     propeller:
       id: rta.propulsion.propeller_sizing
-    gasturbine:
-      id: rta.propulsion.turboprop_sizing
     weight:
       id: fastoad.weight.legacy
       payload_from_npax: false

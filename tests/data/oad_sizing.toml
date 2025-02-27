@@ -22,9 +22,7 @@ driver = "om.ScipyOptimizeDriver(tol=1e-3, optimizer='COBYLA')"
         # An OpenMDAO component is identified by its "id"
         id = "rhea.geometry.sizing"       
     [model.propulsion.propeller]
-        id = "rhea.propulsion.propeller_sizing" 
-    [model.propulsion.gasturbine]
-        id = "rhea.propulsion.turboprop_sizing"                 
+        id = "rhea.propulsion.propeller_sizing"
     [model.weight]
         id = "rhea.weight.sizing"
     [model.mtow]

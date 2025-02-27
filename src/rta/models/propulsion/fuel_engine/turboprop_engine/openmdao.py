@@ -40,7 +40,6 @@ class OMMLTPL1Wrapper(IOMPropulsionWrapper):
 
     def setup(self, component: Component):
         component.add_input("data:propulsion:RTO_power", np.nan, units="W")
-        component.add_input("data:propulsion:Design_Thermo_Power", np.nan, units="W")
         component.add_input("data:propulsion:Power_Offtake", np.nan, units="W")
         component.add_input("data:propulsion:gearbox_eta", np.nan)
         component.add_input("data:geometry:propulsion:propeller:diameter", np.nan, units="m")
@@ -65,7 +64,6 @@ class OMMLTPL1Wrapper(IOMPropulsionWrapper):
         """
         engine_params = {
             "RTO_power": inputs["data:propulsion:RTO_power"],
-            "Design_Thermo_Power": inputs["data:propulsion:Design_Thermo_Power"],
             "Power_Offtake": inputs["data:propulsion:Power_Offtake"],
             "gearbox_eta": inputs["data:propulsion:gearbox_eta"],
             "d_prop": inputs["data:geometry:propulsion:propeller:diameter"],

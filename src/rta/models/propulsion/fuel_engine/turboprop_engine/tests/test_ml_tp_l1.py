@@ -14,7 +14,6 @@ RESULTS_FOLDER = "problem_folder"
 
 engine_params = {
     "RTO_power": "data:propulsion:RTO_power",
-    "Design_Thermo_Power": "data:propulsion:Design_Thermo_Power",
     "Power_Offtake": "data:propulsion:Power_Offtake",
     "gearbox_eta": "data:propulsion:gearbox_eta",
     "d_prop": "data:geometry:propulsion:propeller:diameter",
