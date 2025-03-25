@@ -2,3 +2,6 @@ data:weight:airframe:nacelle:mass || The mass of all nacelles, with the number o
 data:propulsion:RTO_power || Reserve take off power of the gas turbine
 data:propulsion:Design_Thermo_Power || Power used to compute the gas turbine mass flow rate
 data:propulsion:gearbox_eta || Efficiency of gearbox between turboshaft and propeller
+settings:weight:operational:equipment:mass_per_crew:commercial || Mass per commercial crew
+settings:weight:operational:equipment:mass_per_crew:technical|| Mass per technical crew
+settings:weight:operational:equipment:others || Lump-sum mass for other small operational items

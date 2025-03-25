@@ -32,6 +32,18 @@ class OperationalEquipmentsWeight(ExplicitComponent):
     def setup(self):
         self.add_input("data:geometry:cabin:crew_count:technical", val=np.nan)
         self.add_input("data:geometry:cabin:crew_count:commercial", val=np.nan)
+        self.add_input(
+            "settings:weight:operational:equipment:mass_per_crew:commercial", val=75, units="kg"
+        )
+        self.add_input(
+            "settings:weight:operational:equipment:mass_per_crew:technical", val=85, units="kg"
+        )
+        self.add_input(
+            "settings:weight:operational:equipment:others",
+            val=100,
+            units="kg",
+            desc="Lump-sum mass for other small operational items.",
+        )
 
         self.add_output("data:weight:operational:equipment:crew:mass", units="kg")
         self.add_output("data:weight:operational:equipment:others:mass", units="kg")
@@ -42,5 +54,15 @@ class OperationalEquipmentsWeight(ExplicitComponent):
         cockpit_crew = inputs["data:geometry:cabin:crew_count:technical"]
         cabin_crew = inputs["data:geometry:cabin:crew_count:commercial"]
 
-        outputs["data:weight:operational:equipment:crew:mass"] = 85 * cockpit_crew + 75 * cabin_crew
-        outputs["data:weight:operational:equipment:others:mass"] = 100.0
+        mass_per_crew_commercial = inputs[
+            "settings:weight:operational:equipment:mass_per_crew:commercial"
+        ]
+        mass_per_crew_technical = inputs[
+            "settings:weight:operational:equipment:mass_per_crew:technical"
+        ]
+        others = inputs["settings:weight:operational:equipment:others"]
+
+        crew_mass = mass_per_crew_technical * cockpit_crew + mass_per_crew_commercial * cabin_crew
+
+        outputs["data:weight:operational:equipment:crew:mass"] = crew_mass
+        outputs["data:weight:operational:equipment:others:mass"] = others
