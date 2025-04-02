@@ -42,8 +42,9 @@ coverage.xml
 prof/
 *.prof
 
-# test results
+# test results and workdir
 results/
+workdir/
 
 # Build and docs folder/files
 build/*

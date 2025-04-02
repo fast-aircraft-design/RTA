@@ -1,4 +1,0 @@
-data:weight:airframe:nacelle:mass || The mass of all nacelles, with the number of nacelle being equal to the number of engine
-data:propulsion:RTO_power || Reserve take off power of the gas turbine
-data:propulsion:Design_Thermo_Power || Power used to compute the gas turbine mass flow rate
-data:propulsion:gearbox_eta || Efficiency of gearbox between turboshaft and propeller
