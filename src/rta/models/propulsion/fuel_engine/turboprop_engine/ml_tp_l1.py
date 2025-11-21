@@ -81,11 +81,12 @@ class ML_TP_L1(AbstractFuelPropulsion):
         Prop_fid = "ADT"
         mach = np.asarray(flight_points.mach)
         altitude = np.asarray(flight_points.altitude)
+        disa = np.asarray(flight_points.isa_offset)
         thrust_rate = np.asarray(flight_points.thrust_rate)
         thrust = np.asarray(flight_points.thrust)
         phase = flight_points.engine_setting
         thrust_is_regulated = flight_points.thrust_is_regulated
-        atmosphere = AtmosphereSI(altitude)
+        atmosphere = AtmosphereSI(altitude, delta_t=disa)
 
         if thrust_is_regulated is not None:
             thrust_is_regulated = np.asarray(np.round(thrust_is_regulated, 0), dtype=bool)
@@ -383,7 +384,15 @@ class ML_TP_L1(AbstractFuelPropulsion):
             + c9 * mach**3
         )
 
-        max_thermo_power = max_power_rating * K_powerlapse
+        # Correction coefficient to account for DISA (Mattingly)
+        density_isa0 = AtmosphereSI(altitude=atmosphere.altitude, delta_t=0).density
+        density_ground_isa0 = AtmosphereSI(altitude=0, delta_t=0).density
+
+        density_ratio_isa0 = (density_isa0 / density_ground_isa0) ** 0.7
+        density_ratio = (atmosphere.density / density_ground_isa0) ** 0.7
+        k_isa = (density_ratio / density_ratio_isa0) ** 0.7
+
+        max_thermo_power = max_power_rating * K_powerlapse * k_isa
 
         if max_thermo_power > max_power_rating:
             max_shaft_power = max_power_rating  # hp #gearbox mechanical limit
