@@ -385,6 +385,9 @@ class ML_TP_L1(AbstractFuelPropulsion):
         )
 
         # Correction coefficient to account for DISA (Mattingly)
+        # Assumes the surrogate model behaves as P ~ (rho / rho_0)**0.7
+        # Compares two ratios (rho_ISA0 / rho_0_ISA0) and (rho_ISA / rho_0_ISA0)
+        # If the ratios differ, then k_isa represent the correction to apply
         density_isa0 = AtmosphereSI(altitude=atmosphere.altitude, delta_t=0).density
         density_ground_isa0 = AtmosphereSI(altitude=0, delta_t=0).density
 
