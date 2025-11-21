@@ -45,6 +45,8 @@ class ComputeOthersCG(ExplicitComponent):
         self.add_input("data:geometry:cabin:seats:economical:count_by_row", val=np.nan)
         self.add_input("data:geometry:cabin:seats:economical:length", val=np.nan, units="m")
 
+        self.add_input("settings:geometry:fuselage:CG:ratio", val=0.45, units="unitless")
+
         # TODO: add description of these CGs
         self.add_output("data:weight:airframe:fuselage:CG:x", units="m")
         self.add_output("data:weight:airframe:landing_gear:front:CG:x", units="m")
@@ -205,7 +207,9 @@ class ComputeOthersCG(ExplicitComponent):
         ls_eco = inputs["data:geometry:cabin:seats:economical:length"]
         x_cg_tank = inputs["data:weight:fuel_tank:CG:x"]
 
-        x_cg_a2 = 0.45 * fus_length
+        fuselage_cg_ratio = inputs["settings:geometry:fuselage:CG:ratio"]
+
+        x_cg_a2 = fuselage_cg_ratio * fus_length
 
         # Assume cg of nose landing gear is at 75% of lav
         x_cg_a52 = lav * 0.75
@@ -216,10 +220,10 @@ class ComputeOthersCG(ExplicitComponent):
         x_cg_c11 = 0.95 * fus_length
         x_cg_c12 = 0.25 * fus_length  # modified
         x_cg_c13 = 0.5 * fus_length
-        x_cg_c21 = 0.45 * fus_length
+        x_cg_c21 = fuselage_cg_ratio * fus_length
         x_cg_c22 = x_cg_d2
         x_cg_c23 = fa_length - 0.15 * l0_wing
-        x_cg_c24 = 0.45 * fus_length
+        x_cg_c24 = fuselage_cg_ratio * fus_length
         x_cg_c25 = x_cg_d2
         x_cg_c26 = x_cg_d2
         x_cg_c27 = (0.01 * weight_engines * x_cg_b1 + 2.3 * npax1 * x_cg_d2) / (
@@ -243,8 +247,8 @@ class ComputeOthersCG(ExplicitComponent):
 
         x_cg_pl = x_cg_d2
 
-        x_cg_e1 = 0.45 * fus_length
-        x_cg_e3 = 0.45 * fus_length
+        x_cg_e1 = fuselage_cg_ratio * fus_length
+        x_cg_e3 = fuselage_cg_ratio * fus_length
         x_cg_e4 = 0.8 * fus_length
         x_cg_e5 = 0.9 * x_cg_d2
         x_cg_e7 = x_cg_d2

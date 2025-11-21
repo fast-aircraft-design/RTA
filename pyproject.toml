@@ -40,7 +40,7 @@ classifiers = [
 # Dependency groups below will apply only for developers of this project
 python = ">=3.9, <3.13"
 fast-oad-core = "^1.8.0"
-fast-oad-cs25 = "^0.7.2"
+fast-oad-cs25 = "^0.7.3"
 
 [tool.poetry.group.dev.dependencies]
 # Dependencies that may be used during development process (validation,...) but not needed
