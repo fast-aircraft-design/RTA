@@ -67,3 +67,19 @@ def test_ML_TP_L1():
     engine.compute_flight_points(flight_point)
     np.testing.assert_allclose(flight_point.thrust, 14293, rtol=1e-3)
     np.testing.assert_allclose(flight_point.psfc, 8.216e-8, rtol=1e-3)
+    np.testing.assert_allclose(flight_point.sfc, 9.323e-6, rtol=1e-3)
+    np.testing.assert_allclose(flight_point.TPshaft_power, 1.621e6, rtol=1e-3)
+
+    # Test disa
+    flight_point = FlightPoint(
+        mach=0.3,
+        altitude=3000,
+        engine_setting=EngineSetting.CLIMB.value,
+        thrust_rate=1.0,
+        isa_offset=15,
+    )  # with engine_setting as int
+    engine.compute_flight_points(flight_point)
+    np.testing.assert_allclose(flight_point.thrust, 13584.3, rtol=1e-3)
+    np.testing.assert_allclose(flight_point.psfc, 8.216e-8, rtol=1e-3)
+    np.testing.assert_allclose(flight_point.sfc, 9.551e-6, rtol=1e-3)
+    np.testing.assert_allclose(flight_point.TPshaft_power, 1.579e6, rtol=1e-3)
